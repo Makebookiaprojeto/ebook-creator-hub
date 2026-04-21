@@ -8,11 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { niches, facebookGroups, chapterPreviews, testimonials } from "@/lib/mockData";
+import { niches, groupTemplates, chapterPreviews, testimonials } from "@/lib/mockData";
 import { toast } from "sonner";
 
 const steps = ["Nicho", "Preço", "Gerar", "Vendas", "Divulgação"];
-const pricePresets = [9.9, 19.9, 29.9, 39.9, 49.9, 67.0];
+const pricePresets = [9.9, 19.9, 29.9, 39.9, 49.9];
+
+type FbGroup = { name: string; members: number; engagement: string };
 
 export function CreateEbookView() {
   const [step, setStep] = useState(0);
