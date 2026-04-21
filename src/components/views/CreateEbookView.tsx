@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, ArrowRight, Check, Sparkles, Loader2, Copy, Users, Rocket,
-  Search, ChevronDown, Star, Flame, ShieldCheck, Clock, Zap, Quote, X
+  Search, ChevronDown, Star, Flame, ShieldCheck, Clock, Zap, Quote
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
