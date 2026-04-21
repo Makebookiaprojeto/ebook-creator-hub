@@ -1,31 +1,44 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight, Check, Sparkles, Loader2, Copy, Users, Rocket } from "lucide-react";
+import {
+  ArrowLeft, ArrowRight, Check, Sparkles, Loader2, Copy, Users, Rocket,
+  Search, ChevronDown, Star, Flame, ShieldCheck, Clock, Zap, Quote, X
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
+import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { niches, facebookGroups, promoMessages } from "@/lib/mockData";
+import { niches, facebookGroups, chapterPreviews, testimonials } from "@/lib/mockData";
 import { toast } from "sonner";
 
 const steps = ["Nicho", "Preço", "Gerar", "Vendas", "Divulgação"];
+const pricePresets = [9.9, 19.9, 29.9, 39.9, 49.9, 67.0];
 
 export function CreateEbookView() {
   const [step, setStep] = useState(0);
   const [niche, setNiche] = useState("");
-  const [price, setPrice] = useState(47);
+  const [audience, setAudience] = useState("");
+  const [price, setPrice] = useState(29.9);
   const [generating, setGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
-  const [chapters, setChapters] = useState<string[]>([]);
+  const [chapters, setChapters] = useState<{ title: string; content: string }[]>([]);
+  const [openChapter, setOpenChapter] = useState<number | null>(null);
+
+  // Divulgação
+  const [searchTopic, setSearchTopic] = useState("");
+  const [ebookLink, setEbookLink] = useState("https://meuebook.com/oferta");
+  const [searchedGroups, setSearchedGroups] = useState<typeof facebookGroups>([]);
+  const [searchingGroups, setSearchingGroups] = useState(false);
 
   const generate = () => {
     setGenerating(true);
     setTimeout(() => {
+      const audienceTxt = audience ? ` para ${audience}` : "";
       setTitle(`O Guia Definitivo de ${niche || "Sucesso"}`);
-      setSubtitle(`Como dominar ${niche.toLowerCase() || "o mercado"} em 30 dias mesmo começando do zero`);
-      setChapters([
+      setSubtitle(`Como dominar ${niche.toLowerCase() || "o mercado"}${audienceTxt} em 30 dias mesmo começando do zero`);
+      const chapterTitles = [
         `Introdução ao mundo de ${niche || "novos negócios"}`,
         "Os 5 erros que iniciantes cometem",
         "Estratégias comprovadas pelos top 1%",
@@ -33,12 +46,34 @@ export function CreateEbookView() {
         "Ferramentas essenciais",
         "Como escalar seus resultados",
         "Conclusão e próximos passos",
-      ]);
+      ];
+      setChapters(chapterTitles.map((t) => ({ title: t, content: chapterPreviews.default })));
       setGenerating(false);
       setGenerated(true);
       toast.success("Ebook gerado com sucesso!");
     }, 2200);
   };
+
+  const searchGroups = () => {
+    if (!searchTopic.trim()) {
+      toast.error("Digite o assunto do seu ebook primeiro");
+      return;
+    }
+    setSearchingGroups(true);
+    setTimeout(() => {
+      setSearchedGroups(facebookGroups);
+      setSearchingGroups(false);
+      toast.success(`${facebookGroups.length} grupos encontrados para "${searchTopic}"`);
+    }, 1200);
+  };
+
+  const promoTemplates = (topic: string, link: string) => [
+    `🔥 Pessoal, acabei de encontrar o melhor material sobre ${topic || "[ASSUNTO]"} que já vi! Mudou meu jogo completamente. Dá uma olhada: ${link}`,
+    `✨ Você luta com ${topic || "[ASSUNTO]"}? Descobri um ebook passo a passo que resolve isso de verdade. Recomendo demais 👉 ${link}`,
+    `💡 Se você quer dominar ${topic || "[ASSUNTO]"} sem perder tempo, esse material é OBRIGATÓRIO. Vale cada centavo: ${link}`,
+    `🎯 Estou aplicando o método deste ebook de ${topic || "[ASSUNTO]"} e os resultados são reais. Quem quiser, segue o link: ${link}`,
+    `⚡ Promoção especial por tempo limitado! O melhor ebook de ${topic || "[ASSUNTO]"} com desconto. Garanta agora 👉 ${link}`,
+  ];
 
   const next = () => setStep((s) => Math.min(s + 1, steps.length - 1));
   const prev = () => setStep((s) => Math.max(s - 1, 0));
@@ -99,7 +134,8 @@ export function CreateEbookView() {
                   value={niche}
                   onChange={(e) => setNiche(e.target.value)}
                 />
-                <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+
+                <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                   {niches.map((n) => (
                     <button
                       key={n.name}
@@ -110,49 +146,62 @@ export function CreateEbookView() {
                     >
                       <div className="text-2xl">{n.emoji}</div>
                       <p className="mt-2 font-semibold text-sm">{n.name}</p>
-                      <p className="mt-1 text-xs text-muted-foreground">{n.desc}</p>
+                      <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{n.desc}</p>
                     </button>
                   ))}
+                </div>
+
+                <div className="mt-8">
+                  <label className="text-sm font-semibold">
+                    Quem é o público-alvo do seu ebook? <span className="text-muted-foreground font-normal">(opcional, mas recomendado)</span>
+                  </label>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Descreva idade, interesses, dores e objetivos. Quanto mais específico, melhor a IA gera o conteúdo.
+                  </p>
+                  <Textarea
+                    className="mt-3 min-h-[110px]"
+                    placeholder="Ex: Mulheres de 30-45 anos, mães, que querem perder peso após a gravidez sem dietas restritivas e com pouco tempo para se exercitar..."
+                    value={audience}
+                    onChange={(e) => setAudience(e.target.value)}
+                  />
                 </div>
               </div>
             )}
 
             {step === 1 && (
-              <div>
+              <div className="max-w-xl mx-auto">
                 <h2 className="font-display text-xl font-semibold">Defina o preço</h2>
-                <p className="mt-1 text-sm text-muted-foreground">Sugestão para "{niche || "seu nicho"}": R$29 — R$97</p>
+                <p className="mt-1 text-sm text-muted-foreground">Digite ou escolha uma sugestão abaixo.</p>
 
-                <div className="mt-8 flex flex-col items-center">
-                  <div className="text-sm text-muted-foreground">Preço de venda</div>
-                  <div className="mt-2 font-display text-6xl font-bold text-gradient">R$ {price}</div>
-                  <Input
-                    type="number"
-                    value={price}
-                    onChange={(e) => setPrice(Number(e.target.value) || 0)}
-                    className="mt-4 w-32 text-center text-lg font-semibold"
-                  />
-                </div>
-
-                <div className="mt-8">
-                  <Slider value={[price]} min={9} max={297} step={1} onValueChange={(v) => setPrice(v[0])} />
-                  <div className="mt-2 flex justify-between text-xs text-muted-foreground">
-                    <span>R$ 9</span>
-                    <span>R$ 297</span>
+                <div className="mt-6">
+                  <label className="text-xs font-medium uppercase text-muted-foreground">Preço de venda (R$)</label>
+                  <div className="mt-2 relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-semibold text-muted-foreground">R$</span>
+                    <Input
+                      type="number"
+                      step="0.10"
+                      value={price}
+                      onChange={(e) => setPrice(Number(e.target.value) || 0)}
+                      className="pl-12 h-14 text-2xl font-bold font-display"
+                    />
                   </div>
                 </div>
 
-                <div className="mt-6 grid grid-cols-3 gap-3">
-                  {[27, 47, 97].map((p) => (
-                    <button
-                      key={p}
-                      onClick={() => setPrice(p)}
-                      className={`rounded-xl border p-3 text-sm font-medium transition hover:border-primary ${
-                        price === p ? "border-primary bg-accent" : ""
-                      }`}
-                    >
-                      R$ {p}
-                    </button>
-                  ))}
+                <div className="mt-5">
+                  <p className="text-xs text-muted-foreground mb-2">Sugestões rápidas</p>
+                  <div className="flex flex-wrap gap-2">
+                    {pricePresets.map((p) => (
+                      <button
+                        key={p}
+                        onClick={() => setPrice(p)}
+                        className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition hover:border-primary ${
+                          price === p ? "border-primary bg-accent text-accent-foreground" : ""
+                        }`}
+                      >
+                        R$ {p.toFixed(2).replace(".", ",")}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
@@ -195,23 +244,63 @@ export function CreateEbookView() {
                     </div>
                     <div>
                       <label className="text-xs font-medium uppercase text-muted-foreground">Capítulos</label>
-                      <div className="mt-1.5 space-y-2">
-                        {chapters.map((c, i) => (
-                          <div key={i} className="flex items-center gap-3 rounded-xl border bg-background p-3">
-                            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-accent text-xs font-semibold text-accent-foreground">
-                              {i + 1}
-                            </span>
-                            <Input
-                              value={c}
-                              onChange={(e) => {
-                                const copy = [...chapters];
-                                copy[i] = e.target.value;
-                                setChapters(copy);
-                              }}
-                              className="border-0 shadow-none focus-visible:ring-0 px-0"
-                            />
-                          </div>
-                        ))}
+                      <p className="text-xs text-muted-foreground mt-1">Clique em um capítulo para ver e editar o conteúdo completo.</p>
+                      <div className="mt-2 space-y-2">
+                        {chapters.map((c, i) => {
+                          const isOpen = openChapter === i;
+                          return (
+                            <div key={i} className="rounded-xl border bg-background overflow-hidden">
+                              <button
+                                onClick={() => setOpenChapter(isOpen ? null : i)}
+                                className="flex w-full items-center gap-3 p-3 text-left transition hover:bg-muted/40"
+                              >
+                                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-accent text-xs font-semibold text-accent-foreground">
+                                  {i + 1}
+                                </span>
+                                <Input
+                                  value={c.title}
+                                  onClick={(e) => e.stopPropagation()}
+                                  onChange={(e) => {
+                                    const copy = [...chapters];
+                                    copy[i] = { ...copy[i], title: e.target.value };
+                                    setChapters(copy);
+                                  }}
+                                  className="border-0 shadow-none focus-visible:ring-0 px-0 h-7"
+                                />
+                                <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${isOpen ? "rotate-180" : ""}`} />
+                              </button>
+                              <AnimatePresence initial={false}>
+                                {isOpen && (
+                                  <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: "auto", opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="overflow-hidden"
+                                  >
+                                    <div className="border-t p-4 bg-muted/20">
+                                      <label className="text-[11px] font-medium uppercase text-muted-foreground">Conteúdo do capítulo</label>
+                                      <Textarea
+                                        value={c.content}
+                                        onChange={(e) => {
+                                          const copy = [...chapters];
+                                          copy[i] = { ...copy[i], content: e.target.value };
+                                          setChapters(copy);
+                                        }}
+                                        className="mt-2 min-h-[200px] text-sm leading-relaxed bg-background"
+                                      />
+                                      <div className="mt-3 flex justify-end">
+                                        <Button size="sm" variant="outline" onClick={() => setOpenChapter(null)}>
+                                          <Check className="mr-2 h-3.5 w-3.5" /> Salvar capítulo
+                                        </Button>
+                                      </div>
+                                    </div>
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
@@ -222,34 +311,115 @@ export function CreateEbookView() {
             {step === 3 && (
               <div>
                 <h2 className="font-display text-xl font-semibold">Página de vendas</h2>
-                <p className="mt-1 text-sm text-muted-foreground">Preview da landing page do seu ebook.</p>
+                <p className="mt-1 text-sm text-muted-foreground">Preview da landing page de alta conversão.</p>
 
                 <div className="mt-6 overflow-hidden rounded-2xl border">
+                  {/* Top urgency bar */}
+                  <div className="bg-destructive text-destructive-foreground py-2 px-4 text-center text-xs font-bold flex items-center justify-center gap-2">
+                    <Flame className="h-3.5 w-3.5" /> OFERTA RELÂMPAGO • 50% OFF • RESTAM POUCAS UNIDADES
+                  </div>
+
+                  {/* Hero */}
                   <div className="gradient-hero p-8 sm:p-12 text-center">
-                    <Badge className="bg-accent text-accent-foreground hover:bg-accent">⚡ Lançamento</Badge>
-                    <h1 className="mx-auto mt-4 max-w-2xl font-display text-3xl sm:text-4xl font-bold leading-tight">
+                    <Badge className="bg-destructive text-destructive-foreground hover:bg-destructive">
+                      <Zap className="mr-1 h-3 w-3" /> PROMOÇÃO ATIVA
+                    </Badge>
+                    <h1 className="mx-auto mt-4 max-w-2xl font-display text-3xl sm:text-5xl font-bold leading-tight">
                       {title || "Seu título aparecerá aqui"}
                     </h1>
-                    <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
+                    <p className="mx-auto mt-4 max-w-xl text-base text-muted-foreground">
                       {subtitle || "Seu subtítulo persuasivo vai aqui"}
                     </p>
-                    <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-                      <Button size="lg" className="gradient-primary text-primary-foreground shadow-glow">
-                        Comprar por R$ {price}
+
+                    {/* Mock cover */}
+                    <div className="mt-6 flex justify-center">
+                      <div className="relative w-44 h-60 rounded-lg gradient-primary shadow-elevated flex items-center justify-center text-primary-foreground p-4 rotate-[-4deg]">
+                        <div className="text-center">
+                          <Sparkles className="h-6 w-6 mx-auto opacity-80" />
+                          <p className="mt-2 font-display font-bold text-sm leading-tight line-clamp-4">{title || "Ebook"}</p>
+                          <p className="mt-2 text-[10px] opacity-80">EBOOK DIGITAL</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Price */}
+                    <div className="mt-8">
+                      <p className="text-xs text-muted-foreground line-through">De R$ {(price * 2).toFixed(2).replace(".", ",")}</p>
+                      <p className="mt-1 text-sm text-muted-foreground">Por apenas</p>
+                      <p className="mt-1 font-display text-5xl font-bold text-gradient">
+                        R$ {price.toFixed(2).replace(".", ",")}
+                      </p>
+                      <p className="mt-1 text-xs text-muted-foreground">ou 12x sem juros no cartão</p>
+                    </div>
+
+                    <div className="mt-6 flex flex-col items-center gap-3">
+                      <Button size="lg" className="gradient-primary text-primary-foreground shadow-glow text-base px-8 py-6 animate-pulse">
+                        🛒 QUERO COMPRAR AGORA
                       </Button>
-                      <span className="text-xs text-muted-foreground">✓ Acesso imediato • Garantia 7 dias</span>
+                      <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1"><ShieldCheck className="h-3.5 w-3.5 text-success" /> Garantia 7 dias</span>
+                        <span className="flex items-center gap-1"><Zap className="h-3.5 w-3.5 text-warning" /> Acesso imediato</span>
+                        <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5 text-destructive" /> Oferta termina em 24h</span>
+                      </div>
                     </div>
                   </div>
+
+                  {/* Benefits */}
                   <div className="border-t bg-card p-8">
-                    <h3 className="font-display text-lg font-semibold">O que você vai aprender</h3>
-                    <ul className="mt-4 space-y-2.5">
-                      {(chapters.length ? chapters : ["Benefício 1", "Benefício 2", "Benefício 3"]).slice(0, 5).map((b, i) => (
-                        <li key={i} className="flex items-start gap-3 text-sm">
-                          <Check className="mt-0.5 h-4 w-4 shrink-0 text-success" />
-                          <span>{b}</span>
+                    <h3 className="font-display text-2xl font-bold text-center">O que você vai aprender</h3>
+                    <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+                      {(chapters.length ? chapters.map(c => c.title) : ["Benefício 1", "Benefício 2", "Benefício 3"]).slice(0, 6).map((b, i) => (
+                        <li key={i} className="flex items-start gap-3 rounded-xl border bg-background p-3 text-sm">
+                          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-success/10">
+                            <Check className="h-4 w-4 text-success" />
+                          </div>
+                          <span className="font-medium">{b}</span>
                         </li>
                       ))}
                     </ul>
+                  </div>
+
+                  {/* Testimonials */}
+                  <div className="border-t bg-muted/30 p-8">
+                    <div className="text-center">
+                      <Badge className="bg-warning/20 text-warning border-warning/30 hover:bg-warning/20">⭐ AVALIAÇÃO 4.9/5</Badge>
+                      <h3 className="mt-3 font-display text-2xl font-bold">+2.847 alunos transformados</h3>
+                      <p className="mt-1 text-sm text-muted-foreground">Veja o que dizem quem já comprou</p>
+                    </div>
+                    <div className="mt-6 grid gap-4 md:grid-cols-3">
+                      {testimonials.map((t) => (
+                        <div key={t.name} className="rounded-xl border bg-card p-5 shadow-soft">
+                          <Quote className="h-5 w-5 text-primary opacity-40" />
+                          <p className="mt-2 text-sm leading-relaxed">"{t.text}"</p>
+                          <div className="mt-3 flex gap-0.5">
+                            {Array.from({ length: t.rating }).map((_, i) => (
+                              <Star key={i} className="h-3.5 w-3.5 fill-warning text-warning" />
+                            ))}
+                          </div>
+                          <div className="mt-3 flex items-center gap-2.5 border-t pt-3">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-full gradient-primary text-xs font-bold text-primary-foreground">
+                              {t.avatar}
+                            </div>
+                            <div>
+                              <p className="text-xs font-semibold">{t.name}</p>
+                              <p className="text-[11px] text-muted-foreground">{t.role}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Final CTA */}
+                  <div className="border-t gradient-hero p-8 text-center">
+                    <h3 className="font-display text-2xl font-bold">Não perca essa oportunidade</h3>
+                    <p className="mt-2 text-sm text-muted-foreground max-w-md mx-auto">
+                      Garante seu acesso agora com desconto exclusivo + bônus surpresa.
+                    </p>
+                    <Button size="lg" className="mt-5 gradient-primary text-primary-foreground shadow-glow text-base px-8 py-6">
+                      🔥 GARANTIR MINHA VAGA POR R$ {price.toFixed(2).replace(".", ",")}
+                    </Button>
+                    <p className="mt-3 text-[11px] text-muted-foreground">🔒 Compra 100% segura • Garantia incondicional de 7 dias</p>
                   </div>
                 </div>
 
@@ -265,33 +435,72 @@ export function CreateEbookView() {
             {step === 4 && (
               <div>
                 <h2 className="font-display text-xl font-semibold">Divulgação</h2>
-                <p className="mt-1 text-sm text-muted-foreground">Grupos do Facebook recomendados para o seu nicho.</p>
+                <p className="mt-1 text-sm text-muted-foreground">Encontre grupos relevantes e gere mensagens prontas.</p>
 
-                <div className="mt-6 space-y-3">
-                  {facebookGroups.map((g) => (
-                    <div key={g.name} className="flex items-center justify-between rounded-xl border bg-background p-4 transition hover:shadow-md">
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent text-accent-foreground">
-                          <Users className="h-5 w-5" />
-                        </div>
-                        <div>
-                          <p className="font-medium text-sm">{g.name}</p>
-                          <p className="text-xs text-muted-foreground">{g.members.toLocaleString("pt-BR")} membros • {g.engagement} engajamento</p>
-                        </div>
-                      </div>
-                      <Button variant="outline" size="sm" onClick={() => toast.success("Mensagem copiada!")}>
-                        <Copy className="mr-2 h-3.5 w-3.5" /> Copiar
-                      </Button>
+                {/* Search box */}
+                <div className="mt-6 rounded-2xl border bg-muted/30 p-5">
+                  <label className="text-sm font-semibold">Qual o assunto do seu ebook?</label>
+                  <p className="mt-1 text-xs text-muted-foreground">Buscaremos grupos do Facebook coerentes com o seu tema.</p>
+                  <div className="mt-3 flex flex-col sm:flex-row gap-2">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <Input
+                        placeholder="Ex: emagrecimento saudável, marketing digital, finanças pessoais..."
+                        value={searchTopic}
+                        onChange={(e) => setSearchTopic(e.target.value)}
+                        className="pl-9"
+                      />
                     </div>
-                  ))}
+                    <Button onClick={searchGroups} disabled={searchingGroups} className="gradient-primary text-primary-foreground shadow-glow">
+                      {searchingGroups ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Search className="mr-2 h-4 w-4" /> Buscar grupos</>}
+                    </Button>
+                  </div>
+
+                  <div className="mt-3">
+                    <label className="text-xs text-muted-foreground">Link do seu ebook</label>
+                    <Input
+                      value={ebookLink}
+                      onChange={(e) => setEbookLink(e.target.value)}
+                      className="mt-1 bg-background"
+                    />
+                  </div>
                 </div>
 
+                {/* Groups results */}
+                {searchedGroups.length > 0 && (
+                  <div className="mt-6">
+                    <h3 className="font-display text-base font-semibold">Grupos encontrados para "{searchTopic}"</h3>
+                    <div className="mt-3 space-y-3">
+                      {searchedGroups.map((g) => (
+                        <div key={g.name} className="flex items-center justify-between rounded-xl border bg-background p-4 transition hover:shadow-md">
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent text-accent-foreground">
+                              <Users className="h-5 w-5" />
+                            </div>
+                            <div>
+                              <p className="font-medium text-sm">{g.name}</p>
+                              <p className="text-xs text-muted-foreground">{g.members.toLocaleString("pt-BR")} membros • {g.engagement} engajamento</p>
+                            </div>
+                          </div>
+                          <Button variant="outline" size="sm" onClick={() => toast.success("Link do grupo copiado!")}>
+                            <Copy className="mr-2 h-3.5 w-3.5" /> Copiar
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Promo messages */}
                 <div className="mt-8">
-                  <h3 className="font-display text-base font-semibold">Mensagens prontas</h3>
+                  <h3 className="font-display text-base font-semibold">Mensagens prontas para divulgação</h3>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {searchTopic ? `Personalizadas para "${searchTopic}"` : "Digite o assunto acima para personalizar as mensagens"} — já incluem o link do seu ebook.
+                  </p>
                   <div className="mt-3 space-y-3">
-                    {promoMessages.map((m, i) => (
-                      <div key={i} className="rounded-xl border bg-muted/30 p-4">
-                        <p className="text-sm text-foreground">{m}</p>
+                    {promoTemplates(searchTopic, ebookLink).map((m, i) => (
+                      <div key={i} className="rounded-xl border bg-card p-4">
+                        <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">{m}</p>
                         <Button
                           variant="ghost"
                           size="sm"
@@ -301,7 +510,7 @@ export function CreateEbookView() {
                             toast.success("Texto copiado!");
                           }}
                         >
-                          <Copy className="mr-1.5 h-3 w-3" /> Copiar texto
+                          <Copy className="mr-1.5 h-3 w-3" /> Copiar mensagem
                         </Button>
                       </div>
                     ))}
