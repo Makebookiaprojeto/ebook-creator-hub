@@ -342,9 +342,9 @@ export function CreateEbookView() {
                     <Flame className="h-3.5 w-3.5" /> OFERTA RELÂMPAGO • 50% OFF • RESTAM POUCAS UNIDADES
                   </div>
 
-                  {/* Hero */}
-                  <div className="gradient-hero p-8 sm:p-12 text-center">
-                    <Badge className="bg-destructive text-destructive-foreground hover:bg-destructive">
+                  {/* Hero — high-conversion red/orange palette */}
+                  <div className="gradient-conversion-soft p-8 sm:p-12 text-center relative overflow-hidden">
+                    <Badge className="bg-destructive text-destructive-foreground hover:bg-destructive shadow-conversion">
                       <Zap className="mr-1 h-3 w-3" /> PROMOÇÃO ATIVA
                     </Badge>
                     <h1 className="mx-auto mt-4 max-w-2xl font-display text-3xl sm:text-5xl font-bold leading-tight">
@@ -356,11 +356,11 @@ export function CreateEbookView() {
 
                     {/* Mock cover */}
                     <div className="mt-6 flex justify-center">
-                      <div className="relative w-44 h-60 rounded-lg gradient-primary shadow-elevated flex items-center justify-center text-primary-foreground p-4 rotate-[-4deg]">
+                      <div className="relative w-44 h-60 rounded-lg gradient-conversion shadow-conversion flex items-center justify-center text-white p-4 rotate-[-4deg]">
                         <div className="text-center">
-                          <Sparkles className="h-6 w-6 mx-auto opacity-80" />
+                          <Sparkles className="h-6 w-6 mx-auto opacity-90" />
                           <p className="mt-2 font-display font-bold text-sm leading-tight line-clamp-4">{title || "Ebook"}</p>
-                          <p className="mt-2 text-[10px] opacity-80">EBOOK DIGITAL</p>
+                          <p className="mt-2 text-[10px] opacity-90">EBOOK DIGITAL</p>
                         </div>
                       </div>
                     </div>
@@ -369,14 +369,14 @@ export function CreateEbookView() {
                     <div className="mt-8">
                       <p className="text-xs text-muted-foreground line-through">De R$ {(price * 2).toFixed(2).replace(".", ",")}</p>
                       <p className="mt-1 text-sm text-muted-foreground">Por apenas</p>
-                      <p className="mt-1 font-display text-5xl font-bold text-gradient">
+                      <p className="mt-1 font-display text-5xl font-bold text-gradient-conversion">
                         R$ {price.toFixed(2).replace(".", ",")}
                       </p>
                       <p className="mt-1 text-xs text-muted-foreground">ou 12x sem juros no cartão</p>
                     </div>
 
                     <div className="mt-6 flex flex-col items-center gap-3">
-                      <Button size="lg" className="gradient-primary text-primary-foreground shadow-glow text-base px-8 py-6 animate-pulse">
+                      <Button size="lg" className="gradient-conversion text-white shadow-conversion text-base px-8 py-6 hover:opacity-95 animate-pulse">
                         🛒 QUERO COMPRAR AGORA
                       </Button>
                       <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
@@ -434,7 +434,7 @@ export function CreateEbookView() {
                   </div>
 
                   {/* Final CTA */}
-                  <div className="border-t gradient-hero p-8 text-center">
+                  <div className="border-t gradient-conversion-soft p-8 text-center">
                     <h3 className="font-display text-2xl font-bold">Não perca essa oportunidade</h3>
                     <p className="mt-2 text-sm text-muted-foreground max-w-md mx-auto">
                       Garante seu acesso agora com desconto exclusivo + bônus surpresa.
