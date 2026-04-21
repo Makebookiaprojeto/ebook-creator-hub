@@ -8,12 +8,17 @@ import { SupportView } from "@/components/views/SupportView";
 import { ProfileView } from "@/components/views/ProfileView";
 import { Bell, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { useEffect } from "react";
 
 type View = "dashboard" | "create" | "tools" | "support" | "profile";
 
 const Index = () => {
   const [view, setView] = useState<View>("dashboard");
+
+  useEffect(() => {
+    document.documentElement.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+  }, []);
 
   return (
     <SidebarProvider>
@@ -28,7 +33,6 @@ const Index = () => {
               <Input placeholder="Buscar ebooks, ferramentas..." className="pl-9 h-9 bg-muted/50 border-transparent focus-visible:bg-background" />
             </div>
             <div className="ml-auto flex items-center gap-3">
-              <ThemeToggle />
               <button className="relative flex h-9 w-9 items-center justify-center rounded-lg hover:bg-muted transition">
                 <Bell className="h-4 w-4" />
                 <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-primary" />
