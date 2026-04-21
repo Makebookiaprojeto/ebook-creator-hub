@@ -149,7 +149,7 @@ export function CreateEbookView() {
                 />
 
                 <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-                  {niches.map((n) => (
+                  {(showAllNiches ? niches : niches.slice(0, 7)).map((n) => (
                     <button
                       key={n.name}
                       onClick={() => setNiche(n.name)}
@@ -162,6 +162,16 @@ export function CreateEbookView() {
                       <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{n.desc}</p>
                     </button>
                   ))}
+                  {!showAllNiches && niches.length > 7 && (
+                    <button
+                      onClick={() => setShowAllNiches(true)}
+                      className="group rounded-xl border border-dashed p-4 text-left transition hover:border-primary hover:bg-accent/40 hover:shadow-md hover:-translate-y-0.5"
+                    >
+                      <div className="text-2xl">➕</div>
+                      <p className="mt-2 font-semibold text-sm">Entre outros</p>
+                      <p className="mt-1 text-xs text-muted-foreground">Ver mais {niches.length - 7} nichos</p>
+                    </button>
+                  )}
                 </div>
 
                 <div className="mt-8">
