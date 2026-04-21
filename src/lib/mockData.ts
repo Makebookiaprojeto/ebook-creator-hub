@@ -1,0 +1,66 @@
+export const recentEbooks = [
+  { id: 1, title: "Emagreça em 30 dias", niche: "Emagrecimento", price: 47, sales: 124, status: "Publicado" },
+  { id: 2, title: "Renda Extra com Afiliados", niche: "Renda extra", price: 67, sales: 89, status: "Publicado" },
+  { id: 3, title: "Marketing no Instagram", niche: "Marketing digital", price: 97, sales: 56, status: "Rascunho" },
+  { id: 4, title: "Reconquiste seu Amor", niche: "Relacionamentos", price: 37, sales: 203, status: "Publicado" },
+  { id: 5, title: "Dieta Low Carb Definitiva", niche: "Emagrecimento", price: 27, sales: 41, status: "Publicado" },
+];
+
+export const salesChartData = [
+  { month: "Jan", vendas: 12, visualizacoes: 240 },
+  { month: "Fev", vendas: 19, visualizacoes: 320 },
+  { month: "Mar", vendas: 28, visualizacoes: 480 },
+  { month: "Abr", vendas: 41, visualizacoes: 620 },
+  { month: "Mai", vendas: 55, visualizacoes: 890 },
+  { month: "Jun", vendas: 72, visualizacoes: 1240 },
+];
+
+export const niches = [
+  { name: "Emagrecimento", emoji: "🔥", desc: "Alta demanda, ticket médio R$47" },
+  { name: "Renda extra", emoji: "💰", desc: "Público engajado, conversão alta" },
+  { name: "Marketing digital", emoji: "📈", desc: "Ticket alto, R$97-197" },
+  { name: "Relacionamentos", emoji: "💕", desc: "Mercado emocional forte" },
+  { name: "Desenvolvimento pessoal", emoji: "🧠", desc: "Crescimento constante" },
+  { name: "Finanças", emoji: "💵", desc: "Profissional, ticket alto" },
+];
+
+export const facebookGroups = [
+  { name: "Empreendedores Digitais Brasil", members: 245000, engagement: "Alto" },
+  { name: "Renda Extra Online", members: 189000, engagement: "Alto" },
+  { name: "Afiliados Iniciantes", members: 156000, engagement: "Médio" },
+  { name: "Marketing Digital BR", members: 312000, engagement: "Alto" },
+  { name: "Vida Saudável e Fitness", members: 98000, engagement: "Médio" },
+  { name: "Desenvolvimento Pessoal", members: 134000, engagement: "Alto" },
+];
+
+export const promoMessages = [
+  "🔥 Acabei de lançar um material que mudou minha vida! Aprenda passo a passo como [BENEFÍCIO]. Acesse: [LINK]",
+  "✨ Você sabia que dá pra [RESULTADO] em apenas 30 dias? Eu testei e funciona! Confira: [LINK]",
+  "💡 Ebook novo na área! Tudo o que você precisa saber sobre [TEMA] em um só lugar. [LINK]",
+];
+
+export const tools = [
+  { id: 1, name: "Gerador de Títulos", desc: "Crie títulos magnéticos com IA", icon: "Sparkles", color: "from-violet-500 to-purple-500" },
+  { id: 2, name: "Gerador de Copy", desc: "Textos persuasivos para vendas", icon: "PenLine", color: "from-pink-500 to-rose-500" },
+  { id: 3, name: "Ideias de Nicho", desc: "Descubra nichos lucrativos", icon: "Lightbulb", color: "from-amber-500 to-orange-500" },
+  { id: 4, name: "Analisador de Concorrência", desc: "Estude o mercado em segundos", icon: "Search", color: "from-blue-500 to-cyan-500" },
+  { id: 5, name: "Gerador de Capas", desc: "Capas profissionais com IA", icon: "Image", color: "from-emerald-500 to-teal-500" },
+  { id: 6, name: "Otimizador SEO", desc: "Melhore seu posicionamento", icon: "TrendingUp", color: "from-indigo-500 to-violet-500" },
+];
+
+export const faqs = [
+  { q: "Como funciona a geração de ebooks com IA?", a: "Nossa IA cria estrutura, capítulos e conteúdo a partir do seu nicho. Você edita tudo livremente antes de publicar." },
+  { q: "Posso editar o conteúdo gerado?", a: "Sim! Todo o conteúdo é 100% editável. A IA é seu ponto de partida, não o limite." },
+  { q: "Como recebo os pagamentos das vendas?", a: "Os pagamentos são processados via Pix e cartão, com repasse em até 7 dias úteis." },
+  { q: "Existe limite de ebooks no plano FREE?", a: "No plano FREE você cria até 3 ebooks. No PRO, ilimitado." },
+  { q: "Posso cancelar quando quiser?", a: "Sim, sem multa nem fidelidade. Cancele com 1 clique." },
+];
+
+export const user = {
+  name: "Lucas Andrade",
+  email: "lucas@ebookai.com",
+  plan: "FREE" as "FREE" | "PRO",
+  ebooksCreated: 5,
+  totalSales: 513,
+  totalRevenue: 24890,
+};
