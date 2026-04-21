@@ -439,7 +439,7 @@ export function CreateEbookView() {
                     <p className="mt-2 text-sm text-muted-foreground max-w-md mx-auto">
                       Garante seu acesso agora com desconto exclusivo + bônus surpresa.
                     </p>
-                    <Button size="lg" className="mt-5 gradient-primary text-primary-foreground shadow-glow text-base px-8 py-6">
+                    <Button size="lg" className="mt-5 gradient-conversion text-white shadow-conversion text-base px-8 py-6 hover:opacity-95">
                       🔥 GARANTIR MINHA VAGA POR R$ {price.toFixed(2).replace(".", ",")}
                     </Button>
                     <p className="mt-3 text-[11px] text-muted-foreground">🔒 Compra 100% segura • Garantia incondicional de 7 dias</p>
