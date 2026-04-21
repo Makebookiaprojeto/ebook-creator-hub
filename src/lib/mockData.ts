@@ -22,6 +22,18 @@ export const niches = [
   { name: "Relacionamentos", emoji: "💕", desc: "Mercado emocional forte" },
   { name: "Desenvolvimento pessoal", emoji: "🧠", desc: "Crescimento constante" },
   { name: "Finanças", emoji: "💵", desc: "Profissional, ticket alto" },
+  { name: "Saúde mental", emoji: "🧘", desc: "Ansiedade, sono, foco" },
+  { name: "Fitness e musculação", emoji: "💪", desc: "Hipertrofia, treinos" },
+  { name: "Receitas e culinária", emoji: "🍳", desc: "Low carb, fit, doces" },
+  { name: "Maternidade", emoji: "👶", desc: "Gestação, sono do bebê" },
+  { name: "Pets", emoji: "🐶", desc: "Adestramento, cuidados" },
+  { name: "Espiritualidade", emoji: "✨", desc: "Tarô, astrologia, fé" },
+  { name: "Estudos e concursos", emoji: "📚", desc: "ENEM, OAB, vestibular" },
+  { name: "Tecnologia e programação", emoji: "💻", desc: "Dev, IA, no-code" },
+  { name: "Beleza e autocuidado", emoji: "💄", desc: "Skincare, cabelo, makeup" },
+  { name: "Empreendedorismo", emoji: "🚀", desc: "Negócios, gestão, vendas" },
+  { name: "Idiomas", emoji: "🌍", desc: "Inglês, espanhol fluente" },
+  { name: "Viagens", emoji: "✈️", desc: "Roteiros, mochilão, dicas" },
 ];
 
 export const facebookGroups = [
@@ -56,6 +68,25 @@ export const faqs = [
   { q: "Posso cancelar quando quiser?", a: "Sim, sem multa nem fidelidade. Cancele com 1 clique." },
 ];
 
+export const plans = [
+  {
+    id: "monthly",
+    name: "Mensal PRO",
+    price: 149.90,
+    period: "/mês",
+    highlight: false,
+    features: ["Ebooks ilimitados", "IA premium GPT-4", "Páginas customizadas", "Analytics avançado", "Suporte prioritário"],
+  },
+  {
+    id: "lifetime",
+    name: "Vitalício",
+    price: 249.90,
+    period: "pagamento único",
+    highlight: true,
+    features: ["Tudo do plano Mensal", "Acesso para sempre", "Atualizações grátis", "Sem mensalidade", "Suporte VIP vitalício"],
+  },
+];
+
 export const user = {
   name: "Lucas Andrade",
   email: "lucas@ebookai.com",
@@ -64,3 +95,32 @@ export const user = {
   totalSales: 513,
   totalRevenue: 24890,
 };
+
+// Mocked chapter content for preview
+export const chapterPreviews: Record<string, string> = {
+  default: `Neste capítulo você vai descobrir os fundamentos essenciais do tema. Vamos abordar os conceitos centrais com exemplos práticos, estudos de caso reais e exercícios aplicáveis no seu dia a dia.\n\nAo final, você terá clareza sobre os próximos passos e estará pronto para colocar em prática tudo o que aprendeu.\n\n• Conceito 1 explicado em detalhes\n• Aplicação prática com exemplos\n• Erros comuns e como evitar\n• Checklist final do capítulo`,
+};
+
+export const testimonials = [
+  {
+    name: "Mariana Costa",
+    role: "Mãe e empreendedora",
+    text: "Comprei o ebook e em 2 semanas já tinha resultados visíveis. Mudou minha rotina!",
+    rating: 5,
+    avatar: "M",
+  },
+  {
+    name: "Rafael Lima",
+    role: "Estudante",
+    text: "Conteúdo direto ao ponto, sem enrolação. Vale cada centavo. Recomendo demais!",
+    rating: 5,
+    avatar: "R",
+  },
+  {
+    name: "Juliana Souza",
+    role: "Designer",
+    text: "Achei que seria mais um ebook genérico, mas me surpreendeu. Material excelente!",
+    rating: 5,
+    avatar: "J",
+  },
+];
