@@ -19,6 +19,7 @@ type FbGroup = { name: string; members: number; engagement: string };
 export function CreateEbookView() {
   const [step, setStep] = useState(0);
   const [niche, setNiche] = useState("");
+  const [showAllNiches, setShowAllNiches] = useState(false);
   const [audience, setAudience] = useState("");
   const [price, setPrice] = useState(29.9);
   const [generating, setGenerating] = useState(false);
@@ -31,7 +32,7 @@ export function CreateEbookView() {
   // Divulgação
   const [searchTopic, setSearchTopic] = useState("");
   const [ebookLink, setEbookLink] = useState("https://meuebook.com/oferta");
-  const [searchedGroups, setSearchedGroups] = useState<typeof facebookGroups>([]);
+  const [searchedGroups, setSearchedGroups] = useState<FbGroup[]>([]);
   const [searchingGroups, setSearchingGroups] = useState(false);
 
   const generate = () => {
@@ -57,15 +58,25 @@ export function CreateEbookView() {
   };
 
   const searchGroups = () => {
-    if (!searchTopic.trim()) {
+    const topic = searchTopic.trim();
+    if (!topic) {
       toast.error("Digite o assunto do seu ebook primeiro");
       return;
     }
     setSearchingGroups(true);
     setTimeout(() => {
-      setSearchedGroups(facebookGroups);
+      const capitalized = topic
+        .split(" ")
+        .map((w) => (w.length > 2 ? w[0].toUpperCase() + w.slice(1).toLowerCase() : w))
+        .join(" ");
+      const results: FbGroup[] = groupTemplates.map((tpl) => ({
+        name: `${capitalized} ${tpl.suffix}`,
+        members: Math.round(tpl.base * (0.6 + Math.random() * 0.8)),
+        engagement: tpl.engagement,
+      }));
+      setSearchedGroups(results);
       setSearchingGroups(false);
-      toast.success(`${facebookGroups.length} grupos encontrados para "${searchTopic}"`);
+      toast.success(`${results.length} grupos abertos encontrados para "${topic}"`);
     }, 1200);
   };
 
