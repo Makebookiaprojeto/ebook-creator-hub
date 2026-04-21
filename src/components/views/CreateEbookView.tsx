@@ -8,15 +8,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { niches, facebookGroups, chapterPreviews, testimonials } from "@/lib/mockData";
+import { niches, groupTemplates, chapterPreviews, testimonials } from "@/lib/mockData";
 import { toast } from "sonner";
 
 const steps = ["Nicho", "Preço", "Gerar", "Vendas", "Divulgação"];
-const pricePresets = [9.9, 19.9, 29.9, 39.9, 49.9, 67.0];
+const pricePresets = [9.9, 19.9, 29.9, 39.9, 49.9];
+
+type FbGroup = { name: string; members: number; engagement: string };
 
 export function CreateEbookView() {
   const [step, setStep] = useState(0);
   const [niche, setNiche] = useState("");
+  const [showAllNiches, setShowAllNiches] = useState(false);
   const [audience, setAudience] = useState("");
   const [price, setPrice] = useState(29.9);
   const [generating, setGenerating] = useState(false);
@@ -29,7 +32,7 @@ export function CreateEbookView() {
   // Divulgação
   const [searchTopic, setSearchTopic] = useState("");
   const [ebookLink, setEbookLink] = useState("https://meuebook.com/oferta");
-  const [searchedGroups, setSearchedGroups] = useState<typeof facebookGroups>([]);
+  const [searchedGroups, setSearchedGroups] = useState<FbGroup[]>([]);
   const [searchingGroups, setSearchingGroups] = useState(false);
 
   const generate = () => {
@@ -55,15 +58,25 @@ export function CreateEbookView() {
   };
 
   const searchGroups = () => {
-    if (!searchTopic.trim()) {
+    const topic = searchTopic.trim();
+    if (!topic) {
       toast.error("Digite o assunto do seu ebook primeiro");
       return;
     }
     setSearchingGroups(true);
     setTimeout(() => {
-      setSearchedGroups(facebookGroups);
+      const capitalized = topic
+        .split(" ")
+        .map((w) => (w.length > 2 ? w[0].toUpperCase() + w.slice(1).toLowerCase() : w))
+        .join(" ");
+      const results: FbGroup[] = groupTemplates.map((tpl) => ({
+        name: `${capitalized} ${tpl.suffix}`,
+        members: Math.round(tpl.base * (0.6 + Math.random() * 0.8)),
+        engagement: tpl.engagement,
+      }));
+      setSearchedGroups(results);
       setSearchingGroups(false);
-      toast.success(`${facebookGroups.length} grupos encontrados para "${searchTopic}"`);
+      toast.success(`${results.length} grupos abertos encontrados para "${topic}"`);
     }, 1200);
   };
 
@@ -136,7 +149,7 @@ export function CreateEbookView() {
                 />
 
                 <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-                  {niches.map((n) => (
+                  {(showAllNiches ? niches : niches.slice(0, 7)).map((n) => (
                     <button
                       key={n.name}
                       onClick={() => setNiche(n.name)}
@@ -149,6 +162,16 @@ export function CreateEbookView() {
                       <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{n.desc}</p>
                     </button>
                   ))}
+                  {!showAllNiches && niches.length > 7 && (
+                    <button
+                      onClick={() => setShowAllNiches(true)}
+                      className="group rounded-xl border border-dashed p-4 text-left transition hover:border-primary hover:bg-accent/40 hover:shadow-md hover:-translate-y-0.5"
+                    >
+                      <div className="text-2xl">➕</div>
+                      <p className="mt-2 font-semibold text-sm">Entre outros</p>
+                      <p className="mt-1 text-xs text-muted-foreground">Ver mais {niches.length - 7} nichos</p>
+                    </button>
+                  )}
                 </div>
 
                 <div className="mt-8">
@@ -319,9 +342,9 @@ export function CreateEbookView() {
                     <Flame className="h-3.5 w-3.5" /> OFERTA RELÂMPAGO • 50% OFF • RESTAM POUCAS UNIDADES
                   </div>
 
-                  {/* Hero */}
-                  <div className="gradient-hero p-8 sm:p-12 text-center">
-                    <Badge className="bg-destructive text-destructive-foreground hover:bg-destructive">
+                  {/* Hero — high-conversion red/orange palette */}
+                  <div className="gradient-conversion-soft p-8 sm:p-12 text-center relative overflow-hidden">
+                    <Badge className="bg-destructive text-destructive-foreground hover:bg-destructive shadow-conversion">
                       <Zap className="mr-1 h-3 w-3" /> PROMOÇÃO ATIVA
                     </Badge>
                     <h1 className="mx-auto mt-4 max-w-2xl font-display text-3xl sm:text-5xl font-bold leading-tight">
@@ -333,11 +356,11 @@ export function CreateEbookView() {
 
                     {/* Mock cover */}
                     <div className="mt-6 flex justify-center">
-                      <div className="relative w-44 h-60 rounded-lg gradient-primary shadow-elevated flex items-center justify-center text-primary-foreground p-4 rotate-[-4deg]">
+                      <div className="relative w-44 h-60 rounded-lg gradient-conversion shadow-conversion flex items-center justify-center text-white p-4 rotate-[-4deg]">
                         <div className="text-center">
-                          <Sparkles className="h-6 w-6 mx-auto opacity-80" />
+                          <Sparkles className="h-6 w-6 mx-auto opacity-90" />
                           <p className="mt-2 font-display font-bold text-sm leading-tight line-clamp-4">{title || "Ebook"}</p>
-                          <p className="mt-2 text-[10px] opacity-80">EBOOK DIGITAL</p>
+                          <p className="mt-2 text-[10px] opacity-90">EBOOK DIGITAL</p>
                         </div>
                       </div>
                     </div>
@@ -346,14 +369,14 @@ export function CreateEbookView() {
                     <div className="mt-8">
                       <p className="text-xs text-muted-foreground line-through">De R$ {(price * 2).toFixed(2).replace(".", ",")}</p>
                       <p className="mt-1 text-sm text-muted-foreground">Por apenas</p>
-                      <p className="mt-1 font-display text-5xl font-bold text-gradient">
+                      <p className="mt-1 font-display text-5xl font-bold text-gradient-conversion">
                         R$ {price.toFixed(2).replace(".", ",")}
                       </p>
                       <p className="mt-1 text-xs text-muted-foreground">ou 12x sem juros no cartão</p>
                     </div>
 
                     <div className="mt-6 flex flex-col items-center gap-3">
-                      <Button size="lg" className="gradient-primary text-primary-foreground shadow-glow text-base px-8 py-6 animate-pulse">
+                      <Button size="lg" className="gradient-conversion text-white shadow-conversion text-base px-8 py-6 hover:opacity-95 animate-pulse">
                         🛒 QUERO COMPRAR AGORA
                       </Button>
                       <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
@@ -411,12 +434,12 @@ export function CreateEbookView() {
                   </div>
 
                   {/* Final CTA */}
-                  <div className="border-t gradient-hero p-8 text-center">
+                  <div className="border-t gradient-conversion-soft p-8 text-center">
                     <h3 className="font-display text-2xl font-bold">Não perca essa oportunidade</h3>
                     <p className="mt-2 text-sm text-muted-foreground max-w-md mx-auto">
                       Garante seu acesso agora com desconto exclusivo + bônus surpresa.
                     </p>
-                    <Button size="lg" className="mt-5 gradient-primary text-primary-foreground shadow-glow text-base px-8 py-6">
+                    <Button size="lg" className="mt-5 gradient-conversion text-white shadow-conversion text-base px-8 py-6 hover:opacity-95">
                       🔥 GARANTIR MINHA VAGA POR R$ {price.toFixed(2).replace(".", ",")}
                     </Button>
                     <p className="mt-3 text-[11px] text-muted-foreground">🔒 Compra 100% segura • Garantia incondicional de 7 dias</p>

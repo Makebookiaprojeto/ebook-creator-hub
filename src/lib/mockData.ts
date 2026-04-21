@@ -36,13 +36,25 @@ export const niches = [
   { name: "Viagens", emoji: "✈️", desc: "Roteiros, mochilão, dicas" },
 ];
 
+// Pool of group name templates and engagement levels — used to generate
+// topic-specific Facebook group results dynamically in the marketing step.
+export const groupTemplates = [
+  { suffix: "Brasil", base: 245000, engagement: "Alto" },
+  { suffix: "Oficial", base: 189000, engagement: "Alto" },
+  { suffix: "para Iniciantes", base: 156000, engagement: "Médio" },
+  { suffix: "Avançado", base: 98000, engagement: "Alto" },
+  { suffix: "Comunidade", base: 312000, engagement: "Alto" },
+  { suffix: "Dicas e Estratégias", base: 134000, engagement: "Médio" },
+  { suffix: "Networking BR", base: 76000, engagement: "Alto" },
+  { suffix: "Resultados Reais", base: 54000, engagement: "Médio" },
+  { suffix: "Mastermind", base: 42000, engagement: "Alto" },
+  { suffix: "Grupo Aberto", base: 188000, engagement: "Médio" },
+];
+
+// Kept for backwards compatibility (not used in new search flow)
 export const facebookGroups = [
   { name: "Empreendedores Digitais Brasil", members: 245000, engagement: "Alto" },
   { name: "Renda Extra Online", members: 189000, engagement: "Alto" },
-  { name: "Afiliados Iniciantes", members: 156000, engagement: "Médio" },
-  { name: "Marketing Digital BR", members: 312000, engagement: "Alto" },
-  { name: "Vida Saudável e Fitness", members: 98000, engagement: "Médio" },
-  { name: "Desenvolvimento Pessoal", members: 134000, engagement: "Alto" },
 ];
 
 export const promoMessages = [
