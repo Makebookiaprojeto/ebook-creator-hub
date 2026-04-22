@@ -204,16 +204,20 @@ export function CreateEbookView() {
                     <Input
                       type="text"
                       inputMode="decimal"
-                      value={price.toFixed(2).replace(".", ",")}
+                      placeholder="0,00"
+                      value={priceInput}
                       onChange={(e) => {
-                        const raw = e.target.value.replace(/[^0-9,]/g, "");
+                        const raw = e.target.value.replace(/[^0-9,.]/g, "").replace(".", ",");
                         const parts = raw.split(",");
-                        let formatted = parts[0];
-                        if (parts.length > 1) {
-                          formatted += "." + parts[1].slice(0, 2);
-                        }
-                        const num = parseFloat(formatted) || 0;
+                        let next = parts[0].replace(/^0+(?=\d)/, "");
+                        if (parts.length > 1) next += "," + parts[1].slice(0, 2);
+                        setPriceInput(next);
+                        const num = parseFloat(next.replace(",", ".")) || 0;
                         setPrice(num);
+                      }}
+                      onBlur={() => {
+                        if (!priceInput) return;
+                        setPriceInput(price.toFixed(2).replace(".", ","));
                       }}
                       className="pl-12 h-14 text-2xl font-bold font-display"
                     />
