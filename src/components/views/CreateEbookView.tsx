@@ -22,6 +22,7 @@ export function CreateEbookView() {
   const [showAllNiches, setShowAllNiches] = useState(false);
   const [audience, setAudience] = useState("");
   const [price, setPrice] = useState<number>(29.9);
+  const [priceInput, setPriceInput] = useState<string>("29,90");
   const [generating, setGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
   const [title, setTitle] = useState("");
