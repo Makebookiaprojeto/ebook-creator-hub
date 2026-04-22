@@ -12,7 +12,7 @@ import { niches, groupTemplates, chapterPreviews, testimonials } from "@/lib/moc
 import { toast } from "sonner";
 
 const steps = ["Nicho", "Preço", "Gerar", "Vendas", "Divulgação"];
-const pricePresets = [9.9, 19.9, 29.9, 39.9, 49.9];
+const pricePresets = [19.9, 29.9, 39.9, 49.9, 97.0];
 
 type FbGroup = { name: string; members: number; engagement: string };
 
@@ -21,7 +21,7 @@ export function CreateEbookView() {
   const [niche, setNiche] = useState("");
   const [showAllNiches, setShowAllNiches] = useState(false);
   const [audience, setAudience] = useState("");
-  const [price, setPrice] = useState(29.9);
+  const [price, setPrice] = useState<number>(29.9);
   const [generating, setGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
   const [title, setTitle] = useState("");
@@ -201,10 +201,19 @@ export function CreateEbookView() {
                   <div className="mt-2 relative">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-semibold text-muted-foreground">R$</span>
                     <Input
-                      type="number"
-                      step="0.10"
-                      value={price}
-                      onChange={(e) => setPrice(Number(e.target.value) || 0)}
+                      type="text"
+                      inputMode="decimal"
+                      value={price.toFixed(2).replace(".", ",")}
+                      onChange={(e) => {
+                        const raw = e.target.value.replace(/[^0-9,]/g, "");
+                        const parts = raw.split(",");
+                        let formatted = parts[0];
+                        if (parts.length > 1) {
+                          formatted += "." + parts[1].slice(0, 2);
+                        }
+                        const num = parseFloat(formatted) || 0;
+                        setPrice(num);
+                      }}
                       className="pl-12 h-14 text-2xl font-bold font-display"
                     />
                   </div>
