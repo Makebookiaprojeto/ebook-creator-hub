@@ -12,7 +12,7 @@ import { niches, groupTemplates, chapterPreviews, testimonials } from "@/lib/moc
 import { toast } from "sonner";
 
 const steps = ["Nicho", "Preço", "Gerar", "Vendas", "Divulgação"];
-const pricePresets = [9.9, 19.9, 29.9, 39.9, 49.9];
+const pricePresets = [19.9, 29.9, 39.9, 49.9, 97.0];
 
 type FbGroup = { name: string; members: number; engagement: string };
 
@@ -21,7 +21,7 @@ export function CreateEbookView() {
   const [niche, setNiche] = useState("");
   const [showAllNiches, setShowAllNiches] = useState(false);
   const [audience, setAudience] = useState("");
-  const [price, setPrice] = useState(29.9);
+  const [price, setPrice] = useState<string>("29,90");
   const [generating, setGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
   const [title, setTitle] = useState("");
