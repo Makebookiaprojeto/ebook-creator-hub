@@ -1,4 +1,7 @@
-import { LayoutDashboard, Plus, Wrench, LifeBuoy, User, Sparkles } from "lucide-react";
+import { LayoutDashboard, Plus, Wrench, LifeBuoy, User, Sparkles, LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import {
   Sidebar,
   SidebarContent,
@@ -31,6 +34,15 @@ const items: { id: View; title: string; icon: typeof LayoutDashboard }[] = [
 export function AppSidebar({ active, onChange }: Props) {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    toast.success("Você saiu da sua conta.");
+    navigate("/", { replace: true });
+  };
+
 
   return (
     <Sidebar collapsible="icon" className="border-r">
@@ -78,13 +90,32 @@ export function AppSidebar({ active, onChange }: Props) {
 
       <SidebarFooter className="border-t border-sidebar-border">
         {!collapsed && (
-          <div className="m-2 rounded-xl gradient-hero p-3">
-            <p className="text-xs font-semibold text-foreground">Plano FREE</p>
-            <p className="mt-0.5 text-[11px] text-muted-foreground">Faça upgrade para ebooks ilimitados</p>
-            <button className="mt-2 w-full rounded-lg gradient-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition hover:opacity-90">
-              Upgrade PRO
-            </button>
-          </div>
+          <>
+            <div className="m-2 rounded-xl gradient-hero p-3">
+              <p className="text-xs font-semibold text-foreground">Plano FREE</p>
+              <p className="mt-0.5 text-[11px] text-muted-foreground">Faça upgrade para ebooks ilimitados</p>
+              <button className="mt-2 w-full rounded-lg gradient-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition hover:opacity-90">
+                Upgrade PRO
+              </button>
+            </div>
+            {user && (
+              <div className="mx-2 mb-2 flex items-center justify-between gap-2 rounded-lg border bg-card p-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full gradient-primary text-[11px] font-bold text-primary-foreground">
+                    {user.email?.[0]?.toUpperCase() ?? "U"}
+                  </div>
+                  <span className="truncate text-[11px] text-muted-foreground">{user.email}</span>
+                </div>
+                <button
+                  onClick={handleSignOut}
+                  title="Sair"
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md hover:bg-muted transition"
+                >
+                  <LogOut className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            )}
+          </>
         )}
       </SidebarFooter>
     </Sidebar>
