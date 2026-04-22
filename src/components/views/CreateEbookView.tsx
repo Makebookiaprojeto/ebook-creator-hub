@@ -22,6 +22,7 @@ export function CreateEbookView() {
   const [showAllNiches, setShowAllNiches] = useState(false);
   const [audience, setAudience] = useState("");
   const [price, setPrice] = useState<number>(29.9);
+  const [priceInput, setPriceInput] = useState<string>("29,90");
   const [generating, setGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
   const [title, setTitle] = useState("");
@@ -203,16 +204,20 @@ export function CreateEbookView() {
                     <Input
                       type="text"
                       inputMode="decimal"
-                      value={price.toFixed(2).replace(".", ",")}
+                      placeholder="0,00"
+                      value={priceInput}
                       onChange={(e) => {
-                        const raw = e.target.value.replace(/[^0-9,]/g, "");
+                        const raw = e.target.value.replace(/[^0-9,.]/g, "").replace(".", ",");
                         const parts = raw.split(",");
-                        let formatted = parts[0];
-                        if (parts.length > 1) {
-                          formatted += "." + parts[1].slice(0, 2);
-                        }
-                        const num = parseFloat(formatted) || 0;
+                        let next = parts[0].replace(/^0+(?=\d)/, "");
+                        if (parts.length > 1) next += "," + parts[1].slice(0, 2);
+                        setPriceInput(next);
+                        const num = parseFloat(next.replace(",", ".")) || 0;
                         setPrice(num);
+                      }}
+                      onBlur={() => {
+                        if (!priceInput) return;
+                        setPriceInput(price.toFixed(2).replace(".", ","));
                       }}
                       className="pl-12 h-14 text-2xl font-bold font-display"
                     />
@@ -225,7 +230,10 @@ export function CreateEbookView() {
                     {pricePresets.map((p) => (
                       <button
                         key={p}
-                        onClick={() => setPrice(p)}
+                        onClick={() => {
+                          setPrice(p);
+                          setPriceInput(p.toFixed(2).replace(".", ","));
+                        }}
                         className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition hover:border-primary ${
                           price === p ? "border-primary bg-accent text-accent-foreground" : ""
                         }`}
