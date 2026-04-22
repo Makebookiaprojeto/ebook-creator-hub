@@ -230,7 +230,10 @@ export function CreateEbookView() {
                     {pricePresets.map((p) => (
                       <button
                         key={p}
-                        onClick={() => setPrice(p)}
+                        onClick={() => {
+                          setPrice(p);
+                          setPriceInput(p.toFixed(2).replace(".", ","));
+                        }}
                         className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition hover:border-primary ${
                           price === p ? "border-primary bg-accent text-accent-foreground" : ""
                         }`}
