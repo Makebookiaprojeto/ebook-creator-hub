@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { niches, groupTemplates, chapterPreviews, testimonials } from "@/lib/mockData";
 import { toast } from "sonner";
+import { useEbooks } from "@/hooks/useEbooks";
 
 const steps = ["Nicho", "Preço", "Gerar", "Vendas", "Divulgação"];
 const pricePresets = [19.9, 29.9, 39.9, 49.9, 97.0];
@@ -17,6 +18,8 @@ const pricePresets = [19.9, 29.9, 39.9, 49.9, 97.0];
 type FbGroup = { name: string; members: number; engagement: string };
 
 export function CreateEbookView() {
+  const { createEbookWithChapters } = useEbooks();
+  const [saving, setSaving] = useState(false);
   const [step, setStep] = useState(0);
   const [niche, setNiche] = useState("");
   const [showAllNiches, setShowAllNiches] = useState(false);
@@ -572,8 +575,30 @@ export function CreateEbookView() {
             Continuar <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         ) : (
-          <Button onClick={() => toast.success("Ebook finalizado! 🎉")} className="gradient-primary text-primary-foreground shadow-glow">
-            Finalizar <Check className="ml-2 h-4 w-4" />
+          <Button
+            onClick={async () => {
+              if (!title) {
+                toast.error("Gere ou preencha o título antes de finalizar");
+                return;
+              }
+              try {
+                setSaving(true);
+                await createEbookWithChapters(
+                  { title, description: subtitle, category: niche, status: "published" },
+                  chapters,
+                );
+                toast.success("Ebook salvo com sucesso! 🎉");
+              } catch (e: any) {
+                toast.error(e.message ?? "Erro ao salvar ebook");
+              } finally {
+                setSaving(false);
+              }
+            }}
+            disabled={saving}
+            className="gradient-primary text-primary-foreground shadow-glow"
+          >
+            {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Check className="mr-2 h-4 w-4" />}
+            Finalizar e salvar
           </Button>
         )}
       </div>
