@@ -8,10 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Sparkles, Loader2 } from "lucide-react";
+import { Sparkles, Loader2, Eye, EyeOff } from "lucide-react";
 
 const emailSchema = z.string().trim().email("Email inválido").max(255);
 const passwordSchema = z.string().min(6, "Senha deve ter no mínimo 6 caracteres").max(72);
+const usernameSchema = z.string().trim().min(2, "Nome deve ter no mínimo 2 caracteres").max(50, "Nome muito longo");
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -19,6 +20,8 @@ const Auth = () => {
   const [tab, setTab] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [resetMode, setResetMode] = useState(false);
 
@@ -57,10 +60,18 @@ const Auth = () => {
       }
 
       if (tab === "signup") {
+        const usernameParsed = usernameSchema.safeParse(username);
+        if (!usernameParsed.success) {
+          toast.error(usernameParsed.error.issues[0].message);
+          return;
+        }
         const { error } = await supabase.auth.signUp({
           email: emailParsed.data,
           password: passParsed.data,
-          options: { emailRedirectTo: `${window.location.origin}/app` },
+          options: {
+            emailRedirectTo: `${window.location.origin}/app`,
+            data: { username: usernameParsed.data },
+          },
         });
         if (error) {
           if (error.message.includes("already registered")) {
@@ -147,7 +158,22 @@ const Auth = () => {
                 <TabsTrigger value="signup">Criar conta</TabsTrigger>
               </TabsList>
 
-              <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+              <form onSubmit={handleSubmit} className="mt-6 space-y-4" autoComplete="off">
+                {tab === "signup" && (
+                  <div>
+                    <Label htmlFor="username">Nome de usuário</Label>
+                    <Input
+                      id="username"
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder="Seu nome"
+                      required
+                      autoComplete="off"
+                      className="mt-1.5"
+                    />
+                  </div>
+                )}
                 <div>
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -157,7 +183,7 @@ const Auth = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="seu@email.com"
                     required
-                    autoComplete="email"
+                    autoComplete="off"
                     className="mt-1.5"
                   />
                 </div>
@@ -174,17 +200,29 @@ const Auth = () => {
                       </button>
                     )}
                   </div>
-                  <Input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    required
-                    autoComplete={tab === "login" ? "current-password" : "new-password"}
-                    minLength={6}
-                    className="mt-1.5"
-                  />
+                  <div className="relative mt-1.5">
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      required
+                      autoComplete="off"
+                      data-lpignore="true"
+                      data-form-type="other"
+                      minLength={6}
+                      className="pr-10"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((v) => !v)}
+                      aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition"
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
                   {tab === "signup" && (
                     <p className="mt-1.5 text-[11px] text-muted-foreground">Mínimo de 6 caracteres.</p>
                   )}
