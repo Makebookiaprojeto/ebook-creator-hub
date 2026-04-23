@@ -117,7 +117,8 @@ export function AppSidebar({ active, onChange }: Props) {
                   <LogOut className="h-3.5 w-3.5" />
                 </button>
               </div>
-            )}
+              );
+            })()}
           </>
         )}
       </SidebarFooter>
