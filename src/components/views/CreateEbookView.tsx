@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { niches, groupTemplates, chapterPreviews, testimonials } from "@/lib/mockData";
 import { toast } from "sonner";
 import { useEbooks } from "@/hooks/useEbooks";
+import { supabase } from "@/integrations/supabase/client";
 
 const steps = ["Nicho", "Preço", "Gerar", "Vendas", "Divulgação"];
 const pricePresets = [19.9, 29.9, 39.9, 49.9, 97.0];
@@ -39,26 +40,61 @@ export function CreateEbookView() {
   const [searchedGroups, setSearchedGroups] = useState<FbGroup[]>([]);
   const [searchingGroups, setSearchingGroups] = useState(false);
 
-  const generate = () => {
+  const handleAIError = (status?: number, fallback = "Falha ao gerar com IA") => {
+    if (status === 429) return toast.error("Muitas requisições. Aguarde alguns segundos e tente novamente.");
+    if (status === 402) return toast.error("Créditos esgotados. Adicione créditos em Configurações > Workspace.");
+    toast.error(fallback);
+  };
+
+  const generate = async () => {
+    if (!niche.trim()) {
+      toast.error("Escolha um nicho primeiro");
+      return;
+    }
     setGenerating(true);
-    setTimeout(() => {
-      const audienceTxt = audience ? ` para ${audience}` : "";
-      setTitle(`O Guia Definitivo de ${niche || "Sucesso"}`);
-      setSubtitle(`Como dominar ${niche.toLowerCase() || "o mercado"}${audienceTxt} em 30 dias mesmo começando do zero`);
-      const chapterTitles = [
-        `Introdução ao mundo de ${niche || "novos negócios"}`,
-        "Os 5 erros que iniciantes cometem",
-        "Estratégias comprovadas pelos top 1%",
-        "O método passo a passo",
-        "Ferramentas essenciais",
-        "Como escalar seus resultados",
-        "Conclusão e próximos passos",
-      ];
-      setChapters(chapterTitles.map((t) => ({ title: t, content: chapterPreviews.default })));
-      setGenerating(false);
+    try {
+      const { data, error } = await supabase.functions.invoke("generate-ebook", {
+        body: { mode: "structure", niche, audience },
+      });
+      if (error) {
+        handleAIError((error as any).context?.status, "Falha ao gerar estrutura");
+        return;
+      }
+      setTitle(data.title);
+      setSubtitle(data.subtitle);
+      // Generate chapter contents in parallel
+      const chapterTitles: string[] = data.chapters;
+      setChapters(chapterTitles.map((t) => ({ title: t, content: "" })));
       setGenerated(true);
-      toast.success("Ebook gerado com sucesso!");
-    }, 2200);
+      toast.success("Estrutura gerada! Escrevendo capítulos...");
+
+      const results = await Promise.all(
+        chapterTitles.map((ct, idx) =>
+          supabase.functions.invoke("generate-ebook", {
+            body: {
+              mode: "chapter",
+              ebookTitle: data.title,
+              audience,
+              chapterTitle: ct,
+              chapterIndex: idx,
+              totalChapters: chapterTitles.length,
+            },
+          }),
+        ),
+      );
+
+      const filled = chapterTitles.map((t, i) => ({
+        title: t,
+        content: results[i].data?.content ?? chapterPreviews.default,
+      }));
+      setChapters(filled);
+      toast.success("Ebook completo gerado com IA!");
+    } catch (e) {
+      console.error(e);
+      toast.error("Erro inesperado ao gerar ebook");
+    } finally {
+      setGenerating(false);
+    }
   };
 
   const searchGroups = () => {
