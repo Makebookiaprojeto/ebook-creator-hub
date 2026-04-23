@@ -1,10 +1,25 @@
-import { BookOpen, Eye, ShoppingCart, DollarSign } from "lucide-react";
+import { BookOpen, Eye, ShoppingCart, DollarSign, Loader2 } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { StatCard } from "@/components/StatCard";
-import { recentEbooks, salesChartData, user } from "@/lib/mockData";
+import { salesChartData, user } from "@/lib/mockData";
 import { Badge } from "@/components/ui/badge";
+import { useEbooks } from "@/hooks/useEbooks";
+import { useAuth } from "@/hooks/useAuth";
+
+const statusLabel: Record<string, string> = {
+  draft: "Rascunho",
+  published: "Publicado",
+  archived: "Arquivado",
+};
 
 export function DashboardView() {
+  const { user: authUser } = useAuth();
+  const { ebooks, loading } = useEbooks();
+  const displayName =
+    (authUser?.user_metadata?.username as string | undefined) ||
+    authUser?.email?.split("@")[0] ||
+    user.name.split(" ")[0];
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
