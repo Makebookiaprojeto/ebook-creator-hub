@@ -23,7 +23,12 @@ export function DashboardView() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="font-display text-3xl font-bold">Olá, {user.name.split(" ")[0]} 👋</h1>
+        <h1 className="font-display text-3xl font-bold">Olá, {displayName} 👋</h1>
+        <p className="mt-1 text-muted-foreground">Aqui está o resumo do seu negócio hoje.</p>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatCard label="Ebooks criados" value={String(ebooks.length)} delta={`+${ebooks.length}`} icon={BookOpen} tint="from-violet-500 to-purple-500" />
         <p className="mt-1 text-muted-foreground">Aqui está o resumo do seu negócio hoje.</p>
       </div>
 
