@@ -497,9 +497,11 @@ export function CreateEbookView() {
                                   </AnimatePresence>
                                 </div>
                               );
-                        })}
-                      </div>
-                    </div>
+                            })}
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 )}
               </div>
