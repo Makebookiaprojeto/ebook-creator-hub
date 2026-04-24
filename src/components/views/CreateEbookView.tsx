@@ -376,78 +376,127 @@ export function CreateEbookView() {
                   <div className="mt-10 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-center">
                     <Loader2 className="h-10 w-10 animate-spin text-primary" />
                     <p className="mt-4 font-medium">Gerando seu ebook...</p>
-                    <p className="mt-1 text-sm text-muted-foreground">Analisando o nicho • Criando estrutura • Refinando</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{generationStage || "Trabalhando..."}</p>
+                    <p className="mt-3 text-xs text-muted-foreground">Pode levar 30-60 segundos. Estamos criando capa, capítulos e ilustrações.</p>
                   </div>
                 )}
 
                 {generated && (
                   <div className="mt-6 space-y-4">
-                    <div>
-                      <label className="text-xs font-medium uppercase text-muted-foreground">Título</label>
-                      <Input value={title} onChange={(e) => setTitle(e.target.value)} className="mt-1.5 font-display text-lg font-semibold" />
+                    {/* Quick stats + actions */}
+                    <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-gradient-to-br from-accent/40 to-transparent p-4">
+                      <div className="flex items-center gap-3">
+                        {coverUrl ? (
+                          <img src={coverUrl} alt="capa" className="h-16 w-12 rounded-md object-cover shadow-md" />
+                        ) : (
+                          <div className="h-16 w-12 rounded-md bg-muted animate-pulse" />
+                        )}
+                        <div>
+                          <p className="font-display text-sm font-bold leading-tight line-clamp-2">{title}</p>
+                          <p className="text-xs text-muted-foreground">{chapters.length} capítulos</p>
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <Button size="sm" variant="outline" onClick={() => setShowFullPreview((v) => !v)}>
+                          <Eye className="mr-2 h-3.5 w-3.5" /> {showFullPreview ? "Fechar preview" : "Preview completo"}
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={generate}>
+                          <Sparkles className="mr-2 h-3.5 w-3.5" /> Regenerar
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={handleGeneratePdf}
+                          disabled={generatingPdf}
+                          className="gradient-primary text-primary-foreground shadow-glow"
+                        >
+                          {generatingPdf ? (
+                            <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+                          ) : (
+                            <Download className="mr-2 h-3.5 w-3.5" />
+                          )}
+                          Gerar PDF
+                        </Button>
+                      </div>
                     </div>
-                    <div>
-                      <label className="text-xs font-medium uppercase text-muted-foreground">Subtítulo</label>
-                      <Input value={subtitle} onChange={(e) => setSubtitle(e.target.value)} className="mt-1.5" />
-                    </div>
-                    <div>
-                      <label className="text-xs font-medium uppercase text-muted-foreground">Capítulos</label>
-                      <p className="text-xs text-muted-foreground mt-1">Clique em um capítulo para ver e editar o conteúdo completo.</p>
-                      <div className="mt-2 space-y-2">
-                        {chapters.map((c, i) => {
-                          const isOpen = openChapter === i;
-                          return (
-                            <div key={i} className="rounded-xl border bg-background overflow-hidden">
-                              <button
-                                onClick={() => setOpenChapter(isOpen ? null : i)}
-                                className="flex w-full items-center gap-3 p-3 text-left transition hover:bg-muted/40"
-                              >
-                                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-accent text-xs font-semibold text-accent-foreground">
-                                  {i + 1}
-                                </span>
-                                <Input
-                                  value={c.title}
-                                  onClick={(e) => e.stopPropagation()}
-                                  onChange={(e) => {
-                                    const copy = [...chapters];
-                                    copy[i] = { ...copy[i], title: e.target.value };
-                                    setChapters(copy);
-                                  }}
-                                  className="border-0 shadow-none focus-visible:ring-0 px-0 h-7"
-                                />
-                                <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${isOpen ? "rotate-180" : ""}`} />
-                              </button>
-                              <AnimatePresence initial={false}>
-                                {isOpen && (
-                                  <motion.div
-                                    initial={{ height: 0, opacity: 0 }}
-                                    animate={{ height: "auto", opacity: 1 }}
-                                    exit={{ height: 0, opacity: 0 }}
-                                    transition={{ duration: 0.2 }}
-                                    className="overflow-hidden"
+
+                    {showFullPreview ? (
+                      <EbookPreview title={title} subtitle={subtitle} coverUrl={coverUrl} chapters={chapters} />
+                    ) : (
+                      <>
+                        <div>
+                          <label className="text-xs font-medium uppercase text-muted-foreground">Título</label>
+                          <Input value={title} onChange={(e) => setTitle(e.target.value)} className="mt-1.5 font-display text-lg font-semibold" />
+                        </div>
+                        <div>
+                          <label className="text-xs font-medium uppercase text-muted-foreground">Subtítulo</label>
+                          <Input value={subtitle} onChange={(e) => setSubtitle(e.target.value)} className="mt-1.5" />
+                        </div>
+                        <div>
+                          <label className="text-xs font-medium uppercase text-muted-foreground">Capítulos</label>
+                          <p className="text-xs text-muted-foreground mt-1">Clique em um capítulo para ver e editar o conteúdo completo.</p>
+                          <div className="mt-2 space-y-2">
+                            {chapters.map((c, i) => {
+                              const isOpen = openChapter === i;
+                              return (
+                                <div key={i} className="rounded-xl border bg-background overflow-hidden">
+                                  <button
+                                    onClick={() => setOpenChapter(isOpen ? null : i)}
+                                    className="flex w-full items-center gap-3 p-3 text-left transition hover:bg-muted/40"
                                   >
-                                    <div className="border-t p-4 bg-muted/20">
-                                      <label className="text-[11px] font-medium uppercase text-muted-foreground">Conteúdo do capítulo</label>
-                                      <Textarea
-                                        value={c.content}
+                                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-accent text-xs font-semibold text-accent-foreground">
+                                      {i + 1}
+                                    </span>
+                                    {c.image_url && (
+                                      <img src={c.image_url} alt="" className="h-7 w-7 rounded object-cover" />
+                                    )}
+                                    <div className="flex-1 min-w-0">
+                                      <Input
+                                        value={c.title}
+                                        onClick={(e) => e.stopPropagation()}
                                         onChange={(e) => {
                                           const copy = [...chapters];
-                                          copy[i] = { ...copy[i], content: e.target.value };
+                                          copy[i] = { ...copy[i], title: e.target.value };
                                           setChapters(copy);
                                         }}
-                                        className="mt-2 min-h-[200px] text-sm leading-relaxed bg-background"
+                                        className="border-0 shadow-none focus-visible:ring-0 px-0 h-7 font-medium"
                                       />
-                                      <div className="mt-3 flex justify-end">
-                                        <Button size="sm" variant="outline" onClick={() => setOpenChapter(null)}>
-                                          <Check className="mr-2 h-3.5 w-3.5" /> Salvar capítulo
-                                        </Button>
-                                      </div>
+                                      {c.subtitle && (
+                                        <p className="text-xs text-muted-foreground line-clamp-1">{c.subtitle}</p>
+                                      )}
                                     </div>
-                                  </motion.div>
-                                )}
-                              </AnimatePresence>
-                            </div>
-                          );
+                                    <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${isOpen ? "rotate-180" : ""}`} />
+                                  </button>
+                                  <AnimatePresence initial={false}>
+                                    {isOpen && (
+                                      <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: "auto", opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.2 }}
+                                        className="overflow-hidden"
+                                      >
+                                        <div className="border-t p-4 bg-muted/20">
+                                          <label className="text-[11px] font-medium uppercase text-muted-foreground">Conteúdo do capítulo</label>
+                                          <Textarea
+                                            value={c.content}
+                                            onChange={(e) => {
+                                              const copy = [...chapters];
+                                              copy[i] = { ...copy[i], content: e.target.value };
+                                              setChapters(copy);
+                                            }}
+                                            className="mt-2 min-h-[260px] text-sm leading-relaxed bg-background"
+                                          />
+                                          <div className="mt-3 flex justify-end">
+                                            <Button size="sm" variant="outline" onClick={() => setOpenChapter(null)}>
+                                              <Check className="mr-2 h-3.5 w-3.5" /> Salvar capítulo
+                                            </Button>
+                                          </div>
+                                        </div>
+                                      </motion.div>
+                                    )}
+                                  </AnimatePresence>
+                                </div>
+                              );
                         })}
                       </div>
                     </div>
