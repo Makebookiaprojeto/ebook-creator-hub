@@ -64,48 +64,105 @@ export function CreateEbookView() {
       return;
     }
     setGenerating(true);
+    setGenerationStage("Analisando o nicho...");
     try {
-      const { data, error } = await supabase.functions.invoke("generate-ebook", {
+      // 1) Structure
+      const { data: structure, error: sErr } = await supabase.functions.invoke("generate-ebook", {
         body: { mode: "structure", niche, audience },
       });
-      if (error) {
-        handleAIError((error as any).context?.status, "Falha ao gerar estrutura");
+      if (sErr || !structure) {
+        handleAIError((sErr as any)?.context?.status, "Falha ao gerar estrutura");
         return;
       }
-      setTitle(data.title);
-      setSubtitle(data.subtitle);
-      // Generate chapter contents in parallel
-      const chapterTitles: string[] = data.chapters;
-      setChapters(chapterTitles.map((t) => ({ title: t, content: "" })));
+      setTitle(structure.title);
+      setSubtitle(structure.subtitle);
+      const chapterDefs: { title: string; subtitle: string }[] = structure.chapters;
+      setChapters(
+        chapterDefs.map((c) => ({ title: c.title, subtitle: c.subtitle, content: "", image_url: null })),
+      );
       setGenerated(true);
-      toast.success("Estrutura gerada! Escrevendo capítulos...");
+      setGenerationStage(`Escrevendo ${chapterDefs.length} capítulos e gerando imagens...`);
 
-      const results = await Promise.all(
-        chapterTitles.map((ct, idx) =>
+      // 2) Chapter contents (parallel)
+      const contentPromise = Promise.all(
+        chapterDefs.map((c, idx) =>
           supabase.functions.invoke("generate-ebook", {
             body: {
               mode: "chapter",
-              ebookTitle: data.title,
+              ebookTitle: structure.title,
               audience,
-              chapterTitle: ct,
+              chapterTitle: c.title,
+              chapterSubtitle: c.subtitle,
               chapterIndex: idx,
-              totalChapters: chapterTitles.length,
+              totalChapters: chapterDefs.length,
             },
           }),
         ),
       );
 
-      const filled = chapterTitles.map((t, i) => ({
-        title: t,
-        content: results[i].data?.content ?? chapterPreviews.default,
+      // 3) Cover image (parallel with chapters)
+      const coverPromise = supabase.functions.invoke("generate-ebook", {
+        body: { mode: "image", kind: "cover", prompt: structure.cover_prompt },
+      });
+
+      // 4) Chapter images (parallel)
+      const chapterImagesPromise = Promise.all(
+        chapterDefs.map((c) =>
+          supabase.functions.invoke("generate-ebook", {
+            body: {
+              mode: "image",
+              kind: "chapter",
+              prompt: `${c.title} — ${c.subtitle}`,
+            },
+          }),
+        ),
+      );
+
+      const [contents, coverRes, chapterImages] = await Promise.all([
+        contentPromise,
+        coverPromise,
+        chapterImagesPromise,
+      ]);
+
+      if (coverRes.data?.url) setCoverUrl(coverRes.data.url);
+
+      const filled: ChapterDraft[] = chapterDefs.map((c, i) => ({
+        title: c.title,
+        subtitle: c.subtitle,
+        content: contents[i].data?.content ?? "Conteúdo não gerado.",
+        image_url: chapterImages[i].data?.url ?? null,
       }));
       setChapters(filled);
-      toast.success("Ebook completo gerado com IA!");
+      setGenerationStage("");
+      toast.success("Ebook completo gerado com IA! 🎉");
     } catch (e) {
       console.error(e);
       toast.error("Erro inesperado ao gerar ebook");
     } finally {
       setGenerating(false);
+    }
+  };
+
+  const handleGeneratePdf = async () => {
+    if (!title || chapters.length === 0) {
+      toast.error("Gere o ebook primeiro");
+      return;
+    }
+    setGeneratingPdf(true);
+    try {
+      const blob = await generateEbookPdf({
+        title,
+        subtitle,
+        cover_url: coverUrl,
+        chapters,
+      });
+      downloadPdf(blob, title.toLowerCase().replace(/[^a-z0-9]+/gi, "-").slice(0, 60));
+      toast.success("PDF gerado!");
+    } catch (e) {
+      console.error(e);
+      toast.error("Falha ao gerar PDF");
+    } finally {
+      setGeneratingPdf(false);
     }
   };
 
