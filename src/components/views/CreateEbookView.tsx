@@ -740,7 +740,16 @@ export function CreateEbookView() {
               try {
                 setSaving(true);
                 await createEbookWithChapters(
-                  { title, description: subtitle, category: niche, status: "published" },
+                  {
+                    title,
+                    subtitle,
+                    description: subtitle,
+                    category: niche,
+                    niche,
+                    audience,
+                    cover_url: coverUrl,
+                    status: "published",
+                  },
                   chapters,
                 );
                 toast.success("Ebook salvo com sucesso! 🎉");
