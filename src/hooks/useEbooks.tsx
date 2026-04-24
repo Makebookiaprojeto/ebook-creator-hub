@@ -6,6 +6,23 @@ import { Tables } from "@/integrations/supabase/types";
 export type Ebook = Tables<"ebooks">;
 export type Chapter = Tables<"chapters">;
 
+export type NewChapter = {
+  title: string;
+  content: string;
+  image_url?: string | null;
+};
+
+export type NewEbook = {
+  title: string;
+  subtitle?: string | null;
+  description?: string | null;
+  category?: string | null;
+  niche?: string | null;
+  audience?: string | null;
+  cover_url?: string | null;
+  status?: "draft" | "published" | "archived";
+};
+
 export function useEbooks() {
   const { user } = useAuth();
   const [ebooks, setEbooks] = useState<Ebook[]>([]);
@@ -30,10 +47,7 @@ export function useEbooks() {
     fetchEbooks();
   }, [fetchEbooks]);
 
-  const createEbookWithChapters = async (
-    ebook: { title: string; description?: string; category?: string; status?: "draft" | "published" | "archived" },
-    chapters: { title: string; content: string }[]
-  ) => {
+  const createEbookWithChapters = async (ebook: NewEbook, chapters: NewChapter[]) => {
     if (!user) throw new Error("Não autenticado");
 
     const { data: newEbook, error: ebookError } = await supabase
@@ -41,8 +55,12 @@ export function useEbooks() {
       .insert({
         user_id: user.id,
         title: ebook.title,
-        description: ebook.description,
-        category: ebook.category,
+        subtitle: ebook.subtitle ?? null,
+        description: ebook.description ?? null,
+        category: ebook.category ?? ebook.niche ?? null,
+        niche: ebook.niche ?? null,
+        audience: ebook.audience ?? null,
+        cover_url: ebook.cover_url ?? null,
         status: ebook.status ?? "draft",
       })
       .select()
@@ -56,6 +74,7 @@ export function useEbooks() {
         user_id: user.id,
         title: c.title,
         content: c.content,
+        image_url: c.image_url ?? null,
         order_index: i,
       }));
       const { error: chErr } = await supabase.from("chapters").insert(rows);

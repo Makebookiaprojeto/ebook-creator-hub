@@ -1,4 +1,7 @@
-// Generates ebook structure (title, subtitle, chapter titles) and chapter content via Lovable AI
+// Generates ebook structure, chapter content, and AI images via Lovable AI Gateway.
+// Images are uploaded to the public `ebook-images` storage bucket and the public URL is returned.
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
@@ -7,8 +10,11 @@ const corsHeaders = {
 };
 
 const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
-const MODEL = "google/gemini-2.5-flash";
+const TEXT_MODEL = "google/gemini-2.5-flash";
+const IMAGE_MODEL = "google/gemini-2.5-flash-image";
 
 async function callAI(body: Record<string, unknown>) {
   const resp = await fetch(GATEWAY, {
@@ -17,7 +23,7 @@ async function callAI(body: Record<string, unknown>) {
       Authorization: `Bearer ${LOVABLE_API_KEY}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ model: MODEL, ...body }),
+    body: JSON.stringify(body),
   });
   if (!resp.ok) {
     const text = await resp.text();
@@ -26,29 +32,85 @@ async function callAI(body: Record<string, unknown>) {
   return { data: await resp.json() };
 }
 
+function jsonResponse(payload: unknown, status = 200) {
+  return new Response(JSON.stringify(payload), {
+    status,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
+function dataUrlToBytes(dataUrl: string): { bytes: Uint8Array; contentType: string } {
+  const match = dataUrl.match(/^data:([^;]+);base64,(.+)$/);
+  if (!match) throw new Error("Invalid data URL from image model");
+  const contentType = match[1];
+  const b64 = match[2];
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return { bytes, contentType };
+}
+
+async function generateAndUploadImage(prompt: string, userId: string, kind: "cover" | "chapter") {
+  const result = await callAI({
+    model: IMAGE_MODEL,
+    messages: [{ role: "user", content: prompt }],
+    modalities: ["image", "text"],
+  });
+  if ("error" in result) return { error: result.error };
+
+  const dataUrl: string | undefined =
+    result.data.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+  if (!dataUrl) return { error: { status: 500, text: "No image returned by model" } };
+
+  const { bytes, contentType } = dataUrlToBytes(dataUrl);
+  const ext = contentType.split("/")[1] || "png";
+  const path = `${userId}/${kind}-${crypto.randomUUID()}.${ext}`;
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+  const { error: upErr } = await supabase.storage
+    .from("ebook-images")
+    .upload(path, bytes, { contentType, upsert: false });
+  if (upErr) return { error: { status: 500, text: upErr.message } };
+
+  const { data: pub } = supabase.storage.from("ebook-images").getPublicUrl(path);
+  return { url: pub.publicUrl };
+}
+
+async function getUserId(req: Request): Promise<string | null> {
+  const auth = req.headers.get("Authorization");
+  if (!auth) return null;
+  const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+  const token = auth.replace("Bearer ", "");
+  const { data, error } = await supabase.auth.getUser(token);
+  if (error || !data.user) return null;
+  return data.user.id;
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY não configurada");
 
-    const { mode, niche, audience, ebookTitle, chapterTitle, chapterIndex, totalChapters } =
-      await req.json();
+    const body = await req.json();
+    const { mode } = body;
 
-    // ---------- MODE 1: structure (title, subtitle, chapter titles) ----------
+    // ---------- structure ----------
     if (mode === "structure") {
+      const { niche, audience } = body;
       const result = await callAI({
+        model: TEXT_MODEL,
         messages: [
           {
             role: "system",
             content:
-              "Você é um copywriter especialista em ebooks digitais em português do Brasil. Sempre responda chamando a tool fornecida.",
+              "Você é um copywriter especialista em ebooks digitais comerciais em português do Brasil. Sempre responda chamando a tool fornecida.",
           },
           {
             role: "user",
-            content: `Crie a estrutura de um ebook sobre "${niche}".${
+            content: `Crie a estrutura de um ebook profissional sobre "${niche}".${
               audience ? ` Público-alvo: ${audience}.` : ""
-            } Gere um título magnético, subtítulo persuasivo e 7 títulos de capítulos progressivos.`,
+            } Gere: título magnético (máx 60 caracteres), subtítulo persuasivo (máx 120 caracteres), e 6 capítulos com título curto e subtítulo descritivo. Os capítulos devem ter progressão lógica (introdução → fundamentos → prática → resultados).`,
           },
         ],
         tools: [
@@ -62,14 +124,27 @@ Deno.serve(async (req) => {
                 properties: {
                   title: { type: "string" },
                   subtitle: { type: "string" },
+                  cover_prompt: {
+                    type: "string",
+                    description:
+                      "Prompt em inglês para gerar a imagem de capa do ebook. Estilo de capa de livro digital comercial moderno, sem texto na imagem.",
+                  },
                   chapters: {
                     type: "array",
-                    items: { type: "string" },
+                    items: {
+                      type: "object",
+                      properties: {
+                        title: { type: "string" },
+                        subtitle: { type: "string" },
+                      },
+                      required: ["title", "subtitle"],
+                      additionalProperties: false,
+                    },
                     minItems: 5,
-                    maxItems: 9,
+                    maxItems: 8,
                   },
                 },
-                required: ["title", "subtitle", "chapters"],
+                required: ["title", "subtitle", "cover_prompt", "chapters"],
                 additionalProperties: false,
               },
             },
@@ -78,60 +153,57 @@ Deno.serve(async (req) => {
         tool_choice: { type: "function", function: { name: "create_ebook_structure" } },
       });
 
-      if ("error" in result) {
-        return new Response(
-          JSON.stringify({ error: result.error.text }),
-          { status: result.error.status, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-        );
-      }
+      if ("error" in result) return jsonResponse({ error: result.error.text }, result.error.status);
 
       const args = result.data.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
-      const parsed = JSON.parse(args);
-      return new Response(JSON.stringify(parsed), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return jsonResponse(JSON.parse(args));
     }
 
-    // ---------- MODE 2: chapter content ----------
+    // ---------- chapter content ----------
     if (mode === "chapter") {
+      const { ebookTitle, audience, chapterTitle, chapterSubtitle, chapterIndex, totalChapters } = body;
       const result = await callAI({
+        model: TEXT_MODEL,
         messages: [
           {
             role: "system",
             content:
-              "Você é um escritor profissional de ebooks em português do Brasil. Escreva conteúdo claro, prático e envolvente. Use parágrafos curtos, listas quando útil e exemplos concretos. Não use markdown de cabeçalho (###).",
+              "Você é um escritor profissional de ebooks comerciais em português do Brasil. Escreva conteúdo aprofundado, natural, envolvente e humano. Use parágrafos bem espaçados, exemplos práticos, e quando útil, listas numeradas ou com bullet (use '- ' no início da linha). Use '## ' para subtítulos dentro do capítulo. Não use '# ' (título principal). Evite linguagem robótica.",
           },
           {
             role: "user",
             content: `Ebook: "${ebookTitle}".${audience ? ` Público: ${audience}.` : ""}
-Escreva o capítulo ${chapterIndex + 1} de ${totalChapters}: "${chapterTitle}".
-Tamanho: 400-600 palavras. Tom: direto, motivador, prático.`,
+Escreva o capítulo ${chapterIndex + 1} de ${totalChapters}: "${chapterTitle}" — ${chapterSubtitle ?? ""}.
+Estrutura sugerida: abertura envolvente, 2-3 subtítulos com '## ', exemplos práticos, fechamento com gancho para o próximo capítulo.
+Tamanho: 700-1000 palavras. Tom: profissional, próximo, motivador.`,
           },
         ],
       });
 
-      if ("error" in result) {
-        return new Response(
-          JSON.stringify({ error: result.error.text }),
-          { status: result.error.status, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-        );
-      }
-
+      if ("error" in result) return jsonResponse({ error: result.error.text }, result.error.status);
       const content = result.data.choices?.[0]?.message?.content ?? "";
-      return new Response(JSON.stringify({ content }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return jsonResponse({ content });
     }
 
-    return new Response(JSON.stringify({ error: "mode inválido" }), {
-      status: 400,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    // ---------- image generation (cover or chapter) ----------
+    if (mode === "image") {
+      const userId = await getUserId(req);
+      if (!userId) return jsonResponse({ error: "Não autenticado" }, 401);
+
+      const { prompt, kind } = body as { prompt: string; kind: "cover" | "chapter" };
+      const styled =
+        kind === "cover"
+          ? `Professional ebook cover illustration, modern commercial design, vibrant colors, no text, no typography, clean composition, high quality digital art. Subject: ${prompt}`
+          : `Editorial illustration for an ebook chapter, clean modern style, soft colors, conceptual, no text, no typography, magazine quality. Subject: ${prompt}`;
+
+      const result = await generateAndUploadImage(styled, userId, kind);
+      if ("error" in result) return jsonResponse({ error: result.error.text }, result.error.status);
+      return jsonResponse({ url: result.url });
+    }
+
+    return jsonResponse({ error: "mode inválido" }, 400);
   } catch (e) {
     console.error("generate-ebook error:", e);
-    return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-    );
+    return jsonResponse({ error: e instanceof Error ? e.message : "Unknown error" }, 500);
   }
 });
