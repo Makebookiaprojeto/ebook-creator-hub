@@ -2,21 +2,29 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, ArrowRight, Check, Sparkles, Loader2, Copy, Users, Rocket,
-  Search, ChevronDown, Star, Flame, ShieldCheck, Clock, Zap, Quote
+  Search, ChevronDown, Star, Flame, ShieldCheck, Clock, Zap, Quote, Download, FileText, Eye
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { niches, groupTemplates, chapterPreviews, testimonials } from "@/lib/mockData";
+import { niches, groupTemplates, testimonials } from "@/lib/mockData";
 import { toast } from "sonner";
 import { useEbooks } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
+import { EbookPreview } from "@/components/EbookPreview";
+import { generateEbookPdf, downloadPdf } from "@/lib/ebookPdf";
 
 const steps = ["Nicho", "Preço", "Gerar", "Vendas", "Divulgação"];
 const pricePresets = [19.9, 29.9, 39.9, 49.9, 97.0];
 
 type FbGroup = { name: string; members: number; engagement: string };
+type ChapterDraft = {
+  title: string;
+  subtitle: string;
+  content: string;
+  image_url: string | null;
+};
 
 export function CreateEbookView() {
   const { createEbookWithChapters } = useEbooks();
@@ -28,11 +36,15 @@ export function CreateEbookView() {
   const [price, setPrice] = useState<number>(29.9);
   const [priceInput, setPriceInput] = useState<string>("29,90");
   const [generating, setGenerating] = useState(false);
+  const [generationStage, setGenerationStage] = useState<string>("");
   const [generated, setGenerated] = useState(false);
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
-  const [chapters, setChapters] = useState<{ title: string; content: string }[]>([]);
+  const [coverUrl, setCoverUrl] = useState<string | null>(null);
+  const [chapters, setChapters] = useState<ChapterDraft[]>([]);
   const [openChapter, setOpenChapter] = useState<number | null>(null);
+  const [showFullPreview, setShowFullPreview] = useState(false);
+  const [generatingPdf, setGeneratingPdf] = useState(false);
 
   // Divulgação
   const [searchTopic, setSearchTopic] = useState("");
