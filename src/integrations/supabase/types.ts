@@ -20,6 +20,7 @@ export type Database = {
           created_at: string
           ebook_id: string
           id: string
+          image_url: string | null
           order_index: number
           title: string
           updated_at: string
@@ -30,6 +31,7 @@ export type Database = {
           created_at?: string
           ebook_id: string
           id?: string
+          image_url?: string | null
           order_index?: number
           title: string
           updated_at?: string
@@ -40,6 +42,7 @@ export type Database = {
           created_at?: string
           ebook_id?: string
           id?: string
+          image_url?: string | null
           order_index?: number
           title?: string
           updated_at?: string
@@ -57,34 +60,43 @@ export type Database = {
       }
       ebooks: {
         Row: {
+          audience: string | null
           category: string | null
           cover_url: string | null
           created_at: string
           description: string | null
           id: string
+          niche: string | null
           status: Database["public"]["Enums"]["ebook_status"]
+          subtitle: string | null
           title: string
           updated_at: string
           user_id: string
         }
         Insert: {
+          audience?: string | null
           category?: string | null
           cover_url?: string | null
           created_at?: string
           description?: string | null
           id?: string
+          niche?: string | null
           status?: Database["public"]["Enums"]["ebook_status"]
+          subtitle?: string | null
           title: string
           updated_at?: string
           user_id: string
         }
         Update: {
+          audience?: string | null
           category?: string | null
           cover_url?: string | null
           created_at?: string
           description?: string | null
           id?: string
+          niche?: string | null
           status?: Database["public"]["Enums"]["ebook_status"]
+          subtitle?: string | null
           title?: string
           updated_at?: string
           user_id?: string
