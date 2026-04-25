@@ -88,17 +88,23 @@ export function useEbooks() {
   };
 
   const deleteEbook = async (id: string) => {
-    // Delete chapters first (extra safety, though CASCADE should handle it)
-    const { error: chError } = await supabase.from("chapters").delete().eq("ebook_id", id);
-    if (chError) {
-      console.error("Erro ao deletar capítulos:", chError);
-      throw chError;
-    }
-
+    // We attempt to delete the ebook directly. 
+    // If the database has an ON DELETE CASCADE constraint, it will work.
+    // If it doesn't, we might need to delete chapters first.
+    
     const { error } = await supabase.from("ebooks").delete().eq("id", id);
+    
     if (error) {
       console.error("Erro ao deletar ebook:", error);
-      throw error;
+      
+      // Fallback: manually delete chapters if the first attempt failed due to foreign key constraints
+      if (error.code === '23503') {
+        await supabase.from("chapters").delete().eq("ebook_id", id);
+        const { error: retryError } = await supabase.from("ebooks").delete().eq("id", id);
+        if (retryError) throw retryError;
+      } else {
+        throw error;
+      }
     }
     
     setEbooks((prev) => prev.filter((eb) => eb.id !== id));
