@@ -762,27 +762,86 @@ export function CreateEbookView() {
 
                 {/* Groups results */}
                 {searchedGroups.length > 0 && (
-                  <div className="mt-6">
+                  <div className="mt-6 space-y-4">
                     <div className="rounded-xl border bg-primary/5 p-6 text-center border-primary/20">
                       <Rocket className="mx-auto h-8 w-8 text-primary mb-3" />
                       <h3 className="font-display text-lg font-bold">Busca Pronta!</h3>
                       <p className="text-sm text-muted-foreground mt-2 max-w-sm mx-auto">
-                        Clique no botão abaixo para encontrar grupos reais de <strong>"{searchTopic}"</strong> no Facebook.
+                        Abaixo estão os links para encontrar grupos reais de <strong>"{searchTopic}"</strong> no Facebook.
                       </p>
-                      <div className="mt-4 flex flex-col gap-2">
-                        <a 
-                          href={`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-glow hover:opacity-90 transition-opacity"
-                        >
-                          <Rocket className="mr-2 h-4 w-4" /> Ver Grupos no Facebook
-                        </a>
-                        <p className="text-[11px] text-muted-foreground">
-                          Dica: O Facebook pode bloquear janelas automáticas. Clicar no botão acima é a forma mais segura.
-                        </p>
+                    </div>
+
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="rounded-xl border bg-card p-4 flex flex-col justify-between gap-3">
+                        <div className="flex items-start gap-3">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white">
+                            <Users className="h-4 w-4" />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-sm">Grupos de {searchTopic}</p>
+                            <p className="text-xs text-muted-foreground line-clamp-1">Resultados oficiais do Facebook</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2 mt-2">
+                          <a 
+                            href={`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 inline-flex items-center justify-center rounded-md bg-primary px-3 py-2 text-xs font-medium text-primary-foreground hover:opacity-90 transition-opacity"
+                          >
+                            <Eye className="mr-1.5 h-3.5 w-3.5" /> Abrir Link
+                          </a>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="px-3"
+                            onClick={() => {
+                              navigator.clipboard.writeText(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`);
+                              toast.success("Link copiado!");
+                            }}
+                          >
+                            <Copy className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl border bg-card p-4 flex flex-col justify-between gap-3 border-dashed border-primary/30">
+                        <div className="flex items-start gap-3">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                            <Search className="h-4 w-4" />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-sm">Busca Alternativa</p>
+                            <p className="text-xs text-muted-foreground">Filtro de grupos públicos</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2 mt-2">
+                          <a 
+                            href={`https://www.facebook.com/search/groups?q=${encodeURIComponent(searchTopic)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 inline-flex items-center justify-center rounded-md bg-accent px-3 py-2 text-xs font-medium text-accent-foreground hover:bg-accent/80 transition-colors"
+                          >
+                            <Eye className="mr-1.5 h-3.5 w-3.5" /> Abrir Link
+                          </a>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="px-3"
+                            onClick={() => {
+                              navigator.clipboard.writeText(`https://www.facebook.com/search/groups?q=${encodeURIComponent(searchTopic)}`);
+                              toast.success("Link copiado!");
+                            }}
+                          >
+                            <Copy className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
+
+                    <p className="text-[11px] text-muted-foreground text-center italic">
+                      Dica: Use o botão de cópia se preferir abrir os links em um navegador com outra conta do Facebook.
+                    </p>
                   </div>
                 )}
 
