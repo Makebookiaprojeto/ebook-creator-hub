@@ -45,6 +45,8 @@ export function CreateEbookView() {
   const [openChapter, setOpenChapter] = useState<number | null>(null);
   const [showFullPreview, setShowFullPreview] = useState(false);
   const [generatingPdf, setGeneratingPdf] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [uploadingPdf, setUploadingPdf] = useState(false);
 
   // Divulgação
   const [searchTopic, setSearchTopic] = useState("");
