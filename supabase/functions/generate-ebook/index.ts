@@ -153,7 +153,7 @@ Deno.serve(async (req) => {
         tool_choice: { type: "function", function: { name: "create_ebook_structure" } },
       });
 
-      if ("error" in result) return jsonResponse({ error: result.error.text }, result.error.status);
+      if ("error" in result && result.error) return jsonResponse({ error: result.error.text }, result.error.status);
 
       const args = result.data.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
       return jsonResponse(JSON.parse(args));
@@ -180,7 +180,7 @@ Tamanho: 700-1000 palavras. Tom: profissional, próximo, motivador.`,
         ],
       });
 
-      if ("error" in result) return jsonResponse({ error: result.error.text }, result.error.status);
+      if ("error" in result && result.error) return jsonResponse({ error: result.error.text }, result.error.status);
       const content = result.data.choices?.[0]?.message?.content ?? "";
       return jsonResponse({ content });
     }
@@ -197,7 +197,7 @@ Tamanho: 700-1000 palavras. Tom: profissional, próximo, motivador.`,
           : `Editorial illustration for an ebook chapter, clean modern style, soft colors, conceptual, no text, no typography, magazine quality. Subject: ${prompt}`;
 
       const result = await generateAndUploadImage(styled, userId, kind);
-      if ("error" in result) return jsonResponse({ error: result.error.text }, result.error.status);
+      if ("error" in result && result.error) return jsonResponse({ error: result.error.text }, result.error.status);
       return jsonResponse({ url: result.url });
     }
 
