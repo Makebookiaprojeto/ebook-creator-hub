@@ -14,7 +14,7 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
 const TEXT_MODEL = "google/gemini-2.5-flash";
-const IMAGE_MODEL = "google/gemini-2.5-flash-image";
+const IMAGE_MODEL = "google/gemini-3.1-flash-image-preview";
 
 async function callAI(body: Record<string, unknown>) {
   const resp = await fetch(GATEWAY, {
@@ -127,7 +127,7 @@ Deno.serve(async (req) => {
                   cover_prompt: {
                     type: "string",
                     description:
-                      "Prompt em inglês para gerar a imagem de capa do ebook. Estilo de capa de livro digital comercial moderno, sem texto na imagem.",
+                      "Detailed English prompt to generate the ebook cover image. Describe a concrete, photorealistic scene that visually represents the ebook's core theme: include the main subject, setting, lighting (natural or cinematic), camera angle, mood, and color palette. Prefer real-world photography or hyperrealistic 3D rendering over abstract or generic art. NO text, NO typography, NO letters in the image.",
                   },
                   chapters: {
                     type: "array",
@@ -193,8 +193,8 @@ Tamanho: 700-1000 palavras. Tom: profissional, próximo, motivador.`,
       const { prompt, kind } = body as { prompt: string; kind: "cover" | "chapter" };
       const styled =
         kind === "cover"
-          ? `Professional ebook cover illustration, modern commercial design, vibrant colors, no text, no typography, clean composition, high quality digital art. Subject: ${prompt}`
-          : `Editorial illustration for an ebook chapter, clean modern style, soft colors, conceptual, no text, no typography, magazine quality. Subject: ${prompt}`;
+          ? `Photorealistic ebook cover photograph, ultra-detailed, cinematic lighting, shallow depth of field, professional DSLR photography, natural colors, real-world scene, high resolution, intuitive visual metaphor that clearly represents the topic, magazine-quality composition. Absolutely NO text, NO letters, NO typography, NO logos, NO watermarks anywhere in the image. Subject: ${prompt}`
+          : `Photorealistic editorial photograph for an ebook chapter, ultra-detailed real-world scene, natural lighting, professional photography, intuitive and literal visual representation of the concept (show real people, objects, or environments — not abstract shapes), shallow depth of field, magazine quality, lifelike textures and colors. Absolutely NO text, NO letters, NO typography, NO logos, NO watermarks anywhere in the image. Subject: ${prompt}`;
 
       const result = await generateAndUploadImage(styled, userId, kind);
       if ("error" in result && result.error) return jsonResponse({ error: result.error.text }, result.error.status);
