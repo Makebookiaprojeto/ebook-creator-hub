@@ -11,7 +11,7 @@ import { Bell, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useEffect } from "react";
 
-type View = "dashboard" | "create" | "library" | "tools" | "support" | "profile";
+type View = "dashboard" | "create" | "library" | "support" | "profile";
 
 const Index = () => {
   const [view, setView] = useState<View>("dashboard");
