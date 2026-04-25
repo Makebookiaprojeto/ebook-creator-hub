@@ -159,6 +159,17 @@ export default function EbookSalesPage() {
       if (!active) return;
       setEbook(ebookData);
       setChapters(chData ?? []);
+
+      // Carrega o link de checkout externo do dono do ebook (se houver)
+      const { data: ownerProfile } = await supabase
+        .from("profiles")
+        .select("external_checkout_url")
+        .eq("user_id", ebookData.user_id)
+        .maybeSingle();
+      if (active) {
+        setExternalCheckoutUrl((ownerProfile as any)?.external_checkout_url || null);
+      }
+
       setLoading(false);
     })();
     return () => {
