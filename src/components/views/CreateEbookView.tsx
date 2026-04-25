@@ -195,19 +195,17 @@ export function CreateEbookView() {
     }
     setSearchingGroups(true);
     setTimeout(() => {
-      const capitalized = topic
-        .split(" ")
-        .map((w) => (w.length > 2 ? w[0].toUpperCase() + w.slice(1).toLowerCase() : w))
-        .join(" ");
-      const results: FbGroup[] = groupTemplates.map((tpl) => ({
-        name: `${capitalized} ${tpl.suffix}`,
-        members: Math.round(tpl.base * (0.6 + Math.random() * 0.8)),
-        engagement: tpl.engagement,
-      }));
+      const results: FbGroup[] = [
+        { name: `Grupo de ${topic}`, members: 12500, engagement: "Alto" },
+        { name: `Dicas de ${topic}`, members: 8300, engagement: "Médio" },
+        { name: `Comunidade ${topic} Brasil`, members: 45000, engagement: "Alto" },
+        { name: `${topic} para Iniciantes`, members: 3200, engagement: "Alto" },
+        { name: `Vendas e Trocas: ${topic}`, members: 15600, engagement: "Médio" },
+      ];
       setSearchedGroups(results);
       setSearchingGroups(false);
-      toast.success(`${results.length} grupos abertos encontrados para "${topic}"`);
-    }, 1200);
+      toast.success(`${results.length} grupos sugeridos encontrados!`);
+    }, 1000);
   };
 
   const promoTemplates = (topic: string, link: string) => [
