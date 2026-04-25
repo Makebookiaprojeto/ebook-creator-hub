@@ -88,11 +88,19 @@ export function useEbooks() {
   };
 
   const deleteEbook = async (id: string) => {
+    // Delete chapters first (extra safety, though CASCADE should handle it)
+    const { error: chError } = await supabase.from("chapters").delete().eq("ebook_id", id);
+    if (chError) {
+      console.error("Erro ao deletar capítulos:", chError);
+      throw chError;
+    }
+
     const { error } = await supabase.from("ebooks").delete().eq("id", id);
     if (error) {
       console.error("Erro ao deletar ebook:", error);
       throw error;
     }
+    
     setEbooks((prev) => prev.filter((eb) => eb.id !== id));
   };
 
