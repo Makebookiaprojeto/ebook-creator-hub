@@ -60,6 +60,8 @@ export default function EbookSalesPage() {
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [externalCheckoutUrl, setExternalCheckoutUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isPaid, setIsPaid] = useState(false);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
   // Countdown: 24h a partir do primeiro acesso (persistido por slug)
   const deadline = useMemo(() => {
