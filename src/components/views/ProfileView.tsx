@@ -34,6 +34,45 @@ export function ProfileView() {
   const [status, setStatus] = useState<ConnectStatus | null>(null);
   const [loadingStatus, setLoadingStatus] = useState(true);
   const [connecting, setConnecting] = useState(false);
+  const [externalUrl, setExternalUrl] = useState("");
+  const [savedUrl, setSavedUrl] = useState("");
+  const [savingUrl, setSavingUrl] = useState(false);
+
+  // Carrega o link externo salvo
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("external_checkout_url")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      const url = (data as any)?.external_checkout_url || "";
+      setExternalUrl(url);
+      setSavedUrl(url);
+    })();
+  }, [user]);
+
+  const handleSaveExternalUrl = async () => {
+    if (!user) return;
+    const trimmed = externalUrl.trim();
+    if (trimmed && !/^https?:\/\//i.test(trimmed)) {
+      toast.error("O link deve começar com http:// ou https://");
+      return;
+    }
+    setSavingUrl(true);
+    const { error } = await supabase
+      .from("profiles")
+      .update({ external_checkout_url: trimmed || null })
+      .eq("user_id", user.id);
+    setSavingUrl(false);
+    if (error) {
+      toast.error("Erro ao salvar: " + error.message);
+      return;
+    }
+    setSavedUrl(trimmed);
+    toast.success(trimmed ? "Link de checkout salvo!" : "Link removido");
+  };
 
   const refreshStatus = useCallback(async () => {
     setLoadingStatus(true);
