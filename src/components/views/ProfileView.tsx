@@ -1,56 +1,195 @@
-import { user, plans } from "@/lib/mockData";
+import { useEffect, useState, useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
+import { plans } from "@/lib/mockData";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, Crown, Mail, User as UserIcon, Sparkles } from "lucide-react";
+import {
+  Check,
+  Crown,
+  Mail,
+  User as UserIcon,
+  Sparkles,
+  CreditCard,
+  ExternalLink,
+  Loader2,
+  AlertCircle,
+  CheckCircle2,
+} from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+
+type ConnectStatus = {
+  connected: boolean;
+  charges_enabled: boolean;
+  details_submitted: boolean;
+  account_id?: string;
+};
 
 export function ProfileView() {
+  const { user } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [status, setStatus] = useState<ConnectStatus | null>(null);
+  const [loadingStatus, setLoadingStatus] = useState(true);
+  const [connecting, setConnecting] = useState(false);
+
+  const refreshStatus = useCallback(async () => {
+    setLoadingStatus(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("stripe-connect-status");
+      if (error) throw error;
+      setStatus(data as ConnectStatus);
+    } catch (e) {
+      console.error(e);
+      setStatus({ connected: false, charges_enabled: false, details_submitted: false });
+    } finally {
+      setLoadingStatus(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user) refreshStatus();
+  }, [user, refreshStatus]);
+
+  // Quando volta do onboarding Stripe, atualiza status
+  useEffect(() => {
+    if (searchParams.get("stripe_return") === "1" || searchParams.get("stripe_refresh") === "1") {
+      toast.info("Atualizando status da conta de pagamentos...");
+      refreshStatus();
+      const next = new URLSearchParams(searchParams);
+      next.delete("stripe_return");
+      next.delete("stripe_refresh");
+      setSearchParams(next, { replace: true });
+    }
+  }, [searchParams, setSearchParams, refreshStatus]);
+
+  const handleConnect = async () => {
+    setConnecting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("stripe-connect-onboard");
+      if (error) throw error;
+      if (!data?.url) throw new Error("Não foi possível iniciar a conexão");
+      window.location.href = data.url;
+    } catch (e: any) {
+      console.error(e);
+      toast.error(e?.message || "Falha ao conectar Stripe");
+      setConnecting(false);
+    }
+  };
+
+  const displayName = user?.user_metadata?.display_name || user?.email?.split("@")[0] || "Usuário";
+  const email = user?.email || "";
+
+  const fullyConnected = status?.connected && status?.charges_enabled && status?.details_submitted;
+  const pendingConnection = status?.connected && !fullyConnected;
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
         <h1 className="font-display text-3xl font-bold">Perfil</h1>
-        <p className="mt-1 text-muted-foreground">Gerencie sua conta e plano atual.</p>
+        <p className="mt-1 text-muted-foreground">Gerencie sua conta, pagamentos e plano.</p>
       </div>
 
       <div className="rounded-2xl border bg-card p-6 shadow-soft">
         <div className="flex items-center gap-4">
           <div className="flex h-16 w-16 items-center justify-center rounded-full gradient-primary text-2xl font-bold text-primary-foreground shadow-glow">
-            {user.name.charAt(0)}
+            {displayName.charAt(0).toUpperCase()}
           </div>
           <div>
-            <h2 className="font-display text-xl font-semibold">{user.name}</h2>
-            <p className="text-sm text-muted-foreground">{user.email}</p>
-            <Badge className="mt-1.5 bg-accent text-accent-foreground hover:bg-accent">Plano {user.plan}</Badge>
+            <h2 className="font-display text-xl font-semibold">{displayName}</h2>
+            <p className="text-sm text-muted-foreground">{email}</p>
           </div>
         </div>
 
         <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div className="rounded-xl border bg-background p-4">
             <div className="flex items-center gap-2 text-xs uppercase text-muted-foreground">
-              <UserIcon className="h-3.5 w-3.5" /> Nome completo
+              <UserIcon className="h-3.5 w-3.5" /> Nome
             </div>
-            <p className="mt-2 font-medium">{user.name}</p>
+            <p className="mt-2 font-medium">{displayName}</p>
           </div>
           <div className="rounded-xl border bg-background p-4">
             <div className="flex items-center gap-2 text-xs uppercase text-muted-foreground">
               <Mail className="h-3.5 w-3.5" /> Email
             </div>
-            <p className="mt-2 font-medium">{user.email}</p>
+            <p className="mt-2 font-medium">{email}</p>
           </div>
         </div>
+      </div>
 
-        <div className="mt-6 grid grid-cols-3 gap-3">
-          <div className="rounded-xl gradient-hero p-4">
-            <p className="text-xs text-muted-foreground">Ebooks</p>
-            <p className="mt-1 font-display text-2xl font-bold">{user.ebooksCreated}</p>
+      {/* Card de Stripe Connect */}
+      <div className="rounded-2xl border bg-card p-6 shadow-soft">
+        <div className="flex items-start gap-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl gradient-primary text-primary-foreground shadow-glow">
+            <CreditCard className="h-6 w-6" />
           </div>
-          <div className="rounded-xl gradient-hero p-4">
-            <p className="text-xs text-muted-foreground">Vendas</p>
-            <p className="mt-1 font-display text-2xl font-bold">{user.totalSales}</p>
-          </div>
-          <div className="rounded-xl gradient-hero p-4">
-            <p className="text-xs text-muted-foreground">Receita</p>
-            <p className="mt-1 font-display text-2xl font-bold">R$ {(user.totalRevenue / 1000).toFixed(1)}k</p>
+          <div className="flex-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h2 className="font-display text-xl font-semibold">Receber pagamentos</h2>
+              {loadingStatus ? (
+                <Badge variant="outline" className="gap-1">
+                  <Loader2 className="h-3 w-3 animate-spin" /> Verificando
+                </Badge>
+              ) : fullyConnected ? (
+                <Badge className="bg-success text-success-foreground hover:bg-success gap-1">
+                  <CheckCircle2 className="h-3 w-3" /> Ativo
+                </Badge>
+              ) : pendingConnection ? (
+                <Badge variant="outline" className="gap-1 border-warning text-warning">
+                  <AlertCircle className="h-3 w-3" /> Cadastro incompleto
+                </Badge>
+              ) : (
+                <Badge variant="outline" className="gap-1">
+                  <AlertCircle className="h-3 w-3" /> Não conectado
+                </Badge>
+              )}
+            </div>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Conecte sua conta Stripe para receber 100% do valor das vendas dos seus ebooks
+              direto na sua conta bancária. Sem taxa da plataforma.
+            </p>
+
+            {!loadingStatus && !fullyConnected && (
+              <div className="mt-4 rounded-xl border border-warning/30 bg-warning/5 p-3 text-sm">
+                <p className="font-medium text-warning-foreground">
+                  {pendingConnection
+                    ? "Você já iniciou o cadastro na Stripe, mas faltam algumas informações."
+                    : "Enquanto você não conectar uma conta de pagamentos, os botões de compra dos seus ebooks ficam indisponíveis."}
+                </p>
+              </div>
+            )}
+
+            {!loadingStatus && fullyConnected && (
+              <div className="mt-4 rounded-xl border border-success/30 bg-success/5 p-3 text-sm text-success-foreground">
+                <p className="font-medium">
+                  ✅ Tudo certo! Você já pode vender e receber pagamentos.
+                </p>
+              </div>
+            )}
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Button
+                onClick={handleConnect}
+                disabled={connecting || loadingStatus}
+                className="gradient-primary text-primary-foreground shadow-glow"
+              >
+                {connecting ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                )}
+                {fullyConnected
+                  ? "Gerenciar conta Stripe"
+                  : pendingConnection
+                  ? "Continuar cadastro"
+                  : "Conectar Stripe"}
+              </Button>
+              {!loadingStatus && (
+                <Button variant="outline" onClick={refreshStatus}>
+                  Atualizar status
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </div>

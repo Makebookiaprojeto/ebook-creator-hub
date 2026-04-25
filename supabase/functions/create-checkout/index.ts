@@ -29,18 +29,33 @@ Deno.serve(async (req) => {
       .maybeSingle();
 
     if (error || !ebook) {
-      return new Response(JSON.stringify({ error: "Ebook not found" }), {
+      return new Response(JSON.stringify({ error: "Ebook não encontrado" }), {
         status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
     if (!ebook.is_public) {
-      return new Response(JSON.stringify({ error: "Ebook not available" }), {
+      return new Response(JSON.stringify({ error: "Ebook não disponível" }), {
         status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
     const amount = ebook.price_cents ?? 0;
     if (amount < 50) {
-      return new Response(JSON.stringify({ error: "Invalid price" }), {
+      return new Response(JSON.stringify({ error: "Preço inválido" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Buscar conta Stripe Connect do vendedor
+    const { data: sellerProfile } = await supabase
+      .from("profiles")
+      .select("stripe_account_id, stripe_charges_enabled")
+      .eq("user_id", ebook.user_id)
+      .maybeSingle();
+
+    if (!sellerProfile?.stripe_account_id || !sellerProfile.stripe_charges_enabled) {
+      return new Response(JSON.stringify({
+        error: "O vendedor ainda não conectou sua conta de pagamentos. Tente novamente em breve.",
+      }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -51,6 +66,7 @@ Deno.serve(async (req) => {
 
     const origin = req.headers.get("origin") || req.headers.get("referer")?.replace(/\/$/, "") || "";
 
+    // Direct charge na conta conectada — 100% para o vendedor
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: [{
@@ -67,6 +83,8 @@ Deno.serve(async (req) => {
       }],
       success_url: `${origin}/e/${ebook.slug}?paid=1&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/e/${ebook.slug}?canceled=1`,
+    }, {
+      stripeAccount: sellerProfile.stripe_account_id,
     });
 
     await supabase.from("orders").insert({
