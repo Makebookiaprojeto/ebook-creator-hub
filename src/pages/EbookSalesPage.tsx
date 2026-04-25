@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import { Tables } from "@/integrations/supabase/types";
 import {
   ArrowRight,
@@ -27,7 +28,9 @@ function formatPrice(cents?: number | null) {
 
 export default function EbookSalesPage() {
   const { slug } = useParams<{ slug: string }>();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [ebook, setEbook] = useState<Ebook | null>(null);
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -35,6 +38,54 @@ export default function EbookSalesPage() {
   useEffect(() => {
     document.documentElement.classList.add("dark");
   }, []);
+
+  // Handle return from Stripe
+  useEffect(() => {
+    const sessionId = searchParams.get("session_id");
+    const paid = searchParams.get("paid");
+    const canceled = searchParams.get("canceled");
+    if (canceled) {
+      toast.error("Pagamento cancelado.");
+      setSearchParams({}, { replace: true });
+      return;
+    }
+    if (paid && sessionId) {
+      (async () => {
+        const { data, error } = await supabase.functions.invoke("verify-payment", {
+          body: { session_id: sessionId },
+        });
+        if (error || !data?.paid) {
+          toast.error("Não foi possível confirmar o pagamento.");
+        } else {
+          toast.success("Pagamento confirmado! Obrigado pela compra 🎉");
+        }
+        setSearchParams({}, { replace: true });
+      })();
+    }
+  }, [searchParams, setSearchParams]);
+
+  const handleCheckout = async () => {
+    if (!ebook) return;
+    if (!ebook.price_cents || ebook.price_cents < 50) {
+      toast.error("Este eBook não está disponível para compra.");
+      return;
+    }
+    setCheckoutLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: { ebook_id: ebook.id },
+      });
+      if (error) throw error;
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error("URL de checkout não recebida");
+      }
+    } catch (e: any) {
+      toast.error(e?.message || "Erro ao iniciar checkout");
+      setCheckoutLoading(false);
+    }
+  };
 
   useEffect(() => {
     let active = true;
@@ -146,11 +197,14 @@ export default function EbookSalesPage() {
             </div>
             <span className="font-display text-sm font-bold">EbookAI</span>
           </Link>
-          <a href="#comprar">
-            <Button size="sm" className="gradient-primary text-primary-foreground">
-              Comprar agora <ArrowRight className="h-3.5 w-3.5" />
-            </Button>
-          </a>
+          <Button
+            size="sm"
+            className="gradient-primary text-primary-foreground"
+            onClick={handleCheckout}
+            disabled={checkoutLoading}
+          >
+            {checkoutLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <>Comprar agora <ArrowRight className="h-3.5 w-3.5" /></>}
+          </Button>
         </div>
       </header>
 
@@ -185,11 +239,14 @@ export default function EbookSalesPage() {
             </div>
 
             <div className="flex flex-wrap items-center gap-4 pt-4">
-              <a href="#comprar">
-                <Button size="lg" className="gradient-primary text-primary-foreground shadow-glow">
-                  Quero meu exemplar <ArrowRight className="h-4 w-4" />
-                </Button>
-              </a>
+              <Button
+                size="lg"
+                className="gradient-primary text-primary-foreground shadow-glow"
+                onClick={handleCheckout}
+                disabled={checkoutLoading}
+              >
+                {checkoutLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Quero meu exemplar <ArrowRight className="h-4 w-4" /></>}
+              </Button>
               <div className="text-sm">
                 <span className="font-display text-2xl font-bold">{price}</span>
                 <span className="ml-2 text-muted-foreground">acesso imediato</span>
@@ -362,11 +419,14 @@ export default function EbookSalesPage() {
             <Button
               size="lg"
               className="mt-8 gradient-primary text-primary-foreground shadow-glow"
-              onClick={() =>
-                alert("Em breve: integração de pagamento. Por enquanto, configure manualmente.")
-              }
+              onClick={handleCheckout}
+              disabled={checkoutLoading}
             >
-              <Download className="h-4 w-4" /> Comprar e baixar agora
+              {checkoutLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <><Download className="h-4 w-4" /> Comprar e baixar agora</>
+              )}
             </Button>
             <p className="mt-3 text-xs text-muted-foreground">
               Garantia de 7 dias · Acesso imediato
