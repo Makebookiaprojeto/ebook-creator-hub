@@ -197,8 +197,8 @@ export function CreateEbookView() {
     setSearchingGroups(true);
     
     // Pegar o link real do ebook se disponível
-    if (slug) {
-      setEbookLink(`${window.location.origin}/e/${slug}`);
+    if (createdEbookSlug) {
+      setEbookLink(`${window.location.origin}/e/${createdEbookSlug}`);
     }
     
     setTimeout(() => {
