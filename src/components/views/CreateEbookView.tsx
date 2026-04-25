@@ -817,7 +817,28 @@ export function CreateEbookView() {
                 {/* Promo messages */}
                 <div className="mt-8">
                   <h3 className="font-display text-base font-semibold">Mensagens prontas para divulgação</h3>
-                  {/* ... resto do código de mensagens ... */}
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {searchTopic ? `Personalizadas para "${searchTopic}"` : "Digite o assunto acima para personalizar as mensagens"} — já incluem o link do seu ebook.
+                  </p>
+                  <div className="mt-3 space-y-3">
+                    {promoTemplates(searchTopic, ebookLink).map((m, i) => (
+                      <div key={i} className="rounded-xl border bg-card p-4">
+                        <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">{m}</p>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="mt-2 h-7 text-xs"
+                          onClick={() => {
+                            navigator.clipboard.writeText(m);
+                            toast.success("Texto copiado!");
+                          }}
+                        >
+                          <Copy className="mr-1.5 h-3 w-3" /> Copiar mensagem
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
           </motion.div>
