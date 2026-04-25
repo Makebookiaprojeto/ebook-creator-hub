@@ -3,6 +3,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { DashboardView } from "@/components/views/DashboardView";
 import { CreateEbookView } from "@/components/views/CreateEbookView";
+import { LibraryView } from "@/components/views/LibraryView";
 import { ToolsView } from "@/components/views/ToolsView";
 import { SupportView } from "@/components/views/SupportView";
 import { ProfileView } from "@/components/views/ProfileView";
@@ -10,7 +11,7 @@ import { Bell, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useEffect } from "react";
 
-type View = "dashboard" | "create" | "tools" | "support" | "profile";
+type View = "dashboard" | "create" | "library" | "tools" | "support" | "profile";
 
 const Index = () => {
   const [view, setView] = useState<View>("dashboard");
@@ -49,6 +50,7 @@ const Index = () => {
           <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1400px] w-full mx-auto">
             {view === "dashboard" && <DashboardView />}
             {view === "create" && <CreateEbookView />}
+            {view === "library" && <LibraryView onCreateNew={() => setView("create")} />}
             {view === "tools" && <ToolsView />}
             {view === "support" && <SupportView />}
             {view === "profile" && <ProfileView />}

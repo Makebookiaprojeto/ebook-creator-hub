@@ -1,4 +1,4 @@
-import { LayoutDashboard, Plus, Wrench, LifeBuoy, User, Sparkles, LogOut } from "lucide-react";
+import { LayoutDashboard, Plus, Wrench, LifeBuoy, User, Sparkles, LogOut, Library } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -16,7 +16,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-type View = "dashboard" | "create" | "tools" | "support" | "profile";
+type View = "dashboard" | "create" | "library" | "tools" | "support" | "profile";
 
 interface Props {
   active: View;
@@ -26,6 +26,7 @@ interface Props {
 const items: { id: View; title: string; icon: typeof LayoutDashboard }[] = [
   { id: "dashboard", title: "Dashboard", icon: LayoutDashboard },
   { id: "create", title: "Criar Ebook", icon: Plus },
+  { id: "library", title: "Biblioteca", icon: Library },
   { id: "tools", title: "Ferramentas", icon: Wrench },
   { id: "support", title: "Suporte", icon: LifeBuoy },
   { id: "profile", title: "Perfil", icon: User },
