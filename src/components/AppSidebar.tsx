@@ -136,7 +136,7 @@ export function AppSidebar({ active, onChange }: Props) {
               return (
               <div className="mx-2 mb-2 flex items-center justify-between gap-2 rounded-lg border bg-card p-2">
                 <div className="flex items-center gap-2 min-w-0">
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-muted overflow-hidden gradient-primary text-[11px] font-bold text-primary-foreground">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-muted overflow-hidden gradient-primary text-[11px] font-bold text-primary-foreground shadow-glow">
                     {avatarUrl ? (
                       <img src={avatarUrl} alt={display} className="h-full w-full object-cover" />
                     ) : (
