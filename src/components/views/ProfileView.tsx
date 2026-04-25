@@ -31,6 +31,7 @@ type ConnectStatus = {
 };
 
 export function ProfileView() {
+  const plansRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const [status, setStatus] = useState<ConnectStatus | null>(null);
@@ -203,6 +204,19 @@ export function ProfileView() {
 
   const fullyConnected = status?.connected && status?.charges_enabled && status?.details_submitted;
   const pendingConnection = status?.connected && !fullyConnected;
+
+  useEffect(() => {
+    if (searchParams.get("upgrade") === "true") {
+      setTimeout(() => {
+        plansRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 300);
+      setSearchParams((prev) => {
+        const next = new URLSearchParams(prev);
+        next.delete("upgrade");
+        return next;
+      }, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -429,7 +443,7 @@ export function ProfileView() {
         </div>
       </div>
 
-      <div>
+      <div ref={plansRef}>
         <h2 className="font-display text-2xl font-bold">Escolha seu plano</h2>
         <p className="mt-1 text-sm text-muted-foreground">Desbloqueie todo o potencial do EbookAI Builder.</p>
 

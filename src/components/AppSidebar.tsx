@@ -1,4 +1,5 @@
 import { LayoutDashboard, Plus, Wrench, LifeBuoy, User, Sparkles, LogOut, Library } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -40,6 +41,7 @@ export function AppSidebar({ active, onChange }: Props) {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [displayName, setDisplayName] = useState<string>("");
   const navigate = useNavigate();
+  const [_, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     if (!user) return;
@@ -132,7 +134,10 @@ export function AppSidebar({ active, onChange }: Props) {
               <p className="text-xs font-semibold text-foreground">Plano FREE</p>
               <p className="mt-0.5 text-[11px] text-muted-foreground">Faça upgrade para ebooks ilimitados</p>
               <button 
-                onClick={() => onChange("profile")}
+                onClick={() => {
+                  onChange("profile");
+                  setSearchParams({ upgrade: "true" });
+                }}
                 className="mt-2 w-full rounded-lg gradient-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition hover:opacity-90"
               >
                 Upgrade PRO
