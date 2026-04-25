@@ -18,16 +18,20 @@ const Index = () => {
   const [view, setView] = useState<View>("dashboard");
   const { user } = useAuth();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [displayName, setDisplayName] = useState<string>("");
 
   useEffect(() => {
     if (!user) return;
     const fetchProfile = async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("avatar_url")
+        .select("avatar_url, display_name")
         .eq("user_id", user.id)
         .maybeSingle();
-      if (data) setAvatarUrl((data as any).avatar_url);
+      if (data) {
+        setAvatarUrl((data as any).avatar_url);
+        setDisplayName((data as any).display_name || user?.user_metadata?.display_name || user?.email?.split("@")[0] || "Usuário");
+      }
     };
     fetchProfile();
 
@@ -37,7 +41,8 @@ const Index = () => {
         "postgres_changes",
         { event: "UPDATE", schema: "public", table: "profiles", filter: `user_id=eq.${user.id}` },
         (payload) => {
-          setAvatarUrl((payload.new as any).avatar_url);
+          if ((payload.new as any).avatar_url !== undefined) setAvatarUrl((payload.new as any).avatar_url);
+          if ((payload.new as any).display_name !== undefined) setDisplayName((payload.new as any).display_name);
         }
       )
       .subscribe();
@@ -76,7 +81,7 @@ const Index = () => {
                 {avatarUrl ? (
                   <img src={avatarUrl} alt="Perfil" className="h-full w-full object-cover" />
                 ) : (
-                  (user?.user_metadata?.display_name || user?.email || "U")[0].toUpperCase()
+                  (displayName || user?.user_metadata?.display_name || user?.email || "U")[0].toUpperCase()
                 )}
               </button>
             </div>

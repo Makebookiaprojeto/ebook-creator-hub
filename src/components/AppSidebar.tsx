@@ -38,6 +38,7 @@ export function AppSidebar({ active, onChange }: Props) {
   const collapsed = state === "collapsed";
   const { user, signOut } = useAuth();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [displayName, setDisplayName] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,10 +46,13 @@ export function AppSidebar({ active, onChange }: Props) {
     const fetchProfile = async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("avatar_url")
+        .select("avatar_url, display_name")
         .eq("user_id", user.id)
         .maybeSingle();
-      if (data) setAvatarUrl((data as any).avatar_url);
+      if (data) {
+        setAvatarUrl((data as any).avatar_url);
+        setDisplayName((data as any).display_name || user?.user_metadata?.display_name || user?.email?.split("@")[0] || "Usuário");
+      }
     };
     fetchProfile();
 
@@ -59,7 +63,8 @@ export function AppSidebar({ active, onChange }: Props) {
         "postgres_changes",
         { event: "UPDATE", schema: "public", table: "profiles", filter: `user_id=eq.${user.id}` },
         (payload) => {
-          setAvatarUrl((payload.new as any).avatar_url);
+          if ((payload.new as any).avatar_url !== undefined) setAvatarUrl((payload.new as any).avatar_url);
+          if ((payload.new as any).display_name !== undefined) setDisplayName((payload.new as any).display_name);
         }
       )
       .subscribe();
@@ -131,8 +136,8 @@ export function AppSidebar({ active, onChange }: Props) {
               </button>
             </div>
             {user && (() => {
-              const username = (user.user_metadata?.username as string | undefined)?.trim();
-              const display = username || user.email?.split("@")[0] || "Usuário";
+              const display = displayName || (user.user_metadata?.username as string | undefined)?.trim() || user.email?.split("@")[0] || "Usuário";
+
               return (
               <div className="mx-2 mb-2 flex items-center justify-between gap-2 rounded-lg border bg-card p-2">
                 <div className="flex items-center gap-2 min-w-0">
