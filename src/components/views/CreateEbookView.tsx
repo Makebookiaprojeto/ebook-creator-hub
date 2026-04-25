@@ -196,23 +196,19 @@ export function CreateEbookView() {
     }
     setSearchingGroups(true);
     
-    // Pegar o link real do ebook se disponível
     if (createdEbookSlug) {
       setEbookLink(`${window.location.origin}/e/${createdEbookSlug}`);
     }
     
     setTimeout(() => {
-      // Abre o Facebook com a busca real
-      const fbSearchUrl = `https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(topic)}`;
-      window.open(fbSearchUrl, '_blank');
-      
+      // Simula uma busca interna para não ser bloqueado pelo popup
       const results: FbGroup[] = [
-        { name: `Busca ativa para "${topic}"`, members: 0, engagement: "Real" }
+        { name: `Grupos de ${topic}`, members: 0, engagement: "Frequente" }
       ];
       setSearchedGroups(results);
       setSearchingGroups(false);
-      toast.success("Abrindo busca oficial de grupos no Facebook...");
-    }, 800);
+      toast.success("Busca preparada! Clique no botão abaixo para ver no Facebook.");
+    }, 600);
   };
 
   const promoTemplates = (topic: string, link: string) => [
@@ -769,22 +765,21 @@ export function CreateEbookView() {
                   <div className="mt-6">
                     <div className="rounded-xl border bg-primary/5 p-6 text-center border-primary/20">
                       <Rocket className="mx-auto h-8 w-8 text-primary mb-3" />
-                      <h3 className="font-display text-lg font-bold">Busca Inteligente Ativada</h3>
+                      <h3 className="font-display text-lg font-bold">Busca Pronta!</h3>
                       <p className="text-sm text-muted-foreground mt-2 max-w-sm mx-auto">
-                        Uma nova aba foi aberta no seu Facebook com os melhores grupos de <strong>"{searchTopic}"</strong>.
+                        Clique no botão abaixo para encontrar grupos reais de <strong>"{searchTopic}"</strong> no Facebook.
                       </p>
                       <div className="mt-4 flex flex-col gap-2">
-                        <Button 
-                          className="gradient-primary text-primary-foreground"
-                          onClick={() => {
-                            const fbSearchUrl = `https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`;
-                            window.open(fbSearchUrl, '_blank');
-                          }}
+                        <a 
+                          href={`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-glow hover:opacity-90 transition-opacity"
                         >
-                          <Rocket className="mr-2 h-4 w-4" /> Abrir Busca Novamente
-                        </Button>
+                          <Rocket className="mr-2 h-4 w-4" /> Ver Grupos no Facebook
+                        </a>
                         <p className="text-[11px] text-muted-foreground">
-                          Dica: Entre nos grupos, copie a mensagem persuasiva abaixo e cole no primeiro post.
+                          Dica: O Facebook pode bloquear janelas automáticas. Clicar no botão acima é a forma mais segura.
                         </p>
                       </div>
                     </div>
