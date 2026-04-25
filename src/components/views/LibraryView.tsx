@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { BookOpen, Download, ExternalLink, Eye, Globe, Link2, Loader2, Lock, Trash2, Plus } from "lucide-react";
+import { BookOpen, Check, Download, ExternalLink, Eye, Globe, Link2, Loader2, Lock, Tag, Trash2, Plus } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { useEbooks, type Ebook, type Chapter } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
