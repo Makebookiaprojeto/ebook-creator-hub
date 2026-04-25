@@ -773,9 +773,25 @@ export function CreateEbookView() {
                               <p className="text-xs text-muted-foreground">{g.members.toLocaleString("pt-BR")} membros • {g.engagement} engajamento</p>
                             </div>
                           </div>
-                          <Button variant="outline" size="sm" onClick={() => toast.success("Link do grupo copiado!")}>
-                            <Copy className="mr-2 h-3.5 w-3.5" /> Copiar
-                          </Button>
+                          <div className="flex gap-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              onClick={() => {
+                                const fbSearchUrl = `https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(g.name)}`;
+                                window.open(fbSearchUrl, '_blank');
+                                toast.success("Abrindo busca do Facebook...");
+                              }}
+                            >
+                              <Rocket className="mr-2 h-3.5 w-3.5" /> Abrir Grupo
+                            </Button>
+                            <Button variant="ghost" size="sm" onClick={() => {
+                              navigator.clipboard.writeText(g.name);
+                              toast.success("Nome do grupo copiado!");
+                            }}>
+                              <Copy className="h-3.5 w-3.5" />
+                            </Button>
+                          </div>
                         </div>
                       ))}
                     </div>
