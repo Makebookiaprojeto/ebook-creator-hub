@@ -256,6 +256,48 @@ export function LibraryView({ onCreateNew }: Props) {
                   </Button>
                 </div>
 
+                {/* Price editor */}
+                <div className="mt-3">
+                  <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
+                    <Tag className="h-3 w-3" /> Preço de venda
+                  </label>
+                  <div className="flex items-center gap-1.5">
+                    <div className="relative flex-1">
+                      <span className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-[11px] font-semibold text-muted-foreground">
+                        R$
+                      </span>
+                      <Input
+                        inputMode="decimal"
+                        placeholder="0,00"
+                        value={priceDrafts[eb.id] ?? formatPriceBR(eb.price_cents)}
+                        onChange={(e) =>
+                          setPriceDrafts((p) => ({ ...p, [eb.id]: e.target.value }))
+                        }
+                        className="h-8 pl-8 text-xs"
+                      />
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      className="h-8 px-2"
+                      onClick={() => savePrice(eb)}
+                      disabled={savingPriceId === eb.id}
+                      title="Salvar preço"
+                    >
+                      {savingPriceId === eb.id ? (
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      ) : (
+                        <Check className="h-3.5 w-3.5" />
+                      )}
+                    </Button>
+                  </div>
+                  {(!eb.price_cents || eb.price_cents < 50) && (
+                    <p className="mt-1 text-[10px] text-amber-500">
+                      Defina um preço para habilitar a venda.
+                    </p>
+                  )}
+                </div>
+
                 {/* Public page controls */}
                 <div className="mt-2 space-y-1.5">
                   <div className="flex items-center gap-1.5 rounded-lg border bg-muted/30 p-1.5">
