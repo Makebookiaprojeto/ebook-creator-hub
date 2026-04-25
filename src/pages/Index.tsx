@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { DashboardView } from "@/components/views/DashboardView";
@@ -9,12 +9,43 @@ import { SupportView } from "@/components/views/SupportView";
 import { ProfileView } from "@/components/views/ProfileView";
 import { Bell, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 type View = "dashboard" | "create" | "library" | "support" | "profile";
 
 const Index = () => {
   const [view, setView] = useState<View>("dashboard");
+  const { user } = useAuth();
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    const fetchProfile = async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("avatar_url")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (data) setAvatarUrl((data as any).avatar_url);
+    };
+    fetchProfile();
+
+    const channel = supabase
+      .channel("profile-header")
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "profiles", filter: `user_id=eq.${user.id}` },
+        (payload) => {
+          setAvatarUrl((payload.new as any).avatar_url);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
@@ -40,9 +71,13 @@ const Index = () => {
               </button>
               <button
                 onClick={() => setView("profile")}
-                className="flex h-8 w-8 items-center justify-center rounded-full gradient-primary text-sm font-semibold text-primary-foreground shadow-glow"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/20 bg-muted overflow-hidden gradient-primary text-sm font-semibold text-primary-foreground shadow-glow"
               >
-                L
+                {avatarUrl ? (
+                  <img src={avatarUrl} alt="Perfil" className="h-full w-full object-cover" />
+                ) : (
+                  (user?.user_metadata?.display_name || user?.email || "L")[0].toUpperCase()
+                )}
               </button>
             </div>
           </header>
