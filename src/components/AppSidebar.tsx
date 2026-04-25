@@ -16,7 +16,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-type View = "dashboard" | "create" | "library" | "tools" | "support" | "profile";
+type View = "dashboard" | "create" | "library" | "support" | "profile";
 
 interface Props {
   active: View;
@@ -27,7 +27,6 @@ const items: { id: View; title: string; icon: typeof LayoutDashboard }[] = [
   { id: "dashboard", title: "Dashboard", icon: LayoutDashboard },
   { id: "create", title: "Criar Ebook", icon: Plus },
   { id: "library", title: "Biblioteca", icon: Library },
-  { id: "tools", title: "Ferramentas", icon: Wrench },
   { id: "support", title: "Suporte", icon: LifeBuoy },
   { id: "profile", title: "Perfil", icon: User },
 ];
