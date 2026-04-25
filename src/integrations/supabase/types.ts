@@ -118,6 +118,48 @@ export type Database = {
         }
         Relationships: []
       }
+      orders: {
+        Row: {
+          amount_cents: number
+          buyer_email: string | null
+          created_at: string
+          currency: string
+          ebook_id: string
+          ebook_owner_id: string
+          id: string
+          status: string
+          stripe_payment_intent: string | null
+          stripe_session_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount_cents: number
+          buyer_email?: string | null
+          created_at?: string
+          currency?: string
+          ebook_id: string
+          ebook_owner_id: string
+          id?: string
+          status?: string
+          stripe_payment_intent?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount_cents?: number
+          buyer_email?: string | null
+          created_at?: string
+          currency?: string
+          ebook_id?: string
+          ebook_owner_id?: string
+          id?: string
+          status?: string
+          stripe_payment_intent?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
