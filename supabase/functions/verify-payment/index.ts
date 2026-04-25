@@ -68,7 +68,7 @@ Deno.serve(async (req) => {
       })
       .eq("stripe_session_id", session_id);
 
-    return new Response(JSON.stringify({ paid, status: session.payment_status }), {
+    return new Response(JSON.stringify({ paid, status: session.payment_status, pdf_url: paid ? pdfUrl : null }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
