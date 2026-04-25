@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { plans } from "@/lib/mockData";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,8 @@ import {
   Loader2,
   AlertCircle,
   CheckCircle2,
+  Camera,
+  Upload,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
@@ -37,6 +39,9 @@ export function ProfileView() {
   const [externalUrl, setExternalUrl] = useState("");
   const [savedUrl, setSavedUrl] = useState("");
   const [savingUrl, setSavingUrl] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Carrega o link externo salvo
   useEffect(() => {
@@ -44,9 +49,14 @@ export function ProfileView() {
     (async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("external_checkout_url")
+        .select("external_checkout_url, avatar_url")
         .eq("user_id", user.id)
         .maybeSingle();
+      const url = (data as any)?.external_checkout_url || "";
+      const avatar = (data as any)?.avatar_url || null;
+      setExternalUrl(url);
+      setSavedUrl(url);
+      setAvatarUrl(avatar);
       const url = (data as any)?.external_checkout_url || "";
       setExternalUrl(url);
       setSavedUrl(url);
@@ -118,6 +128,45 @@ export function ProfileView() {
     }
   };
 
+  const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      setUploadingAvatar(true);
+      const file = event.target.files?.[0];
+      if (!file || !user) return;
+
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}/${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      // Upload image to storage
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(filePath);
+
+      // Update profile
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ avatar_url: publicUrl })
+        .eq('user_id', user.id);
+
+      if (updateError) throw updateError;
+
+      setAvatarUrl(publicUrl);
+      toast.success("Foto de perfil atualizada!");
+    } catch (error: any) {
+      toast.error("Erro ao subir foto: " + error.message);
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
+
   const displayName = user?.user_metadata?.display_name || user?.email?.split("@")[0] || "Usuário";
   const email = user?.email || "";
 
@@ -132,13 +181,51 @@ export function ProfileView() {
       </div>
 
       <div className="rounded-2xl border bg-card p-6 shadow-soft">
-        <div className="flex items-center gap-4">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full gradient-primary text-2xl font-bold text-primary-foreground shadow-glow">
-            {displayName.charAt(0).toUpperCase()}
+        <div className="flex items-center gap-6 flex-wrap sm:flex-nowrap">
+          <div className="relative group">
+            <div className="flex h-24 w-24 items-center justify-center rounded-full border-2 border-primary/20 bg-muted overflow-hidden shadow-glow">
+              {avatarUrl ? (
+                <img src={avatarUrl} alt={displayName} className="h-full w-full object-cover" />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center gradient-primary text-3xl font-bold text-primary-foreground">
+                  {displayName.charAt(0).toUpperCase()}
+                </div>
+              )}
+              {uploadingAvatar && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                  <Loader2 className="h-8 w-8 animate-spin text-white" />
+                </div>
+              )}
+            </div>
+            <button 
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploadingAvatar}
+              className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg hover:scale-110 transition active:scale-95"
+              title="Mudar foto"
+            >
+              <Camera className="h-4 w-4" />
+            </button>
+            <input 
+              type="file"
+              ref={fileInputRef}
+              onChange={handleAvatarUpload}
+              accept="image/*"
+              className="hidden"
+            />
           </div>
           <div>
-            <h2 className="font-display text-xl font-semibold">{displayName}</h2>
-            <p className="text-sm text-muted-foreground">{email}</p>
+            <h2 className="font-display text-2xl font-semibold">{displayName}</h2>
+            <p className="text-muted-foreground">{email}</p>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="mt-3 gap-2"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploadingAvatar}
+            >
+              <Upload className="h-3.5 w-3.5" />
+              Upload Nova Foto
+            </Button>
           </div>
         </div>
 
