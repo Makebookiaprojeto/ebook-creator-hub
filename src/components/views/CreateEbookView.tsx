@@ -62,8 +62,6 @@ export function CreateEbookView() {
   };
 
   const generate = async () => {
-    toast.error("Geração por IA está temporariamente desativada para evitar custos. Reative quando quiser.");
-    return;
     if (!niche.trim()) {
       toast.error("Escolha um nicho primeiro");
       return;
