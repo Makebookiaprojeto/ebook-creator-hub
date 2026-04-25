@@ -29,9 +29,19 @@ Deno.serve(async (req) => {
     // Localizar order para descobrir conta Stripe Connect do vendedor
     const { data: order } = await supabase
       .from("orders")
-      .select("ebook_owner_id")
+      .select("ebook_owner_id, ebook_id")
       .eq("stripe_session_id", session_id)
       .maybeSingle();
+
+    let pdfUrl: string | null = null;
+    if (order?.ebook_id) {
+      const { data: ebook } = await supabase
+        .from("ebooks")
+        .select("pdf_url")
+        .eq("id", order.ebook_id)
+        .maybeSingle();
+      pdfUrl = ebook?.pdf_url ?? null;
+    }
 
     let stripeAccount: string | undefined;
     if (order?.ebook_owner_id) {
