@@ -202,17 +202,17 @@ export function CreateEbookView() {
     }
     
     setTimeout(() => {
+      // Abre o Facebook com a busca real
+      const fbSearchUrl = `https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(topic)}`;
+      window.open(fbSearchUrl, '_blank');
+      
       const results: FbGroup[] = [
-        { name: `Grupo de ${topic}`, members: 12500, engagement: "Alto" },
-        { name: `Dicas de ${topic}`, members: 8300, engagement: "Médio" },
-        { name: `Comunidade ${topic} Brasil`, members: 45000, engagement: "Alto" },
-        { name: `${topic} para Iniciantes`, members: 3200, engagement: "Alto" },
-        { name: `Vendas e Trocas: ${topic}`, members: 15600, engagement: "Médio" },
+        { name: `Busca ativa para "${topic}"`, members: 0, engagement: "Real" }
       ];
       setSearchedGroups(results);
       setSearchingGroups(false);
-      toast.success(`${results.length} grupos sugeridos encontrados!`);
-    }, 1000);
+      toast.success("Abrindo busca oficial de grupos no Facebook...");
+    }, 800);
   };
 
   const promoTemplates = (topic: string, link: string) => [
