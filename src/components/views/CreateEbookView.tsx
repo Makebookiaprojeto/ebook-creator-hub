@@ -767,47 +767,29 @@ export function CreateEbookView() {
                         <h3 className="font-bold">Busca Manual no Facebook</h3>
                       </div>
                       
-                      <div className="grid gap-4">
-                        <div className="space-y-2">
-                          <p className="text-xs font-medium text-muted-foreground uppercase">Opção 1: Link Direto (Recomendado)</p>
-                          <div className="flex items-center gap-2">
-                            <Input 
-                              readOnly 
-                              value={`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`}
-                              className="bg-muted/50 text-xs"
-                            />
-                            <Button 
-                              size="sm" 
-                              variant="outline"
-                              onClick={() => {
-                                navigator.clipboard.writeText(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`);
-                                toast.success("Link copiado! Cole no seu navegador.");
-                              }}
-                            >
-                              <Copy className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <p className="text-xs font-medium text-muted-foreground uppercase">Opção 2: Abrir em nova aba</p>
-                          <a 
-                            href={`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+                      <div className="space-y-3">
+                        <p className="text-xs font-medium text-muted-foreground uppercase">Link da Busca</p>
+                        <div className="flex items-center gap-2">
+                          <Input 
+                            readOnly 
+                            value={`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`}
+                            className="bg-muted/50 text-xs"
+                          />
+                          <Button 
+                            className="gradient-primary text-primary-foreground shadow-glow shrink-0"
+                            onClick={() => {
+                              navigator.clipboard.writeText(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`);
+                              toast.success("Link copiado! Cole no seu navegador.");
+                            }}
                           >
-                            <Search className="h-4 w-4" /> Tentar abrir busca agora
-                          </a>
+                            <Copy className="mr-2 h-4 w-4" /> Copiar Link
+                          </Button>
                         </div>
                       </div>
 
                       <div className="rounded-lg bg-blue-50 p-4 border border-blue-100">
                         <p className="text-xs text-blue-800 leading-relaxed">
-                          <strong>Por que falha?</strong> O Facebook protege contra robôs. Se o botão acima não funcionar:
-                          <br />1. Clique no botão de <strong>copiar</strong> acima.
-                          <br />2. Abra uma nova aba no seu navegador.
-                          <br />3. Cole o link e pressione Enter.
+                          <strong>Como usar:</strong> Como o Facebook bloqueia acessos diretos, clique no botão <strong>Copiar Link</strong> acima, abra uma nova aba no seu navegador e cole o link lá.
                         </p>
                       </div>
                     </div>
