@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { BookOpen, Download, ExternalLink, Eye, Globe, Link2, Loader2, Lock, Trash2, Plus } from "lucide-react";
+import { BookOpen, Check, Download, ExternalLink, Eye, Globe, Link2, Loader2, Lock, Tag, Trash2, Plus } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { useEbooks, type Ebook, type Chapter } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -43,6 +44,42 @@ export function LibraryView({ onCreateNew }: Props) {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<Ebook | null>(null);
+  const [priceDrafts, setPriceDrafts] = useState<Record<string, string>>({});
+  const [savingPriceId, setSavingPriceId] = useState<string | null>(null);
+
+  const formatPriceBR = (cents?: number | null) =>
+    !cents || cents <= 0 ? "" : (cents / 100).toFixed(2).replace(".", ",");
+
+  const savePrice = async (eb: Ebook) => {
+    const raw = priceDrafts[eb.id] ?? formatPriceBR(eb.price_cents);
+    const normalized = raw.replace(/\./g, "").replace(",", ".").trim();
+    const value = Number(normalized);
+    if (!normalized || isNaN(value) || value < 0.5) {
+      toast.error("Defina um preço válido (mínimo R$ 0,50).");
+      return;
+    }
+    const cents = Math.round(value * 100);
+    setSavingPriceId(eb.id);
+    try {
+      const { error } = await supabase
+        .from("ebooks")
+        .update({ price_cents: cents })
+        .eq("id", eb.id);
+      if (error) throw error;
+      toast.success("Preço atualizado!");
+      setPriceDrafts((p) => {
+        const n = { ...p };
+        delete n[eb.id];
+        return n;
+      });
+      await refresh();
+    } catch (err) {
+      console.error(err);
+      toast.error("Não foi possível salvar o preço.");
+    } finally {
+      setSavingPriceId(null);
+    }
+  };
 
   const togglePublic = async (eb: Ebook) => {
     setTogglingId(eb.id);
@@ -217,6 +254,48 @@ export function LibraryView({ onCreateNew }: Props) {
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </Button>
+                </div>
+
+                {/* Price editor */}
+                <div className="mt-3">
+                  <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
+                    <Tag className="h-3 w-3" /> Preço de venda
+                  </label>
+                  <div className="flex items-center gap-1.5">
+                    <div className="relative flex-1">
+                      <span className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-[11px] font-semibold text-muted-foreground">
+                        R$
+                      </span>
+                      <Input
+                        inputMode="decimal"
+                        placeholder="0,00"
+                        value={priceDrafts[eb.id] ?? formatPriceBR(eb.price_cents)}
+                        onChange={(e) =>
+                          setPriceDrafts((p) => ({ ...p, [eb.id]: e.target.value }))
+                        }
+                        className="h-8 pl-8 text-xs"
+                      />
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      className="h-8 px-2"
+                      onClick={() => savePrice(eb)}
+                      disabled={savingPriceId === eb.id}
+                      title="Salvar preço"
+                    >
+                      {savingPriceId === eb.id ? (
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      ) : (
+                        <Check className="h-3.5 w-3.5" />
+                      )}
+                    </Button>
+                  </div>
+                  {(!eb.price_cents || eb.price_cents < 50) && (
+                    <p className="mt-1 text-[10px] text-amber-500">
+                      Defina um preço para habilitar a venda.
+                    </p>
+                  )}
                 </div>
 
                 {/* Public page controls */}
