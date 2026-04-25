@@ -50,7 +50,8 @@ export function CreateEbookView() {
 
   // Divulgação
   const [searchTopic, setSearchTopic] = useState("");
-  const [ebookLink, setEbookLink] = useState("https://meuebook.com/oferta");
+  const [ebookLink, setEbookLink] = useState("");
+  const [createdEbookSlug, setCreatedEbookSlug] = useState<string | null>(null);
   const [searchedGroups, setSearchedGroups] = useState<FbGroup[]>([]);
   const [searchingGroups, setSearchingGroups] = useState(false);
 
