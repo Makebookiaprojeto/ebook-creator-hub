@@ -854,7 +854,7 @@ export function CreateEbookView() {
               }
               try {
                 setSaving(true);
-                await createEbookWithChapters(
+                const res = await createEbookWithChapters(
                   {
                     title,
                     subtitle,
@@ -868,6 +868,10 @@ export function CreateEbookView() {
                   },
                   chapters,
                 );
+                if (res?.slug) {
+                  setCreatedEbookSlug(res.slug);
+                  setEbookLink(`${window.location.origin}/e/${res.slug}`);
+                }
                 toast.success("Ebook salvo com sucesso! 🎉");
               } catch (e: any) {
                 toast.error(e.message ?? "Erro ao salvar ebook");
