@@ -158,7 +158,63 @@ export function ProfileView() {
         </div>
       </div>
 
-      {/* Card de Stripe Connect */}
+      {/* Card de Link de Checkout Externo */}
+      <div className="rounded-2xl border bg-card p-6 shadow-soft">
+        <div className="flex items-start gap-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl gradient-primary text-primary-foreground shadow-glow">
+            <ExternalLink className="h-6 w-6" />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h2 className="font-display text-xl font-semibold">Link de checkout externo</h2>
+              {savedUrl ? (
+                <Badge className="bg-success text-success-foreground hover:bg-success gap-1">
+                  <CheckCircle2 className="h-3 w-3" /> Configurado
+                </Badge>
+              ) : (
+                <Badge variant="outline" className="gap-1">
+                  <AlertCircle className="h-3 w-3" /> Não configurado
+                </Badge>
+              )}
+            </div>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Cole aqui o link do seu checkout (Hotmart, Kiwify, Mercado Pago, Stripe Payment Link, etc).
+              O botão "Comprar" dos seus ebooks vai redirecionar para esse link.
+            </p>
+
+            <div className="mt-4 space-y-2">
+              <Label htmlFor="external-checkout-url">URL do checkout</Label>
+              <Input
+                id="external-checkout-url"
+                type="url"
+                placeholder="https://pay.hotmart.com/..."
+                value={externalUrl}
+                onChange={(e) => setExternalUrl(e.target.value)}
+              />
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Button
+                onClick={handleSaveExternalUrl}
+                disabled={savingUrl || externalUrl === savedUrl}
+                className="gradient-primary text-primary-foreground shadow-glow"
+              >
+                {savingUrl && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Salvar link
+              </Button>
+              {savedUrl && (
+                <Button variant="outline" asChild>
+                  <a href={savedUrl} target="_blank" rel="noopener noreferrer">
+                    Testar link
+                  </a>
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+
       <div className="rounded-2xl border bg-card p-6 shadow-soft">
         <div className="flex items-start gap-4">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl gradient-primary text-primary-foreground shadow-glow">
