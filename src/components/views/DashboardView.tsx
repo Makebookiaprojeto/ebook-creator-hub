@@ -29,11 +29,6 @@ export function DashboardView() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Ebooks criados" value={String(ebooks.length)} delta={`+${ebooks.length}`} icon={BookOpen} tint="from-violet-500 to-purple-500" />
-        <p className="mt-1 text-muted-foreground">Aqui está o resumo do seu negócio hoje.</p>
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Ebooks criados" value={String(user.ebooksCreated)} delta="+2" icon={BookOpen} tint="from-violet-500 to-purple-500" />
         <StatCard label="Visualizações" value="12.4k" delta="+18%" icon={Eye} tint="from-blue-500 to-cyan-500" />
         <StatCard label="Vendas" value={String(user.totalSales)} delta="+34%" icon={ShoppingCart} tint="from-emerald-500 to-teal-500" />
         <StatCard label="Receita" value={`R$ ${user.totalRevenue.toLocaleString("pt-BR")}`} delta="+27%" icon={DollarSign} tint="from-amber-500 to-orange-500" />
