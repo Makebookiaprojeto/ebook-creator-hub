@@ -10,7 +10,7 @@ import {
   Clock,
   Download,
   Flame,
-  Gift,
+  
   Loader2,
   Lock,
   ShieldCheck,
