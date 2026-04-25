@@ -34,13 +34,15 @@ Deno.serve(async (req) => {
       .maybeSingle();
 
     let pdfUrl: string | null = null;
+    let ebookTitle: string = "Seu eBook";
     if (order?.ebook_id) {
       const { data: ebook } = await supabase
         .from("ebooks")
-        .select("pdf_url")
+        .select("pdf_url, title")
         .eq("id", order.ebook_id)
         .maybeSingle();
       pdfUrl = ebook?.pdf_url ?? null;
+      ebookTitle = ebook?.title ?? ebookTitle;
     }
 
     let stripeAccount: string | undefined;
@@ -58,15 +60,33 @@ Deno.serve(async (req) => {
       stripeAccount ? { stripeAccount } : undefined,
     );
     const paid = session.payment_status === "paid";
+    const customerEmail = session.customer_details?.email;
 
     await supabase
       .from("orders")
       .update({
         status: paid ? "paid" : session.payment_status,
-        buyer_email: session.customer_details?.email ?? null,
+        buyer_email: customerEmail ?? null,
         stripe_payment_intent: typeof session.payment_intent === "string" ? session.payment_intent : null,
       })
       .eq("stripe_session_id", session_id);
+
+    // Disparar e-mail se estiver pago e tivermos as informações necessárias
+    if (paid && customerEmail && pdfUrl) {
+      console.log(`Disparando e-mail para ${customerEmail} do eBook ${ebookTitle}`);
+      try {
+        await supabase.functions.invoke("send-ebook-email", {
+          body: { 
+            customerEmail, 
+            ebookTitle, 
+            pdfUrl 
+          },
+        });
+      } catch (emailErr) {
+        console.error("Erro ao disparar e-mail:", emailErr);
+        // Não travamos a resposta principal se o e-mail falhar
+      }
+    }
 
     return new Response(JSON.stringify({ paid, status: session.payment_status, pdf_url: paid ? pdfUrl : null }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
