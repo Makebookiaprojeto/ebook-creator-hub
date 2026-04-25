@@ -250,7 +250,7 @@ export function LibraryView({ onCreateNew }: Props) {
                       </Button>
                     )}
                   </div>
-                  {eb.is_public && eb.slug && (
+                  {eb.is_public && eb.slug ? (
                     <a
                       href={`/e/${eb.slug}`}
                       target="_blank"
@@ -259,6 +259,22 @@ export function LibraryView({ onCreateNew }: Props) {
                     >
                       <ExternalLink className="h-3.5 w-3.5" /> Ver na web
                     </a>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!eb.is_public) {
+                          toast.info("Publique a página primeiro para vê-la na web.", {
+                            description: 'Clique em "Publicar página" acima.',
+                          });
+                        } else {
+                          toast.error("Link ainda não disponível. Tente novamente em instantes.");
+                        }
+                      }}
+                      className="flex h-9 w-full items-center justify-center gap-1.5 rounded-lg border border-dashed bg-muted/20 px-3 text-xs font-medium text-muted-foreground transition hover:bg-muted/40"
+                    >
+                      <Lock className="h-3.5 w-3.5" /> Ver na web
+                    </button>
                   )}
                 </div>
               </div>
