@@ -58,6 +58,44 @@ export type Database = {
           },
         ]
       }
+      ebook_sales: {
+        Row: {
+          amount_paid_cents: number | null
+          created_at: string | null
+          customer_email: string
+          ebook_id: string | null
+          id: string
+          status: string | null
+          stripe_session_id: string | null
+        }
+        Insert: {
+          amount_paid_cents?: number | null
+          created_at?: string | null
+          customer_email: string
+          ebook_id?: string | null
+          id?: string
+          status?: string | null
+          stripe_session_id?: string | null
+        }
+        Update: {
+          amount_paid_cents?: number | null
+          created_at?: string | null
+          customer_email?: string
+          ebook_id?: string | null
+          id?: string
+          status?: string | null
+          stripe_session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ebook_sales_ebook_id_fkey"
+            columns: ["ebook_id"]
+            isOneToOne: false
+            referencedRelation: "ebooks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ebooks: {
         Row: {
           audience: string | null
@@ -69,6 +107,7 @@ export type Database = {
           id: string
           is_public: boolean
           niche: string | null
+          pdf_url: string | null
           price_cents: number | null
           sales_pitch: string | null
           slug: string | null
@@ -88,6 +127,7 @@ export type Database = {
           id?: string
           is_public?: boolean
           niche?: string | null
+          pdf_url?: string | null
           price_cents?: number | null
           sales_pitch?: string | null
           slug?: string | null
@@ -107,6 +147,7 @@ export type Database = {
           id?: string
           is_public?: boolean
           niche?: string | null
+          pdf_url?: string | null
           price_cents?: number | null
           sales_pitch?: string | null
           slug?: string | null
