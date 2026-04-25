@@ -45,6 +45,8 @@ export function CreateEbookView() {
   const [openChapter, setOpenChapter] = useState<number | null>(null);
   const [showFullPreview, setShowFullPreview] = useState(false);
   const [generatingPdf, setGeneratingPdf] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [uploadingPdf, setUploadingPdf] = useState(false);
 
   // Divulgação
   const [searchTopic, setSearchTopic] = useState("");
@@ -158,8 +160,25 @@ export function CreateEbookView() {
         cover_url: coverUrl,
         chapters,
       });
-      downloadPdf(blob, title.toLowerCase().replace(/[^a-z0-9]+/gi, "-").slice(0, 60));
-      toast.success("PDF gerado!");
+      const fileName = title.toLowerCase().replace(/[^a-z0-9]+/gi, "-").slice(0, 60);
+      downloadPdf(blob, fileName);
+      
+      // Upload automático após gerar
+      setUploadingPdf(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const filePath = `${user.id}/${Date.now()}-${fileName}.pdf`;
+        const { error: uploadError } = await supabase.storage
+          .from("ebook-files")
+          .upload(filePath, blob);
+        
+        if (!uploadError) {
+          const { data: { publicUrl } } = supabase.storage.from("ebook-files").getPublicUrl(filePath);
+          setPdfUrl(publicUrl);
+        }
+      }
+      
+      toast.success("PDF gerado e pronto para entrega!");
     } catch (e) {
       console.error(e);
       toast.error("Falha ao gerar PDF");
@@ -384,7 +403,80 @@ export function CreateEbookView() {
                 )}
 
                 {generated && (
-                  <div className="mt-6 space-y-4">
+                  <div className="mt-6 space-y-6">
+                    {/* Arquivo do Ebook */}
+                    <div className="rounded-xl border bg-success/5 p-4 border-success/20">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success text-success-foreground">
+                            <FileText className="h-5 w-5" />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-sm">Arquivo do eBook (PDF)</p>
+                            <p className="text-xs text-muted-foreground">Este arquivo será enviado automaticamente após a compra.</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <input
+                            type="file"
+                            id="pdf-upload"
+                            accept=".pdf"
+                            className="hidden"
+                            onChange={async (e) => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              
+                              setUploadingPdf(true);
+                              try {
+                                const { data: { user } } = await supabase.auth.getUser();
+                                if (!user) throw new Error("Não autenticado");
+
+                                const filePath = `${user.id}/${Date.now()}-${file.name}`;
+                                const { error: uploadError } = await supabase.storage
+                                  .from("ebook-files")
+                                  .upload(filePath, file);
+
+                                if (uploadError) throw uploadError;
+
+                                const { data: { publicUrl } } = supabase.storage
+                                  .from("ebook-files")
+                                  .getPublicUrl(filePath);
+
+                                setPdfUrl(publicUrl);
+                                toast.success("PDF enviado com sucesso!");
+                              } catch (err: any) {
+                                toast.error("Erro ao subir PDF: " + err.message);
+                              } finally {
+                                setUploadingPdf(false);
+                              }
+                            }}
+                          />
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={() => document.getElementById('pdf-upload')?.click()}
+                            disabled={uploadingPdf}
+                          >
+                            {uploadingPdf ? <Loader2 className="h-4 w-4 animate-spin" /> : "Fazer Upload"}
+                          </Button>
+                          
+                          <Button
+                            size="sm"
+                            onClick={handleGeneratePdf}
+                            disabled={generatingPdf}
+                            className="gradient-primary text-primary-foreground"
+                          >
+                            {generatingPdf ? <Loader2 className="h-4 w-4 animate-spin" /> : "Gerar do Conteúdo"}
+                          </Button>
+                        </div>
+                      </div>
+                      {pdfUrl && (
+                        <div className="mt-3 flex items-center gap-2 text-xs text-success font-medium">
+                          <Check className="h-3.5 w-3.5" /> PDF configurado e pronto para entrega.
+                        </div>
+                      )}
+                    </div>
+
                     {/* Quick stats + actions */}
                     <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-gradient-to-br from-accent/40 to-transparent p-4">
                       <div className="flex items-center gap-3">
@@ -751,6 +843,7 @@ export function CreateEbookView() {
                     audience,
                     cover_url: coverUrl,
                     status: "published",
+                    pdf_url: pdfUrl,
                   },
                   chapters,
                 );
