@@ -194,6 +194,12 @@ export function CreateEbookView() {
       return;
     }
     setSearchingGroups(true);
+    
+    // Pegar o link real do ebook se disponível
+    if (slug) {
+      setEbookLink(`${window.location.origin}/e/${slug}`);
+    }
+    
     setTimeout(() => {
       const results: FbGroup[] = [
         { name: `Grupo de ${topic}`, members: 12500, engagement: "Alto" },
