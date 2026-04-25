@@ -1,4 +1,6 @@
 import { LayoutDashboard, Plus, Wrench, LifeBuoy, User, Sparkles, LogOut, Library } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -35,7 +37,37 @@ export function AppSidebar({ active, onChange }: Props) {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const { user, signOut } = useAuth();
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) return;
+    const fetchProfile = async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("avatar_url")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (data) setAvatarUrl((data as any).avatar_url);
+    };
+    fetchProfile();
+
+    // Subscribe to profile changes
+    const channel = supabase
+      .channel("profile-sidebar")
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "profiles", filter: `user_id=eq.${user.id}` },
+        (payload) => {
+          setAvatarUrl((payload.new as any).avatar_url);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -104,8 +136,12 @@ export function AppSidebar({ active, onChange }: Props) {
               return (
               <div className="mx-2 mb-2 flex items-center justify-between gap-2 rounded-lg border bg-card p-2">
                 <div className="flex items-center gap-2 min-w-0">
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full gradient-primary text-[11px] font-bold text-primary-foreground">
-                    {display[0]?.toUpperCase() ?? "U"}
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-muted overflow-hidden gradient-primary text-[11px] font-bold text-primary-foreground">
+                    {avatarUrl ? (
+                      <img src={avatarUrl} alt={display} className="h-full w-full object-cover" />
+                    ) : (
+                      display[0]?.toUpperCase() ?? "U"
+                    )}
                   </div>
                   <span className="truncate text-[11px] text-muted-foreground">{display}</span>
                 </div>
