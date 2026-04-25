@@ -160,8 +160,25 @@ export function CreateEbookView() {
         cover_url: coverUrl,
         chapters,
       });
-      downloadPdf(blob, title.toLowerCase().replace(/[^a-z0-9]+/gi, "-").slice(0, 60));
-      toast.success("PDF gerado!");
+      const fileName = title.toLowerCase().replace(/[^a-z0-9]+/gi, "-").slice(0, 60);
+      downloadPdf(blob, fileName);
+      
+      // Upload automático após gerar
+      setUploadingPdf(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const filePath = `${user.id}/${Date.now()}-${fileName}.pdf`;
+        const { error: uploadError } = await supabase.storage
+          .from("ebook-files")
+          .upload(filePath, blob);
+        
+        if (!uploadError) {
+          const { data: { publicUrl } } = supabase.storage.from("ebook-files").getPublicUrl(filePath);
+          setPdfUrl(publicUrl);
+        }
+      }
+      
+      toast.success("PDF gerado e pronto para entrega!");
     } catch (e) {
       console.error(e);
       toast.error("Falha ao gerar PDF");
