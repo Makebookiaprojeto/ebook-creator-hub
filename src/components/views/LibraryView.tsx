@@ -44,6 +44,42 @@ export function LibraryView({ onCreateNew }: Props) {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<Ebook | null>(null);
+  const [priceDrafts, setPriceDrafts] = useState<Record<string, string>>({});
+  const [savingPriceId, setSavingPriceId] = useState<string | null>(null);
+
+  const formatPriceBR = (cents?: number | null) =>
+    !cents || cents <= 0 ? "" : (cents / 100).toFixed(2).replace(".", ",");
+
+  const savePrice = async (eb: Ebook) => {
+    const raw = priceDrafts[eb.id] ?? formatPriceBR(eb.price_cents);
+    const normalized = raw.replace(/\./g, "").replace(",", ".").trim();
+    const value = Number(normalized);
+    if (!normalized || isNaN(value) || value < 0.5) {
+      toast.error("Defina um preço válido (mínimo R$ 0,50).");
+      return;
+    }
+    const cents = Math.round(value * 100);
+    setSavingPriceId(eb.id);
+    try {
+      const { error } = await supabase
+        .from("ebooks")
+        .update({ price_cents: cents })
+        .eq("id", eb.id);
+      if (error) throw error;
+      toast.success("Preço atualizado!");
+      setPriceDrafts((p) => {
+        const n = { ...p };
+        delete n[eb.id];
+        return n;
+      });
+      await refresh();
+    } catch (err) {
+      console.error(err);
+      toast.error("Não foi possível salvar o preço.");
+    } finally {
+      setSavingPriceId(null);
+    }
+  };
 
   const togglePublic = async (eb: Ebook) => {
     setTogglingId(eb.id);
