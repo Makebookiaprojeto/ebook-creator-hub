@@ -490,38 +490,6 @@ export default function EbookSalesPage() {
         </section>
       )}
 
-      {/* BONUSES */}
-      <section className="border-y border-border/40 bg-gradient-to-br from-primary/10 via-card/30 to-accent/10 py-20">
-        <div className="mx-auto max-w-5xl px-6">
-          <div className="text-center">
-            <Badge className="mb-3 bg-green-500/15 text-green-400 border-green-500/30">🎁 Bônus exclusivos</Badge>
-            <h2 className="font-display text-3xl font-bold sm:text-4xl">
-              Comprando hoje você leva também
-            </h2>
-            <p className="mt-3 text-muted-foreground">3 bônus liberados imediatamente após a compra.</p>
-          </div>
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {[
-              { t: "Checklist prático em PDF", v: "R$ 47" },
-              { t: "Mapa mental visual completo", v: "R$ 67" },
-              { t: "Comunidade VIP no Telegram", v: "R$ 97" },
-            ].map((b, i) => (
-              <div key={i} className="relative rounded-2xl border-2 border-dashed border-primary/40 bg-card/70 p-6 backdrop-blur">
-                <Gift className="h-6 w-6 text-primary" />
-                <p className="mt-3 font-display text-base font-bold">BÔNUS #{i + 1}</p>
-                <p className="mt-1 text-sm text-foreground/90">{b.t}</p>
-                <p className="mt-3 text-xs text-muted-foreground">
-                  Valor: <span className="line-through">{b.v}</span> · <span className="font-bold text-green-500">GRÁTIS</span>
-                </p>
-              </div>
-            ))}
-          </div>
-          <p className="mt-8 text-center text-sm text-muted-foreground">
-            Valor total dos bônus: <span className="line-through">R$ 211</span> — <strong className="text-green-500">incluso na sua compra</strong>
-          </p>
-        </div>
-      </section>
-
       {/* GUARANTEE */}
       <section className="mx-auto max-w-4xl px-6 py-20">
         <div className="rounded-3xl border-2 border-green-500/30 bg-gradient-to-br from-green-500/5 to-transparent p-8 sm:p-12">
