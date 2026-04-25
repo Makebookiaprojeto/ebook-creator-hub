@@ -10,12 +10,29 @@ import { toast } from "sonner";
 export function SupportView() {
   const [name, setName] = useState("");
   const [msg, setMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Mensagem enviada! Responderemos em breve.");
-    setName("");
-    setMsg("");
+    if (!name || !msg) return;
+
+    setLoading(true);
+    
+    // Configura o email de suporte aqui
+    const supportEmail = "suporte@ebookai.com.br"; // Substitua pelo seu email real
+    const subject = encodeURIComponent(`Suporte EbookAI - Mensagem de ${name}`);
+    const body = encodeURIComponent(`Nome: ${name}\n\nMensagem:\n${msg}`);
+    
+    // Abre o cliente de email do usuário
+    window.location.href = `mailto:${supportEmail}?subject=${subject}&body=${body}`;
+    
+    toast.success("Abrindo seu cliente de e-mail para enviar a mensagem!");
+    
+    setTimeout(() => {
+      setName("");
+      setMsg("");
+      setLoading(false);
+    }, 1000);
   };
 
   return (
@@ -58,8 +75,18 @@ export function SupportView() {
               <label className="text-xs font-medium">Mensagem</label>
               <Textarea className="mt-1.5 min-h-[120px]" placeholder="Como podemos ajudar?" value={msg} onChange={(e) => setMsg(e.target.value)} required />
             </div>
-            <Button type="submit" className="w-full gradient-primary text-primary-foreground shadow-glow">
-              <Send className="mr-2 h-4 w-4" /> Enviar mensagem
+            <Button 
+              type="submit" 
+              className="w-full gradient-primary text-primary-foreground shadow-glow"
+              disabled={loading}
+            >
+              {loading ? (
+                <>Processando...</>
+              ) : (
+                <>
+                  <Send className="mr-2 h-4 w-4" /> Enviar mensagem
+                </>
+              )}
             </Button>
           </form>
         </div>
