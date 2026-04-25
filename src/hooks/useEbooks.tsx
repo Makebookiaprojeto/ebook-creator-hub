@@ -89,8 +89,11 @@ export function useEbooks() {
 
   const deleteEbook = async (id: string) => {
     const { error } = await supabase.from("ebooks").delete().eq("id", id);
-    if (error) throw error;
-    await fetchEbooks();
+    if (error) {
+      console.error("Erro ao deletar ebook:", error);
+      throw error;
+    }
+    setEbooks((prev) => prev.filter((eb) => eb.id !== id));
   };
 
   const getEbookWithChapters = async (id: string) => {
