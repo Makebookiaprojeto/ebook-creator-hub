@@ -131,7 +131,10 @@ export function AppSidebar({ active, onChange }: Props) {
             <div className="m-2 rounded-xl gradient-hero p-3">
               <p className="text-xs font-semibold text-foreground">Plano FREE</p>
               <p className="mt-0.5 text-[11px] text-muted-foreground">Faça upgrade para ebooks ilimitados</p>
-              <button className="mt-2 w-full rounded-lg gradient-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition hover:opacity-90">
+              <button 
+                onClick={() => onChange("profile")}
+                className="mt-2 w-full rounded-lg gradient-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition hover:opacity-90"
+              >
                 Upgrade PRO
               </button>
             </div>
