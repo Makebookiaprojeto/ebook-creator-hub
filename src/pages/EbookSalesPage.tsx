@@ -98,14 +98,8 @@ export default function EbookSalesPage() {
         } else {
           setIsPaid(true);
           toast.success("Pagamento confirmado! Obrigado pela compra 🎉");
-          // Re-fetch ebook to get pdf_url if now accessible
-          const { data: updatedEbook } = await supabase
-            .from("ebooks")
-            .select("pdf_url")
-            .eq("slug", slug || "")
-            .maybeSingle();
-          if (updatedEbook?.pdf_url) {
-            setDownloadUrl(updatedEbook.pdf_url);
+          if (data?.pdf_url) {
+            setDownloadUrl(data.pdf_url);
           }
         }
         setSearchParams({}, { replace: true });
