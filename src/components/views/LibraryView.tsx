@@ -410,18 +410,28 @@ export function LibraryView({ onCreateNew }: Props) {
       <AlertDialog open={!!confirmDelete} onOpenChange={(o) => !o && setConfirmDelete(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Deletar eBook?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Esta ação removerá permanentemente "{confirmDelete?.title}" e todos os seus capítulos.
+            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
+              <Trash2 className="h-6 w-6 text-destructive" />
+            </div>
+            <AlertDialogTitle className="text-center">Deletar eBook?</AlertDialogTitle>
+            <AlertDialogDescription className="text-center">
+              Tem certeza que deseja deletar permanentemente:
+              <span className="mt-2 block rounded-lg border bg-muted/50 p-3 font-semibold text-foreground">
+                "{confirmDelete?.title}"
+              </span>
+              <span className="mt-3 block text-xs">
+                Esta ação não pode ser desfeita. Todos os capítulos vinculados também serão removidos.
+              </span>
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogFooter className="sm:justify-center gap-2">
+            <AlertDialogCancel className="mt-0">Cancelar</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Deletar
+              <Trash2 className="mr-2 h-4 w-4" />
+              Confirmar exclusão
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
