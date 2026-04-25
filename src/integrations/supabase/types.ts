@@ -164,6 +164,7 @@ export type Database = {
         Row: {
           created_at: string
           display_name: string | null
+          external_checkout_url: string | null
           id: string
           stripe_account_id: string | null
           stripe_charges_enabled: boolean
@@ -174,6 +175,7 @@ export type Database = {
         Insert: {
           created_at?: string
           display_name?: string | null
+          external_checkout_url?: string | null
           id?: string
           stripe_account_id?: string | null
           stripe_charges_enabled?: boolean
@@ -184,6 +186,7 @@ export type Database = {
         Update: {
           created_at?: string
           display_name?: string | null
+          external_checkout_url?: string | null
           id?: string
           stripe_account_id?: string | null
           stripe_charges_enabled?: boolean
