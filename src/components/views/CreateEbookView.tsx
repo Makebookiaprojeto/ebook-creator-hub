@@ -202,17 +202,17 @@ export function CreateEbookView() {
     }
     
     setTimeout(() => {
+      // Abre o Facebook com a busca real
+      const fbSearchUrl = `https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(topic)}`;
+      window.open(fbSearchUrl, '_blank');
+      
       const results: FbGroup[] = [
-        { name: `Grupo de ${topic}`, members: 12500, engagement: "Alto" },
-        { name: `Dicas de ${topic}`, members: 8300, engagement: "Médio" },
-        { name: `Comunidade ${topic} Brasil`, members: 45000, engagement: "Alto" },
-        { name: `${topic} para Iniciantes`, members: 3200, engagement: "Alto" },
-        { name: `Vendas e Trocas: ${topic}`, members: 15600, engagement: "Médio" },
+        { name: `Busca ativa para "${topic}"`, members: 0, engagement: "Real" }
       ];
       setSearchedGroups(results);
       setSearchingGroups(false);
-      toast.success(`${results.length} grupos sugeridos encontrados!`);
-    }, 1000);
+      toast.success("Abrindo busca oficial de grupos no Facebook...");
+    }, 800);
   };
 
   const promoTemplates = (topic: string, link: string) => [
@@ -767,40 +767,26 @@ export function CreateEbookView() {
                 {/* Groups results */}
                 {searchedGroups.length > 0 && (
                   <div className="mt-6">
-                    <h3 className="font-display text-base font-semibold">Grupos encontrados para "{searchTopic}"</h3>
-                    <div className="mt-3 space-y-3">
-                      {searchedGroups.map((g) => (
-                        <div key={g.name} className="flex items-center justify-between rounded-xl border bg-background p-4 transition hover:shadow-md">
-                          <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent text-accent-foreground">
-                              <Users className="h-5 w-5" />
-                            </div>
-                            <div>
-                              <p className="font-medium text-sm">{g.name}</p>
-                              <p className="text-xs text-muted-foreground">{g.members.toLocaleString("pt-BR")} membros • {g.engagement} engajamento</p>
-                            </div>
-                          </div>
-                          <div className="flex gap-2">
-                            <Button 
-                              variant="outline" 
-                              size="sm" 
-                              onClick={() => {
-                                const fbSearchUrl = `https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(g.name)}`;
-                                window.open(fbSearchUrl, '_blank');
-                                toast.success("Abrindo busca do Facebook...");
-                              }}
-                            >
-                              <Rocket className="mr-2 h-3.5 w-3.5" /> Abrir Grupo
-                            </Button>
-                            <Button variant="ghost" size="sm" onClick={() => {
-                              navigator.clipboard.writeText(g.name);
-                              toast.success("Nome do grupo copiado!");
-                            }}>
-                              <Copy className="h-3.5 w-3.5" />
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
+                    <div className="rounded-xl border bg-primary/5 p-6 text-center border-primary/20">
+                      <Rocket className="mx-auto h-8 w-8 text-primary mb-3" />
+                      <h3 className="font-display text-lg font-bold">Busca Inteligente Ativada</h3>
+                      <p className="text-sm text-muted-foreground mt-2 max-w-sm mx-auto">
+                        Uma nova aba foi aberta no seu Facebook com os melhores grupos de <strong>"{searchTopic}"</strong>.
+                      </p>
+                      <div className="mt-4 flex flex-col gap-2">
+                        <Button 
+                          className="gradient-primary text-primary-foreground"
+                          onClick={() => {
+                            const fbSearchUrl = `https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`;
+                            window.open(fbSearchUrl, '_blank');
+                          }}
+                        >
+                          <Rocket className="mr-2 h-4 w-4" /> Abrir Busca Novamente
+                        </Button>
+                        <p className="text-[11px] text-muted-foreground">
+                          Dica: Entre nos grupos, copie a mensagem persuasiva abaixo e cole no primeiro post.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 )}
