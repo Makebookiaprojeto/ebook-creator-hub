@@ -50,7 +50,8 @@ export function CreateEbookView() {
 
   // Divulgação
   const [searchTopic, setSearchTopic] = useState("");
-  const [ebookLink, setEbookLink] = useState("https://meuebook.com/oferta");
+  const [ebookLink, setEbookLink] = useState("");
+  const [createdEbookSlug, setCreatedEbookSlug] = useState<string | null>(null);
   const [searchedGroups, setSearchedGroups] = useState<FbGroup[]>([]);
   const [searchingGroups, setSearchingGroups] = useState(false);
 
@@ -194,20 +195,24 @@ export function CreateEbookView() {
       return;
     }
     setSearchingGroups(true);
+    
+    // Pegar o link real do ebook se disponível
+    if (createdEbookSlug) {
+      setEbookLink(`${window.location.origin}/e/${createdEbookSlug}`);
+    }
+    
     setTimeout(() => {
-      const capitalized = topic
-        .split(" ")
-        .map((w) => (w.length > 2 ? w[0].toUpperCase() + w.slice(1).toLowerCase() : w))
-        .join(" ");
-      const results: FbGroup[] = groupTemplates.map((tpl) => ({
-        name: `${capitalized} ${tpl.suffix}`,
-        members: Math.round(tpl.base * (0.6 + Math.random() * 0.8)),
-        engagement: tpl.engagement,
-      }));
+      const results: FbGroup[] = [
+        { name: `Grupo de ${topic}`, members: 12500, engagement: "Alto" },
+        { name: `Dicas de ${topic}`, members: 8300, engagement: "Médio" },
+        { name: `Comunidade ${topic} Brasil`, members: 45000, engagement: "Alto" },
+        { name: `${topic} para Iniciantes`, members: 3200, engagement: "Alto" },
+        { name: `Vendas e Trocas: ${topic}`, members: 15600, engagement: "Médio" },
+      ];
       setSearchedGroups(results);
       setSearchingGroups(false);
-      toast.success(`${results.length} grupos abertos encontrados para "${topic}"`);
-    }, 1200);
+      toast.success(`${results.length} grupos sugeridos encontrados!`);
+    }, 1000);
   };
 
   const promoTemplates = (topic: string, link: string) => [
@@ -775,9 +780,25 @@ export function CreateEbookView() {
                               <p className="text-xs text-muted-foreground">{g.members.toLocaleString("pt-BR")} membros • {g.engagement} engajamento</p>
                             </div>
                           </div>
-                          <Button variant="outline" size="sm" onClick={() => toast.success("Link do grupo copiado!")}>
-                            <Copy className="mr-2 h-3.5 w-3.5" /> Copiar
-                          </Button>
+                          <div className="flex gap-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              onClick={() => {
+                                const fbSearchUrl = `https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(g.name)}`;
+                                window.open(fbSearchUrl, '_blank');
+                                toast.success("Abrindo busca do Facebook...");
+                              }}
+                            >
+                              <Rocket className="mr-2 h-3.5 w-3.5" /> Abrir Grupo
+                            </Button>
+                            <Button variant="ghost" size="sm" onClick={() => {
+                              navigator.clipboard.writeText(g.name);
+                              toast.success("Nome do grupo copiado!");
+                            }}>
+                              <Copy className="h-3.5 w-3.5" />
+                            </Button>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -833,7 +854,7 @@ export function CreateEbookView() {
               }
               try {
                 setSaving(true);
-                await createEbookWithChapters(
+                const res = await createEbookWithChapters(
                   {
                     title,
                     subtitle,
@@ -847,6 +868,10 @@ export function CreateEbookView() {
                   },
                   chapters,
                 );
+                if (res?.slug) {
+                  setCreatedEbookSlug(res.slug);
+                  setEbookLink(`${window.location.origin}/e/${res.slug}`);
+                }
                 toast.success("Ebook salvo com sucesso! 🎉");
               } catch (e: any) {
                 toast.error(e.message ?? "Erro ao salvar ebook");
