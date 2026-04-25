@@ -39,6 +39,8 @@ export function ProfileView() {
   const [externalUrl, setExternalUrl] = useState("");
   const [savedUrl, setSavedUrl] = useState("");
   const [savingUrl, setSavingUrl] = useState(false);
+  const [displayName, setDisplayName] = useState("");
+  const [savingName, setSavingName] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -49,16 +51,18 @@ export function ProfileView() {
     (async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("external_checkout_url, avatar_url")
+        .select("external_checkout_url, avatar_url, display_name")
         .eq("user_id", user.id)
         .maybeSingle();
       const profileData = data as any;
       const urlValue = profileData?.external_checkout_url || "";
       const avatarValue = profileData?.avatar_url || null;
+      const nameValue = profileData?.display_name || user?.user_metadata?.display_name || user?.email?.split("@")[0] || "Usuário";
       setExternalUrl(urlValue);
       setSavedUrl(urlValue);
       setAvatarUrl(avatarValue);
-      const url = (data as any)?.external_checkout_url || "";
+      setDisplayName(nameValue);
+      const url = profileData?.external_checkout_url || "";
       setExternalUrl(url);
       setSavedUrl(url);
     })();
@@ -83,6 +87,32 @@ export function ProfileView() {
     }
     setSavedUrl(trimmed);
     toast.success(trimmed ? "Link de checkout salvo!" : "Link removido");
+  };
+
+  const handleSaveDisplayName = async () => {
+    if (!user) return;
+    const trimmed = displayName.trim();
+    if (!trimmed) {
+      toast.error("O nome não pode estar vazio");
+      return;
+    }
+    setSavingName(true);
+    const { error } = await supabase
+      .from("profiles")
+      .update({ display_name: trimmed })
+      .eq("user_id", user.id);
+    
+    // Also update auth metadata for consistency
+    await supabase.auth.updateUser({
+      data: { display_name: trimmed }
+    });
+
+    setSavingName(false);
+    if (error) {
+      toast.error("Erro ao salvar nome: " + error.message);
+      return;
+    }
+    toast.success("Nome de exibição atualizado!");
   };
 
   const refreshStatus = useCallback(async () => {
@@ -168,7 +198,7 @@ export function ProfileView() {
     }
   };
 
-  const displayName = user?.user_metadata?.display_name || user?.email?.split("@")[0] || "Usuário";
+  // const displayName = user?.user_metadata?.display_name || user?.email?.split("@")[0] || "Usuário"; // Replaced by state
   const email = user?.email || "";
 
   const fullyConnected = status?.connected && status?.charges_enabled && status?.details_submitted;
@@ -230,18 +260,38 @@ export function ProfileView() {
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <div className="rounded-xl border bg-background p-4">
-            <div className="flex items-center gap-2 text-xs uppercase text-muted-foreground">
-              <UserIcon className="h-3.5 w-3.5" /> Nome
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="display-name" className="flex items-center gap-2 text-xs uppercase text-muted-foreground">
+              <UserIcon className="h-3.5 w-3.5" /> Nome de Exibição
+            </Label>
+            <div className="flex gap-2">
+              <Input
+                id="display-name"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                placeholder="Seu nome"
+                className="bg-background"
+              />
+              <Button 
+                size="sm" 
+                onClick={handleSaveDisplayName}
+                disabled={savingName}
+                className="gradient-primary text-primary-foreground"
+              >
+                {savingName ? <Loader2 className="h-4 w-4 animate-spin" /> : "Salvar"}
+              </Button>
             </div>
-            <p className="mt-2 font-medium">{displayName}</p>
           </div>
-          <div className="rounded-xl border bg-background p-4">
-            <div className="flex items-center gap-2 text-xs uppercase text-muted-foreground">
+          <div className="space-y-2">
+            <Label className="flex items-center gap-2 text-xs uppercase text-muted-foreground">
               <Mail className="h-3.5 w-3.5" /> Email
-            </div>
-            <p className="mt-2 font-medium">{email}</p>
+            </Label>
+            <Input
+              value={email}
+              disabled
+              className="bg-muted/50 cursor-not-allowed"
+            />
           </div>
         </div>
       </div>
