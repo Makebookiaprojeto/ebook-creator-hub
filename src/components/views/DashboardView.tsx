@@ -1,4 +1,6 @@
+import { useState, useEffect } from "react";
 import { BookOpen, Eye, ShoppingCart, DollarSign, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { StatCard } from "@/components/StatCard";
 import { salesChartData, user } from "@/lib/mockData";
