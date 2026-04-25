@@ -75,8 +75,18 @@ export function SupportView() {
               <label className="text-xs font-medium">Mensagem</label>
               <Textarea className="mt-1.5 min-h-[120px]" placeholder="Como podemos ajudar?" value={msg} onChange={(e) => setMsg(e.target.value)} required />
             </div>
-            <Button type="submit" className="w-full gradient-primary text-primary-foreground shadow-glow">
-              <Send className="mr-2 h-4 w-4" /> Enviar mensagem
+            <Button 
+              type="submit" 
+              className="w-full gradient-primary text-primary-foreground shadow-glow"
+              disabled={loading}
+            >
+              {loading ? (
+                <>Processando...</>
+              ) : (
+                <>
+                  <Send className="mr-2 h-4 w-4" /> Enviar mensagem
+                </>
+              )}
             </Button>
           </form>
         </div>
