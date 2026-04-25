@@ -20,13 +20,34 @@ Deno.serve(async (req) => {
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
       apiVersion: "2024-11-20.acacia",
     });
-    const session = await stripe.checkout.sessions.retrieve(session_id);
-    const paid = session.payment_status === "paid";
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
+
+    // Localizar order para descobrir conta Stripe Connect do vendedor
+    const { data: order } = await supabase
+      .from("orders")
+      .select("ebook_owner_id")
+      .eq("stripe_session_id", session_id)
+      .maybeSingle();
+
+    let stripeAccount: string | undefined;
+    if (order?.ebook_owner_id) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("stripe_account_id")
+        .eq("user_id", order.ebook_owner_id)
+        .maybeSingle();
+      stripeAccount = profile?.stripe_account_id ?? undefined;
+    }
+
+    const session = await stripe.checkout.sessions.retrieve(
+      session_id,
+      stripeAccount ? { stripeAccount } : undefined,
+    );
+    const paid = session.payment_status === "paid";
 
     await supabase
       .from("orders")
