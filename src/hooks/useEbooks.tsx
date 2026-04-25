@@ -63,6 +63,7 @@ export function useEbooks() {
         audience: ebook.audience ?? null,
         cover_url: ebook.cover_url ?? null,
         status: ebook.status ?? "draft",
+        pdf_url: ebook.pdf_url ?? null,
       })
       .select()
       .single();
