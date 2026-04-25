@@ -96,7 +96,17 @@ export default function EbookSalesPage() {
         if (error || !data?.paid) {
           toast.error("Não foi possível confirmar o pagamento.");
         } else {
+          setIsPaid(true);
           toast.success("Pagamento confirmado! Obrigado pela compra 🎉");
+          // Re-fetch ebook to get pdf_url if now accessible
+          const { data: updatedEbook } = await supabase
+            .from("ebooks")
+            .select("pdf_url")
+            .eq("slug", slug || "")
+            .maybeSingle();
+          if (updatedEbook?.pdf_url) {
+            setDownloadUrl(updatedEbook.pdf_url);
+          }
         }
         setSearchParams({}, { replace: true });
       })();
