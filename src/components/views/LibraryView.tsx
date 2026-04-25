@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { BookOpen, Download, Eye, Loader2, Trash2, Plus } from "lucide-react";
+import { BookOpen, Download, ExternalLink, Eye, Globe, Link2, Loader2, Lock, Trash2, Plus } from "lucide-react";
 import { useEbooks, type Ebook, type Chapter } from "@/hooks/useEbooks";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -35,12 +36,38 @@ interface Props {
 }
 
 export function LibraryView({ onCreateNew }: Props) {
-  const { ebooks, loading, deleteEbook, getEbookWithChapters } = useEbooks();
+  const { ebooks, loading, deleteEbook, getEbookWithChapters, refresh } = useEbooks();
   const [openEbook, setOpenEbook] = useState<Ebook | null>(null);
   const [openChapters, setOpenChapters] = useState<Chapter[]>([]);
   const [loadingPreview, setLoadingPreview] = useState(false);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [togglingId, setTogglingId] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<Ebook | null>(null);
+
+  const togglePublic = async (eb: Ebook) => {
+    setTogglingId(eb.id);
+    try {
+      const { error } = await supabase
+        .from("ebooks")
+        .update({ is_public: !eb.is_public })
+        .eq("id", eb.id);
+      if (error) throw error;
+      toast.success(!eb.is_public ? "Página publicada!" : "Página despublicada.");
+      await refresh();
+    } catch (err) {
+      console.error(err);
+      toast.error("Não foi possível atualizar.");
+    } finally {
+      setTogglingId(null);
+    }
+  };
+
+  const copyPublicLink = (eb: Ebook) => {
+    if (!eb.slug) return;
+    const url = `${window.location.origin}/e/${eb.slug}`;
+    navigator.clipboard.writeText(url);
+    toast.success("Link copiado!");
+  };
 
   const handlePreview = async (eb: Ebook) => {
     setOpenEbook(eb);
@@ -190,6 +217,48 @@ export function LibraryView({ onCreateNew }: Props) {
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </Button>
+                </div>
+
+                {/* Public page controls */}
+                <div className="mt-2 flex items-center gap-1.5 rounded-lg border bg-muted/30 p-1.5">
+                  <Button
+                    size="sm"
+                    variant={eb.is_public ? "default" : "ghost"}
+                    className={`h-7 flex-1 text-[11px] ${eb.is_public ? "bg-success hover:bg-success/90" : ""}`}
+                    onClick={() => togglePublic(eb)}
+                    disabled={togglingId === eb.id}
+                  >
+                    {togglingId === eb.id ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : eb.is_public ? (
+                      <Globe className="h-3 w-3" />
+                    ) : (
+                      <Lock className="h-3 w-3" />
+                    )}
+                    {eb.is_public ? "Público" : "Publicar"}
+                  </Button>
+                  {eb.is_public && eb.slug && (
+                    <>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-7 px-2"
+                        onClick={() => copyPublicLink(eb)}
+                        title="Copiar link"
+                      >
+                        <Link2 className="h-3 w-3" />
+                      </Button>
+                      <a
+                        href={`/e/${eb.slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex h-7 items-center justify-center rounded-md px-2 text-muted-foreground hover:bg-muted hover:text-foreground"
+                        title="Abrir página"
+                      >
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
