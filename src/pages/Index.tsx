@@ -4,7 +4,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { DashboardView } from "@/components/views/DashboardView";
 import { CreateEbookView } from "@/components/views/CreateEbookView";
 import { LibraryView } from "@/components/views/LibraryView";
-import { ToolsView } from "@/components/views/ToolsView";
+// ToolsView removed
 import { SupportView } from "@/components/views/SupportView";
 import { ProfileView } from "@/components/views/ProfileView";
 import { Bell, Search } from "lucide-react";
@@ -51,7 +51,7 @@ const Index = () => {
             {view === "dashboard" && <DashboardView />}
             {view === "create" && <CreateEbookView />}
             {view === "library" && <LibraryView onCreateNew={() => setView("create")} />}
-            {view === "tools" && <ToolsView />}
+            {/* tools view removed */}
             {view === "support" && <SupportView />}
             {view === "profile" && <ProfileView />}
           </main>
