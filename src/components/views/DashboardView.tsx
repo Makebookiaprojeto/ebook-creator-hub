@@ -15,10 +15,26 @@ const statusLabel: Record<string, string> = {
 export function DashboardView() {
   const { user: authUser } = useAuth();
   const { ebooks, loading } = useEbooks();
+  const [dbDisplayName, setDbDisplayName] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!authUser) return;
+    const fetchName = async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("display_name")
+        .eq("user_id", authUser.id)
+        .maybeSingle();
+      if (data) setDbDisplayName((data as any).display_name);
+    };
+    fetchName();
+  }, [authUser]);
+
   const displayName =
-    (authUser?.user_metadata?.username as string | undefined) ||
+    dbDisplayName ||
+    (authUser?.user_metadata?.display_name as string | undefined) ||
     authUser?.email?.split("@")[0] ||
-    user.name.split(" ")[0];
+    "Usuário";
 
   return (
     <div className="space-y-6 animate-fade-in">
