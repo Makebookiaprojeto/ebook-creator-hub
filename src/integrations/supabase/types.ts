@@ -61,12 +61,17 @@ export type Database = {
       ebooks: {
         Row: {
           audience: string | null
+          author_name: string | null
           category: string | null
           cover_url: string | null
           created_at: string
           description: string | null
           id: string
+          is_public: boolean
           niche: string | null
+          price_cents: number | null
+          sales_pitch: string | null
+          slug: string | null
           status: Database["public"]["Enums"]["ebook_status"]
           subtitle: string | null
           title: string
@@ -75,12 +80,17 @@ export type Database = {
         }
         Insert: {
           audience?: string | null
+          author_name?: string | null
           category?: string | null
           cover_url?: string | null
           created_at?: string
           description?: string | null
           id?: string
+          is_public?: boolean
           niche?: string | null
+          price_cents?: number | null
+          sales_pitch?: string | null
+          slug?: string | null
           status?: Database["public"]["Enums"]["ebook_status"]
           subtitle?: string | null
           title: string
@@ -89,12 +99,17 @@ export type Database = {
         }
         Update: {
           audience?: string | null
+          author_name?: string | null
           category?: string | null
           cover_url?: string | null
           created_at?: string
           description?: string | null
           id?: string
+          is_public?: boolean
           niche?: string | null
+          price_cents?: number | null
+          sales_pitch?: string | null
+          slug?: string | null
           status?: Database["public"]["Enums"]["ebook_status"]
           subtitle?: string | null
           title?: string
@@ -108,7 +123,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      slugify: { Args: { input: string }; Returns: string }
+      unaccent: { Args: { "": string }; Returns: string }
     }
     Enums: {
       ebook_status: "draft" | "published" | "archived"
