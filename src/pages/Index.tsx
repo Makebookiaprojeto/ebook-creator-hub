@@ -71,12 +71,12 @@ const Index = () => {
               </button>
               <button
                 onClick={() => setView("profile")}
-                className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/20 bg-muted overflow-hidden gradient-primary text-sm font-semibold text-primary-foreground shadow-glow"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/20 bg-muted overflow-hidden gradient-primary text-sm font-semibold text-primary-foreground shadow-glow transition-transform hover:scale-105 active:scale-95"
               >
                 {avatarUrl ? (
                   <img src={avatarUrl} alt="Perfil" className="h-full w-full object-cover" />
                 ) : (
-                  (user?.user_metadata?.display_name || user?.email || "L")[0].toUpperCase()
+                  (user?.user_metadata?.display_name || user?.email || "U")[0].toUpperCase()
                 )}
               </button>
             </div>
