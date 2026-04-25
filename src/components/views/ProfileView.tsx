@@ -52,11 +52,12 @@ export function ProfileView() {
         .select("external_checkout_url, avatar_url")
         .eq("user_id", user.id)
         .maybeSingle();
-      const url = (data as any)?.external_checkout_url || "";
-      const avatar = (data as any)?.avatar_url || null;
-      setExternalUrl(url);
-      setSavedUrl(url);
-      setAvatarUrl(avatar);
+      const profileData = data as any;
+      const urlValue = profileData?.external_checkout_url || "";
+      const avatarValue = profileData?.avatar_url || null;
+      setExternalUrl(urlValue);
+      setSavedUrl(urlValue);
+      setAvatarUrl(avatarValue);
       const url = (data as any)?.external_checkout_url || "";
       setExternalUrl(url);
       setSavedUrl(url);
