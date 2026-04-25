@@ -826,6 +826,7 @@ export function CreateEbookView() {
                     audience,
                     cover_url: coverUrl,
                     status: "published",
+                    pdf_url: pdfUrl,
                   },
                   chapters,
                 );
