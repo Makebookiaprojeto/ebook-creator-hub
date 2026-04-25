@@ -103,6 +103,13 @@ export default function EbookSalesPage() {
 
   const handleCheckout = async () => {
     if (!ebook) return;
+
+    // Se o dono do ebook configurou um link externo, redireciona direto
+    if (externalCheckoutUrl) {
+      window.location.href = externalCheckoutUrl;
+      return;
+    }
+
     if (!ebook.price_cents || ebook.price_cents < 50) {
       toast.error("Este eBook não está disponível para compra.");
       return;
