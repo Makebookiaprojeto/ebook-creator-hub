@@ -21,6 +21,7 @@ export type NewEbook = {
   audience?: string | null;
   cover_url?: string | null;
   status?: "draft" | "published" | "archived";
+  pdf_url?: string | null;
 };
 
 export function useEbooks() {
