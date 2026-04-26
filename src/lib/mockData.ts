@@ -102,7 +102,7 @@ export const plans = [
 export const user = {
   name: "Lucas Andrade",
   email: "lucas@ebookai.com",
-  plan: "FREE" as "FREE" | "PRO",
+  plan: "PRO" as "PRO",
   ebooksCreated: 5,
   totalSales: 513,
   totalRevenue: 24890,
