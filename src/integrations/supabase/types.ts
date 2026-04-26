@@ -247,7 +247,6 @@ export type Database = {
     Functions: {
       check_email_exists: { Args: { email_to_check: string }; Returns: boolean }
       slugify: { Args: { input: string }; Returns: string }
-      unaccent: { Args: { "": string }; Returns: string }
     }
     Enums: {
       ebook_status: "draft" | "published" | "archived"
