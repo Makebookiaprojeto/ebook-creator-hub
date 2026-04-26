@@ -131,8 +131,8 @@ export function AppSidebar({ active, onChange }: Props) {
         {!collapsed && (
           <>
             <div className="m-2 rounded-xl gradient-hero p-3">
-              <p className="text-xs font-semibold text-foreground">Plano FREE</p>
-              <p className="mt-0.5 text-[11px] text-muted-foreground">Faça upgrade para ebooks ilimitados</p>
+              <p className="text-xs font-semibold text-foreground">Plano PRO</p>
+              <p className="mt-0.5 text-[11px] text-muted-foreground">Aproveite todo o potencial da IA</p>
               <button 
                 onClick={() => {
                   onChange("profile");
@@ -140,7 +140,7 @@ export function AppSidebar({ active, onChange }: Props) {
                 }}
                 className="mt-2 w-full rounded-lg gradient-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition hover:opacity-90"
               >
-                Upgrade PRO
+                Ver Planos
               </button>
             </div>
             {user && (() => {
