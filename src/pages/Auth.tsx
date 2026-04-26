@@ -28,7 +28,12 @@ const Auth = () => {
   const [emailError, setEmailError] = useState("");
 
   // Mock de e-mails já existentes para validação local
-  const existingEmails = ["teste@teste.com", "contato@ebookaibuilder.com", "admin@admin.com"];
+  const existingEmails = [
+    "teste@teste.com", 
+    "contato@ebookaibuilder.com", 
+    "admin@admin.com", 
+    "contatoebookaibuilder@gmail.com"
+  ];
 
   useEffect(() => {
     if (tab === "signup" && email && existingEmails.includes(email.toLowerCase())) {
