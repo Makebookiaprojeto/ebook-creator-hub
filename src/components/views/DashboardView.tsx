@@ -3,7 +3,6 @@ import { BookOpen, Eye, ShoppingCart, DollarSign, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { StatCard } from "@/components/StatCard";
-import { salesChartData, user } from "@/lib/mockData";
 import { Badge } from "@/components/ui/badge";
 import { useEbooks } from "@/hooks/useEbooks";
 import { useAuth } from "@/hooks/useAuth";
@@ -16,20 +15,77 @@ const statusLabel: Record<string, string> = {
 
 export function DashboardView() {
   const { user: authUser } = useAuth();
-  const { ebooks, loading } = useEbooks();
+  const { ebooks, loading: loadingEbooks } = useEbooks();
   const [dbDisplayName, setDbDisplayName] = useState<string | null>(null);
+  const [stats, setStats] = useState({
+    totalSales: 0,
+    totalRevenue: 0,
+    views: "0",
+  });
+  const [salesHistory, setSalesHistory] = useState<any[]>([]);
+  const [loadingStats, setLoadingStats] = useState(true);
 
   useEffect(() => {
     if (!authUser) return;
-    const fetchName = async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("display_name")
-        .eq("user_id", authUser.id)
-        .maybeSingle();
-      if (data) setDbDisplayName((data as any).display_name);
+
+    const fetchDashboardData = async () => {
+      setLoadingStats(true);
+      try {
+        // Fetch profile
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("display_name")
+          .eq("user_id", authUser.id)
+          .maybeSingle();
+        if (profile) setDbDisplayName(profile.display_name);
+
+        // Fetch sales/orders for this user
+        const { data: orders } = await supabase
+          .from("orders")
+          .select("*")
+          .eq("ebook_owner_id", authUser.id)
+          .eq("status", "completed");
+
+        if (orders) {
+          const totalSales = orders.length;
+          const totalRevenue = orders.reduce((acc, order) => acc + (order.amount_cents || 0), 0) / 100;
+          
+          setStats(prev => ({
+            ...prev,
+            totalSales,
+            totalRevenue,
+          }));
+
+          // Group by month for the chart (last 6 months)
+          const last6Months = Array.from({ length: 6 }, (_, i) => {
+            const date = new Date();
+            date.setMonth(date.getMonth() - i);
+            return {
+              month: date.toLocaleString('pt-BR', { month: 'short' }),
+              vendas: 0,
+              timestamp: date.getTime()
+            };
+          }).reverse();
+
+          orders.forEach(order => {
+            const orderDate = new Date(order.created_at);
+            const monthName = orderDate.toLocaleString('pt-BR', { month: 'short' });
+            const monthData = last6Months.find(m => m.month === monthName);
+            if (monthData) {
+              monthData.vendas += 1;
+            }
+          });
+
+          setSalesHistory(last6Months);
+        }
+      } catch (error) {
+        console.error("Error fetching dashboard stats:", error);
+      } finally {
+        setLoadingStats(false);
+      }
     };
-    fetchName();
+
+    fetchDashboardData();
   }, [authUser]);
 
   const displayName =
@@ -46,10 +102,10 @@ export function DashboardView() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Ebooks criados" value={String(ebooks.length)} delta={`+${ebooks.length}`} icon={BookOpen} tint="from-violet-500 to-purple-500" />
-        <StatCard label="Visualizações" value="12.4k" delta="+18%" icon={Eye} tint="from-blue-500 to-cyan-500" />
-        <StatCard label="Vendas" value={String(user.totalSales)} delta="+34%" icon={ShoppingCart} tint="from-emerald-500 to-teal-500" />
-        <StatCard label="Receita" value={`R$ ${user.totalRevenue.toLocaleString("pt-BR")}`} delta="+27%" icon={DollarSign} tint="from-amber-500 to-orange-500" />
+        <StatCard label="Ebooks criados" value={String(ebooks.length)} delta={ebooks.length > 0 ? `+${ebooks.length}` : "0"} icon={BookOpen} tint="from-violet-500 to-purple-500" />
+        <StatCard label="Visualizações" value={stats.views} delta="+0%" icon={Eye} tint="from-blue-500 to-cyan-500" />
+        <StatCard label="Vendas" value={String(stats.totalSales)} delta={stats.totalSales > 0 ? `+${stats.totalSales}` : "0"} icon={ShoppingCart} tint="from-emerald-500 to-teal-500" />
+        <StatCard label="Receita" value={`R$ ${stats.totalRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} delta="0%" icon={DollarSign} tint="from-amber-500 to-orange-500" />
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -59,11 +115,11 @@ export function DashboardView() {
               <h2 className="font-display text-lg font-semibold">Performance de vendas</h2>
               <p className="text-sm text-muted-foreground">Últimos 6 meses</p>
             </div>
-            <Badge variant="secondary">Mockado</Badge>
+            {salesHistory.length === 0 && <Badge variant="secondary">Sem dados</Badge>}
           </div>
           <div className="h-[280px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={salesChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <AreaChart data={salesHistory.length > 0 ? salesHistory : [{month: 'Jan', vendas: 0}, {month: 'Jun', vendas: 0}]} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorVendas" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.4} />
@@ -91,17 +147,27 @@ export function DashboardView() {
           <h2 className="font-display text-lg font-semibold">Atividade rápida</h2>
           <p className="mb-4 text-sm text-muted-foreground">Novidades recentes</p>
           <ul className="space-y-3">
-            {[
-              { color: "bg-success", text: "3 vendas nas últimas 2h" },
-              { color: "bg-primary", text: '"Renda Extra" foi publicado' },
-              { color: "bg-amber-500", text: "Nova ferramenta disponível" },
-              { color: "bg-blue-500", text: "240 visualizações hoje" },
-            ].map((item, i) => (
-              <li key={i} className="flex items-center gap-3 rounded-lg p-2 hover:bg-muted/50 transition">
-                <span className={`h-2 w-2 rounded-full ${item.color}`} />
-                <span className="text-sm">{item.text}</span>
+            {stats.totalSales > 0 ? (
+               <li className="flex items-center gap-3 rounded-lg p-2 hover:bg-muted/50 transition">
+                <span className="h-2 w-2 rounded-full bg-success" />
+                <span className="text-sm">{stats.totalSales} vendas realizadas</span>
               </li>
-            ))}
+            ) : (
+              <li className="flex items-center gap-3 rounded-lg p-2 hover:bg-muted/50 transition">
+                <span className="h-2 w-2 rounded-full bg-muted" />
+                <span className="text-sm text-muted-foreground">Nenhuma venda ainda</span>
+              </li>
+            )}
+            {ebooks.length > 0 && (
+              <li className="flex items-center gap-3 rounded-lg p-2 hover:bg-muted/50 transition">
+                <span className="h-2 w-2 rounded-full bg-primary" />
+                <span className="text-sm">{ebooks[0].title} criado recentemente</span>
+              </li>
+            )}
+            <li className="flex items-center gap-3 rounded-lg p-2 hover:bg-muted/50 transition">
+              <span className="h-2 w-2 rounded-full bg-amber-500" />
+              <span className="text-sm">Sistema de suporte ativo</span>
+            </li>
           </ul>
         </div>
       </div>
@@ -124,21 +190,21 @@ export function DashboardView() {
               </tr>
             </thead>
             <tbody className="divide-y">
-              {loading && (
+              {loadingEbooks && (
                 <tr>
                   <td colSpan={4} className="px-6 py-10 text-center text-muted-foreground">
                     <Loader2 className="mx-auto h-5 w-5 animate-spin" />
                   </td>
                 </tr>
               )}
-              {!loading && ebooks.length === 0 && (
+              {!loadingEbooks && ebooks.length === 0 && (
                 <tr>
                   <td colSpan={4} className="px-6 py-10 text-center text-sm text-muted-foreground">
                     Nenhum ebook ainda. Crie seu primeiro na aba "Criar ebook".
                   </td>
                 </tr>
               )}
-              {!loading && ebooks.map((e) => (
+              {!loadingEbooks && ebooks.map((e) => (
                 <tr key={e.id} className="text-sm transition hover:bg-muted/30">
                   <td className="px-6 py-4 font-medium">{e.title}</td>
                   <td className="px-6 py-4 text-muted-foreground">{e.category ?? "—"}</td>
