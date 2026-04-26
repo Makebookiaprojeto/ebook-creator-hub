@@ -36,7 +36,7 @@ const Auth = () => {
     if (!authLoading && user) navigate("/app", { replace: true });
   }, [user, authLoading, navigate]);
 
-  // Debounce para validar email no banco de dados
+  // Validação em tempo real para e-mail duplicado
   useEffect(() => {
     const timer = setTimeout(async () => {
       if (tab === "signup" && email.trim() !== "" && emailSchema.safeParse(email).success) {
@@ -49,7 +49,7 @@ const Auth = () => {
           if (error) throw error;
           
           if (data === true) {
-            setEmailError("Este e-mail já está cadastrado.");
+            setEmailError("Este e-mail já está sendo usado por outra conta.");
           } else {
             setEmailError("");
           }
@@ -61,13 +61,15 @@ const Auth = () => {
       } else {
         setEmailError("");
       }
-    }, 500);
+    }, 600);
 
     return () => clearTimeout(timer);
   }, [email, tab]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (submitting) return;
+    
     setSubmitting(true);
     try {
       if (tab === "signup" && emailError) {
@@ -90,6 +92,7 @@ const Auth = () => {
         if (error) throw error;
         toast.success("Enviamos um link de recuperação para seu email.");
         setResetMode(false);
+        setSubmitting(false);
         return;
       }
 
@@ -118,37 +121,44 @@ const Auth = () => {
         });
 
         if (error) {
-          if (error.message.includes("already registered") || error.status === 400 || error.status === 422) {
-            toast.error("Este email já está cadastrado em nossa base.");
+          // Tratamento explícito para e-mail já cadastrado
+          if (error.status === 422 || error.message.toLowerCase().includes("already registered") || error.status === 400) {
+            toast.error("Este e-mail já possui uma conta vinculada. Por favor, faça login.");
             setTab("login");
           } else {
             toast.error(error.message);
           }
+          setSubmitting(false);
           return;
         }
-        toast.success("Cadastro realizado! Verifique seu email para confirmar a conta.");
+        
+        toast.success("Cadastro solicitado! Verifique sua caixa de entrada para confirmar o e-mail.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email: emailParsed.data,
           password: passParsed.data,
         });
+        
         if (error) {
           if (error.message.includes("Invalid login")) {
-            toast.error("Email ou senha incorretos.");
+            toast.error("E-mail ou senha incorretos.");
           } else if (error.message.includes("Email not confirmed")) {
-            toast.error("Confirme seu email antes de entrar.");
+            toast.error("Sua conta ainda não foi confirmada. Verifique seu e-mail.");
           } else {
             toast.error(error.message);
           }
+          setSubmitting(false);
           return;
         }
+        
         toast.success("Bem-vindo de volta!");
         navigate("/app", { replace: true });
       }
     } catch (err: any) {
-      toast.error(err.message ?? "Erro inesperado");
-    } finally {
+      toast.error(err.message ?? "Ocorreu um erro inesperado.");
       setSubmitting(false);
+    } finally {
+      // O setSubmitting(false) é chamado dentro dos blocos específicos para melhor controle do fluxo
     }
   };
 
@@ -180,11 +190,11 @@ const Auth = () => {
             <>
               <h1 className="font-display text-2xl font-bold">Recuperar senha</h1>
               <p className="mt-1 text-sm text-muted-foreground">
-                Digite seu email e enviaremos um link para redefinir sua senha.
+                Digite seu e-mail e enviaremos um link de recuperação.
               </p>
               <form onSubmit={handleSubmit} className="mt-6 space-y-4">
                 <div>
-                  <Label htmlFor="reset-email">Email</Label>
+                  <Label htmlFor="reset-email">E-mail</Label>
                   <Input
                     id="reset-email"
                     type="email"
@@ -224,7 +234,7 @@ const Auth = () => {
                       type="text"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      placeholder="Seu nome"
+                      placeholder="Como quer ser chamado"
                       required
                       autoComplete="off"
                       className="mt-1.5"
@@ -233,7 +243,7 @@ const Auth = () => {
                 )}
                 <div>
                   <Label htmlFor="email" className="flex items-center justify-between">
-                    Email
+                    E-mail
                     {isValidatingEmail && <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />}
                   </Label>
                   <Input
@@ -244,7 +254,7 @@ const Auth = () => {
                     placeholder="seu@email.com"
                     required
                     autoComplete="off"
-                    className={`mt-1.5 ${emailError ? 'border-destructive' : ''}`}
+                    className={`mt-1.5 ${emailError ? 'border-destructive focus-visible:ring-destructive' : ''}`}
                   />
                   {tab === "signup" && emailError && (
                     <p className="mt-1 text-xs text-destructive animate-in fade-in slide-in-from-top-1">
@@ -305,7 +315,7 @@ const Auth = () => {
                     Criar minha conta
                   </Button>
                   <p className="mt-3 text-[11px] text-muted-foreground text-center">
-                    Você receberá um email para confirmar sua conta.
+                    Enviaremos um e-mail de confirmação para você.
                   </p>
                 </TabsContent>
               </form>
