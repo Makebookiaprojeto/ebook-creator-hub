@@ -36,18 +36,19 @@ const Auth = () => {
   ];
 
   useEffect(() => {
-    const checkEmail = () => {
-      if (tab === "signup" && email.trim() !== "") {
-        const exists = existingEmails.some(e => e.toLowerCase() === email.toLowerCase().trim());
-        if (exists) {
-          setEmailError("Este e-mail já está cadastrado em nossa base.");
-          return;
-        }
+    const emailValue = email.trim().toLowerCase();
+    if (tab === "signup" && emailValue !== "") {
+      const isMockExisting = existingEmails.some(e => e.toLowerCase() === emailValue);
+      
+      if (isMockExisting) {
+        setEmailError("Este e-mail já está cadastrado em nossa base.");
+        console.log("Validação: E-mail encontrado no mock.");
+      } else {
+        setEmailError("");
       }
+    } else {
       setEmailError("");
-    };
-
-    checkEmail();
+    }
   }, [email, tab]);
 
   useEffect(() => {
