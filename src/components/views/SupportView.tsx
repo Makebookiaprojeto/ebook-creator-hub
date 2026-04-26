@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +14,7 @@ export function SupportView() {
   const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email || !msg) {
       toast.error("Por favor, preencha todos os campos.");
@@ -28,22 +29,23 @@ export function SupportView() {
 
     setLoading(true);
     
-    // Configura o email de suporte aqui
-    const supportEmail = "Contatoebookaibuilder@gmail.com"; // E-mail de suporte configurado pelo usuário
-    const subject = encodeURIComponent(`Suporte EbookAI - Mensagem de ${name}`);
-    const body = encodeURIComponent(`Nome: ${name}\nE-mail: ${email}\n\nMensagem:\n${msg}`);
-    
-    // Abre o cliente de email do usuário
-    window.location.href = `mailto:${supportEmail}?subject=${subject}&body=${body}`;
-    
-    toast.success("Abrindo seu cliente de e-mail para enviar a mensagem!");
-    
-    setTimeout(() => {
+    try {
+      const { data, error } = await supabase.functions.invoke("send-support-email", {
+        body: { name, email, message: msg },
+      });
+
+      if (error) throw error;
+
+      toast.success("Mensagem enviada com sucesso! Responderemos em breve.");
       setName("");
       setEmail("");
       setMsg("");
+    } catch (error) {
+      console.error("Erro ao enviar e-mail:", error);
+      toast.error("Ocorreu um erro ao enviar sua mensagem. Tente novamente mais tarde.");
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (
