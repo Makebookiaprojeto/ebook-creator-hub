@@ -9,19 +9,29 @@ import { toast } from "sonner";
 
 export function SupportView() {
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(false);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !msg) return;
+    if (!name || !email || !msg) {
+      toast.error("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Por favor, insira um e-mail válido.");
+      return;
+    }
 
     setLoading(true);
     
     // Configura o email de suporte aqui
     const supportEmail = "Contatoebookaibuilder@gmail.com"; // E-mail de suporte configurado pelo usuário
     const subject = encodeURIComponent(`Suporte EbookAI - Mensagem de ${name}`);
-    const body = encodeURIComponent(`Nome: ${name}\n\nMensagem:\n${msg}`);
+    const body = encodeURIComponent(`Nome: ${name}\nE-mail: ${email}\n\nMensagem:\n${msg}`);
     
     // Abre o cliente de email do usuário
     window.location.href = `mailto:${supportEmail}?subject=${subject}&body=${body}`;
@@ -30,6 +40,7 @@ export function SupportView() {
     
     setTimeout(() => {
       setName("");
+      setEmail("");
       setMsg("");
       setLoading(false);
     }, 1000);
@@ -70,6 +81,17 @@ export function SupportView() {
             <div>
               <label className="text-xs font-medium">Seu nome</label>
               <Input className="mt-1.5" placeholder="João Silva" value={name} onChange={(e) => setName(e.target.value)} required />
+            </div>
+            <div>
+              <label className="text-xs font-medium">Seu e-mail</label>
+              <Input 
+                className="mt-1.5" 
+                type="email" 
+                placeholder="seu@email.com" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                required 
+              />
             </div>
             <div>
               <label className="text-xs font-medium">Mensagem</label>
