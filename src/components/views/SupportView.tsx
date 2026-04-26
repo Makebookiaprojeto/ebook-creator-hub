@@ -76,7 +76,7 @@ export function SupportView() {
             </div>
             <div>
               <h2 className="font-display text-lg font-semibold">Fale conosco</h2>
-              <p className="text-xs text-muted-foreground">Resposta em até 24h</p>
+              <p className="text-xs text-muted-foreground">Resposta em até 48h</p>
             </div>
           </div>
           <form onSubmit={submit} className="mt-5 space-y-4">
