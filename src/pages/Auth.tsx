@@ -35,6 +35,7 @@ const Auth = () => {
     "admin@admin.com", 
     "contatoebookaibuilder@gmail.com"
   ];
+  const existingUsernames = ["admin", "teste", "suporte"];
 
   useEffect(() => {
     const emailValue = email.trim().toLowerCase();
