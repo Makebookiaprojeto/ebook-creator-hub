@@ -25,6 +25,18 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [resetMode, setResetMode] = useState(false);
+  const [emailError, setEmailError] = useState("");
+
+  // Mock de e-mails já existentes para validação local
+  const existingEmails = ["teste@teste.com", "contato@ebookaibuilder.com", "admin@admin.com"];
+
+  useEffect(() => {
+    if (tab === "signup" && email && existingEmails.includes(email.toLowerCase())) {
+      setEmailError("Este e-mail já está em uso.");
+    } else {
+      setEmailError("");
+    }
+  }, [email, tab]);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
@@ -38,6 +50,12 @@ const Auth = () => {
     e.preventDefault();
     setSubmitting(true);
     try {
+      if (tab === "signup" && emailError) {
+        toast.error(emailError);
+        setSubmitting(false);
+        return;
+      }
+
       const emailParsed = emailSchema.safeParse(email);
       if (!emailParsed.success) {
         toast.error(emailParsed.error.issues[0].message);
