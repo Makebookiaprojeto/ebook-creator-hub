@@ -25,6 +25,18 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [resetMode, setResetMode] = useState(false);
+  const [emailError, setEmailError] = useState("");
+
+  // Mock de e-mails já existentes para validação local
+  const existingEmails = ["teste@teste.com", "contato@ebookaibuilder.com", "admin@admin.com"];
+
+  useEffect(() => {
+    if (tab === "signup" && email && existingEmails.includes(email.toLowerCase())) {
+      setEmailError("Este e-mail já está em uso.");
+    } else {
+      setEmailError("");
+    }
+  }, [email, tab]);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
@@ -38,6 +50,12 @@ const Auth = () => {
     e.preventDefault();
     setSubmitting(true);
     try {
+      if (tab === "signup" && emailError) {
+        toast.error(emailError);
+        setSubmitting(false);
+        return;
+      }
+
       const emailParsed = emailSchema.safeParse(email);
       if (!emailParsed.success) {
         toast.error(emailParsed.error.issues[0].message);
@@ -200,45 +218,10 @@ const Auth = () => {
                     autoComplete="off"
                     className="mt-1.5"
                   />
-                </div>
-                <div>
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="password">Senha</Label>
-                    {tab === "login" && (
-                      <button
-                        type="button"
-                        onClick={() => setResetMode(true)}
-                        className="text-xs text-primary hover:underline"
-                      >
-                        Esqueci minha senha
-                      </button>
-                    )}
-                  </div>
-                  <div className="relative mt-1.5">
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••"
-                      required
-                      autoComplete="off"
-                      data-lpignore="true"
-                      data-form-type="other"
-                      minLength={6}
-                      className="pr-10"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword((v) => !v)}
-                      aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition"
-                    >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
-                  {tab === "signup" && (
-                    <p className="mt-1.5 text-[11px] text-muted-foreground">Mínimo de 6 caracteres.</p>
+                  {tab === "signup" && emailError && (
+                    <p className="mt-1 text-xs text-destructive">
+                      {emailError}
+                    </p>
                   )}
                 </div>
 
