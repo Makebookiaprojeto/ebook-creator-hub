@@ -26,17 +26,50 @@ const Auth = () => {
   const [submitting, setSubmitting] = useState(false);
   const [resetMode, setResetMode] = useState(false);
   const [emailError, setEmailError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
 
-  // Mock de e-mails já existentes para validação local
-  const existingEmails = ["teste@teste.com", "contato@ebookaibuilder.com", "admin@admin.com"];
+  // Mock de dados já existentes para validação local
+  const existingEmails = [
+    "teste@teste.com", 
+    "contato@ebookaibuilder.com", 
+    "admin@admin.com", 
+    "contatoebookaibuilder@gmail.com"
+  ];
+  const existingUsernames = ["admin", "teste", "suporte"];
 
   useEffect(() => {
-    if (tab === "signup" && email && existingEmails.includes(email.toLowerCase())) {
-      setEmailError("Este e-mail já está em uso.");
+    const emailValue = email.trim().toLowerCase();
+    const usernameValue = username.trim().toLowerCase();
+
+    if (tab === "signup") {
+      // Validar Email
+      if (emailValue !== "") {
+        const isMockExistingEmail = existingEmails.some(e => e.toLowerCase() === emailValue);
+        if (isMockExistingEmail) {
+          setEmailError("Este e-mail já está cadastrado em nossa base.");
+        } else {
+          setEmailError("");
+        }
+      } else {
+        setEmailError("");
+      }
+
+      // Validar Username
+      if (usernameValue !== "") {
+        const isMockExistingUsername = existingUsernames.some(u => u.toLowerCase() === usernameValue);
+        if (isMockExistingUsername) {
+          setUsernameError("Este nome de usuário já está sendo usado.");
+        } else {
+          setUsernameError("");
+        }
+      } else {
+        setUsernameError("");
+      }
     } else {
       setEmailError("");
+      setUsernameError("");
     }
-  }, [email, tab]);
+  }, [email, username, tab]);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
@@ -50,10 +83,17 @@ const Auth = () => {
     e.preventDefault();
     setSubmitting(true);
     try {
-      if (tab === "signup" && emailError) {
-        toast.error(emailError);
-        setSubmitting(false);
-        return;
+      if (tab === "signup") {
+        if (emailError) {
+          toast.error(emailError);
+          setSubmitting(false);
+          return;
+        }
+        if (usernameError) {
+          toast.error(usernameError);
+          setSubmitting(false);
+          return;
+        }
       }
 
       const emailParsed = emailSchema.safeParse(email);
@@ -204,6 +244,11 @@ const Auth = () => {
                       autoComplete="off"
                       className="mt-1.5"
                     />
+                    {usernameError && (
+                      <p className="mt-1 text-xs text-destructive">
+                        {usernameError}
+                      </p>
+                    )}
                   </div>
                 )}
                 <div>
@@ -222,6 +267,46 @@ const Auth = () => {
                     <p className="mt-1 text-xs text-destructive">
                       {emailError}
                     </p>
+                  )}
+                </div>
+                <div>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="password">Senha</Label>
+                    {tab === "login" && (
+                      <button
+                        type="button"
+                        onClick={() => setResetMode(true)}
+                        className="text-xs text-primary hover:underline"
+                      >
+                        Esqueci minha senha
+                      </button>
+                    )}
+                  </div>
+                  <div className="relative mt-1.5">
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      required
+                      autoComplete="off"
+                      data-lpignore="true"
+                      data-form-type="other"
+                      minLength={6}
+                      className="pr-10"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((v) => !v)}
+                      aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition"
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
+                  {tab === "signup" && (
+                    <p className="mt-1.5 text-[11px] text-muted-foreground">Mínimo de 6 caracteres.</p>
                   )}
                 </div>
 
