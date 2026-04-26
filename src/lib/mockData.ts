@@ -84,7 +84,7 @@ export const plans = [
   {
     id: "monthly",
     name: "Plano Mensal",
-    price: 97.00,
+    price: 149.90,
     period: "/mês",
     highlight: false,
     features: ["Ebooks ilimitados", "IA premium GPT-4o", "Páginas de vendas inclusas", "Analytics avançado", "Suporte prioritário"],
@@ -92,7 +92,7 @@ export const plans = [
   {
     id: "lifetime",
     name: "Acesso Vitalício",
-    price: 297.00,
+    price: 249.90,
     period: "pagamento único",
     highlight: true,
     features: ["Tudo do plano Mensal", "Acesso para sempre", "Sem mensalidade", "Bônus: Gerador de Criativos", "Suporte VIP vitalício"],
