@@ -19,7 +19,7 @@ export function SupportView() {
     setLoading(true);
     
     // Configura o email de suporte aqui
-    const supportEmail = "contato@ebookai.com.br"; // E-mail de suporte atualizado
+    const supportEmail = "Contatoebookaibuilder@gmail.com"; // E-mail de suporte configurado pelo usuário
     const subject = encodeURIComponent(`Suporte EbookAI - Mensagem de ${name}`);
     const body = encodeURIComponent(`Nome: ${name}\n\nMensagem:\n${msg}`);
     
