@@ -83,10 +83,17 @@ const Auth = () => {
     e.preventDefault();
     setSubmitting(true);
     try {
-      if (tab === "signup" && emailError) {
-        toast.error(emailError);
-        setSubmitting(false);
-        return;
+      if (tab === "signup") {
+        if (emailError) {
+          toast.error(emailError);
+          setSubmitting(false);
+          return;
+        }
+        if (usernameError) {
+          toast.error(usernameError);
+          setSubmitting(false);
+          return;
+        }
       }
 
       const emailParsed = emailSchema.safeParse(email);
