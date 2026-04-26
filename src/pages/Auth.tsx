@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -103,7 +104,17 @@ const Auth = () => {
       }
     } catch (err: any) {
       toast.error(err.message ?? "Erro inesperado");
-    } finally {
+  };
+
+  const handleGoogleLogin = async () => {
+    setSubmitting(true);
+    try {
+      const { error } = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: `${window.location.origin}/app`,
+      });
+      if (error) throw error;
+    } catch (err: any) {
+      toast.error(err.message ?? "Erro ao entrar com Google");
       setSubmitting(false);
     }
   };
