@@ -39,19 +39,37 @@ const Auth = () => {
 
   useEffect(() => {
     const emailValue = email.trim().toLowerCase();
-    if (tab === "signup" && emailValue !== "") {
-      const isMockExisting = existingEmails.some(e => e.toLowerCase() === emailValue);
-      
-      if (isMockExisting) {
-        setEmailError("Este e-mail já está cadastrado em nossa base.");
-        console.log("Validação: E-mail encontrado no mock.");
+    const usernameValue = username.trim().toLowerCase();
+
+    if (tab === "signup") {
+      // Validar Email
+      if (emailValue !== "") {
+        const isMockExistingEmail = existingEmails.some(e => e.toLowerCase() === emailValue);
+        if (isMockExistingEmail) {
+          setEmailError("Este e-mail já está cadastrado em nossa base.");
+        } else {
+          setEmailError("");
+        }
       } else {
         setEmailError("");
       }
+
+      // Validar Username
+      if (usernameValue !== "") {
+        const isMockExistingUsername = existingUsernames.some(u => u.toLowerCase() === usernameValue);
+        if (isMockExistingUsername) {
+          setUsernameError("Este nome de usuário já está sendo usado.");
+        } else {
+          setUsernameError("");
+        }
+      } else {
+        setUsernameError("");
+      }
     } else {
       setEmailError("");
+      setUsernameError("");
     }
-  }, [email, tab]);
+  }, [email, username, tab]);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
