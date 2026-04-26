@@ -26,6 +26,7 @@ const Auth = () => {
   const [submitting, setSubmitting] = useState(false);
   const [resetMode, setResetMode] = useState(false);
   const [emailError, setEmailError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
 
   // Mock de e-mails já existentes para validação local
   const existingEmails = [
