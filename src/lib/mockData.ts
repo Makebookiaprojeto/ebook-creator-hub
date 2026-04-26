@@ -75,9 +75,9 @@ export const tools = [
 export const faqs = [
   { q: "Como funciona a geração de ebooks com IA?", a: "Nossa IA cria estrutura, capítulos e conteúdo a partir do seu nicho. Você edita tudo livremente antes de publicar." },
   { q: "Posso editar o conteúdo gerado?", a: "Sim! Todo o conteúdo é 100% editável. A IA é seu ponto de partida, não o limite." },
-  { q: "Como recebo os pagamentos das vendas?", a: "Os pagamentos são processados via Pix e cartão, com repasse em até 7 dias úteis." },
-  { q: "Existe limite de ebooks no plano FREE?", a: "No plano FREE você cria até 3 ebooks. No PRO, ilimitado." },
-  { q: "Posso cancelar quando quiser?", a: "Sim, sem multa nem fidelidade. Cancele com 1 clique." },
+  { q: "Como recebo os pagamentos das vendas?", a: "Os pagamentos são processados via Stripe, garantindo segurança e rapidez." },
+  { q: "Existe limite de ebooks?", a: "Não! Em qualquer um dos nossos planos você pode criar ebooks ilimitados e aproveitar todo o poder da nossa IA." },
+  { q: "Posso cancelar quando quiser?", a: "Sim, no plano mensal você pode cancelar a qualquer momento sem fidelidade ou multas." },
 ];
 
 export const plans = [
