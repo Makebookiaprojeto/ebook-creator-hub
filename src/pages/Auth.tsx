@@ -36,11 +36,18 @@ const Auth = () => {
   ];
 
   useEffect(() => {
-    if (tab === "signup" && email && existingEmails.includes(email.toLowerCase())) {
-      setEmailError("Este e-mail já está em uso.");
-    } else {
+    const checkEmail = () => {
+      if (tab === "signup" && email.trim() !== "") {
+        const exists = existingEmails.some(e => e.toLowerCase() === email.toLowerCase().trim());
+        if (exists) {
+          setEmailError("Este e-mail já está cadastrado em nossa base.");
+          return;
+        }
+      }
       setEmailError("");
-    }
+    };
+
+    checkEmail();
   }, [email, tab]);
 
   useEffect(() => {
