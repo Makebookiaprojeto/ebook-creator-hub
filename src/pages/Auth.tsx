@@ -75,8 +75,8 @@ const Auth = () => {
           },
         });
         if (error) {
-          if (error.message.includes("already registered")) {
-            toast.error("Este email já está cadastrado. Faça login.");
+          if (error.message.includes("already registered") || error.status === 400 || error.status === 422) {
+            toast.error("Este email já está cadastrado em nossa base.");
             setTab("login");
           } else {
             toast.error(error.message);
