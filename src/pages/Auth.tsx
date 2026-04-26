@@ -26,50 +26,7 @@ const Auth = () => {
   const [submitting, setSubmitting] = useState(false);
   const [resetMode, setResetMode] = useState(false);
   const [emailError, setEmailError] = useState("");
-  const [usernameError, setUsernameError] = useState("");
-
-  // Mock de dados já existentes para validação local
-  const existingEmails = [
-    "teste@teste.com", 
-    "contato@ebookaibuilder.com", 
-    "admin@admin.com", 
-    "contatoebookaibuilder@gmail.com"
-  ];
-  const existingUsernames = ["admin", "teste", "suporte"];
-
-  useEffect(() => {
-    const emailValue = email.trim().toLowerCase();
-    const usernameValue = username.trim().toLowerCase();
-
-    if (tab === "signup") {
-      // Validar Email
-      if (emailValue !== "") {
-        const isMockExistingEmail = existingEmails.some(e => e.toLowerCase() === emailValue);
-        if (isMockExistingEmail) {
-          setEmailError("Este e-mail já está cadastrado em nossa base.");
-        } else {
-          setEmailError("");
-        }
-      } else {
-        setEmailError("");
-      }
-
-      // Validar Username
-      if (usernameValue !== "") {
-        const isMockExistingUsername = existingUsernames.some(u => u.toLowerCase() === usernameValue);
-        if (isMockExistingUsername) {
-          setUsernameError("Este nome de usuário já está sendo usado.");
-        } else {
-          setUsernameError("");
-        }
-      } else {
-        setUsernameError("");
-      }
-    } else {
-      setEmailError("");
-      setUsernameError("");
-    }
-  }, [email, username, tab]);
+  const [isValidatingEmail, setIsValidatingEmail] = useState(false);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
@@ -79,26 +36,50 @@ const Auth = () => {
     if (!authLoading && user) navigate("/app", { replace: true });
   }, [user, authLoading, navigate]);
 
+  // Debounce para validar email no banco de dados
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (tab === "signup" && email.trim() !== "" && emailSchema.safeParse(email).success) {
+        setIsValidatingEmail(true);
+        try {
+          const { data, error } = await supabase.rpc('check_email_exists', { 
+            email_to_check: email.trim().toLowerCase() 
+          });
+          
+          if (error) throw error;
+          
+          if (data === true) {
+            setEmailError("Este e-mail já está cadastrado.");
+          } else {
+            setEmailError("");
+          }
+        } catch (err) {
+          console.error("Erro ao validar email:", err);
+        } finally {
+          setIsValidatingEmail(false);
+        }
+      } else {
+        setEmailError("");
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [email, tab]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     try {
-      if (tab === "signup") {
-        if (emailError) {
-          toast.error(emailError);
-          setSubmitting(false);
-          return;
-        }
-        if (usernameError) {
-          toast.error(usernameError);
-          setSubmitting(false);
-          return;
-        }
+      if (tab === "signup" && emailError) {
+        toast.error(emailError);
+        setSubmitting(false);
+        return;
       }
 
       const emailParsed = emailSchema.safeParse(email);
       if (!emailParsed.success) {
         toast.error(emailParsed.error.issues[0].message);
+        setSubmitting(false);
         return;
       }
 
@@ -115,6 +96,7 @@ const Auth = () => {
       const passParsed = passwordSchema.safeParse(password);
       if (!passParsed.success) {
         toast.error(passParsed.error.issues[0].message);
+        setSubmitting(false);
         return;
       }
 
@@ -122,8 +104,10 @@ const Auth = () => {
         const usernameParsed = usernameSchema.safeParse(username);
         if (!usernameParsed.success) {
           toast.error(usernameParsed.error.issues[0].message);
+          setSubmitting(false);
           return;
         }
+
         const { error } = await supabase.auth.signUp({
           email: emailParsed.data,
           password: passParsed.data,
@@ -132,6 +116,7 @@ const Auth = () => {
             data: { username: usernameParsed.data },
           },
         });
+
         if (error) {
           if (error.message.includes("already registered") || error.status === 400 || error.status === 422) {
             toast.error("Este email já está cadastrado em nossa base.");
@@ -244,15 +229,13 @@ const Auth = () => {
                       autoComplete="off"
                       className="mt-1.5"
                     />
-                    {usernameError && (
-                      <p className="mt-1 text-xs text-destructive">
-                        {usernameError}
-                      </p>
-                    )}
                   </div>
                 )}
                 <div>
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email" className="flex items-center justify-between">
+                    Email
+                    {isValidatingEmail && <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />}
+                  </Label>
                   <Input
                     id="email"
                     type="email"
@@ -261,10 +244,10 @@ const Auth = () => {
                     placeholder="seu@email.com"
                     required
                     autoComplete="off"
-                    className="mt-1.5"
+                    className={`mt-1.5 ${emailError ? 'border-destructive' : ''}`}
                   />
                   {tab === "signup" && emailError && (
-                    <p className="mt-1 text-xs text-destructive">
+                    <p className="mt-1 text-xs text-destructive animate-in fade-in slide-in-from-top-1">
                       {emailError}
                     </p>
                   )}
@@ -317,7 +300,7 @@ const Auth = () => {
                   </Button>
                 </TabsContent>
                 <TabsContent value="signup" className="m-0">
-                  <Button type="submit" disabled={submitting} className="w-full">
+                  <Button type="submit" disabled={submitting || !!emailError} className="w-full">
                     {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Criar minha conta
                   </Button>
