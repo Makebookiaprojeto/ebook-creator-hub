@@ -61,30 +61,39 @@ export type Database = {
       ebook_sales: {
         Row: {
           amount_paid_cents: number | null
+          cakto_transaction_id: string | null
           created_at: string | null
           customer_email: string
           ebook_id: string | null
+          ebook_owner_id: string | null
           id: string
           status: string | null
           stripe_session_id: string | null
+          updated_at: string
         }
         Insert: {
           amount_paid_cents?: number | null
+          cakto_transaction_id?: string | null
           created_at?: string | null
           customer_email: string
           ebook_id?: string | null
+          ebook_owner_id?: string | null
           id?: string
           status?: string | null
           stripe_session_id?: string | null
+          updated_at?: string
         }
         Update: {
           amount_paid_cents?: number | null
+          cakto_transaction_id?: string | null
           created_at?: string | null
           customer_email?: string
           ebook_id?: string | null
+          ebook_owner_id?: string | null
           id?: string
           status?: string | null
           stripe_session_id?: string | null
+          updated_at?: string
         }
         Relationships: [
           {
@@ -100,6 +109,7 @@ export type Database = {
         Row: {
           audience: string | null
           author_name: string | null
+          cakto_checkout_url: string | null
           cakto_product_id: string | null
           category: string | null
           cover_url: string | null
@@ -121,6 +131,7 @@ export type Database = {
         Insert: {
           audience?: string | null
           author_name?: string | null
+          cakto_checkout_url?: string | null
           cakto_product_id?: string | null
           category?: string | null
           cover_url?: string | null
@@ -142,6 +153,7 @@ export type Database = {
         Update: {
           audience?: string | null
           author_name?: string | null
+          cakto_checkout_url?: string | null
           cakto_product_id?: string | null
           category?: string | null
           cover_url?: string | null
