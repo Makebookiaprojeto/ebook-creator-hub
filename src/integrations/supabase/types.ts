@@ -56,6 +56,13 @@ export type Database = {
             referencedRelation: "ebooks"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "chapters_ebook_id_fkey"
+            columns: ["ebook_id"]
+            isOneToOne: false
+            referencedRelation: "public_ebooks"
+            referencedColumns: ["id"]
+          },
         ]
       }
       ebook_payment_config: {
@@ -98,6 +105,13 @@ export type Database = {
             columns: ["ebook_id"]
             isOneToOne: true
             referencedRelation: "ebooks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ebook_payment_config_ebook_id_fkey"
+            columns: ["ebook_id"]
+            isOneToOne: true
+            referencedRelation: "public_ebooks"
             referencedColumns: ["id"]
           },
         ]
@@ -151,6 +165,13 @@ export type Database = {
             columns: ["ebook_id"]
             isOneToOne: false
             referencedRelation: "ebooks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ebook_sales_ebook_id_fkey"
+            columns: ["ebook_id"]
+            isOneToOne: false
+            referencedRelation: "public_ebooks"
             referencedColumns: ["id"]
           },
         ]
@@ -358,10 +379,73 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_ebooks: {
+        Row: {
+          audience: string | null
+          author_name: string | null
+          cakto_checkout_url: string | null
+          category: string | null
+          cover_url: string | null
+          created_at: string | null
+          description: string | null
+          id: string | null
+          is_public: boolean | null
+          niche: string | null
+          price_cents: number | null
+          sales_pitch: string | null
+          slug: string | null
+          status: Database["public"]["Enums"]["ebook_status"] | null
+          subtitle: string | null
+          title: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          audience?: string | null
+          author_name?: string | null
+          cakto_checkout_url?: string | null
+          category?: string | null
+          cover_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          is_public?: boolean | null
+          niche?: string | null
+          price_cents?: number | null
+          sales_pitch?: string | null
+          slug?: string | null
+          status?: Database["public"]["Enums"]["ebook_status"] | null
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          audience?: string | null
+          author_name?: string | null
+          cakto_checkout_url?: string | null
+          category?: string | null
+          cover_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          is_public?: boolean | null
+          niche?: string | null
+          price_cents?: number | null
+          sales_pitch?: string | null
+          slug?: string | null
+          status?: Database["public"]["Enums"]["ebook_status"] | null
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       check_email_exists: { Args: { email_to_check: string }; Returns: boolean }
+      get_public_ebook_pdf_url: { Args: { _ebook_id: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
