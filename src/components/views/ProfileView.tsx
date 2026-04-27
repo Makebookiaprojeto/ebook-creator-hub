@@ -40,6 +40,12 @@ export function ProfileView() {
   const [externalUrl, setExternalUrl] = useState("");
   const [savedUrl, setSavedUrl] = useState("");
   const [savingUrl, setSavingUrl] = useState(false);
+  const [monthlyUrl, setMonthlyUrl] = useState("");
+  const [savedMonthlyUrl, setSavedMonthlyUrl] = useState("");
+  const [savingMonthly, setSavingMonthly] = useState(false);
+  const [lifetimeUrl, setLifetimeUrl] = useState("");
+  const [savedLifetimeUrl, setSavedLifetimeUrl] = useState("");
+  const [savingLifetime, setSavingLifetime] = useState(false);
   const [displayName, setDisplayName] = useState("");
   const [savingName, setSavingName] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
@@ -52,7 +58,7 @@ export function ProfileView() {
     (async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("external_checkout_url, avatar_url, display_name")
+        .select("external_checkout_url, avatar_url, display_name, monthly_checkout_url, lifetime_checkout_url")
         .eq("user_id", user.id)
         .maybeSingle();
       const profileData = data as any;
@@ -63,9 +69,12 @@ export function ProfileView() {
       setSavedUrl(urlValue);
       setAvatarUrl(avatarValue);
       setDisplayName(nameValue);
-      const url = profileData?.external_checkout_url || "";
-      setExternalUrl(url);
-      setSavedUrl(url);
+      const m = profileData?.monthly_checkout_url || "";
+      const l = profileData?.lifetime_checkout_url || "";
+      setMonthlyUrl(m);
+      setSavedMonthlyUrl(m);
+      setLifetimeUrl(l);
+      setSavedLifetimeUrl(l);
     })();
   }, [user]);
 
@@ -88,6 +97,40 @@ export function ProfileView() {
     }
     setSavedUrl(trimmed);
     toast.success(trimmed ? "Link de checkout salvo!" : "Link removido");
+  };
+
+  const handleSavePlanUrl = async (planId: "monthly" | "lifetime") => {
+    if (!user) return;
+    const value = planId === "monthly" ? monthlyUrl : lifetimeUrl;
+    const trimmed = value.trim();
+    if (trimmed && !/^https?:\/\//i.test(trimmed)) {
+      toast.error("O link deve começar com http:// ou https://");
+      return;
+    }
+    const setSaving = planId === "monthly" ? setSavingMonthly : setSavingLifetime;
+    const setSaved = planId === "monthly" ? setSavedMonthlyUrl : setSavedLifetimeUrl;
+    const column = planId === "monthly" ? "monthly_checkout_url" : "lifetime_checkout_url";
+    setSaving(true);
+    const { error } = await supabase
+      .from("profiles")
+      .update({ [column]: trimmed || null } as any)
+      .eq("user_id", user.id);
+    setSaving(false);
+    if (error) {
+      toast.error("Erro ao salvar: " + error.message);
+      return;
+    }
+    setSaved(trimmed);
+    toast.success(trimmed ? "Link salvo!" : "Link removido");
+  };
+
+  const handleSubscribe = (planId: string) => {
+    const url = planId === "monthly" ? savedMonthlyUrl : planId === "lifetime" ? savedLifetimeUrl : "";
+    if (url) {
+      window.open(url, "_blank", "noopener,noreferrer");
+    } else {
+      toast.info("Configure o link de checkout deste plano no card 'Links de checkout dos planos' acima.");
+    }
   };
 
   const handleSaveDisplayName = async () => {
@@ -366,6 +409,92 @@ export function ProfileView() {
         </div>
       </div>
 
+      {/* Card: Links de checkout dos planos (Cakto, Hotmart, etc) */}
+      <div className="rounded-2xl border bg-card p-6 shadow-soft">
+        <div className="flex items-start gap-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl gradient-primary text-primary-foreground shadow-glow">
+            <Crown className="h-6 w-6" />
+          </div>
+          <div className="flex-1">
+            <h2 className="font-display text-xl font-semibold">Links de checkout dos planos</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Configure um link de checkout (Cakto, Hotmart, Kiwify, Stripe Payment Link, etc) para cada plano.
+              O botão "Assinar agora" de cada plano vai abrir o link correspondente.
+            </p>
+
+            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="space-y-2 rounded-xl border bg-background/40 p-4">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="monthly-url" className="font-semibold">Plano Mensal</Label>
+                  {savedMonthlyUrl ? (
+                    <Badge className="bg-success text-success-foreground gap-1"><CheckCircle2 className="h-3 w-3" /> Ok</Badge>
+                  ) : (
+                    <Badge variant="outline" className="gap-1"><AlertCircle className="h-3 w-3" /> Vazio</Badge>
+                  )}
+                </div>
+                <Input
+                  id="monthly-url"
+                  type="url"
+                  placeholder="https://pay.cakto.com.br/..."
+                  value={monthlyUrl}
+                  onChange={(e) => setMonthlyUrl(e.target.value)}
+                />
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    onClick={() => handleSavePlanUrl("monthly")}
+                    disabled={savingMonthly || monthlyUrl === savedMonthlyUrl}
+                    className="gradient-primary text-primary-foreground"
+                  >
+                    {savingMonthly && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    Salvar
+                  </Button>
+                  {savedMonthlyUrl && (
+                    <Button size="sm" variant="outline" asChild>
+                      <a href={savedMonthlyUrl} target="_blank" rel="noopener noreferrer">Testar</a>
+                    </Button>
+                  )}
+                </div>
+              </div>
+
+              <div className="space-y-2 rounded-xl border bg-background/40 p-4">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="lifetime-url" className="font-semibold">Acesso Vitalício</Label>
+                  {savedLifetimeUrl ? (
+                    <Badge className="bg-success text-success-foreground gap-1"><CheckCircle2 className="h-3 w-3" /> Ok</Badge>
+                  ) : (
+                    <Badge variant="outline" className="gap-1"><AlertCircle className="h-3 w-3" /> Vazio</Badge>
+                  )}
+                </div>
+                <Input
+                  id="lifetime-url"
+                  type="url"
+                  placeholder="https://pay.cakto.com.br/..."
+                  value={lifetimeUrl}
+                  onChange={(e) => setLifetimeUrl(e.target.value)}
+                />
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    onClick={() => handleSavePlanUrl("lifetime")}
+                    disabled={savingLifetime || lifetimeUrl === savedLifetimeUrl}
+                    className="gradient-primary text-primary-foreground"
+                  >
+                    {savingLifetime && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    Salvar
+                  </Button>
+                  {savedLifetimeUrl && (
+                    <Button size="sm" variant="outline" asChild>
+                      <a href={savedLifetimeUrl} target="_blank" rel="noopener noreferrer">Testar</a>
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
       <div className="rounded-2xl border bg-card p-6 shadow-soft">
         <div className="flex items-start gap-4">
@@ -478,7 +607,7 @@ export function ProfileView() {
                 ))}
               </ul>
               <Button
-                onClick={() => toast.info(`Plano ${plan.name} selecionado!`)}
+                onClick={() => handleSubscribe(plan.id)}
                 className={`mt-6 w-full ${plan.highlight ? "gradient-primary text-primary-foreground shadow-glow" : ""}`}
                 variant={plan.highlight ? "default" : "outline"}
               >
