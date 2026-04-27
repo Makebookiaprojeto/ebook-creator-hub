@@ -409,6 +409,92 @@ export function ProfileView() {
         </div>
       </div>
 
+      {/* Card: Links de checkout dos planos (Cakto, Hotmart, etc) */}
+      <div className="rounded-2xl border bg-card p-6 shadow-soft">
+        <div className="flex items-start gap-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl gradient-primary text-primary-foreground shadow-glow">
+            <Crown className="h-6 w-6" />
+          </div>
+          <div className="flex-1">
+            <h2 className="font-display text-xl font-semibold">Links de checkout dos planos</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Configure um link de checkout (Cakto, Hotmart, Kiwify, Stripe Payment Link, etc) para cada plano.
+              O botão "Assinar agora" de cada plano vai abrir o link correspondente.
+            </p>
+
+            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="space-y-2 rounded-xl border bg-background/40 p-4">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="monthly-url" className="font-semibold">Plano Mensal</Label>
+                  {savedMonthlyUrl ? (
+                    <Badge className="bg-success text-success-foreground gap-1"><CheckCircle2 className="h-3 w-3" /> Ok</Badge>
+                  ) : (
+                    <Badge variant="outline" className="gap-1"><AlertCircle className="h-3 w-3" /> Vazio</Badge>
+                  )}
+                </div>
+                <Input
+                  id="monthly-url"
+                  type="url"
+                  placeholder="https://pay.cakto.com.br/..."
+                  value={monthlyUrl}
+                  onChange={(e) => setMonthlyUrl(e.target.value)}
+                />
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    onClick={() => handleSavePlanUrl("monthly")}
+                    disabled={savingMonthly || monthlyUrl === savedMonthlyUrl}
+                    className="gradient-primary text-primary-foreground"
+                  >
+                    {savingMonthly && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    Salvar
+                  </Button>
+                  {savedMonthlyUrl && (
+                    <Button size="sm" variant="outline" asChild>
+                      <a href={savedMonthlyUrl} target="_blank" rel="noopener noreferrer">Testar</a>
+                    </Button>
+                  )}
+                </div>
+              </div>
+
+              <div className="space-y-2 rounded-xl border bg-background/40 p-4">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="lifetime-url" className="font-semibold">Acesso Vitalício</Label>
+                  {savedLifetimeUrl ? (
+                    <Badge className="bg-success text-success-foreground gap-1"><CheckCircle2 className="h-3 w-3" /> Ok</Badge>
+                  ) : (
+                    <Badge variant="outline" className="gap-1"><AlertCircle className="h-3 w-3" /> Vazio</Badge>
+                  )}
+                </div>
+                <Input
+                  id="lifetime-url"
+                  type="url"
+                  placeholder="https://pay.cakto.com.br/..."
+                  value={lifetimeUrl}
+                  onChange={(e) => setLifetimeUrl(e.target.value)}
+                />
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    onClick={() => handleSavePlanUrl("lifetime")}
+                    disabled={savingLifetime || lifetimeUrl === savedLifetimeUrl}
+                    className="gradient-primary text-primary-foreground"
+                  >
+                    {savingLifetime && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    Salvar
+                  </Button>
+                  {savedLifetimeUrl && (
+                    <Button size="sm" variant="outline" asChild>
+                      <a href={savedLifetimeUrl} target="_blank" rel="noopener noreferrer">Testar</a>
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
       <div className="rounded-2xl border bg-card p-6 shadow-soft">
         <div className="flex items-start gap-4">
