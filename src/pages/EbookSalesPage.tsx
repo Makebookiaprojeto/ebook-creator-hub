@@ -58,7 +58,7 @@ export default function EbookSalesPage() {
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [ebook, setEbook] = useState<Ebook | null>(null);
   const [chapters, setChapters] = useState<Chapter[]>([]);
-  const [externalCheckoutUrl, setExternalCheckoutUrl] = useState<string | null>(null);
+  
   const [error, setError] = useState<string | null>(null);
   const [isPaid, setIsPaid] = useState(false);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
@@ -110,37 +110,13 @@ export default function EbookSalesPage() {
   const handleCheckout = async () => {
     if (!ebook) return;
 
-    // Prioridade 1: link Cakto específico do eBook (autor configurou)
+    // Cada eBook tem seu próprio link de pagamento (Cakto/Hotmart/Kiwify)
     if ((ebook as any).cakto_checkout_url) {
       window.location.href = (ebook as any).cakto_checkout_url;
       return;
     }
 
-    // Prioridade 2: link de checkout externo do perfil do autor (legacy)
-    if (externalCheckoutUrl) {
-      window.location.href = externalCheckoutUrl;
-      return;
-    }
-
-    if (!ebook.price_cents || ebook.price_cents < 50) {
-      toast.error("Este eBook não está disponível para compra.");
-      return;
-    }
-    setCheckoutLoading(true);
-    try {
-      const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { ebook_id: ebook.id },
-      });
-      if (error) throw error;
-      if (data?.url) {
-        window.location.href = data.url;
-      } else {
-        throw new Error("URL de checkout não recebida");
-      }
-    } catch (e: any) {
-      toast.error(e?.message || "Erro ao iniciar checkout");
-      setCheckoutLoading(false);
-    }
+    toast.error("Este eBook ainda não tem link de pagamento configurado pelo autor.");
   };
 
   useEffect(() => {
@@ -171,16 +147,6 @@ export default function EbookSalesPage() {
       if (!active) return;
       setEbook(ebookData);
       setChapters(chData ?? []);
-
-      // Carrega o link de checkout externo do dono do ebook (se houver)
-      const { data: ownerProfile } = await supabase
-        .from("profiles")
-        .select("external_checkout_url")
-        .eq("user_id", ebookData.user_id)
-        .maybeSingle();
-      if (active) {
-        setExternalCheckoutUrl((ownerProfile as any)?.external_checkout_url || null);
-      }
 
       setLoading(false);
     })();
