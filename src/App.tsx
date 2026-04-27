@@ -11,6 +11,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Index from "./pages/Index.tsx";
 import EbookSalesPage from "./pages/EbookSalesPage";
 import Plans from "./pages/Plans";
+import MyPurchases from "./pages/MyPurchases";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
