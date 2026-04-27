@@ -87,12 +87,17 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    const { data: ebook } = await supabase
-      .from("ebooks")
-      .select("id, user_id, title, pdf_url, payment_webhook_secret")
-      .eq("cakto_product_id", productId) // reusa o campo (renomeado na UI)
+    const { data: cfg } = await supabase
+      .from("ebook_payment_config")
+      .select("ebook_id, owner_id, webhook_secret, ebooks!inner(id, title, pdf_url)")
+      .eq("product_id", productId)
       .eq("payment_platform", PLATFORM)
       .maybeSingle();
+
+    const ebook = cfg
+      ? { id: (cfg as any).ebook_id, user_id: (cfg as any).owner_id,
+          title: (cfg as any).ebooks?.title, pdf_url: (cfg as any).ebooks?.pdf_url }
+      : null;
 
     if (!ebook) {
       console.warn("hotmart-webhook: ebook não encontrado", productId);
@@ -102,7 +107,7 @@ Deno.serve(async (req) => {
     }
 
     // Validação obrigatória: HOTTOK do autor deve bater
-    const expectedToken = (ebook as any).payment_webhook_secret as string | null;
+    const expectedToken = (cfg as any).webhook_secret as string | null;
     if (!expectedToken || providedToken !== expectedToken) {
       console.warn("hotmart-webhook: HOTTOK inválido pro ebook", ebook.id);
       return new Response(JSON.stringify({ error: "Invalid signature" }), {

@@ -95,12 +95,17 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    const { data: ebook } = await supabase
-      .from("ebooks")
-      .select("id, user_id, title, pdf_url, payment_webhook_secret")
-      .eq("cakto_product_id", productId)
+    const { data: cfg } = await supabase
+      .from("ebook_payment_config")
+      .select("ebook_id, owner_id, webhook_secret, ebooks!inner(id, title, pdf_url)")
+      .eq("product_id", productId)
       .eq("payment_platform", PLATFORM)
       .maybeSingle();
+
+    const ebook = cfg
+      ? { id: (cfg as any).ebook_id, user_id: (cfg as any).owner_id,
+          title: (cfg as any).ebooks?.title, pdf_url: (cfg as any).ebooks?.pdf_url }
+      : null;
 
     if (!ebook) {
       return new Response(JSON.stringify({ error: "ebook não encontrado" }), {
@@ -109,7 +114,7 @@ Deno.serve(async (req) => {
     }
 
     // Validação obrigatória: HMAC-SHA1 do body com o token do autor
-    const secret = (ebook as any).payment_webhook_secret as string | null;
+    const secret = (cfg as any).webhook_secret as string | null;
     if (!secret) {
       console.warn("kiwify-webhook: ebook sem token configurado", ebook.id);
       return new Response(JSON.stringify({ error: "Webhook secret not configured" }), {
