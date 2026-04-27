@@ -51,6 +51,9 @@ export function LibraryView({ onCreateNew }: Props) {
   >({});
   const [savingCaktoId, setSavingCaktoId] = useState<string | null>(null);
   const [openCaktoId, setOpenCaktoId] = useState<string | null>(null);
+  const [paymentConfigs, setPaymentConfigs] = useState<
+    Record<string, { platform: string; checkout_url: string; product_id: string; webhook_secret: string }>
+  >({});
 
   const PLATFORMS = [
     { value: "cakto", label: "Cakto" },
@@ -65,13 +68,40 @@ export function LibraryView({ onCreateNew }: Props) {
       ? ""
       : `https://${projectRef}.supabase.co/functions/v1/${platform}-webhook`;
 
-  const getCaktoDraft = (eb: Ebook) =>
-    caktoDrafts[eb.id] ?? {
-      url: (eb as any).cakto_checkout_url ?? "",
-      pid: (eb as any).cakto_product_id ?? "",
-      platform: (eb as any).payment_platform ?? "cakto",
-      secret: (eb as any).payment_webhook_secret ?? "",
+  // Carrega configs de pagamento (tabela protegida) sempre que ebooks mudarem
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      if (ebooks.length === 0) return;
+      const { data } = await supabase
+        .from("ebook_payment_config" as any)
+        .select("ebook_id, payment_platform, checkout_url, product_id, webhook_secret")
+        .in("ebook_id", ebooks.map((e) => e.id));
+      if (!active || !data) return;
+      const map: typeof paymentConfigs = {};
+      for (const r of data as any[]) {
+        map[r.ebook_id] = {
+          platform: r.payment_platform ?? "cakto",
+          checkout_url: r.checkout_url ?? "",
+          product_id: r.product_id ?? "",
+          webhook_secret: r.webhook_secret ?? "",
+        };
+      }
+      setPaymentConfigs(map);
+    })();
+    return () => { active = false; };
+  }, [ebooks]);
+
+  const getCaktoDraft = (eb: Ebook) => {
+    if (caktoDrafts[eb.id]) return caktoDrafts[eb.id];
+    const cfg = paymentConfigs[eb.id];
+    return {
+      url: cfg?.checkout_url ?? (eb as any).cakto_checkout_url ?? "",
+      pid: cfg?.product_id ?? "",
+      platform: cfg?.platform ?? "cakto",
+      secret: cfg?.webhook_secret ?? "",
     };
+  };
 
   const saveCakto = async (eb: Ebook) => {
     const d = getCaktoDraft(eb);
@@ -84,17 +114,43 @@ export function LibraryView({ onCreateNew }: Props) {
     }
     setSavingCaktoId(eb.id);
     try {
-      const { error } = await supabase
+      // 1) Atualiza link público de checkout (continua na tabela ebooks)
+      const { error: ebErr } = await supabase
         .from("ebooks")
-        .update({
-          cakto_checkout_url: url || null,
-          cakto_product_id: pid || null,
-          payment_platform: d.platform,
-          payment_webhook_secret: secret || null,
-        } as any)
+        .update({ cakto_checkout_url: url || null } as any)
         .eq("id", eb.id);
-      if (error) throw error;
+      if (ebErr) throw ebErr;
+
+      // 2) Upsert configs sensíveis na tabela protegida
+      const { data: userData } = await supabase.auth.getUser();
+      const ownerId = userData.user?.id;
+      if (!ownerId) throw new Error("Não autenticado");
+
+      const { error: cfgErr } = await supabase
+        .from("ebook_payment_config" as any)
+        .upsert(
+          {
+            ebook_id: eb.id,
+            owner_id: ownerId,
+            payment_platform: d.platform,
+            checkout_url: url || null,
+            product_id: pid || null,
+            webhook_secret: secret || null,
+          },
+          { onConflict: "ebook_id" },
+        );
+      if (cfgErr) throw cfgErr;
+
       toast.success("Configuração de pagamento salva!");
+      setPaymentConfigs((prev) => ({
+        ...prev,
+        [eb.id]: {
+          platform: d.platform,
+          checkout_url: url,
+          product_id: pid,
+          webhook_secret: secret,
+        },
+      }));
       setCaktoDrafts((p) => {
         const n = { ...p };
         delete n[eb.id];
