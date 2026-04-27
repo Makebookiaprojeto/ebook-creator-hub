@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader2, Check, Crown, Sparkles, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { CHECKOUT_LINKS } from "@/config/checkoutLinks";
+import { supabase } from "@/integrations/supabase/client";
 
 const BENEFITS = [
   "Criar eBooks ilimitados",
@@ -20,6 +21,7 @@ export default function Plans() {
   const navigate = useNavigate();
   const { user, loading: authLoading, signOut } = useAuth();
   const { loading: subLoading, isActive } = useSubscription();
+  const [displayName, setDisplayName] = useState<string>("");
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
