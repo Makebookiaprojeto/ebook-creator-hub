@@ -80,7 +80,6 @@ const Auth = () => {
       const emailParsed = emailSchema.safeParse(email);
       if (!emailParsed.success) {
         toast.error(emailParsed.error.issues[0].message);
-        setSubmitting(false);
         return;
       }
 
@@ -91,14 +90,12 @@ const Auth = () => {
         if (error) throw error;
         toast.success("Enviamos um link de recuperação para seu email.");
         setResetMode(false);
-        setSubmitting(false);
         return;
       }
 
       const passParsed = passwordSchema.safeParse(password);
       if (!passParsed.success) {
         toast.error(passParsed.error.issues[0].message);
-        setSubmitting(false);
         return;
       }
 
@@ -106,7 +103,6 @@ const Auth = () => {
         const usernameParsed = usernameSchema.safeParse(username);
         if (!usernameParsed.success) {
           toast.error(usernameParsed.error.issues[0].message);
-          setSubmitting(false);
           return;
         }
 
@@ -120,24 +116,22 @@ const Auth = () => {
         });
 
         if (error) {
-          // Tratamento explícito para e-mail já cadastrado
           if (error.status === 422 || error.message.toLowerCase().includes("already registered") || error.status === 400) {
             toast.error("Este e-mail já possui uma conta vinculada. Por favor, faça login.");
             setTab("login");
           } else {
             toast.error(error.message);
           }
-          setSubmitting(false);
           return;
         }
-        
+
         toast.success("Cadastro solicitado! Verifique sua caixa de entrada para confirmar o e-mail.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email: emailParsed.data,
           password: passParsed.data,
         });
-        
+
         if (error) {
           if (error.message.includes("Invalid login")) {
             toast.error("E-mail ou senha incorretos.");
@@ -146,18 +140,16 @@ const Auth = () => {
           } else {
             toast.error(error.message);
           }
-          setSubmitting(false);
           return;
         }
-        
+
         toast.success("Bem-vindo de volta!");
         navigate("/app", { replace: true });
       }
     } catch (err: any) {
       toast.error(err.message ?? "Ocorreu um erro inesperado.");
-      setSubmitting(false);
     } finally {
-      // O setSubmitting(false) é chamado dentro dos blocos específicos para melhor controle do fluxo
+      setSubmitting(false);
     }
   };
 
