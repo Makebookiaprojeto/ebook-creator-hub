@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Sparkles, Loader2 } from "lucide-react";
+import saasLogo from "@/assets/saas-logo.jpg";
 
 const passwordSchema = z.string().min(6, "Senha deve ter no mínimo 6 caracteres").max(72);
 
@@ -61,8 +62,8 @@ const ResetPassword = () => {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <div className="w-full max-w-md">
         <div className="flex items-center justify-center gap-2 mb-8">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl gradient-primary shadow-glow">
-            <Sparkles className="h-5 w-5 text-primary-foreground" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl overflow-hidden shadow-glow">
+            <img src={saasLogo} alt="EbookAI Builder" className="h-full w-full object-cover" />
           </div>
           <span className="font-display text-xl font-bold">EbookAI Builder</span>
         </div>
