@@ -1,4 +1,5 @@
 import { LayoutDashboard, Plus, Wrench, LifeBuoy, User, Sparkles, LogOut, Library } from "lucide-react";
+import saasLogo from "@/assets/saas-logo.jpg";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -87,8 +88,8 @@ export function AppSidebar({ active, onChange }: Props) {
     <Sidebar collapsible="icon" className="border-r">
       <SidebarHeader className="border-b border-sidebar-border">
         <div className="flex items-center gap-2.5 px-2 py-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl gradient-primary shadow-glow">
-            <Sparkles className="h-5 w-5 text-primary-foreground" />
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl overflow-hidden shadow-glow">
+            <img src={saasLogo} alt="EbookAI Builder" className="h-full w-full object-cover" />
           </div>
           {!collapsed && (
             <div className="flex flex-col leading-tight">
