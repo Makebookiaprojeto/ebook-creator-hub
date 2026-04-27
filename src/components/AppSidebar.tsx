@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { resolveDisplayName, initialFromName } from "@/lib/userName";
 import {
   Sidebar,
   SidebarContent,
@@ -54,7 +55,7 @@ export function AppSidebar({ active, onChange }: Props) {
         .maybeSingle();
       if (data) {
         setAvatarUrl((data as any).avatar_url);
-        setDisplayName((data as any).display_name || user?.user_metadata?.display_name || user?.email?.split("@")[0] || "Usuário");
+        setDisplayName(resolveDisplayName((data as any).display_name, user));
       }
     };
     fetchProfile();
@@ -145,7 +146,7 @@ export function AppSidebar({ active, onChange }: Props) {
               </button>
             </div>
             {user && (() => {
-              const display = displayName || (user.user_metadata?.username as string | undefined)?.trim() || user.email?.split("@")[0] || "Usuário";
+              const display = resolveDisplayName(displayName, user);
 
               return (
               <div className="mx-2 mb-2 flex items-center justify-between gap-2 rounded-lg border bg-card p-2">
@@ -154,7 +155,7 @@ export function AppSidebar({ active, onChange }: Props) {
                     {avatarUrl ? (
                       <img src={avatarUrl} alt={display} className="h-full w-full object-cover" />
                     ) : (
-                      display[0]?.toUpperCase() ?? "U"
+                      initialFromName(display)
                     )}
                   </div>
                   <span className="truncate text-[11px] text-muted-foreground">{display}</span>
