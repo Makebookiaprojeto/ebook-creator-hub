@@ -95,7 +95,7 @@ export default function Plans() {
                 Mensal
               </div>
               <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-bold">R$ 47</span>
+                <span className="text-4xl font-bold">R$ 149,90</span>
                 <span className="text-muted-foreground">/mês</span>
               </div>
               <p className="text-sm text-muted-foreground mt-2">
@@ -133,7 +133,7 @@ export default function Plans() {
                 Vitalício
               </div>
               <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-bold">R$ 297</span>
+                <span className="text-4xl font-bold">R$ 249,90</span>
                 <span className="text-muted-foreground">único</span>
               </div>
               <p className="text-sm text-muted-foreground mt-2">
