@@ -1,19 +1,11 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { plans } from "@/lib/mockData";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
-  Check,
-  Crown,
   Mail,
   User as UserIcon,
-  Sparkles,
-  CreditCard,
-  ExternalLink,
   Loader2,
-  AlertCircle,
-  CheckCircle2,
   Camera,
   Upload,
 } from "lucide-react";
@@ -25,69 +17,32 @@ import { Label } from "@/components/ui/label";
 import { CHECKOUT_LINKS } from "@/config/checkoutLinks";
 import { resolveDisplayName } from "@/lib/userName";
 
-type ConnectStatus = {
-  connected: boolean;
-  charges_enabled: boolean;
-  details_submitted: boolean;
-  account_id?: string;
-};
-
 export function ProfileView() {
   const plansRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [status, setStatus] = useState<ConnectStatus | null>(null);
-  const [loadingStatus, setLoadingStatus] = useState(true);
-  const [connecting, setConnecting] = useState(false);
-  const [externalUrl, setExternalUrl] = useState("");
-  const [savedUrl, setSavedUrl] = useState("");
-  const [savingUrl, setSavingUrl] = useState(false);
   const [displayName, setDisplayName] = useState("");
   const [savingName, setSavingName] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Carrega o link externo salvo
+  // Carrega dados do perfil
   useEffect(() => {
     if (!user) return;
     (async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("external_checkout_url, avatar_url, display_name")
+        .select("avatar_url, display_name")
         .eq("user_id", user.id)
         .maybeSingle();
       const profileData = data as any;
-      const urlValue = profileData?.external_checkout_url || "";
       const avatarValue = profileData?.avatar_url || null;
       const nameValue = resolveDisplayName(profileData?.display_name, user);
-      setExternalUrl(urlValue);
-      setSavedUrl(urlValue);
       setAvatarUrl(avatarValue);
       setDisplayName(nameValue);
     })();
   }, [user]);
-
-  const handleSaveExternalUrl = async () => {
-    if (!user) return;
-    const trimmed = externalUrl.trim();
-    if (trimmed && !/^https?:\/\//i.test(trimmed)) {
-      toast.error("O link deve começar com http:// ou https://");
-      return;
-    }
-    setSavingUrl(true);
-    const { error } = await supabase
-      .from("profiles")
-      .update({ external_checkout_url: trimmed || null })
-      .eq("user_id", user.id);
-    setSavingUrl(false);
-    if (error) {
-      toast.error("Erro ao salvar: " + error.message);
-      return;
-    }
-    setSavedUrl(trimmed);
-    toast.success(trimmed ? "Link de checkout salvo!" : "Link removido");
-  };
 
   const handleSubscribe = (planId: string) => {
     const url = CHECKOUT_LINKS[planId];
@@ -97,7 +52,6 @@ export function ProfileView() {
       toast.info("Checkout deste plano ainda não está configurado.");
     }
   };
-
 
   const handleSaveDisplayName = async () => {
     if (!user) return;
@@ -111,7 +65,7 @@ export function ProfileView() {
       .from("profiles")
       .update({ display_name: trimmed })
       .eq("user_id", user.id);
-    
+
     // Also update auth metadata for consistency
     await supabase.auth.updateUser({
       data: { display_name: trimmed }
@@ -123,50 +77,6 @@ export function ProfileView() {
       return;
     }
     toast.success("Nome de exibição atualizado!");
-  };
-
-  const refreshStatus = useCallback(async () => {
-    setLoadingStatus(true);
-    try {
-      const { data, error } = await supabase.functions.invoke("stripe-connect-status");
-      if (error) throw error;
-      setStatus(data as ConnectStatus);
-    } catch (e) {
-      console.error(e);
-      setStatus({ connected: false, charges_enabled: false, details_submitted: false });
-    } finally {
-      setLoadingStatus(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (user) refreshStatus();
-  }, [user, refreshStatus]);
-
-  // Quando volta do onboarding Stripe, atualiza status
-  useEffect(() => {
-    if (searchParams.get("stripe_return") === "1" || searchParams.get("stripe_refresh") === "1") {
-      toast.info("Atualizando status da conta de pagamentos...");
-      refreshStatus();
-      const next = new URLSearchParams(searchParams);
-      next.delete("stripe_return");
-      next.delete("stripe_refresh");
-      setSearchParams(next, { replace: true });
-    }
-  }, [searchParams, setSearchParams, refreshStatus]);
-
-  const handleConnect = async () => {
-    setConnecting(true);
-    try {
-      const { data, error } = await supabase.functions.invoke("stripe-connect-onboard");
-      if (error) throw error;
-      if (!data?.url) throw new Error("Não foi possível iniciar a conexão");
-      window.location.href = data.url;
-    } catch (e: any) {
-      console.error(e);
-      toast.error(e?.message || "Falha ao conectar Stripe");
-      setConnecting(false);
-    }
   };
 
   const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -208,11 +118,7 @@ export function ProfileView() {
     }
   };
 
-  // const displayName = user?.user_metadata?.display_name || user?.email?.split("@")[0] || "Usuário"; // Replaced by state
   const email = user?.email || "";
-
-  const fullyConnected = status?.connected && status?.charges_enabled && status?.details_submitted;
-  const pendingConnection = status?.connected && !fullyConnected;
 
   useEffect(() => {
     if (searchParams.get("upgrade") === "true") {
