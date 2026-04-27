@@ -11,6 +11,7 @@ import { Bell, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { resolveDisplayName, initialFromName } from "@/lib/userName";
 
 type View = "dashboard" | "create" | "library" | "support" | "profile";
 
@@ -30,7 +31,7 @@ const Index = () => {
         .maybeSingle();
       if (data) {
         setAvatarUrl((data as any).avatar_url);
-        setDisplayName((data as any).display_name || user?.user_metadata?.display_name || user?.email?.split("@")[0] || "Usuário");
+        setDisplayName(resolveDisplayName((data as any).display_name, user));
       }
     };
     fetchProfile();
@@ -81,7 +82,7 @@ const Index = () => {
                 {avatarUrl ? (
                   <img src={avatarUrl} alt="Perfil" className="h-full w-full object-cover" />
                 ) : (
-                  (displayName || user?.user_metadata?.display_name || user?.email || "U")[0].toUpperCase()
+                  initialFromName(displayName || resolveDisplayName(null, user))
                 )}
               </button>
             </div>
