@@ -39,41 +39,41 @@ export function DashboardView() {
           .maybeSingle();
         if (profile) setDbDisplayName(profile.display_name);
 
-        // Fetch sales/orders for this user
-        const { data: orders } = await supabase
-          .from("orders")
-          .select("*")
-          .eq("ebook_owner_id", authUser.id)
-          .eq("status", "completed");
+        // Vendas confirmadas dos eBooks deste autor
+        // ebook_sales tem RLS "Owners can view sales of their ebooks" → filtra automático
+        const { data: sales } = await supabase
+          .from("ebook_sales")
+          .select("amount_paid_cents, created_at, status")
+          .eq("status", "paid");
 
-        if (orders) {
-          const totalSales = orders.length;
-          const totalRevenue = orders.reduce((acc, order) => acc + (order.amount_cents || 0), 0) / 100;
-          
-          setStats(prev => ({
+        if (sales) {
+          const totalSales = sales.length;
+          const totalRevenue =
+            sales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
+
+          setStats((prev) => ({
             ...prev,
             totalSales,
             totalRevenue,
           }));
 
-          // Group by month for the chart (last 6 months)
+          // Agrupa por mês (últimos 6 meses)
           const last6Months = Array.from({ length: 6 }, (_, i) => {
             const date = new Date();
             date.setMonth(date.getMonth() - i);
             return {
-              month: date.toLocaleString('pt-BR', { month: 'short' }),
+              month: date.toLocaleString("pt-BR", { month: "short" }),
               vendas: 0,
-              timestamp: date.getTime()
+              timestamp: date.getTime(),
             };
           }).reverse();
 
-          orders.forEach(order => {
-            const orderDate = new Date(order.created_at);
-            const monthName = orderDate.toLocaleString('pt-BR', { month: 'short' });
-            const monthData = last6Months.find(m => m.month === monthName);
-            if (monthData) {
-              monthData.vendas += 1;
-            }
+          sales.forEach((s) => {
+            if (!s.created_at) return;
+            const d = new Date(s.created_at);
+            const monthName = d.toLocaleString("pt-BR", { month: "short" });
+            const m = last6Months.find((x) => x.month === monthName);
+            if (m) m.vendas += 1;
           });
 
           setSalesHistory(last6Months);
@@ -86,6 +86,20 @@ export function DashboardView() {
     };
 
     fetchDashboardData();
+
+    // Realtime: atualiza quando uma nova venda chegar
+    const channel = supabase
+      .channel(`dashboard-sales-${authUser.id}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "ebook_sales" },
+        () => fetchDashboardData(),
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [authUser]);
 
   const displayName =
