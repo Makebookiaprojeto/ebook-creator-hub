@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader2, Check, Crown, Sparkles, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { CHECKOUT_LINKS } from "@/config/checkoutLinks";
+import { supabase } from "@/integrations/supabase/client";
 
 const BENEFITS = [
   "Criar eBooks ilimitados",
@@ -20,10 +21,32 @@ export default function Plans() {
   const navigate = useNavigate();
   const { user, loading: authLoading, signOut } = useAuth();
   const { loading: subLoading, isActive } = useSubscription();
+  const [displayName, setDisplayName] = useState<string>("");
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
   }, []);
+
+  // Carrega display_name do perfil
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("display_name")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (cancelled) return;
+      const name =
+        (data as any)?.display_name ||
+        (user.user_metadata?.display_name as string | undefined) ||
+        user.email?.split("@")[0] ||
+        "Usuário";
+      setDisplayName(name);
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
 
   // Se já tem plano ativo, manda pro app
   useEffect(() => {
@@ -64,7 +87,7 @@ export default function Plans() {
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary" />
-            <span className="font-semibold">Sua plataforma de eBooks</span>
+            <span className="font-semibold">{displayName || "Carregando..."}</span>
           </div>
           <Button variant="ghost" size="sm" onClick={signOut}>
             <LogOut className="h-4 w-4 mr-2" /> Sair
