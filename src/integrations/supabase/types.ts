@@ -208,6 +208,8 @@ export type Database = {
           display_name: string | null
           external_checkout_url: string | null
           id: string
+          lifetime_checkout_url: string | null
+          monthly_checkout_url: string | null
           stripe_account_id: string | null
           stripe_charges_enabled: boolean
           stripe_details_submitted: boolean
@@ -220,6 +222,8 @@ export type Database = {
           display_name?: string | null
           external_checkout_url?: string | null
           id?: string
+          lifetime_checkout_url?: string | null
+          monthly_checkout_url?: string | null
           stripe_account_id?: string | null
           stripe_charges_enabled?: boolean
           stripe_details_submitted?: boolean
@@ -232,6 +236,8 @@ export type Database = {
           display_name?: string | null
           external_checkout_url?: string | null
           id?: string
+          lifetime_checkout_url?: string | null
+          monthly_checkout_url?: string | null
           stripe_account_id?: string | null
           stripe_charges_enabled?: boolean
           stripe_details_submitted?: boolean
