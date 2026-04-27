@@ -3,16 +3,18 @@
 //   1) Assinatura SaaS (planos monthly/lifetime) -> grava em `subscriptions`
 //   2) Venda de eBook do autor -> grava em `ebook_sales` + dispara e-mail com PDF
 // Endpoint: POST /functions/v1/cakto-webhook
-// Configure essa URL no painel da Cakto (do SaaS E de cada autor) e (opcional) defina CAKTO_WEBHOOK_SECRET.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-cakto-signature, x-webhook-secret",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-cakto-signature, x-webhook-secret",
 };
 
-// Mapeamento product_id (Cakto) -> tipo de plano do SaaS
+const PLATFORM = "cakto";
+
+// Mapeamento product_id (Cakto) -> plano do SaaS (mantido)
 const PRODUCT_PLAN_MAP: Record<string, "monthly" | "lifetime"> = {
   "864624": "monthly",
   "864639": "lifetime",
@@ -68,16 +70,12 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Validação global do SaaS (opcional). Sempre bloqueia se setado e errado.
     const expectedSecret = Deno.env.get("CAKTO_WEBHOOK_SECRET");
-    if (expectedSecret) {
-      const provided = req.headers.get("x-cakto-signature") || req.headers.get("x-webhook-secret")
-        || new URL(req.url).searchParams.get("secret");
-      if (provided !== expectedSecret) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), {
-          status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-    }
+    const providedGlobalSecret =
+      req.headers.get("x-cakto-signature") ||
+      req.headers.get("x-webhook-secret") ||
+      new URL(req.url).searchParams.get("secret");
 
     const payload = await req.json().catch(() => ({}));
     console.log("cakto-webhook payload:", JSON.stringify(payload));
@@ -113,40 +111,50 @@ Deno.serve(async (req) => {
     if (productId) {
       const { data: ebook } = await supabase
         .from("ebooks")
-        .select("id, user_id, title, pdf_url")
+        .select("id, user_id, title, pdf_url, payment_platform, payment_webhook_secret")
         .eq("cakto_product_id", productId)
+        .eq("payment_platform", PLATFORM)
         .maybeSingle();
 
       if (ebook) {
+        // Validação por-ebook: se o autor cadastrou um secret, exige que bata
+        const ebookSecret = (ebook as any).payment_webhook_secret as string | null;
+        if (ebookSecret && providedGlobalSecret !== ebookSecret) {
+          console.warn("cakto-webhook: assinatura inválida pro ebook", ebook.id);
+          return new Response(JSON.stringify({ error: "Invalid signature" }), {
+            status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+
         if (isRefund) {
           await supabase
             .from("ebook_sales")
             .update({ status: "refunded" })
             .eq("ebook_id", ebook.id)
-            .or(`cakto_transaction_id.eq.${transactionId ?? "_"},customer_email.eq.${email}`);
+            .or(`platform_transaction_id.eq.${transactionId ?? "_"},customer_email.eq.${email}`);
           return new Response(JSON.stringify({ ok: true, type: "ebook", action: "refunded" }), {
             headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }
 
-        // Aprovado -> upsert por cakto_transaction_id
-        const row = {
+        const row: any = {
           ebook_id: ebook.id,
           ebook_owner_id: ebook.user_id,
           customer_email: email,
           amount_paid_cents: amountCents,
           status: "paid",
-          cakto_transaction_id: transactionId,
+          platform: PLATFORM,
+          platform_transaction_id: transactionId,
+          cakto_transaction_id: transactionId, // legacy
         };
         if (transactionId) {
-          await supabase.from("ebook_sales").upsert(row as any, {
+          await supabase.from("ebook_sales").upsert(row, {
             onConflict: "cakto_transaction_id",
           });
         } else {
-          await supabase.from("ebook_sales").insert(row as any);
+          await supabase.from("ebook_sales").insert(row);
         }
 
-        // Dispara e-mail com PDF (se houver)
         if (ebook.pdf_url) {
           try {
             await supabase.functions.invoke("send-ebook-email", {
@@ -164,8 +172,14 @@ Deno.serve(async (req) => {
     }
 
     // ============================================================
-    // ROUTE 2: assinatura SaaS
+    // ROUTE 2: assinatura SaaS — exige secret global (se setado)
     // ============================================================
+    if (expectedSecret && providedGlobalSecret !== expectedSecret) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     let planType: "monthly" | "lifetime" | null = null;
     if (productId && PRODUCT_PLAN_MAP[productId]) planType = PRODUCT_PLAN_MAP[productId];
     if (!planType && amountCents && AMOUNT_PLAN_MAP[amountCents]) planType = AMOUNT_PLAN_MAP[amountCents];

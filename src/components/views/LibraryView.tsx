@@ -46,22 +46,40 @@ export function LibraryView({ onCreateNew }: Props) {
   const [confirmDelete, setConfirmDelete] = useState<Ebook | null>(null);
   const [priceDrafts, setPriceDrafts] = useState<Record<string, string>>({});
   const [savingPriceId, setSavingPriceId] = useState<string | null>(null);
-  const [caktoDrafts, setCaktoDrafts] = useState<Record<string, { url: string; pid: string }>>({});
+  const [caktoDrafts, setCaktoDrafts] = useState<
+    Record<string, { url: string; pid: string; platform: string; secret: string }>
+  >({});
   const [savingCaktoId, setSavingCaktoId] = useState<string | null>(null);
   const [openCaktoId, setOpenCaktoId] = useState<string | null>(null);
+
+  const PLATFORMS = [
+    { value: "cakto", label: "Cakto" },
+    { value: "hotmart", label: "Hotmart" },
+    { value: "kiwify", label: "Kiwify" },
+    { value: "outro", label: "Outro (só link)" },
+  ] as const;
+
+  const projectRef = (import.meta as any).env?.VITE_SUPABASE_PROJECT_ID ?? "";
+  const webhookUrl = (platform: string) =>
+    platform === "outro"
+      ? ""
+      : `https://${projectRef}.supabase.co/functions/v1/${platform}-webhook`;
 
   const getCaktoDraft = (eb: Ebook) =>
     caktoDrafts[eb.id] ?? {
       url: (eb as any).cakto_checkout_url ?? "",
       pid: (eb as any).cakto_product_id ?? "",
+      platform: (eb as any).payment_platform ?? "cakto",
+      secret: (eb as any).payment_webhook_secret ?? "",
     };
 
   const saveCakto = async (eb: Ebook) => {
     const d = getCaktoDraft(eb);
     const url = d.url.trim();
     const pid = d.pid.trim();
+    const secret = d.secret.trim();
     if (url && !/^https?:\/\//i.test(url)) {
-      toast.error("Use um link Cakto válido (começando com https://).");
+      toast.error("Use um link válido (começando com https://).");
       return;
     }
     setSavingCaktoId(eb.id);
@@ -71,10 +89,12 @@ export function LibraryView({ onCreateNew }: Props) {
         .update({
           cakto_checkout_url: url || null,
           cakto_product_id: pid || null,
+          payment_platform: d.platform,
+          payment_webhook_secret: secret || null,
         } as any)
         .eq("id", eb.id);
       if (error) throw error;
-      toast.success("Configuração Cakto salva!");
+      toast.success("Configuração de pagamento salva!");
       setCaktoDrafts((p) => {
         const n = { ...p };
         delete n[eb.id];
@@ -87,6 +107,13 @@ export function LibraryView({ onCreateNew }: Props) {
     } finally {
       setSavingCaktoId(null);
     }
+  };
+
+  const copyWebhookUrl = (platform: string) => {
+    const u = webhookUrl(platform);
+    if (!u) return;
+    navigator.clipboard.writeText(u);
+    toast.success("URL do webhook copiada!");
   };
 
   const formatPriceBR = (cents?: number | null) =>
@@ -399,7 +426,7 @@ export function LibraryView({ onCreateNew }: Props) {
                   )}
                 </div>
 
-                {/* Cakto config */}
+                {/* Payment config */}
                 <div className="mt-2 rounded-lg border bg-muted/20 p-2">
                   <button
                     type="button"
@@ -408,10 +435,10 @@ export function LibraryView({ onCreateNew }: Props) {
                   >
                     <span className="flex items-center gap-1.5">
                       <Tag className="h-3 w-3" />
-                      Pagamento (Cakto)
+                      Pagamento
                       {(eb as any).cakto_checkout_url && (
-                        <Badge variant="secondary" className="h-4 px-1 text-[9px]">
-                          <Check className="h-2.5 w-2.5" /> ok
+                        <Badge variant="secondary" className="h-4 px-1 text-[9px] capitalize">
+                          <Check className="h-2.5 w-2.5" /> {(eb as any).payment_platform ?? "cakto"}
                         </Badge>
                       )}
                     </span>
@@ -419,8 +446,24 @@ export function LibraryView({ onCreateNew }: Props) {
                   </button>
                   {openCaktoId === eb.id && (
                     <div className="mt-2 space-y-1.5">
+                      <select
+                        value={getCaktoDraft(eb).platform}
+                        onChange={(e) =>
+                          setCaktoDrafts((p) => ({
+                            ...p,
+                            [eb.id]: { ...getCaktoDraft(eb), platform: e.target.value },
+                          }))
+                        }
+                        className="h-8 w-full rounded-md border bg-background px-2 text-[11px]"
+                      >
+                        {PLATFORMS.map((pl) => (
+                          <option key={pl.value} value={pl.value}>
+                            {pl.label}
+                          </option>
+                        ))}
+                      </select>
                       <Input
-                        placeholder="Link Cakto (https://pay.cakto.com.br/...)"
+                        placeholder="Link de checkout (https://...)"
                         value={getCaktoDraft(eb).url}
                         onChange={(e) =>
                           setCaktoDrafts((p) => ({
@@ -430,17 +473,38 @@ export function LibraryView({ onCreateNew }: Props) {
                         }
                         className="h-8 text-[11px]"
                       />
-                      <Input
-                        placeholder="Product ID Cakto (ex: 864624)"
-                        value={getCaktoDraft(eb).pid}
-                        onChange={(e) =>
-                          setCaktoDrafts((p) => ({
-                            ...p,
-                            [eb.id]: { ...getCaktoDraft(eb), pid: e.target.value },
-                          }))
-                        }
-                        className="h-8 text-[11px]"
-                      />
+                      {getCaktoDraft(eb).platform !== "outro" && (
+                        <>
+                          <Input
+                            placeholder="ID do produto na plataforma"
+                            value={getCaktoDraft(eb).pid}
+                            onChange={(e) =>
+                              setCaktoDrafts((p) => ({
+                                ...p,
+                                [eb.id]: { ...getCaktoDraft(eb), pid: e.target.value },
+                              }))
+                            }
+                            className="h-8 text-[11px]"
+                          />
+                          <Input
+                            placeholder={
+                              getCaktoDraft(eb).platform === "hotmart"
+                                ? "HOTTOK (token de validação Hotmart)"
+                                : getCaktoDraft(eb).platform === "kiwify"
+                                ? "Token do webhook Kiwify"
+                                : "Secret do webhook (opcional)"
+                            }
+                            value={getCaktoDraft(eb).secret}
+                            onChange={(e) =>
+                              setCaktoDrafts((p) => ({
+                                ...p,
+                                [eb.id]: { ...getCaktoDraft(eb), secret: e.target.value },
+                              }))
+                            }
+                            className="h-8 text-[11px] font-mono"
+                          />
+                        </>
+                      )}
                       <Button
                         size="sm"
                         variant="secondary"
@@ -455,10 +519,24 @@ export function LibraryView({ onCreateNew }: Props) {
                         )}
                         Salvar
                       </Button>
+                      {getCaktoDraft(eb).platform !== "outro" && (
+                        <div className="rounded bg-background/60 p-1.5">
+                          <p className="text-[10px] font-semibold text-muted-foreground">
+                            URL do webhook (cole na sua conta {getCaktoDraft(eb).platform}):
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => copyWebhookUrl(getCaktoDraft(eb).platform)}
+                            className="mt-0.5 block w-full truncate text-left text-[10px] font-mono text-primary hover:underline"
+                            title="Clique para copiar"
+                          >
+                            {webhookUrl(getCaktoDraft(eb).platform)}
+                          </button>
+                        </div>
+                      )}
                       <p className="text-[10px] leading-tight text-muted-foreground">
-                        Cole o link do produto Cakto + o Product ID. Configure o
-                        webhook Cakto para esta URL para liberar o PDF
-                        automaticamente após o pagamento.
+                        Configure o webhook na plataforma escolhida apontando pra URL acima.
+                        Para Hotmart e Kiwify o token é obrigatório.
                       </p>
                     </div>
                   )}

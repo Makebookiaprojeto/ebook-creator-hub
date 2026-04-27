@@ -67,6 +67,8 @@ export type Database = {
           ebook_id: string | null
           ebook_owner_id: string | null
           id: string
+          platform: string
+          platform_transaction_id: string | null
           status: string | null
           stripe_session_id: string | null
           updated_at: string
@@ -79,6 +81,8 @@ export type Database = {
           ebook_id?: string | null
           ebook_owner_id?: string | null
           id?: string
+          platform?: string
+          platform_transaction_id?: string | null
           status?: string | null
           stripe_session_id?: string | null
           updated_at?: string
@@ -91,6 +95,8 @@ export type Database = {
           ebook_id?: string | null
           ebook_owner_id?: string | null
           id?: string
+          platform?: string
+          platform_transaction_id?: string | null
           status?: string | null
           stripe_session_id?: string | null
           updated_at?: string
@@ -118,6 +124,8 @@ export type Database = {
           id: string
           is_public: boolean
           niche: string | null
+          payment_platform: string
+          payment_webhook_secret: string | null
           pdf_url: string | null
           price_cents: number | null
           sales_pitch: string | null
@@ -140,6 +148,8 @@ export type Database = {
           id?: string
           is_public?: boolean
           niche?: string | null
+          payment_platform?: string
+          payment_webhook_secret?: string | null
           pdf_url?: string | null
           price_cents?: number | null
           sales_pitch?: string | null
@@ -162,6 +172,8 @@ export type Database = {
           id?: string
           is_public?: boolean
           niche?: string | null
+          payment_platform?: string
+          payment_webhook_secret?: string | null
           pdf_url?: string | null
           price_cents?: number | null
           sales_pitch?: string | null
@@ -184,6 +196,8 @@ export type Database = {
           ebook_id: string
           ebook_owner_id: string
           id: string
+          platform: string
+          platform_transaction_id: string | null
           status: string
           stripe_payment_intent: string | null
           stripe_session_id: string | null
@@ -198,6 +212,8 @@ export type Database = {
           ebook_id: string
           ebook_owner_id: string
           id?: string
+          platform?: string
+          platform_transaction_id?: string | null
           status?: string
           stripe_payment_intent?: string | null
           stripe_session_id?: string | null
@@ -212,6 +228,8 @@ export type Database = {
           ebook_id?: string
           ebook_owner_id?: string
           id?: string
+          platform?: string
+          platform_transaction_id?: string | null
           status?: string
           stripe_payment_intent?: string | null
           stripe_session_id?: string | null
