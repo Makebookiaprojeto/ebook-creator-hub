@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Sparkles, BookOpen, Wand2, TrendingUp, ArrowRight, Check } from "lucide-react";
+import saasLogo from "@/assets/saas-logo.jpg";
 
 const Landing = () => {
   const navigate = useNavigate();
