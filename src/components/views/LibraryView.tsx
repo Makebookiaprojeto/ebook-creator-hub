@@ -46,6 +46,48 @@ export function LibraryView({ onCreateNew }: Props) {
   const [confirmDelete, setConfirmDelete] = useState<Ebook | null>(null);
   const [priceDrafts, setPriceDrafts] = useState<Record<string, string>>({});
   const [savingPriceId, setSavingPriceId] = useState<string | null>(null);
+  const [caktoDrafts, setCaktoDrafts] = useState<Record<string, { url: string; pid: string }>>({});
+  const [savingCaktoId, setSavingCaktoId] = useState<string | null>(null);
+  const [openCaktoId, setOpenCaktoId] = useState<string | null>(null);
+
+  const getCaktoDraft = (eb: Ebook) =>
+    caktoDrafts[eb.id] ?? {
+      url: (eb as any).cakto_checkout_url ?? "",
+      pid: (eb as any).cakto_product_id ?? "",
+    };
+
+  const saveCakto = async (eb: Ebook) => {
+    const d = getCaktoDraft(eb);
+    const url = d.url.trim();
+    const pid = d.pid.trim();
+    if (url && !/^https?:\/\//i.test(url)) {
+      toast.error("Use um link Cakto válido (começando com https://).");
+      return;
+    }
+    setSavingCaktoId(eb.id);
+    try {
+      const { error } = await supabase
+        .from("ebooks")
+        .update({
+          cakto_checkout_url: url || null,
+          cakto_product_id: pid || null,
+        } as any)
+        .eq("id", eb.id);
+      if (error) throw error;
+      toast.success("Configuração Cakto salva!");
+      setCaktoDrafts((p) => {
+        const n = { ...p };
+        delete n[eb.id];
+        return n;
+      });
+      await refresh();
+    } catch (err) {
+      console.error(err);
+      toast.error("Não foi possível salvar.");
+    } finally {
+      setSavingCaktoId(null);
+    }
+  };
 
   const formatPriceBR = (cents?: number | null) =>
     !cents || cents <= 0 ? "" : (cents / 100).toFixed(2).replace(".", ",");
@@ -354,6 +396,71 @@ export function LibraryView({ onCreateNew }: Props) {
                     >
                       <Lock className="h-3.5 w-3.5" /> Ver na web
                     </button>
+                  )}
+                </div>
+
+                {/* Cakto config */}
+                <div className="mt-2 rounded-lg border bg-muted/20 p-2">
+                  <button
+                    type="button"
+                    onClick={() => setOpenCaktoId(openCaktoId === eb.id ? null : eb.id)}
+                    className="flex w-full items-center justify-between text-[11px] font-semibold text-muted-foreground hover:text-foreground"
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <Tag className="h-3 w-3" />
+                      Pagamento (Cakto)
+                      {(eb as any).cakto_checkout_url && (
+                        <Badge variant="secondary" className="h-4 px-1 text-[9px]">
+                          <Check className="h-2.5 w-2.5" /> ok
+                        </Badge>
+                      )}
+                    </span>
+                    <span>{openCaktoId === eb.id ? "−" : "+"}</span>
+                  </button>
+                  {openCaktoId === eb.id && (
+                    <div className="mt-2 space-y-1.5">
+                      <Input
+                        placeholder="Link Cakto (https://pay.cakto.com.br/...)"
+                        value={getCaktoDraft(eb).url}
+                        onChange={(e) =>
+                          setCaktoDrafts((p) => ({
+                            ...p,
+                            [eb.id]: { ...getCaktoDraft(eb), url: e.target.value },
+                          }))
+                        }
+                        className="h-8 text-[11px]"
+                      />
+                      <Input
+                        placeholder="Product ID Cakto (ex: 864624)"
+                        value={getCaktoDraft(eb).pid}
+                        onChange={(e) =>
+                          setCaktoDrafts((p) => ({
+                            ...p,
+                            [eb.id]: { ...getCaktoDraft(eb), pid: e.target.value },
+                          }))
+                        }
+                        className="h-8 text-[11px]"
+                      />
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        className="h-7 w-full text-[11px]"
+                        onClick={() => saveCakto(eb)}
+                        disabled={savingCaktoId === eb.id}
+                      >
+                        {savingCaktoId === eb.id ? (
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                        ) : (
+                          <Check className="h-3 w-3" />
+                        )}
+                        Salvar
+                      </Button>
+                      <p className="text-[10px] leading-tight text-muted-foreground">
+                        Cole o link do produto Cakto + o Product ID. Configure o
+                        webhook Cakto para esta URL para liberar o PDF
+                        automaticamente após o pagamento.
+                      </p>
+                    </div>
                   )}
                 </div>
               </div>

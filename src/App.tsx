@@ -11,6 +11,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Index from "./pages/Index.tsx";
 import EbookSalesPage from "./pages/EbookSalesPage";
 import Plans from "./pages/Plans";
+import MyPurchases from "./pages/MyPurchases";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
             />
             <Route path="/e/:slug" element={<EbookSalesPage />} />
             <Route path="/planos" element={<Plans />} />
+            <Route path="/minhas-compras" element={<MyPurchases />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -110,7 +110,13 @@ export default function EbookSalesPage() {
   const handleCheckout = async () => {
     if (!ebook) return;
 
-    // Se o dono do ebook configurou um link externo, redireciona direto
+    // Prioridade 1: link Cakto específico do eBook (autor configurou)
+    if ((ebook as any).cakto_checkout_url) {
+      window.location.href = (ebook as any).cakto_checkout_url;
+      return;
+    }
+
+    // Prioridade 2: link de checkout externo do perfil do autor (legacy)
     if (externalCheckoutUrl) {
       window.location.href = externalCheckoutUrl;
       return;
