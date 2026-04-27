@@ -40,6 +40,12 @@ export function ProfileView() {
   const [externalUrl, setExternalUrl] = useState("");
   const [savedUrl, setSavedUrl] = useState("");
   const [savingUrl, setSavingUrl] = useState(false);
+  const [monthlyUrl, setMonthlyUrl] = useState("");
+  const [savedMonthlyUrl, setSavedMonthlyUrl] = useState("");
+  const [savingMonthly, setSavingMonthly] = useState(false);
+  const [lifetimeUrl, setLifetimeUrl] = useState("");
+  const [savedLifetimeUrl, setSavedLifetimeUrl] = useState("");
+  const [savingLifetime, setSavingLifetime] = useState(false);
   const [displayName, setDisplayName] = useState("");
   const [savingName, setSavingName] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
@@ -52,7 +58,7 @@ export function ProfileView() {
     (async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("external_checkout_url, avatar_url, display_name")
+        .select("external_checkout_url, avatar_url, display_name, monthly_checkout_url, lifetime_checkout_url")
         .eq("user_id", user.id)
         .maybeSingle();
       const profileData = data as any;
@@ -63,9 +69,12 @@ export function ProfileView() {
       setSavedUrl(urlValue);
       setAvatarUrl(avatarValue);
       setDisplayName(nameValue);
-      const url = profileData?.external_checkout_url || "";
-      setExternalUrl(url);
-      setSavedUrl(url);
+      const m = profileData?.monthly_checkout_url || "";
+      const l = profileData?.lifetime_checkout_url || "";
+      setMonthlyUrl(m);
+      setSavedMonthlyUrl(m);
+      setLifetimeUrl(l);
+      setSavedLifetimeUrl(l);
     })();
   }, [user]);
 
