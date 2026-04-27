@@ -176,6 +176,54 @@ export type Database = {
           },
         ]
       }
+      ebook_templates: {
+        Row: {
+          audience: string | null
+          chapters: Json
+          cover_prompt: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          niche: string
+          subtitle: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+          use_count: number
+        }
+        Insert: {
+          audience?: string | null
+          chapters?: Json
+          cover_prompt?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          niche: string
+          subtitle?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          use_count?: number
+        }
+        Update: {
+          audience?: string | null
+          chapters?: Json
+          cover_prompt?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          niche?: string
+          subtitle?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          use_count?: number
+        }
+        Relationships: []
+      }
       ebooks: {
         Row: {
           audience: string | null
@@ -445,6 +493,18 @@ export type Database = {
     }
     Functions: {
       check_email_exists: { Args: { email_to_check: string }; Returns: boolean }
+      find_active_template_by_niche: {
+        Args: { _niche: string }
+        Returns: {
+          audience: string
+          chapters: Json
+          cover_prompt: string
+          id: string
+          niche: string
+          subtitle: string
+          title: string
+        }[]
+      }
       get_public_ebook_pdf_url: { Args: { _ebook_id: string }; Returns: string }
       has_role: {
         Args: {
@@ -452,6 +512,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      increment_template_use: {
+        Args: { _template_id: string }
+        Returns: undefined
       }
       is_admin: { Args: never; Returns: boolean }
       slugify: { Args: { input: string }; Returns: string }
