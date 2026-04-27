@@ -69,12 +69,11 @@ const Auth = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (submitting) return;
-    
+
     setSubmitting(true);
     try {
       if (tab === "signup" && emailError) {
         toast.error(emailError);
-        setSubmitting(false);
         return;
       }
 
