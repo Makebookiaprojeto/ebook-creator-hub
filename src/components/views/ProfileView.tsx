@@ -607,7 +607,7 @@ export function ProfileView() {
                 ))}
               </ul>
               <Button
-                onClick={() => toast.info(`Plano ${plan.name} selecionado!`)}
+                onClick={() => handleSubscribe(plan.id)}
                 className={`mt-6 w-full ${plan.highlight ? "gradient-primary text-primary-foreground shadow-glow" : ""}`}
                 variant={plan.highlight ? "default" : "outline"}
               >
