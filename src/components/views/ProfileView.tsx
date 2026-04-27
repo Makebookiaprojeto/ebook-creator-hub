@@ -30,6 +30,7 @@ export function ProfileView() {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   // Carrega dados do perfil
   useEffect(() => {
@@ -45,6 +46,14 @@ export function ProfileView() {
       const nameValue = resolveDisplayName(profileData?.display_name, user);
       setAvatarUrl(avatarValue);
       setDisplayName(nameValue);
+    })();
+
+    (async () => {
+      const { data } = await supabase.rpc("has_role", {
+        _user_id: user.id,
+        _role: "admin",
+      });
+      setIsAdmin(!!data);
     })();
   }, [user]);
 
@@ -143,6 +152,22 @@ export function ProfileView() {
         <h1 className="font-display text-3xl font-bold">Perfil</h1>
         <p className="mt-1 text-muted-foreground">Gerencie sua conta, pagamentos e plano.</p>
       </div>
+
+      {isAdmin && (
+        <a
+          href="/admin/templates"
+          className="block rounded-2xl border border-primary/40 bg-primary/5 p-4 hover:bg-primary/10 transition"
+        >
+          <div className="flex items-center gap-3">
+            <Sparkles className="h-5 w-5 text-primary" />
+            <div className="flex-1">
+              <p className="font-semibold">Catálogo de Templates (admin)</p>
+              <p className="text-sm text-muted-foreground">Gerenciar ebooks-base por nicho.</p>
+            </div>
+            <Badge variant="outline">Admin</Badge>
+          </div>
+        </a>
+      )}
 
       <div className="rounded-2xl border bg-card p-6 shadow-soft">
         <div className="flex items-center gap-6 flex-wrap sm:flex-nowrap">

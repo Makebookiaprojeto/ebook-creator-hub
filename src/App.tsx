@@ -13,6 +13,7 @@ import EbookSalesPage from "./pages/EbookSalesPage";
 import Plans from "./pages/Plans";
 import MyPurchases from "./pages/MyPurchases";
 import NotFound from "./pages/NotFound.tsx";
+import AdminTemplates from "./pages/AdminTemplates";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,14 @@ const App = () => (
             <Route path="/e/:slug" element={<EbookSalesPage />} />
             <Route path="/planos" element={<Plans />} />
             <Route path="/minhas-compras" element={<MyPurchases />} />
+            <Route
+              path="/admin/templates"
+              element={
+                <ProtectedRoute>
+                  <AdminTemplates />
+                </ProtectedRoute>
+              }
+            />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
