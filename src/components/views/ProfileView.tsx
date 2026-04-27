@@ -53,7 +53,7 @@ export function ProfileView() {
     (async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("external_checkout_url, avatar_url, display_name, monthly_checkout_url, lifetime_checkout_url")
+        .select("external_checkout_url, avatar_url, display_name")
         .eq("user_id", user.id)
         .maybeSingle();
       const profileData = data as any;
@@ -64,12 +64,6 @@ export function ProfileView() {
       setSavedUrl(urlValue);
       setAvatarUrl(avatarValue);
       setDisplayName(nameValue);
-      const m = profileData?.monthly_checkout_url || "";
-      const l = profileData?.lifetime_checkout_url || "";
-      setMonthlyUrl(m);
-      setSavedMonthlyUrl(m);
-      setLifetimeUrl(l);
-      setSavedLifetimeUrl(l);
     })();
   }, [user]);
 
@@ -94,39 +88,15 @@ export function ProfileView() {
     toast.success(trimmed ? "Link de checkout salvo!" : "Link removido");
   };
 
-  const handleSavePlanUrl = async (planId: "monthly" | "lifetime") => {
-    if (!user) return;
-    const value = planId === "monthly" ? monthlyUrl : lifetimeUrl;
-    const trimmed = value.trim();
-    if (trimmed && !/^https?:\/\//i.test(trimmed)) {
-      toast.error("O link deve começar com http:// ou https://");
-      return;
-    }
-    const setSaving = planId === "monthly" ? setSavingMonthly : setSavingLifetime;
-    const setSaved = planId === "monthly" ? setSavedMonthlyUrl : setSavedLifetimeUrl;
-    const column = planId === "monthly" ? "monthly_checkout_url" : "lifetime_checkout_url";
-    setSaving(true);
-    const { error } = await supabase
-      .from("profiles")
-      .update({ [column]: trimmed || null } as any)
-      .eq("user_id", user.id);
-    setSaving(false);
-    if (error) {
-      toast.error("Erro ao salvar: " + error.message);
-      return;
-    }
-    setSaved(trimmed);
-    toast.success(trimmed ? "Link salvo!" : "Link removido");
-  };
-
   const handleSubscribe = (planId: string) => {
-    const url = planId === "monthly" ? savedMonthlyUrl : planId === "lifetime" ? savedLifetimeUrl : "";
-    if (url) {
+    const url = CHECKOUT_LINKS[planId];
+    if (url && /^https?:\/\//i.test(url) && !url.includes("SEU_LINK")) {
       window.open(url, "_blank", "noopener,noreferrer");
     } else {
-      toast.info("Configure o link de checkout deste plano no card 'Links de checkout dos planos' acima.");
+      toast.info("Checkout deste plano ainda não está configurado.");
     }
   };
+
 
   const handleSaveDisplayName = async () => {
     if (!user) return;
