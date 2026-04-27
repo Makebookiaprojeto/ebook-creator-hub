@@ -58,6 +58,50 @@ export type Database = {
           },
         ]
       }
+      ebook_payment_config: {
+        Row: {
+          checkout_url: string | null
+          created_at: string
+          ebook_id: string
+          id: string
+          owner_id: string
+          payment_platform: string
+          product_id: string | null
+          updated_at: string
+          webhook_secret: string | null
+        }
+        Insert: {
+          checkout_url?: string | null
+          created_at?: string
+          ebook_id: string
+          id?: string
+          owner_id: string
+          payment_platform?: string
+          product_id?: string | null
+          updated_at?: string
+          webhook_secret?: string | null
+        }
+        Update: {
+          checkout_url?: string | null
+          created_at?: string
+          ebook_id?: string
+          id?: string
+          owner_id?: string
+          payment_platform?: string
+          product_id?: string | null
+          updated_at?: string
+          webhook_secret?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ebook_payment_config_ebook_id_fkey"
+            columns: ["ebook_id"]
+            isOneToOne: true
+            referencedRelation: "ebooks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ebook_sales: {
         Row: {
           amount_paid_cents: number | null
@@ -116,7 +160,6 @@ export type Database = {
           audience: string | null
           author_name: string | null
           cakto_checkout_url: string | null
-          cakto_product_id: string | null
           category: string | null
           cover_url: string | null
           created_at: string
@@ -124,8 +167,6 @@ export type Database = {
           id: string
           is_public: boolean
           niche: string | null
-          payment_platform: string
-          payment_webhook_secret: string | null
           pdf_url: string | null
           price_cents: number | null
           sales_pitch: string | null
@@ -140,7 +181,6 @@ export type Database = {
           audience?: string | null
           author_name?: string | null
           cakto_checkout_url?: string | null
-          cakto_product_id?: string | null
           category?: string | null
           cover_url?: string | null
           created_at?: string
@@ -148,8 +188,6 @@ export type Database = {
           id?: string
           is_public?: boolean
           niche?: string | null
-          payment_platform?: string
-          payment_webhook_secret?: string | null
           pdf_url?: string | null
           price_cents?: number | null
           sales_pitch?: string | null
@@ -164,7 +202,6 @@ export type Database = {
           audience?: string | null
           author_name?: string | null
           cakto_checkout_url?: string | null
-          cakto_product_id?: string | null
           category?: string | null
           cover_url?: string | null
           created_at?: string
@@ -172,8 +209,6 @@ export type Database = {
           id?: string
           is_public?: boolean
           niche?: string | null
-          payment_platform?: string
-          payment_webhook_secret?: string | null
           pdf_url?: string | null
           price_cents?: number | null
           sales_pitch?: string | null
