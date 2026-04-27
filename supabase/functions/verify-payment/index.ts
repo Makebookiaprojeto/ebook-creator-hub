@@ -45,20 +45,7 @@ Deno.serve(async (req) => {
       ebookTitle = ebook?.title ?? ebookTitle;
     }
 
-    let stripeAccount: string | undefined;
-    if (order?.ebook_owner_id) {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("stripe_account_id")
-        .eq("user_id", order.ebook_owner_id)
-        .maybeSingle();
-      stripeAccount = profile?.stripe_account_id ?? undefined;
-    }
-
-    const session = await stripe.checkout.sessions.retrieve(
-      session_id,
-      stripeAccount ? { stripeAccount } : undefined,
-    );
+    const session = await stripe.checkout.sessions.retrieve(session_id);
     const paid = session.payment_status === "paid";
     const customerEmail = session.customer_details?.email;
 

@@ -3,17 +3,8 @@ project_id = "qbksltxsnpkeaijfihug"
 [functions.generate-ebook]
 verify_jwt = false
 
-[functions.create-checkout]
-verify_jwt = false
-
 [functions.verify-payment]
 verify_jwt = false
-
-[functions.stripe-connect-onboard]
-verify_jwt = true
-
-[functions.stripe-connect-status]
-verify_jwt = true
 
 [functions.cakto-webhook]
 verify_jwt = false
