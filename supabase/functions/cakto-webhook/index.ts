@@ -106,19 +106,24 @@ Deno.serve(async (req) => {
     );
 
     // ============================================================
-    // ROUTE 1: venda de eBook (procura ebook pelo cakto_product_id)
+    // ROUTE 1: venda de eBook (procura via ebook_payment_config)
     // ============================================================
     if (productId) {
-      const { data: ebook } = await supabase
-        .from("ebooks")
-        .select("id, user_id, title, pdf_url, payment_platform, payment_webhook_secret")
-        .eq("cakto_product_id", productId)
+      const { data: cfg } = await supabase
+        .from("ebook_payment_config")
+        .select("ebook_id, owner_id, webhook_secret, ebooks!inner(id, title, pdf_url)")
+        .eq("product_id", productId)
         .eq("payment_platform", PLATFORM)
         .maybeSingle();
 
+      const ebook = cfg
+        ? { id: (cfg as any).ebook_id, user_id: (cfg as any).owner_id,
+            title: (cfg as any).ebooks?.title, pdf_url: (cfg as any).ebooks?.pdf_url }
+        : null;
+
       if (ebook) {
         // Validação por-ebook: se o autor cadastrou um secret, exige que bata
-        const ebookSecret = (ebook as any).payment_webhook_secret as string | null;
+        const ebookSecret = (cfg as any).webhook_secret as string | null;
         if (ebookSecret && providedGlobalSecret !== ebookSecret) {
           console.warn("cakto-webhook: assinatura inválida pro ebook", ebook.id);
           return new Response(JSON.stringify({ error: "Invalid signature" }), {
