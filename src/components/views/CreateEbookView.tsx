@@ -67,56 +67,91 @@ export function CreateEbookView() {
       return;
     }
     setGenerating(true);
-    setGenerationStage("Analisando o nicho...");
+    setGenerationStage("Procurando ebook-base no catálogo...");
     try {
-      // 1) Structure
-      const { data: structure, error: sErr } = await supabase.functions.invoke("generate-ebook", {
-        body: { mode: "structure", niche, audience },
-      });
-      if (sErr || !structure) {
-        handleAIError((sErr as any)?.context?.status, "Falha ao gerar estrutura");
-        return;
+      // 0) Tenta usar template do catálogo (modelo híbrido)
+      let usedTemplate = false;
+      let chapterDefs: { title: string; subtitle: string }[] = [];
+      let templateChapterContents: string[] = [];
+      let coverPromptFromTemplate: string | null = null;
+
+      try {
+        const { data: tplRes } = await supabase.functions.invoke("personalize-template", {
+          body: { niche, audience },
+        });
+        const tpl = (tplRes as any)?.template;
+        if (tpl) {
+          usedTemplate = true;
+          setTitle(tpl.title);
+          setSubtitle(tpl.subtitle);
+          chapterDefs = tpl.chapters.map((c: any) => ({ title: c.title, subtitle: c.subtitle }));
+          templateChapterContents = tpl.chapters.map((c: any) => c.content);
+          coverPromptFromTemplate = tpl.cover_prompt ?? null;
+          setChapters(
+            tpl.chapters.map((c: any) => ({
+              title: c.title,
+              subtitle: c.subtitle,
+              content: c.content,
+              image_url: null,
+            })),
+          );
+          setGenerated(true);
+          setGenerationStage("Gerando capa e imagens dos capítulos...");
+        }
+      } catch (e) {
+        console.warn("Template lookup falhou, caindo para geração completa", e);
       }
-      setTitle(structure.title);
-      setSubtitle(structure.subtitle);
-      const chapterDefs: { title: string; subtitle: string }[] = structure.chapters;
-      setChapters(
-        chapterDefs.map((c) => ({ title: c.title, subtitle: c.subtitle, content: "", image_url: null })),
-      );
-      setGenerated(true);
-      setGenerationStage(`Escrevendo ${chapterDefs.length} capítulos e gerando imagens...`);
 
-      // 2) Chapter contents (parallel)
-      const contentPromise = Promise.all(
-        chapterDefs.map((c, idx) =>
-          supabase.functions.invoke("generate-ebook", {
-            body: {
-              mode: "chapter",
-              ebookTitle: structure.title,
-              audience,
-              chapterTitle: c.title,
-              chapterSubtitle: c.subtitle,
-              chapterIndex: idx,
-              totalChapters: chapterDefs.length,
-            },
-          }),
-        ),
-      );
+      // 1) Sem template → gera estrutura do zero
+      if (!usedTemplate) {
+        setGenerationStage("Analisando o nicho...");
+        const { data: structure, error: sErr } = await supabase.functions.invoke("generate-ebook", {
+          body: { mode: "structure", niche, audience },
+        });
+        if (sErr || !structure) {
+          handleAIError((sErr as any)?.context?.status, "Falha ao gerar estrutura");
+          return;
+        }
+        setTitle(structure.title);
+        setSubtitle(structure.subtitle);
+        chapterDefs = structure.chapters;
+        coverPromptFromTemplate = structure.cover_prompt;
+        setChapters(
+          chapterDefs.map((c) => ({ title: c.title, subtitle: c.subtitle, content: "", image_url: null })),
+        );
+        setGenerated(true);
+        setGenerationStage(`Escrevendo ${chapterDefs.length} capítulos e gerando imagens...`);
+      }
 
-      // 3) Cover image (parallel with chapters)
+      // 2) Conteúdo dos capítulos: vem do template (custo zero) ou gera com IA
+      const contentPromise = usedTemplate
+        ? Promise.resolve(templateChapterContents.map((content) => ({ data: { content }, error: null })))
+        : Promise.all(
+            chapterDefs.map((c, idx) =>
+              supabase.functions.invoke("generate-ebook", {
+                body: {
+                  mode: "chapter",
+                  ebookTitle: title || (chapterDefs[0]?.title ?? ""),
+                  audience,
+                  chapterTitle: c.title,
+                  chapterSubtitle: c.subtitle,
+                  chapterIndex: idx,
+                  totalChapters: chapterDefs.length,
+                },
+              }),
+            ),
+          );
+
+      // 3) Capa (sempre IA — personalização visual)
       const coverPromise = supabase.functions.invoke("generate-ebook", {
-        body: { mode: "image", kind: "cover", prompt: structure.cover_prompt },
+        body: { mode: "image", kind: "cover", prompt: coverPromptFromTemplate ?? niche },
       });
 
-      // 4) Chapter images (parallel)
+      // 4) Imagens dos capítulos (sempre IA)
       const chapterImagesPromise = Promise.all(
         chapterDefs.map((c) =>
           supabase.functions.invoke("generate-ebook", {
-            body: {
-              mode: "image",
-              kind: "chapter",
-              prompt: `${c.title} — ${c.subtitle}`,
-            },
+            body: { mode: "image", kind: "chapter", prompt: `${c.title} — ${c.subtitle}` },
           }),
         ),
       );
@@ -132,12 +167,16 @@ export function CreateEbookView() {
       const filled: ChapterDraft[] = chapterDefs.map((c, i) => ({
         title: c.title,
         subtitle: c.subtitle,
-        content: contents[i].data?.content ?? "Conteúdo não gerado.",
+        content: (contents as any)[i].data?.content ?? "Conteúdo não gerado.",
         image_url: chapterImages[i].data?.url ?? null,
       }));
       setChapters(filled);
       setGenerationStage("");
-      toast.success("Ebook completo gerado com IA! 🎉");
+      toast.success(
+        usedTemplate
+          ? "Ebook entregue do catálogo + personalizado! 🎯"
+          : "Ebook completo gerado com IA! 🎉",
+      );
     } catch (e) {
       console.error(e);
       toast.error("Erro inesperado ao gerar ebook");
