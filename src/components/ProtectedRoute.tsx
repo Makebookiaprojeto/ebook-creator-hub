@@ -1,12 +1,20 @@
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useSubscription } from "@/hooks/useSubscription";
 import { Loader2 } from "lucide-react";
 
-export function ProtectedRoute({ children }: { children: ReactNode }) {
-  const { user, loading } = useAuth();
+interface ProtectedRouteProps {
+  children: ReactNode;
+  /** Se true, não exige assinatura ativa (usado na própria página /planos). */
+  allowWithoutSubscription?: boolean;
+}
 
-  if (loading) {
+export function ProtectedRoute({ children, allowWithoutSubscription = false }: ProtectedRouteProps) {
+  const { user, loading: authLoading } = useAuth();
+  const { loading: subLoading, isActive } = useSubscription();
+
+  if (authLoading || (user && !allowWithoutSubscription && subLoading)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
@@ -15,5 +23,10 @@ export function ProtectedRoute({ children }: { children: ReactNode }) {
   }
 
   if (!user) return <Navigate to="/auth" replace />;
+
+  if (!allowWithoutSubscription && !isActive) {
+    return <Navigate to="/planos" replace />;
+  }
+
   return <>{children}</>;
 }
