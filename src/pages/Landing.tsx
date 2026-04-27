@@ -23,8 +23,8 @@ const Landing = () => {
       <header className="sticky top-0 z-20 border-b border-border/40 bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
           <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl gradient-primary shadow-glow">
-              <Sparkles className="h-5 w-5 text-primary-foreground" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl overflow-hidden shadow-glow">
+              <img src={saasLogo} alt="EbookAI Builder" className="h-full w-full object-cover" />
             </div>
             <span className="font-display text-lg font-bold">EbookAI Builder</span>
           </Link>
