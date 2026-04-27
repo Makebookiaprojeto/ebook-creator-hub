@@ -25,6 +25,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { CHECKOUT_LINKS } from "@/config/checkoutLinks";
 import { supabase } from "@/integrations/supabase/client";
+import { resolveDisplayName } from "@/lib/userName";
 
 const BENEFITS = [
   "Criar eBooks ilimitados",
