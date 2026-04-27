@@ -492,9 +492,9 @@ export function LibraryView({ onCreateNew }: Props) {
                     <span className="flex items-center gap-1.5">
                       <Tag className="h-3 w-3" />
                       Pagamento
-                      {(eb as any).cakto_checkout_url && (
+                      {paymentConfigs[eb.id]?.checkout_url && (
                         <Badge variant="secondary" className="h-4 px-1 text-[9px] capitalize">
-                          <Check className="h-2.5 w-2.5" /> {(eb as any).payment_platform ?? "cakto"}
+                          <Check className="h-2.5 w-2.5" /> {paymentConfigs[eb.id]?.platform ?? "cakto"}
                         </Badge>
                       )}
                     </span>
