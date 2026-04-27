@@ -41,12 +41,6 @@ export function ProfileView() {
   const [externalUrl, setExternalUrl] = useState("");
   const [savedUrl, setSavedUrl] = useState("");
   const [savingUrl, setSavingUrl] = useState(false);
-  const [monthlyUrl, setMonthlyUrl] = useState("");
-  const [savedMonthlyUrl, setSavedMonthlyUrl] = useState("");
-  const [savingMonthly, setSavingMonthly] = useState(false);
-  const [lifetimeUrl, setLifetimeUrl] = useState("");
-  const [savedLifetimeUrl, setSavedLifetimeUrl] = useState("");
-  const [savingLifetime, setSavingLifetime] = useState(false);
   const [displayName, setDisplayName] = useState("");
   const [savingName, setSavingName] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
