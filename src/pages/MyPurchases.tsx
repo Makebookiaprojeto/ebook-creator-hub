@@ -38,18 +38,29 @@ export default function MyPurchases() {
       setLoading(true);
       const { data, error } = await supabase
         .from("ebook_sales")
-        .select("id, ebook_id, amount_paid_cents, status, created_at, ebooks(title, cover_url, pdf_url, slug)")
+        .select("id, ebook_id, amount_paid_cents, status, created_at, ebooks(title, cover_url, slug)")
         .eq("status", "paid")
         .order("created_at", { ascending: false });
       if (error) {
         console.error(error);
       }
-      setPurchases(
-        (data ?? []).map((r: any) => ({
-          ...r,
-          ebook: r.ebooks ?? null,
-        })),
+      const rows = (data ?? []).map((r: any) => ({
+        ...r,
+        ebook: r.ebooks ? { ...r.ebooks, pdf_url: null as string | null } : null,
+      }));
+
+      // Busca pdf_url via RPC (só retorna pra compradores autorizados)
+      await Promise.all(
+        rows.map(async (r) => {
+          if (!r.ebook_id || !r.ebook) return;
+          const { data: pdf } = await supabase.rpc("get_public_ebook_pdf_url", {
+            _ebook_id: r.ebook_id,
+          });
+          if (pdf) r.ebook.pdf_url = pdf as string;
+        }),
       );
+
+      setPurchases(rows);
       setLoading(false);
     })();
   }, [user, authLoading]);
