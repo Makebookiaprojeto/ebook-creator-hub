@@ -46,6 +46,48 @@ export function LibraryView({ onCreateNew }: Props) {
   const [confirmDelete, setConfirmDelete] = useState<Ebook | null>(null);
   const [priceDrafts, setPriceDrafts] = useState<Record<string, string>>({});
   const [savingPriceId, setSavingPriceId] = useState<string | null>(null);
+  const [caktoDrafts, setCaktoDrafts] = useState<Record<string, { url: string; pid: string }>>({});
+  const [savingCaktoId, setSavingCaktoId] = useState<string | null>(null);
+  const [openCaktoId, setOpenCaktoId] = useState<string | null>(null);
+
+  const getCaktoDraft = (eb: Ebook) =>
+    caktoDrafts[eb.id] ?? {
+      url: (eb as any).cakto_checkout_url ?? "",
+      pid: (eb as any).cakto_product_id ?? "",
+    };
+
+  const saveCakto = async (eb: Ebook) => {
+    const d = getCaktoDraft(eb);
+    const url = d.url.trim();
+    const pid = d.pid.trim();
+    if (url && !/^https?:\/\//i.test(url)) {
+      toast.error("Use um link Cakto válido (começando com https://).");
+      return;
+    }
+    setSavingCaktoId(eb.id);
+    try {
+      const { error } = await supabase
+        .from("ebooks")
+        .update({
+          cakto_checkout_url: url || null,
+          cakto_product_id: pid || null,
+        } as any)
+        .eq("id", eb.id);
+      if (error) throw error;
+      toast.success("Configuração Cakto salva!");
+      setCaktoDrafts((p) => {
+        const n = { ...p };
+        delete n[eb.id];
+        return n;
+      });
+      await refresh();
+    } catch (err) {
+      console.error(err);
+      toast.error("Não foi possível salvar.");
+    } finally {
+      setSavingCaktoId(null);
+    }
+  };
 
   const formatPriceBR = (cents?: number | null) =>
     !cents || cents <= 0 ? "" : (cents / 100).toFixed(2).replace(".", ",");
