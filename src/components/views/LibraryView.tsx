@@ -46,22 +46,40 @@ export function LibraryView({ onCreateNew }: Props) {
   const [confirmDelete, setConfirmDelete] = useState<Ebook | null>(null);
   const [priceDrafts, setPriceDrafts] = useState<Record<string, string>>({});
   const [savingPriceId, setSavingPriceId] = useState<string | null>(null);
-  const [caktoDrafts, setCaktoDrafts] = useState<Record<string, { url: string; pid: string }>>({});
+  const [caktoDrafts, setCaktoDrafts] = useState<
+    Record<string, { url: string; pid: string; platform: string; secret: string }>
+  >({});
   const [savingCaktoId, setSavingCaktoId] = useState<string | null>(null);
   const [openCaktoId, setOpenCaktoId] = useState<string | null>(null);
+
+  const PLATFORMS = [
+    { value: "cakto", label: "Cakto" },
+    { value: "hotmart", label: "Hotmart" },
+    { value: "kiwify", label: "Kiwify" },
+    { value: "outro", label: "Outro (só link)" },
+  ] as const;
+
+  const projectRef = (import.meta as any).env?.VITE_SUPABASE_PROJECT_ID ?? "";
+  const webhookUrl = (platform: string) =>
+    platform === "outro"
+      ? ""
+      : `https://${projectRef}.supabase.co/functions/v1/${platform}-webhook`;
 
   const getCaktoDraft = (eb: Ebook) =>
     caktoDrafts[eb.id] ?? {
       url: (eb as any).cakto_checkout_url ?? "",
       pid: (eb as any).cakto_product_id ?? "",
+      platform: (eb as any).payment_platform ?? "cakto",
+      secret: (eb as any).payment_webhook_secret ?? "",
     };
 
   const saveCakto = async (eb: Ebook) => {
     const d = getCaktoDraft(eb);
     const url = d.url.trim();
     const pid = d.pid.trim();
+    const secret = d.secret.trim();
     if (url && !/^https?:\/\//i.test(url)) {
-      toast.error("Use um link Cakto válido (começando com https://).");
+      toast.error("Use um link válido (começando com https://).");
       return;
     }
     setSavingCaktoId(eb.id);
@@ -71,10 +89,12 @@ export function LibraryView({ onCreateNew }: Props) {
         .update({
           cakto_checkout_url: url || null,
           cakto_product_id: pid || null,
+          payment_platform: d.platform,
+          payment_webhook_secret: secret || null,
         } as any)
         .eq("id", eb.id);
       if (error) throw error;
-      toast.success("Configuração Cakto salva!");
+      toast.success("Configuração de pagamento salva!");
       setCaktoDrafts((p) => {
         const n = { ...p };
         delete n[eb.id];
@@ -87,6 +107,13 @@ export function LibraryView({ onCreateNew }: Props) {
     } finally {
       setSavingCaktoId(null);
     }
+  };
+
+  const copyWebhookUrl = (platform: string) => {
+    const u = webhookUrl(platform);
+    if (!u) return;
+    navigator.clipboard.writeText(u);
+    toast.success("URL do webhook copiada!");
   };
 
   const formatPriceBR = (cents?: number | null) =>
