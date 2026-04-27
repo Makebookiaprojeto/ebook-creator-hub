@@ -100,6 +100,7 @@ export type Database = {
         Row: {
           audience: string | null
           author_name: string | null
+          cakto_product_id: string | null
           category: string | null
           cover_url: string | null
           created_at: string
@@ -120,6 +121,7 @@ export type Database = {
         Insert: {
           audience?: string | null
           author_name?: string | null
+          cakto_product_id?: string | null
           category?: string | null
           cover_url?: string | null
           created_at?: string
@@ -140,6 +142,7 @@ export type Database = {
         Update: {
           audience?: string | null
           author_name?: string | null
+          cakto_product_id?: string | null
           category?: string | null
           cover_url?: string | null
           created_at?: string
@@ -163,6 +166,7 @@ export type Database = {
         Row: {
           amount_cents: number
           buyer_email: string | null
+          cakto_transaction_id: string | null
           created_at: string
           currency: string
           ebook_id: string
@@ -176,6 +180,7 @@ export type Database = {
         Insert: {
           amount_cents: number
           buyer_email?: string | null
+          cakto_transaction_id?: string | null
           created_at?: string
           currency?: string
           ebook_id: string
@@ -189,6 +194,7 @@ export type Database = {
         Update: {
           amount_cents?: number
           buyer_email?: string | null
+          cakto_transaction_id?: string | null
           created_at?: string
           currency?: string
           ebook_id?: string
@@ -237,6 +243,42 @@ export type Database = {
           stripe_details_submitted?: boolean
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          buyer_email: string
+          cakto_transaction_id: string | null
+          created_at: string
+          expires_at: string | null
+          id: string
+          plan_type: string
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          buyer_email: string
+          cakto_transaction_id?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          plan_type: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          buyer_email?: string
+          cakto_transaction_id?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          plan_type?: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
