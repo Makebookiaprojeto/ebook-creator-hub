@@ -30,6 +30,17 @@ export function useSubscription(): SubscriptionStatus {
     (async () => {
       const email = user.email?.toLowerCase() ?? "";
 
+      // Admins têm acesso total, ignoram checagem de assinatura
+      const { data: isAdminData } = await supabase.rpc("has_role", {
+        _user_id: user.id,
+        _role: "admin",
+      });
+      if (cancelled) return;
+      if (isAdminData === true) {
+        setState({ loading: false, isActive: true, planType: "lifetime", expiresAt: null });
+        return;
+      }
+
       // Busca a assinatura mais recente do usuário (por user_id OU pelo e-mail)
       const { data, error } = await supabase
         .from("subscriptions")
