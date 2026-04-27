@@ -23,6 +23,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CHECKOUT_LINKS } from "@/config/checkoutLinks";
+import { resolveDisplayName } from "@/lib/userName";
 
 type ConnectStatus = {
   connected: boolean;
@@ -59,7 +60,7 @@ export function ProfileView() {
       const profileData = data as any;
       const urlValue = profileData?.external_checkout_url || "";
       const avatarValue = profileData?.avatar_url || null;
-      const nameValue = profileData?.display_name || user?.user_metadata?.display_name || user?.email?.split("@")[0] || "Usuário";
+      const nameValue = resolveDisplayName(profileData?.display_name, user);
       setExternalUrl(urlValue);
       setSavedUrl(urlValue);
       setAvatarUrl(avatarValue);

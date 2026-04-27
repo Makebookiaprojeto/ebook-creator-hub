@@ -109,11 +109,7 @@ export default function Plans() {
         .eq("user_id", user.id)
         .maybeSingle();
       if (cancelled) return;
-      const name =
-        (data as any)?.display_name ||
-        (user.user_metadata?.display_name as string | undefined) ||
-        user.email?.split("@")[0] ||
-        "Usuário";
+      const name = resolveDisplayName((data as any)?.display_name, user);
       setDisplayName(name);
     })();
     return () => {
