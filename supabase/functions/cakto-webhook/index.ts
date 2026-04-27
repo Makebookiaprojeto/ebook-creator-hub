@@ -1,6 +1,9 @@
-// Webhook público da Cakto — registra/atualiza assinaturas após pagamento aprovado.
+// Webhook público da Cakto.
+// Trata DOIS tipos de venda:
+//   1) Assinatura SaaS (planos monthly/lifetime) -> grava em `subscriptions`
+//   2) Venda de eBook do autor -> grava em `ebook_sales` + dispara e-mail com PDF
 // Endpoint: POST /functions/v1/cakto-webhook
-// Configure essa URL no painel da Cakto e (opcional) defina CAKTO_WEBHOOK_SECRET.
+// Configure essa URL no painel da Cakto (do SaaS E de cada autor) e (opcional) defina CAKTO_WEBHOOK_SECRET.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
@@ -9,115 +12,55 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-cakto-signature, x-webhook-secret",
 };
 
-// Mapeamento product_id (Cakto) -> tipo de plano
+// Mapeamento product_id (Cakto) -> tipo de plano do SaaS
 const PRODUCT_PLAN_MAP: Record<string, "monthly" | "lifetime"> = {
   "864624": "monthly",
   "864639": "lifetime",
 };
-
-// Fallback por valor (em centavos) caso o product_id não venha
 const AMOUNT_PLAN_MAP: Record<number, "monthly" | "lifetime"> = {
   14990: "monthly",
   24990: "lifetime",
 };
 
-function pickEmail(payload: any): string | null {
-  const candidates = [
-    payload?.customer?.email,
-    payload?.customer_email,
-    payload?.buyer?.email,
-    payload?.buyer_email,
-    payload?.email,
-    payload?.data?.customer?.email,
-    payload?.data?.customer_email,
-    payload?.data?.email,
-  ];
-  for (const c of candidates) {
-    if (typeof c === "string" && c.includes("@")) return c.toLowerCase().trim();
-  }
+function pickEmail(p: any): string | null {
+  const c = [p?.customer?.email, p?.customer_email, p?.buyer?.email, p?.buyer_email, p?.email,
+    p?.data?.customer?.email, p?.data?.customer_email, p?.data?.email];
+  for (const x of c) if (typeof x === "string" && x.includes("@")) return x.toLowerCase().trim();
   return null;
 }
-
-function pickProductId(payload: any): string | null {
-  const candidates = [
-    payload?.product_id,
-    payload?.product?.id,
-    payload?.offer_id,
-    payload?.offer?.id,
-    payload?.data?.product_id,
-    payload?.data?.product?.id,
-    payload?.data?.offer_id,
-  ];
-  for (const c of candidates) {
-    if (c !== undefined && c !== null) return String(c);
-  }
+function pickProductId(p: any): string | null {
+  const c = [p?.product_id, p?.product?.id, p?.offer_id, p?.offer?.id,
+    p?.data?.product_id, p?.data?.product?.id, p?.data?.offer_id];
+  for (const x of c) if (x !== undefined && x !== null) return String(x);
   return null;
 }
-
-function pickAmountCents(payload: any): number | null {
-  const candidates = [
-    payload?.amount,
-    payload?.value,
-    payload?.price,
-    payload?.total,
-    payload?.data?.amount,
-    payload?.data?.value,
-    payload?.data?.total,
-  ];
-  for (const c of candidates) {
-    if (typeof c === "number") {
-      // Se vier em reais (ex.: 149.9), converte para centavos
-      return c < 1000 ? Math.round(c * 100) : Math.round(c);
-    }
-    if (typeof c === "string" && c.length > 0) {
-      const n = Number(c.replace(",", "."));
+function pickAmountCents(p: any): number | null {
+  const c = [p?.amount, p?.value, p?.price, p?.total, p?.data?.amount, p?.data?.value, p?.data?.total];
+  for (const x of c) {
+    if (typeof x === "number") return x < 1000 ? Math.round(x * 100) : Math.round(x);
+    if (typeof x === "string" && x.length > 0) {
+      const n = Number(x.replace(",", "."));
       if (!isNaN(n)) return n < 1000 ? Math.round(n * 100) : Math.round(n);
     }
   }
   return null;
 }
-
-function pickStatus(payload: any): string {
-  const candidates = [
-    payload?.status,
-    payload?.payment_status,
-    payload?.event,
-    payload?.type,
-    payload?.data?.status,
-  ];
-  for (const c of candidates) {
-    if (typeof c === "string") return c.toLowerCase();
-  }
+function pickStatus(p: any): string {
+  const c = [p?.status, p?.payment_status, p?.event, p?.type, p?.data?.status];
+  for (const x of c) if (typeof x === "string") return x.toLowerCase();
   return "";
 }
-
-function pickTransactionId(payload: any): string | null {
-  const candidates = [
-    payload?.transaction_id,
-    payload?.id,
-    payload?.transaction?.id,
-    payload?.data?.transaction_id,
-    payload?.data?.id,
-  ];
-  for (const c of candidates) {
-    if (c) return String(c);
-  }
+function pickTransactionId(p: any): string | null {
+  const c = [p?.transaction_id, p?.id, p?.transaction?.id, p?.data?.transaction_id, p?.data?.id];
+  for (const x of c) if (x) return String(x);
   return null;
 }
 
-const APPROVED_STATUSES = new Set([
-  "paid", "approved", "completed", "success", "succeeded",
-  "purchase_approved", "payment_approved", "order_approved",
-]);
-
-const REFUND_STATUSES = new Set([
-  "refunded", "chargeback", "canceled", "cancelled", "refund",
-  "purchase_refunded", "purchase_canceled", "purchase_chargeback",
-]);
+const APPROVED = new Set(["paid","approved","completed","success","succeeded","purchase_approved","payment_approved","order_approved"]);
+const REFUND = new Set(["refunded","chargeback","canceled","cancelled","refund","purchase_refunded","purchase_canceled","purchase_chargeback"]);
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
-
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ error: "Method not allowed" }), {
       status: 405, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -125,15 +68,11 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // Validação opcional por secret
     const expectedSecret = Deno.env.get("CAKTO_WEBHOOK_SECRET");
     if (expectedSecret) {
-      const provided =
-        req.headers.get("x-cakto-signature") ||
-        req.headers.get("x-webhook-secret") ||
-        new URL(req.url).searchParams.get("secret");
+      const provided = req.headers.get("x-cakto-signature") || req.headers.get("x-webhook-secret")
+        || new URL(req.url).searchParams.get("secret");
       if (provided !== expectedSecret) {
-        console.warn("cakto-webhook: invalid secret");
         return new Response(JSON.stringify({ error: "Unauthorized" }), {
           status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -150,21 +89,16 @@ Deno.serve(async (req) => {
     const transactionId = pickTransactionId(payload);
 
     if (!email) {
-      console.warn("cakto-webhook: email ausente");
-      return new Response(JSON.stringify({ error: "email ausente no payload" }), {
+      return new Response(JSON.stringify({ error: "email ausente" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Determina o plano
-    let planType: "monthly" | "lifetime" | null = null;
-    if (productId && PRODUCT_PLAN_MAP[productId]) planType = PRODUCT_PLAN_MAP[productId];
-    if (!planType && amountCents && AMOUNT_PLAN_MAP[amountCents]) planType = AMOUNT_PLAN_MAP[amountCents];
-
-    if (!planType) {
-      console.warn("cakto-webhook: plano não identificado", { productId, amountCents });
-      return new Response(JSON.stringify({ error: "plano não identificado" }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    const isApproved = APPROVED.has(status);
+    const isRefund = REFUND.has(status);
+    if (!isApproved && !isRefund) {
+      return new Response(JSON.stringify({ ignored: true, status }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
@@ -173,27 +107,83 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    // Tenta vincular ao user_id pelo e-mail (se já houver conta)
+    // ============================================================
+    // ROUTE 1: venda de eBook (procura ebook pelo cakto_product_id)
+    // ============================================================
+    if (productId) {
+      const { data: ebook } = await supabase
+        .from("ebooks")
+        .select("id, user_id, title, pdf_url")
+        .eq("cakto_product_id", productId)
+        .maybeSingle();
+
+      if (ebook) {
+        if (isRefund) {
+          await supabase
+            .from("ebook_sales")
+            .update({ status: "refunded" })
+            .eq("ebook_id", ebook.id)
+            .or(`cakto_transaction_id.eq.${transactionId ?? "_"},customer_email.eq.${email}`);
+          return new Response(JSON.stringify({ ok: true, type: "ebook", action: "refunded" }), {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+
+        // Aprovado -> upsert por cakto_transaction_id
+        const row = {
+          ebook_id: ebook.id,
+          ebook_owner_id: ebook.user_id,
+          customer_email: email,
+          amount_paid_cents: amountCents,
+          status: "paid",
+          cakto_transaction_id: transactionId,
+        };
+        if (transactionId) {
+          await supabase.from("ebook_sales").upsert(row as any, {
+            onConflict: "cakto_transaction_id",
+          });
+        } else {
+          await supabase.from("ebook_sales").insert(row as any);
+        }
+
+        // Dispara e-mail com PDF (se houver)
+        if (ebook.pdf_url) {
+          try {
+            await supabase.functions.invoke("send-ebook-email", {
+              body: { customerEmail: email, ebookTitle: ebook.title, pdfUrl: ebook.pdf_url },
+            });
+          } catch (e) {
+            console.error("send-ebook-email falhou:", e);
+          }
+        }
+
+        return new Response(JSON.stringify({ ok: true, type: "ebook", ebook_id: ebook.id }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
+    // ============================================================
+    // ROUTE 2: assinatura SaaS
+    // ============================================================
+    let planType: "monthly" | "lifetime" | null = null;
+    if (productId && PRODUCT_PLAN_MAP[productId]) planType = PRODUCT_PLAN_MAP[productId];
+    if (!planType && amountCents && AMOUNT_PLAN_MAP[amountCents]) planType = AMOUNT_PLAN_MAP[amountCents];
+
+    if (!planType) {
+      console.warn("cakto-webhook: produto não identificado", { productId, amountCents });
+      return new Response(JSON.stringify({ error: "produto não identificado" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     let userId: string | null = null;
     try {
       const { data: list } = await (supabase.auth.admin as any).listUsers({ page: 1, perPage: 200 });
       const match = list?.users?.find((u: any) => (u.email || "").toLowerCase() === email);
       if (match?.id) userId = match.id;
-    } catch (e) {
-      console.warn("cakto-webhook: não foi possível listar usuários", e);
-    }
+    } catch (e) { console.warn("listUsers falhou", e); }
 
-    const isApproved = APPROVED_STATUSES.has(status);
-    const isRefund = REFUND_STATUSES.has(status);
-
-    if (!isApproved && !isRefund) {
-      console.log("cakto-webhook: status ignorado:", status);
-      return new Response(JSON.stringify({ ignored: true, status }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Procura assinatura existente desse e-mail/plano
     const { data: existing } = await supabase
       .from("subscriptions")
       .select("id, plan_type, status, expires_at")
@@ -205,56 +195,40 @@ Deno.serve(async (req) => {
 
     if (isRefund) {
       if (existing) {
-        await supabase
-          .from("subscriptions")
+        await supabase.from("subscriptions")
           .update({ status: "canceled", updated_at: new Date().toISOString() })
           .eq("id", existing.id);
       }
-      return new Response(JSON.stringify({ ok: true, action: "canceled" }), {
+      return new Response(JSON.stringify({ ok: true, type: "subscription", action: "canceled" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // APROVADO -> criar/estender assinatura
     let expiresAt: string | null = null;
     if (planType === "monthly") {
-      // Renovação: estende a partir do expires_at atual (se ainda no futuro), senão de agora.
       const baseMs = existing?.expires_at && new Date(existing.expires_at).getTime() > Date.now()
-        ? new Date(existing.expires_at).getTime()
-        : Date.now();
+        ? new Date(existing.expires_at).getTime() : Date.now();
       expiresAt = new Date(baseMs + 30 * 24 * 60 * 60 * 1000).toISOString();
     }
 
     if (existing) {
-      await supabase
-        .from("subscriptions")
-        .update({
-          status: "active",
-          expires_at: expiresAt,
-          user_id: userId ?? undefined,
-          cakto_transaction_id: transactionId ?? undefined,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", existing.id);
+      await supabase.from("subscriptions").update({
+        status: "active", expires_at: expiresAt,
+        user_id: userId ?? undefined,
+        cakto_transaction_id: transactionId ?? undefined,
+        updated_at: new Date().toISOString(),
+      }).eq("id", existing.id);
     } else {
       await supabase.from("subscriptions").insert({
-        buyer_email: email,
-        user_id: userId,
-        plan_type: planType,
-        status: "active",
-        expires_at: expiresAt,
+        buyer_email: email, user_id: userId, plan_type: planType,
+        status: "active", expires_at: expiresAt,
         cakto_transaction_id: transactionId,
       });
     }
 
     return new Response(JSON.stringify({
-      ok: true,
-      plan_type: planType,
-      expires_at: expiresAt,
-      linked_user: !!userId,
-    }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+      ok: true, type: "subscription", plan_type: planType, expires_at: expiresAt, linked_user: !!userId,
+    }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e) {
     console.error("cakto-webhook error:", e);
     return new Response(JSON.stringify({ error: (e as Error).message }), {
