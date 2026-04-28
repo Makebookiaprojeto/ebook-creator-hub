@@ -364,9 +364,7 @@ export function LibraryView({ onCreateNew }: Props) {
               </div>
               <div className="flex flex-1 flex-col p-4">
                 <h3 className="line-clamp-2 font-display font-bold leading-tight">{eb.title}</h3>
-                {eb.subtitle && (
-                  <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{eb.subtitle}</p>
-                )}
+
                 <p className="mt-2 text-[11px] text-muted-foreground">
                   {new Date(eb.created_at).toLocaleDateString("pt-BR")}
                 </p>
