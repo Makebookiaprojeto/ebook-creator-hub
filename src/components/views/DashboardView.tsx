@@ -130,7 +130,7 @@ export function DashboardView() {
   return (
     <div className="space-y-10 animate-fade-in py-4">
       <div className="flex flex-col gap-1 border-b border-border/40 pb-6">
-        <h1 className="font-sans text-4xl font-light tracking-tight text-foreground/90">Olá, {displayName}</h1>
+        <h1 className="font-serif text-4xl font-medium tracking-tight text-foreground/90">Olá, {displayName}</h1>
         <p className="text-sm font-medium text-primary/70 italic">"{quote}"</p>
       </div>
 
