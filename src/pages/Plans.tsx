@@ -100,7 +100,7 @@ export default function Plans() {
     document.documentElement.classList.add("dark");
     
     // Cache buster: force refresh if version mismatch
-    const version = "v1.0.1";
+    const version = "v1.0.2";
     const stored = localStorage.getItem("plans_v");
     if (stored !== version) {
       localStorage.setItem("plans_v", version);
@@ -292,12 +292,11 @@ export default function Plans() {
 
               <ul className="space-y-3 mb-8 flex-1">
                 {[
-                  "Tudo do PRO",
                   "Editor com IA integrada",
                   "Capa profissional automática",
                   "Página de vendas pronta",
                   "Receba pagamentos diretamente",
-                  "Domínio personalizado grátis",
+                  "Suporte prioritário",
                   "Acesso vitalício, sem renovações",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm font-medium">
