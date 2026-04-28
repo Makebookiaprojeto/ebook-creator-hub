@@ -233,7 +233,7 @@ const Landing = () => {
               <div className="absolute top-0 right-0 p-6">
                 <Crown className="h-12 w-12 text-primary/10" />
               </div>
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 gradient-primary px-4 py-1 text-[10px] font-black text-primary-foreground rounded-full tracking-widest uppercase">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 gradient-primary px-6 py-1.5 text-[10px] font-black text-primary-foreground rounded-full tracking-widest uppercase whitespace-nowrap z-10 shadow-lg">
                 OFERTA VITALÍCIA
               </div>
               <p className="text-xs font-bold uppercase tracking-widest text-primary mb-4">Acesso Eterno</p>
