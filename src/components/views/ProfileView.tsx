@@ -36,26 +36,31 @@ export function ProfileView() {
   // Carrega dados do perfil
   useEffect(() => {
     if (!user) return;
-    (async () => {
+    const loadData = async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("avatar_url, display_name")
+        .select("avatar_url, display_name, monthly_ebook_limit, ebooks_generated_this_month")
         .eq("user_id", user.id)
         .maybeSingle();
+      
       const profileData = data as any;
-      const avatarValue = profileData?.avatar_url || null;
-      const nameValue = resolveDisplayName(profileData?.display_name, user);
-      setAvatarUrl(avatarValue);
-      setDisplayName(nameValue);
-    })();
+      if (profileData) {
+        setAvatarUrl(profileData.avatar_url || null);
+        setDisplayName(resolveDisplayName(profileData.display_name, user));
+        setUsage({
+          limit: profileData.monthly_ebook_limit ?? 20,
+          current: profileData.ebooks_generated_this_month ?? 0
+        });
+      }
 
-    (async () => {
-      const { data } = await supabase.rpc("has_role", {
+      const { data: roleData } = await supabase.rpc("has_role", {
         _user_id: user.id,
         _role: "admin",
       });
-      setIsAdmin(!!data);
-    })();
+      setIsAdmin(!!roleData);
+    };
+
+    loadData();
   }, [user]);
 
   const handleSubscribe = (planId: string) => {
