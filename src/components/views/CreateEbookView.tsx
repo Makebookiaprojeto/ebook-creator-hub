@@ -112,7 +112,9 @@ export function CreateEbookView() {
           body: { mode: "structure", niche, audience },
         });
         if (sErr || !structure) {
-          handleAIError((sErr as any)?.context?.status, "Falha ao gerar estrutura");
+          const status = (sErr as any)?.context?.status;
+          const errorMsg = (sErr as any)?.message || (structure as any)?.error;
+          handleAIError(status, "Falha ao gerar estrutura", errorMsg);
           return;
         }
         setTitle(structure.title);
