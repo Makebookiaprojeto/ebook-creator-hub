@@ -361,11 +361,6 @@ export function ProfileView() {
                   <Label className="flex items-center gap-2 text-xs uppercase text-muted-foreground">
                     <Lock className="h-3.5 w-3.5" /> Token/Secret do Webhook (Global)
                   </Label>
-
-                <div className="space-y-2">
-                  <Label className="flex items-center gap-2 text-xs uppercase text-muted-foreground">
-                    <Lock className="h-3.5 w-3.5" /> Token/Secret do Webhook
-                  </Label>
                   <Input
                     type="password"
                     placeholder={
