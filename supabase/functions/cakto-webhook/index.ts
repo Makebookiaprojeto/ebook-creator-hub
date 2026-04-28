@@ -111,7 +111,7 @@ Deno.serve(async (req) => {
     if (productId) {
       const { data: cfg } = await supabase
         .from("ebook_payment_config")
-        .select("ebook_id, owner_id, webhook_secret, ebooks!inner(id, title, pdf_url)")
+        .select("ebook_id, owner_id, ebooks!inner(id, title, pdf_url)")
         .eq("product_id", productId)
         .eq("payment_platform", PLATFORM)
         .maybeSingle();
@@ -122,8 +122,13 @@ Deno.serve(async (req) => {
         : null;
 
       if (ebook) {
-        // Validação por-ebook: se o autor cadastrou um secret, exige que bata
-        const ebookSecret = (cfg as any).webhook_secret as string | null;
+        // Validação por-ebook (secret armazenado em tabela protegida)
+        const { data: secretRow } = await supabase
+          .from("ebook_webhook_secrets")
+          .select("webhook_secret")
+          .eq("ebook_id", ebook.id)
+          .maybeSingle();
+        const ebookSecret = (secretRow as any)?.webhook_secret as string | null;
         if (ebookSecret && providedGlobalSecret !== ebookSecret) {
           console.warn("cakto-webhook: assinatura inválida pro ebook", ebook.id);
           return new Response(JSON.stringify({ error: "Invalid signature" }), {

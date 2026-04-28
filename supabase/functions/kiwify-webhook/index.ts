@@ -97,7 +97,7 @@ Deno.serve(async (req) => {
 
     const { data: cfg } = await supabase
       .from("ebook_payment_config")
-      .select("ebook_id, owner_id, webhook_secret, ebooks!inner(id, title, pdf_url)")
+      .select("ebook_id, owner_id, ebooks!inner(id, title, pdf_url)")
       .eq("product_id", productId)
       .eq("payment_platform", PLATFORM)
       .maybeSingle();
@@ -113,8 +113,13 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Validação obrigatória: HMAC-SHA1 do body com o token do autor
-    const secret = (cfg as any).webhook_secret as string | null;
+    // Validação obrigatória: HMAC-SHA1 do body com o token do autor (tabela protegida)
+    const { data: secretRow } = await supabase
+      .from("ebook_webhook_secrets")
+      .select("webhook_secret")
+      .eq("ebook_id", ebook.id)
+      .maybeSingle();
+    const secret = (secretRow as any)?.webhook_secret as string | null;
     if (!secret) {
       console.warn("kiwify-webhook: ebook sem token configurado", ebook.id);
       return new Response(JSON.stringify({ error: "Webhook secret not configured" }), {
