@@ -282,6 +282,10 @@ export default function Plans() {
               </div>
 
               <ul className="space-y-3 mb-8 flex-1">
+                <li className="flex items-start gap-2 text-sm">
+                  <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                  <span>Tudo do PRO</span>
+                </li>
                 {BENEFITS.map((b) => (
                   <li key={b} className="flex items-start gap-2 text-sm">
                     <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
@@ -294,7 +298,7 @@ export default function Plans() {
                 </li>
                 <li className="flex items-start gap-2 text-sm font-medium">
                   <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                  <span>Atualizações futuras grátis</span>
+                  <span>Domínio personalizado grátis</span>
                 </li>
               </ul>
 
