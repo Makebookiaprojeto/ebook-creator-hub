@@ -202,7 +202,14 @@ export function ProfileView() {
 
   useEffect(() => {
     if (searchParams.get("upgrade") === "true") {
-...
+      setTimeout(() => {
+        plansRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 300);
+      setSearchParams((prev) => {
+        const next = new URLSearchParams(prev);
+        next.delete("upgrade");
+        return next;
+      }, { replace: true });
     }
   }, [searchParams, setSearchParams]);
 
