@@ -271,7 +271,7 @@ const Landing = () => {
             <div className="text-left space-y-6">
               {[
                 { q: "Preciso de experiência?", a: "Absolutamente nenhuma. A nossa IA faz o trabalho pesado de escrita e design. Você só precisa ter uma ideia de tema." },
-                { q: "O conteúdo é único?", a: "Sim! Cada geração usa prompts exclusivos para criar textos originais e que não serão detectados como plágio." },
+                { q: "O pagamento é seguro?", a: "Totalmente. Usamos tecnologia de criptografia de ponta e processadores de pagamento líderes de mercado para garantir sua total segurança." },
                 { q: "Posso vender os ebooks onde quiser?", a: "Sim! O conteúdo é seu. Você pode vender na Hotmart, Kiwify, Amazon ou até diretamente pelo link que nós geramos para você." }
               ].map((faq, i) => (
                 <div key={i} className="p-6 rounded-xl border bg-background/50">
