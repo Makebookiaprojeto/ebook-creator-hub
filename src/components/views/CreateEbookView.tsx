@@ -147,13 +147,11 @@ export function CreateEbookView() {
         body: { mode: "image", kind: "cover", prompt: coverPromptFromTemplate ?? niche },
       });
 
-      // 4) Imagens dos capítulos (sempre IA)
-      const chapterImagesPromise = Promise.all(
-        chapterDefs.map((c) =>
-          supabase.functions.invoke("generate-ebook", {
-            body: { mode: "image", kind: "chapter", prompt: `${c.title} — ${c.subtitle}` },
-          }),
-        ),
+      // 4) Imagens dos capítulos (Fotos gratuitas para economizar)
+      const chapterImagesPromise = Promise.resolve(
+        chapterDefs.map((c) => ({
+          data: { url: `https://source.unsplash.com/featured/800x450?${encodeURIComponent(niche + " " + c.title)}` }
+        }))
       );
 
       const [contents, coverRes, chapterImages] = await Promise.all([
