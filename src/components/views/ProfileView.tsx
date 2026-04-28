@@ -154,9 +154,25 @@ export function ProfileView() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="font-display text-3xl font-bold">Perfil</h1>
-        <p className="mt-1 text-muted-foreground">Gerencie sua conta, pagamentos e plano.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl font-bold">Perfil</h1>
+          <p className="mt-1 text-muted-foreground">Gerencie sua conta, pagamentos e plano.</p>
+        </div>
+        
+        <div className="rounded-2xl border bg-card p-4 shadow-soft min-w-[200px]">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase text-muted-foreground">Uso Mensal</span>
+            <span className="text-xs font-bold">{usage.current} / {usage.limit}</span>
+          </div>
+          <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+            <div 
+              className={`h-full transition-all duration-500 ${usage.current >= usage.limit ? 'bg-destructive' : 'gradient-primary'}`}
+              style={{ width: `${Math.min((usage.current / usage.limit) * 100, 100)}%` }}
+            />
+          </div>
+          <p className="mt-2 text-[10px] text-muted-foreground text-center">Ebooks gerados este mês</p>
+        </div>
       </div>
 
       {isAdmin && (
