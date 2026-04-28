@@ -402,7 +402,7 @@ export function LibraryView({ onCreateNew }: Props) {
                   </Button>
                 </div>
 
-                {/* Price editor */}
+                {/* Preço de venda */}
                 <div className="mt-3">
                   <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
                     <Tag className="h-3 w-3" /> Preço de venda
@@ -503,120 +503,12 @@ export function LibraryView({ onCreateNew }: Props) {
                   )}
                 </div>
 
-                {/* Payment config */}
-                <div className="mt-2 rounded-lg border bg-muted/20 p-2">
-                  <button
-                    type="button"
-                    onClick={() => setOpenCaktoId(openCaktoId === eb.id ? null : eb.id)}
-                    className="flex w-full items-center justify-between text-[11px] font-semibold text-muted-foreground hover:text-foreground"
-                  >
-                    <span className="flex items-center gap-1.5">
-                      <Tag className="h-3 w-3" />
-                      Pagamento
-                      {paymentConfigs[eb.id]?.checkout_url && (
-                        <Badge variant="secondary" className="h-4 px-1 text-[9px] capitalize">
-                          <Check className="h-2.5 w-2.5" /> {paymentConfigs[eb.id]?.platform ?? "cakto"}
-                        </Badge>
-                      )}
-                    </span>
-                    <span>{openCaktoId === eb.id ? "−" : "+"}</span>
-                  </button>
-                  {openCaktoId === eb.id && (
-                    <div className="mt-2 space-y-1.5">
-                      <select
-                        value={getCaktoDraft(eb).platform}
-                        onChange={(e) =>
-                          setCaktoDrafts((p) => ({
-                            ...p,
-                            [eb.id]: { ...getCaktoDraft(eb), platform: e.target.value },
-                          }))
-                        }
-                        className="h-8 w-full rounded-md border bg-background px-2 text-[11px]"
-                      >
-                        {PLATFORMS.map((pl) => (
-                          <option key={pl.value} value={pl.value}>
-                            {pl.label}
-                          </option>
-                        ))}
-                      </select>
-                      <Input
-                        placeholder="Link de checkout (https://...)"
-                        value={getCaktoDraft(eb).url}
-                        onChange={(e) =>
-                          setCaktoDrafts((p) => ({
-                            ...p,
-                            [eb.id]: { ...getCaktoDraft(eb), url: e.target.value },
-                          }))
-                        }
-                        className="h-8 text-[11px]"
-                      />
-                      {getCaktoDraft(eb).platform !== "outro" && (
-                        <>
-                          <Input
-                            placeholder="ID do produto na plataforma"
-                            value={getCaktoDraft(eb).pid}
-                            onChange={(e) =>
-                              setCaktoDrafts((p) => ({
-                                ...p,
-                                [eb.id]: { ...getCaktoDraft(eb), pid: e.target.value },
-                              }))
-                            }
-                            className="h-8 text-[11px]"
-                          />
-                          <Input
-                            placeholder={
-                              getCaktoDraft(eb).platform === "hotmart"
-                                ? "HOTTOK (token de validação Hotmart)"
-                                : getCaktoDraft(eb).platform === "kiwify"
-                                ? "Token do webhook Kiwify"
-                                : "Secret do webhook (opcional)"
-                            }
-                            value={getCaktoDraft(eb).secret}
-                            onChange={(e) =>
-                              setCaktoDrafts((p) => ({
-                                ...p,
-                                [eb.id]: { ...getCaktoDraft(eb), secret: e.target.value },
-                              }))
-                            }
-                            className="h-8 text-[11px] font-mono"
-                          />
-                        </>
-                      )}
-                      <Button
-                        size="sm"
-                        variant="secondary"
-                        className="h-7 w-full text-[11px]"
-                        onClick={() => saveCakto(eb)}
-                        disabled={savingCaktoId === eb.id}
-                      >
-                        {savingCaktoId === eb.id ? (
-                          <Loader2 className="h-3 w-3 animate-spin" />
-                        ) : (
-                          <Check className="h-3 w-3" />
-                        )}
-                        Salvar
-                      </Button>
-                      {getCaktoDraft(eb).platform !== "outro" && (
-                        <div className="rounded bg-background/60 p-1.5">
-                          <p className="text-[10px] font-semibold text-muted-foreground">
-                            URL do webhook (cole na sua conta {getCaktoDraft(eb).platform}):
-                          </p>
-                          <button
-                            type="button"
-                            onClick={() => copyWebhookUrl(getCaktoDraft(eb).platform)}
-                            className="mt-0.5 block w-full truncate text-left text-[10px] font-mono text-primary hover:underline"
-                            title="Clique para copiar"
-                          >
-                            {webhookUrl(getCaktoDraft(eb).platform)}
-                          </button>
-                        </div>
-                      )}
-                      <p className="text-[10px] leading-tight text-muted-foreground">
-                        Configure o webhook na plataforma escolhida apontando pra URL acima.
-                        Para Hotmart e Kiwify o token é obrigatório.
-                      </p>
-                    </div>
-                  )}
+                {/* Simplified Payment Badge */}
+                <div className="mt-2">
+                  <p className="flex items-center gap-1.5 text-[10px] text-muted-foreground italic">
+                    <Settings className="h-2.5 w-2.5" />
+                    Checkout e Webhook são configurados globalmente no seu Perfil.
+                  </p>
                 </div>
               </div>
             </div>
