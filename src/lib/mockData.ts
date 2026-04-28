@@ -87,7 +87,7 @@ export const plans = [
     price: 149.90,
     period: "/mês",
     highlight: false,
-    features: ["Ebooks ilimitados", "IA premium GPT-4o", "Páginas de vendas inclusas", "Analytics avançado", "Suporte prioritário"],
+    features: ["Até 20 ebooks/mês", "IA premium GPT-4o", "Páginas de vendas inclusas", "Analytics avançado", "Suporte prioritário"],
   },
   {
     id: "lifetime",
