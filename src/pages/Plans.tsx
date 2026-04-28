@@ -96,7 +96,16 @@ export default function Plans() {
   const [displayName, setDisplayName] = useState<string>("");
 
   useEffect(() => {
+    // Force CSS dark mode
     document.documentElement.classList.add("dark");
+    
+    // Cache buster: force refresh if version mismatch
+    const version = "v1.0.1";
+    const stored = localStorage.getItem("plans_v");
+    if (stored !== version) {
+      localStorage.setItem("plans_v", version);
+      window.location.reload();
+    }
   }, []);
 
   useEffect(() => {
