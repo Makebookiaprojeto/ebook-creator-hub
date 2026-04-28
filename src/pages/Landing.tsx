@@ -272,7 +272,7 @@ const Landing = () => {
               {[
                 { q: "Preciso de experiência?", a: "Absolutamente nenhuma. A nossa IA faz o trabalho pesado de escrita e design. Você só precisa ter uma ideia de tema." },
                 { q: "O conteúdo é único?", a: "Sim! Cada geração usa prompts exclusivos para criar textos originais e que não serão detectados como plágio." },
-                { q: "Consigo vender no exterior?", a: "Com certeza. A IA escreve em vários idiomas se você solicitar, permitindo que você ganhe em dólar ou euro." }
+                { q: "Posso vender os ebooks onde quiser?", a: "Sim! O conteúdo é seu. Você pode vender na Hotmart, Kiwify, Amazon ou até diretamente pelo link que nós geramos para você." }
               ].map((faq, i) => (
                 <div key={i} className="p-6 rounded-xl border bg-background/50">
                   <p className="font-bold mb-2 flex items-center gap-2">
