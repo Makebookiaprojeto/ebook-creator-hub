@@ -75,7 +75,6 @@ export type Database = {
           payment_platform: string
           product_id: string | null
           updated_at: string
-          webhook_secret: string | null
         }
         Insert: {
           checkout_url?: string | null
@@ -86,7 +85,6 @@ export type Database = {
           payment_platform?: string
           product_id?: string | null
           updated_at?: string
-          webhook_secret?: string | null
         }
         Update: {
           checkout_url?: string | null
@@ -97,7 +95,6 @@ export type Database = {
           payment_platform?: string
           product_id?: string | null
           updated_at?: string
-          webhook_secret?: string | null
         }
         Relationships: [
           {
@@ -221,6 +218,30 @@ export type Database = {
           title?: string
           updated_at?: string
           use_count?: number
+        }
+        Relationships: []
+      }
+      ebook_webhook_secrets: {
+        Row: {
+          created_at: string
+          ebook_id: string
+          owner_id: string
+          updated_at: string
+          webhook_secret: string
+        }
+        Insert: {
+          created_at?: string
+          ebook_id: string
+          owner_id: string
+          updated_at?: string
+          webhook_secret: string
+        }
+        Update: {
+          created_at?: string
+          ebook_id?: string
+          owner_id?: string
+          updated_at?: string
+          webhook_secret?: string
         }
         Relationships: []
       }
@@ -436,34 +457,6 @@ export type Database = {
       }
     }
     Views: {
-      ebook_payment_config_public: {
-        Row: {
-          checkout_url: string | null
-          created_at: string | null
-          ebook_id: string | null
-          id: string | null
-          owner_id: string | null
-          payment_platform: string | null
-          product_id: string | null
-          updated_at: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "ebook_payment_config_ebook_id_fkey"
-            columns: ["ebook_id"]
-            isOneToOne: true
-            referencedRelation: "ebooks"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "ebook_payment_config_ebook_id_fkey"
-            columns: ["ebook_id"]
-            isOneToOne: true
-            referencedRelation: "public_ebooks"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       public_ebooks: {
         Row: {
           audience: string | null
