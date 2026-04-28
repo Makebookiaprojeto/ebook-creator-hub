@@ -12,6 +12,10 @@ import {
   Crown,
   Sparkles,
   Check,
+  Settings,
+  Link2,
+  Lock,
+  Copy,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
@@ -32,6 +36,18 @@ export function ProfileView() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [usage, setUsage] = useState({ limit: 20, current: 0 });
+  const [paymentConfig, setPaymentConfig] = useState<{
+    platform: string;
+    checkout_url: string;
+    product_id: string;
+    webhook_secret: string;
+  }>({
+    platform: "cakto",
+    checkout_url: "",
+    product_id: "",
+    webhook_secret: "",
+  });
+  const [savingPayment, setSavingPayment] = useState(false);
 
   // Carrega dados do perfil
   useEffect(() => {
@@ -50,6 +66,23 @@ export function ProfileView() {
         setUsage({
           limit: profileData.monthly_ebook_limit ?? 20,
           current: profileData.ebooks_generated_this_month ?? 0
+        });
+      }
+
+      // Carregar configs de pagamento
+      const { data: payData } = await supabase
+        .from("user_payment_configs" as any)
+        .select("*")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (payData) {
+        const config = payData as any;
+        setPaymentConfig({
+          platform: config.payment_platform ?? "cakto",
+          checkout_url: config.checkout_url ?? "",
+          product_id: config.product_id ?? "",
+          webhook_secret: config.webhook_secret ?? "",
         });
       }
 
@@ -138,6 +171,35 @@ export function ProfileView() {
   };
 
   const email = user?.email || "";
+
+  const handleSavePayment = async () => {
+    if (!user) return;
+    setSavingPayment(true);
+    try {
+      const { error } = await supabase
+        .from("user_payment_configs" as any)
+        .upsert({
+          user_id: user.id,
+          payment_platform: paymentConfig.platform,
+          checkout_url: paymentConfig.checkout_url,
+          product_id: paymentConfig.product_id,
+          webhook_secret: paymentConfig.webhook_secret,
+        }, { onConflict: "user_id" });
+
+      if (error) throw error;
+      toast.success("Configurações de pagamento atualizadas!");
+    } catch (error: any) {
+      toast.error("Erro ao salvar: " + error.message);
+    } finally {
+      setSavingPayment(false);
+    }
+  };
+
+  const projectRef = (import.meta as any).env?.VITE_SUPABASE_PROJECT_ID ?? "";
+  const getWebhookUrl = (platform: string) =>
+    platform === "outro"
+      ? ""
+      : `https://${projectRef}.supabase.co/functions/v1/${platform}-webhook`;
 
   useEffect(() => {
     if (searchParams.get("upgrade") === "true") {
@@ -258,6 +320,135 @@ export function ProfileView() {
               disabled
               className="bg-muted/50 cursor-not-allowed"
             />
+          </div>
+        </div>
+      </div>
+
+      {/* Payment Configuration */}
+      <div className="rounded-2xl border bg-card p-6 shadow-soft">
+        <div className="flex items-center gap-2 mb-6">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <Settings className="h-4 w-4" />
+          </div>
+          <h2 className="font-display text-xl font-bold text-foreground">Configuração de Pagamento (Global)</h2>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label className="text-xs uppercase text-muted-foreground">Plataforma de Checkout</Label>
+              <select
+                value={paymentConfig.platform}
+                onChange={(e) => setPaymentConfig(prev => ({ ...prev, platform: e.target.value }))}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <option value="cakto">Cakto</option>
+                <option value="hotmart">Hotmart</option>
+                <option value="kiwify">Kiwify</option>
+                <option value="outro">Outro (Apenas link)</option>
+              </select>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="flex items-center gap-2 text-xs uppercase text-muted-foreground">
+                <Link2 className="h-3.5 w-3.5" /> Link de Checkout
+              </Label>
+              <Input
+                placeholder="https://..."
+                value={paymentConfig.checkout_url}
+                onChange={(e) => setPaymentConfig(prev => ({ ...prev, checkout_url: e.target.value }))}
+              />
+              <p className="text-[10px] text-muted-foreground">
+                Link global que será usado no botão de compra de todos os seus eBooks.
+              </p>
+            </div>
+
+            {paymentConfig.platform !== "outro" && (
+              <>
+                <div className="space-y-2">
+                  <Label className="text-xs uppercase text-muted-foreground">ID do Produto na Plataforma</Label>
+                  <Input
+                    placeholder="Ex: 123456"
+                    value={paymentConfig.product_id}
+                    onChange={(e) => setPaymentConfig(prev => ({ ...prev, product_id: e.target.value }))}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-2 text-xs uppercase text-muted-foreground">
+                    <Lock className="h-3.5 w-3.5" /> Token/Secret do Webhook
+                  </Label>
+                  <Input
+                    type="password"
+                    placeholder={
+                      paymentConfig.platform === "hotmart" ? "HOTTOK" : 
+                      paymentConfig.platform === "kiwify" ? "Webhook Token" : "Secret"
+                    }
+                    value={paymentConfig.webhook_secret}
+                    onChange={(e) => setPaymentConfig(prev => ({ ...prev, webhook_secret: e.target.value }))}
+                  />
+                </div>
+              </>
+            )}
+
+            <Button 
+              onClick={handleSavePayment} 
+              disabled={savingPayment}
+              className="w-full gradient-primary text-primary-foreground"
+            >
+              {savingPayment ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Check className="h-4 w-4 mr-2" />}
+              Salvar Configurações
+            </Button>
+          </div>
+
+          <div className="space-y-4">
+            {paymentConfig.platform !== "outro" && (
+              <div className="rounded-xl border bg-muted/30 p-4 space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label className="text-xs uppercase text-muted-foreground font-bold">Integração via Webhook</Label>
+                  <Badge variant="outline" className="text-[10px]">Padrão</Badge>
+                </div>
+                
+                <div className="space-y-2">
+                  <p className="text-xs text-muted-foreground">
+                    Para liberar o eBook automaticamente após a compra, cole esta URL na sua conta {paymentConfig.platform.toUpperCase()}:
+                  </p>
+                  <div className="relative group">
+                    <code className="block w-full rounded-lg bg-background p-3 text-[10px] font-mono break-all border border-primary/20">
+                      {getWebhookUrl(paymentConfig.platform)}
+                    </code>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 opacity-0 group-hover:opacity-100 transition"
+                      onClick={() => {
+                        navigator.clipboard.writeText(getWebhookUrl(paymentConfig.platform));
+                        toast.success("URL copiada!");
+                      }}
+                    >
+                      <Copy className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="space-y-3 pt-2">
+                  <div className="flex items-start gap-2 text-[10px] text-muted-foreground leading-relaxed">
+                    <div className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                    <p>Crie um webhook na sua plataforma apontando para a URL acima.</p>
+                  </div>
+                  <div className="flex items-start gap-2 text-[10px] text-muted-foreground leading-relaxed">
+                    <div className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                    <p>O eBook será enviado por email e liberado na biblioteca do cliente assim que o pagamento for aprovado.</p>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            <div className="rounded-xl border border-amber-200/50 bg-amber-50/30 p-4">
+              <p className="text-[11px] text-amber-700 leading-relaxed italic">
+                "Esta configuração é global. Isso significa que você configura seus dados de venda uma única vez e todos os seus eBooks herdam essas regras de segurança e checkout."
+              </p>
+            </div>
           </div>
         </div>
       </div>

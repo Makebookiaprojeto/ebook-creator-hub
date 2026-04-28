@@ -434,6 +434,39 @@ export type Database = {
         }
         Relationships: []
       }
+      user_payment_configs: {
+        Row: {
+          checkout_url: string | null
+          created_at: string
+          id: string
+          payment_platform: string | null
+          product_id: string | null
+          updated_at: string
+          user_id: string
+          webhook_secret: string | null
+        }
+        Insert: {
+          checkout_url?: string | null
+          created_at?: string
+          id?: string
+          payment_platform?: string | null
+          product_id?: string | null
+          updated_at?: string
+          user_id: string
+          webhook_secret?: string | null
+        }
+        Update: {
+          checkout_url?: string | null
+          created_at?: string
+          id?: string
+          payment_platform?: string | null
+          product_id?: string | null
+          updated_at?: string
+          user_id?: string
+          webhook_secret?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
