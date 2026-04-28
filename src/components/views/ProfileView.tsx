@@ -350,33 +350,16 @@ export function ProfileView() {
             </div>
 
             <div className="space-y-2">
-              <Label className="flex items-center gap-2 text-xs uppercase text-muted-foreground">
-                <Link2 className="h-3.5 w-3.5" /> Link de Checkout
-              </Label>
-              <Input
-                placeholder="https://..."
-                value={paymentConfig.checkout_url}
-                onChange={(e) => setPaymentConfig(prev => ({ ...prev, checkout_url: e.target.value }))}
-              />
-              <p className="text-[10px] text-muted-foreground">
-                Link global que será usado no botão de compra de todos os seus eBooks.
+              <p className="text-[10px] text-muted-foreground italic">
+                Configure os links de checkout e IDs de produtos individualmente em cada eBook na sua Biblioteca.
               </p>
             </div>
 
             {paymentConfig.platform !== "outro" && (
               <>
                 <div className="space-y-2">
-                  <Label className="text-xs uppercase text-muted-foreground">ID do Produto na Plataforma</Label>
-                  <Input
-                    placeholder="Ex: 123456"
-                    value={paymentConfig.product_id}
-                    onChange={(e) => setPaymentConfig(prev => ({ ...prev, product_id: e.target.value }))}
-                  />
-                </div>
-
-                <div className="space-y-2">
                   <Label className="flex items-center gap-2 text-xs uppercase text-muted-foreground">
-                    <Lock className="h-3.5 w-3.5" /> Token/Secret do Webhook
+                    <Lock className="h-3.5 w-3.5" /> Token/Secret do Webhook (Global)
                   </Label>
                   <Input
                     type="password"
