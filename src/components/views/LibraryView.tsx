@@ -444,7 +444,46 @@ export function LibraryView({ onCreateNew }: Props) {
                   )}
                 </div>
 
-                {/* Public page controls */}
+                {/* Checkout Link */}
+                <div className="mt-3">
+                  <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
+                    <Link2 className="h-3 w-3" /> Link de Checkout
+                  </label>
+                  <div className="flex items-center gap-1.5">
+                    <Input
+                      placeholder="https://..."
+                      value={caktoDrafts[eb.id]?.url ?? (eb as any).cakto_checkout_url ?? ""}
+                      onChange={(e) =>
+                        setCaktoDrafts((p) => ({
+                          ...p,
+                          [eb.id]: { ...getCaktoDraft(eb), url: e.target.value },
+                        }))
+                      }
+                      className="h-8 text-xs"
+                    />
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      className="h-8 px-2"
+                      onClick={() => saveCakto(eb)}
+                      disabled={savingCaktoId === eb.id}
+                      title="Salvar link"
+                    >
+                      {savingCaktoId === eb.id ? (
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      ) : (
+                        <Check className="h-3.5 w-3.5" />
+                      )}
+                    </Button>
+                  </div>
+                  {!(eb as any).cakto_checkout_url && (
+                    <p className="mt-1 text-[10px] text-muted-foreground italic">
+                      Se vazio, usará o link global do seu Perfil.
+                    </p>
+                  )}
+                </div>
+
+
                 <div className="mt-2 space-y-1.5">
                   <div className="flex items-center gap-1.5 rounded-lg border bg-muted/30 p-1.5">
                     <Button

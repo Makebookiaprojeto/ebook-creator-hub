@@ -110,13 +110,34 @@ export default function EbookSalesPage() {
   const handleCheckout = async () => {
     if (!ebook) return;
 
-    // Cada eBook tem seu próprio link de pagamento (Cakto/Hotmart/Kiwify)
-    if ((ebook as any).cakto_checkout_url) {
-      window.location.href = (ebook as any).cakto_checkout_url;
+    // 1) Link específico do eBook
+    const specificUrl = (ebook as any).cakto_checkout_url;
+    if (specificUrl) {
+      window.location.href = specificUrl;
       return;
     }
 
-    toast.error("Este eBook ainda não tem link de pagamento configurado pelo autor.");
+    // 2) Fallback para o Link Global do perfil do autor
+    setCheckoutLoading(true);
+    try {
+      const { data: globalCfg } = await (supabase
+        .from("user_payment_configs" as any)
+        .select("checkout_url")
+        .eq("user_id", ebook.user_id)
+        .maybeSingle() as any);
+
+      if (globalCfg && (globalCfg as any).checkout_url) {
+        window.location.href = (globalCfg as any).checkout_url;
+        return;
+      }
+
+      toast.error("Este eBook ainda não tem link de pagamento configurado.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao redirecionar para o checkout.");
+    } finally {
+      setCheckoutLoading(false);
+    }
   };
 
   useEffect(() => {
