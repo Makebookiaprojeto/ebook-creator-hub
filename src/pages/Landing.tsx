@@ -99,7 +99,7 @@ const Landing = () => {
             <p className="text-sm text-muted-foreground">Mensal PRO</p>
             <p className="mt-2 font-display text-4xl font-bold">R$ 149,90<span className="text-base font-normal text-muted-foreground">/mês</span></p>
             <ul className="mt-6 space-y-2 text-sm">
-              {["Ebooks ilimitados", "IA premium", "Página de vendas", "Suporte prioritário"].map((b) => (
+              {["Até 20 ebooks/mês", "IA premium", "Página de vendas", "Suporte prioritário"].map((b) => (
                 <li key={b} className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> {b}</li>
               ))}
             </ul>
