@@ -73,18 +73,27 @@ export function LibraryView({ onCreateNew }: Props) {
     let active = true;
     (async () => {
       if (ebooks.length === 0) return;
-      const { data } = await supabase
-        .from("ebook_payment_config" as any)
-        .select("ebook_id, payment_platform, checkout_url, product_id, webhook_secret")
-        .in("ebook_id", ebooks.map((e) => e.id));
+      const ids = ebooks.map((e) => e.id);
+      const [{ data }, { data: secrets }] = await Promise.all([
+        supabase
+          .from("ebook_payment_config" as any)
+          .select("ebook_id, payment_platform, checkout_url, product_id")
+          .in("ebook_id", ids),
+        supabase
+          .from("ebook_webhook_secrets" as any)
+          .select("ebook_id, webhook_secret")
+          .in("ebook_id", ids),
+      ]);
       if (!active || !data) return;
+      const secretMap: Record<string, string> = {};
+      for (const s of (secrets ?? []) as any[]) secretMap[s.ebook_id] = s.webhook_secret ?? "";
       const map: typeof paymentConfigs = {};
       for (const r of data as any[]) {
         map[r.ebook_id] = {
           platform: r.payment_platform ?? "cakto",
           checkout_url: r.checkout_url ?? "",
           product_id: r.product_id ?? "",
-          webhook_secret: r.webhook_secret ?? "",
+          webhook_secret: secretMap[r.ebook_id] ?? "",
         };
       }
       setPaymentConfigs(map);
@@ -135,11 +144,23 @@ export function LibraryView({ onCreateNew }: Props) {
             payment_platform: d.platform,
             checkout_url: url || null,
             product_id: pid || null,
-            webhook_secret: secret || null,
           },
           { onConflict: "ebook_id" },
         );
       if (cfgErr) throw cfgErr;
+
+      // Salva secret na tabela protegida separada
+      if (secret) {
+        const { error: secErr } = await supabase
+          .from("ebook_webhook_secrets" as any)
+          .upsert(
+            { ebook_id: eb.id, owner_id: ownerId, webhook_secret: secret },
+            { onConflict: "ebook_id" },
+          );
+        if (secErr) throw secErr;
+      } else {
+        await supabase.from("ebook_webhook_secrets" as any).delete().eq("ebook_id", eb.id);
+      }
 
       toast.success("Configuração de pagamento salva!");
       setPaymentConfigs((prev) => ({
