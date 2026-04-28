@@ -36,6 +36,18 @@ export function ProfileView() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [usage, setUsage] = useState({ limit: 20, current: 0 });
+  const [paymentConfig, setPaymentConfig] = useState<{
+    platform: string;
+    checkout_url: string;
+    product_id: string;
+    webhook_secret: string;
+  }>({
+    platform: "cakto",
+    checkout_url: "",
+    product_id: "",
+    webhook_secret: "",
+  });
+  const [savingPayment, setSavingPayment] = useState(false);
 
   // Carrega dados do perfil
   useEffect(() => {
