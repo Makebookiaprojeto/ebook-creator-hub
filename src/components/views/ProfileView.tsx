@@ -77,11 +77,12 @@ export function ProfileView() {
         .maybeSingle();
 
       if (payData) {
+        const config = payData as any;
         setPaymentConfig({
-          platform: payData.payment_platform ?? "cakto",
-          checkout_url: payData.checkout_url ?? "",
-          product_id: payData.product_id ?? "",
-          webhook_secret: payData.webhook_secret ?? "",
+          platform: config.payment_platform ?? "cakto",
+          checkout_url: config.checkout_url ?? "",
+          product_id: config.product_id ?? "",
+          webhook_secret: config.webhook_secret ?? "",
         });
       }
 
