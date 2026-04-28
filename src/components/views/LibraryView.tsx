@@ -498,61 +498,20 @@ export function LibraryView({ onCreateNew }: Props) {
                 </div>
 
 
-                <div className="mt-2 space-y-1.5">
-                  <div className="flex items-center gap-1.5 rounded-lg border bg-muted/30 p-1.5">
-                    <Button
-                      size="sm"
-                      variant={eb.is_public ? "default" : "ghost"}
-                      className={`h-7 flex-1 text-[11px] ${eb.is_public ? "bg-success hover:bg-success/90" : ""}`}
-                      onClick={() => togglePublic(eb)}
-                      disabled={togglingId === eb.id}
-                    >
-                      {togglingId === eb.id ? (
-                        <Loader2 className="h-3 w-3 animate-spin" />
-                      ) : eb.is_public ? (
-                        <Globe className="h-3 w-3" />
-                      ) : (
-                        <Lock className="h-3 w-3" />
-                      )}
-                      {eb.is_public ? "Público" : "Publicar página"}
-                    </Button>
-                    {eb.is_public && eb.slug && (
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-7 px-2"
-                        onClick={() => copyPublicLink(eb)}
-                        title="Copiar link"
-                      >
-                        <Link2 className="h-3 w-3" />
-                      </Button>
-                    )}
-                  </div>
-                  {eb.is_public && eb.slug ? (
+                <div className="mt-2">
+                  {eb.slug ? (
                     <a
                       href={`/e/${eb.slug}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex h-9 w-full items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-primary to-accent px-3 text-xs font-semibold text-primary-foreground shadow-glow transition hover:opacity-90"
                     >
-                      <ExternalLink className="h-3.5 w-3.5" /> Ver na web
+                      <ExternalLink className="h-3.5 w-3.5" /> Ver página de vendas
                     </a>
                   ) : (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (!eb.is_public) {
-                          toast.info("Publique a página primeiro para vê-la na web.", {
-                            description: 'Clique em "Publicar página" acima.',
-                          });
-                        } else {
-                          toast.error("Link ainda não disponível. Tente novamente em instantes.");
-                        }
-                      }}
-                      className="flex h-9 w-full items-center justify-center gap-1.5 rounded-lg border border-dashed bg-muted/20 px-3 text-xs font-medium text-muted-foreground transition hover:bg-muted/40"
-                    >
-                      <Lock className="h-3.5 w-3.5" /> Ver na web
-                    </button>
+                    <div className="flex h-9 w-full items-center justify-center gap-1.5 rounded-lg border border-dashed bg-muted/20 px-3 text-xs font-medium text-muted-foreground italic">
+                      Link indisponível
+                    </div>
                   )}
                 </div>
 
