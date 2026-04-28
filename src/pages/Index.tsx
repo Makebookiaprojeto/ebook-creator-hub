@@ -7,7 +7,7 @@ import { LibraryView } from "@/components/views/LibraryView";
 // ToolsView removed
 import { SupportView } from "@/components/views/SupportView";
 import { ProfileView } from "@/components/views/ProfileView";
-import { Bell } from "lucide-react";
+import {  } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { resolveDisplayName, initialFromName } from "@/lib/userName";
@@ -67,10 +67,6 @@ const Index = () => {
             <SidebarTrigger />
             <div className="flex-1" />
             <div className="ml-auto flex items-center gap-3">
-              <button className="relative flex h-9 w-9 items-center justify-center rounded-lg hover:bg-muted transition">
-                <Bell className="h-4 w-4" />
-                <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-primary" />
-              </button>
               <button
                 onClick={() => setView("profile")}
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/20 bg-muted overflow-hidden gradient-primary text-sm font-semibold text-primary-foreground shadow-glow transition-transform hover:scale-105 active:scale-95"
