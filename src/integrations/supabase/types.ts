@@ -447,26 +447,6 @@ export type Database = {
           product_id: string | null
           updated_at: string | null
         }
-        Insert: {
-          checkout_url?: string | null
-          created_at?: string | null
-          ebook_id?: string | null
-          id?: string | null
-          owner_id?: string | null
-          payment_platform?: string | null
-          product_id?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          checkout_url?: string | null
-          created_at?: string | null
-          ebook_id?: string | null
-          id?: string | null
-          owner_id?: string | null
-          payment_platform?: string | null
-          product_id?: string | null
-          updated_at?: string | null
-        }
         Relationships: [
           {
             foreignKeyName: "ebook_payment_config_ebook_id_fkey"
