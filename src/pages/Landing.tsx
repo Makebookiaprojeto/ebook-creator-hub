@@ -114,7 +114,7 @@ const Landing = () => {
             <p className="text-sm text-muted-foreground">Vitalício</p>
             <p className="mt-2 font-display text-4xl font-bold">R$ 249,90<span className="text-base font-normal text-muted-foreground"> uma vez</span></p>
             <ul className="mt-6 space-y-2 text-sm">
-              {["Até 20 ebooks/mês", "Pagamento único", "Atualizações vitalícias", "Acesso antecipado a recursos"].map((b) => (
+              {["Tudo do PRO", "Pagamento único", "Atualizações vitalícias", "Acesso antecipado a recursos"].map((b) => (
                 <li key={b} className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> {b}</li>
               ))}
             </ul>
