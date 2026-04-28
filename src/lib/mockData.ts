@@ -76,7 +76,7 @@ export const faqs = [
   { q: "Como funciona a geração de ebooks com IA?", a: "Nossa IA cria estrutura, capítulos e conteúdo a partir do seu nicho. Você edita tudo livremente antes de publicar." },
   { q: "Posso editar o conteúdo gerado?", a: "Sim! Todo o conteúdo é 100% editável. A IA é seu ponto de partida, não o limite." },
   { q: "Como recebo os pagamentos das vendas?", a: "Os pagamentos são processados via Stripe, ou algum checkout da sua preferência (Hotmart, Kiwify, Mercado Pago, Stripe Payment Link, etc), garantindo segurança e rapidez." },
-  { q: "Existe limite de ebooks?", a: "Não! Em qualquer um dos nossos planos você pode criar ebooks ilimitados e aproveitar todo o poder da nossa IA." },
+  { q: "Existe limite de ebooks?", a: "Sim, para manter a qualidade e o custo acessível para todos, cada usuário pode gerar até 20 novos eBooks por mês." },
   { q: "Posso cancelar quando quiser?", a: "Sim, no plano mensal você pode cancelar a qualquer momento sem fidelidade ou multas." },
 ];
 
@@ -87,7 +87,7 @@ export const plans = [
     price: 149.90,
     period: "/mês",
     highlight: false,
-    features: ["Ebooks ilimitados", "IA premium GPT-4o", "Páginas de vendas inclusas", "Analytics avançado", "Suporte prioritário"],
+    features: ["Até 20 ebooks/mês", "IA premium GPT-4o", "Páginas de vendas inclusas", "Analytics avançado", "Suporte prioritário"],
   },
   {
     id: "lifetime",
@@ -95,7 +95,7 @@ export const plans = [
     price: 249.90,
     period: "pagamento único",
     highlight: true,
-    features: ["Tudo do plano Mensal", "Acesso para sempre", "Sem mensalidade", "Bônus: Gerador de Criativos", "Suporte VIP vitalício"],
+    features: ["Até 20 ebooks/mês", "Acesso para sempre", "Sem mensalidade", "Bônus: Gerador de Criativos", "Suporte VIP vitalício"],
   },
 ];
 
