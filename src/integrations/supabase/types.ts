@@ -346,7 +346,10 @@ export type Database = {
           avatar_url: string | null
           created_at: string
           display_name: string | null
+          ebooks_generated_this_month: number | null
           id: string
+          last_ebook_reset_at: string | null
+          monthly_ebook_limit: number | null
           updated_at: string
           user_id: string
         }
@@ -354,7 +357,10 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           display_name?: string | null
+          ebooks_generated_this_month?: number | null
           id?: string
+          last_ebook_reset_at?: string | null
+          monthly_ebook_limit?: number | null
           updated_at?: string
           user_id: string
         }
@@ -362,7 +368,10 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           display_name?: string | null
+          ebooks_generated_this_month?: number | null
           id?: string
+          last_ebook_reset_at?: string | null
+          monthly_ebook_limit?: number | null
           updated_at?: string
           user_id?: string
         }
