@@ -28,7 +28,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { resolveDisplayName } from "@/lib/userName";
 
 const BENEFITS = [
-  "Criar eBooks ilimitados",
+  "Até 20 ebooks/mês",
   "Editor com IA integrada",
   "Capa profissional automática",
   "Página de vendas pronta",
