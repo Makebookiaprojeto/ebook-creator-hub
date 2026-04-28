@@ -7,8 +7,7 @@ import { LibraryView } from "@/components/views/LibraryView";
 // ToolsView removed
 import { SupportView } from "@/components/views/SupportView";
 import { ProfileView } from "@/components/views/ProfileView";
-import { Bell, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Bell } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { resolveDisplayName, initialFromName } from "@/lib/userName";
@@ -66,10 +65,7 @@ const Index = () => {
         <div className="flex-1 flex flex-col min-w-0">
           <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b bg-background/80 backdrop-blur-md px-4 sm:px-6">
             <SidebarTrigger />
-            <div className="relative hidden sm:block flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Buscar ebooks, ferramentas..." className="pl-9 h-9 bg-muted/50 border-transparent focus-visible:bg-background" />
-            </div>
+            <div className="flex-1" />
             <div className="ml-auto flex items-center gap-3">
               <button className="relative flex h-9 w-9 items-center justify-center rounded-lg hover:bg-muted transition">
                 <Bell className="h-4 w-4" />
