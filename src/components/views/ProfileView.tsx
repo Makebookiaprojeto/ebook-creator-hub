@@ -31,6 +31,7 @@ export function ProfileView() {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [usage, setUsage] = useState({ limit: 20, current: 0 });
 
   // Carrega dados do perfil
   useEffect(() => {
