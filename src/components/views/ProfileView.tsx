@@ -69,6 +69,22 @@ export function ProfileView() {
         });
       }
 
+      // Carregar configs de pagamento
+      const { data: payData } = await supabase
+        .from("user_payment_configs" as any)
+        .select("*")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (payData) {
+        setPaymentConfig({
+          platform: payData.payment_platform ?? "cakto",
+          checkout_url: payData.checkout_url ?? "",
+          product_id: payData.product_id ?? "",
+          webhook_secret: payData.webhook_secret ?? "",
+        });
+      }
+
       const { data: roleData } = await supabase.rpc("has_role", {
         _user_id: user.id,
         _role: "admin",
