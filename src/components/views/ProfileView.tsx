@@ -12,6 +12,10 @@ import {
   Crown,
   Sparkles,
   Check,
+  Settings,
+  Link2,
+  Lock,
+  Copy,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
