@@ -31,30 +31,36 @@ export function ProfileView() {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [usage, setUsage] = useState({ limit: 20, current: 0 });
 
   // Carrega dados do perfil
   useEffect(() => {
     if (!user) return;
-    (async () => {
+    const loadData = async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("avatar_url, display_name")
+        .select("avatar_url, display_name, monthly_ebook_limit, ebooks_generated_this_month")
         .eq("user_id", user.id)
         .maybeSingle();
+      
       const profileData = data as any;
-      const avatarValue = profileData?.avatar_url || null;
-      const nameValue = resolveDisplayName(profileData?.display_name, user);
-      setAvatarUrl(avatarValue);
-      setDisplayName(nameValue);
-    })();
+      if (profileData) {
+        setAvatarUrl(profileData.avatar_url || null);
+        setDisplayName(resolveDisplayName(profileData.display_name, user));
+        setUsage({
+          limit: profileData.monthly_ebook_limit ?? 20,
+          current: profileData.ebooks_generated_this_month ?? 0
+        });
+      }
 
-    (async () => {
-      const { data } = await supabase.rpc("has_role", {
+      const { data: roleData } = await supabase.rpc("has_role", {
         _user_id: user.id,
         _role: "admin",
       });
-      setIsAdmin(!!data);
-    })();
+      setIsAdmin(!!roleData);
+    };
+
+    loadData();
   }, [user]);
 
   const handleSubscribe = (planId: string) => {
@@ -148,9 +154,25 @@ export function ProfileView() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="font-display text-3xl font-bold">Perfil</h1>
-        <p className="mt-1 text-muted-foreground">Gerencie sua conta, pagamentos e plano.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl font-bold">Perfil</h1>
+          <p className="mt-1 text-muted-foreground">Gerencie sua conta, pagamentos e plano.</p>
+        </div>
+        
+        <div className="rounded-2xl border bg-card p-4 shadow-soft min-w-[200px]">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase text-muted-foreground">Uso Mensal</span>
+            <span className="text-xs font-bold">{usage.current} / {usage.limit}</span>
+          </div>
+          <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+            <div 
+              className={`h-full transition-all duration-500 ${usage.current >= usage.limit ? 'bg-destructive' : 'gradient-primary'}`}
+              style={{ width: `${Math.min((usage.current / usage.limit) * 100, 100)}%` }}
+            />
+          </div>
+          <p className="mt-2 text-[10px] text-muted-foreground text-center">Ebooks gerados este mês</p>
+        </div>
       </div>
 
       {isAdmin && (
