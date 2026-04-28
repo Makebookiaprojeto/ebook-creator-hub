@@ -55,10 +55,13 @@ export function CreateEbookView() {
   const [searchedGroups, setSearchedGroups] = useState<FbGroup[]>([]);
   const [searchingGroups, setSearchingGroups] = useState(false);
 
-  const handleAIError = (status?: number, fallback = "Falha ao gerar com IA") => {
+  const handleAIError = (status?: number, fallback = "Falha ao gerar com IA", errorText?: string) => {
+    if (status === 403 && errorText?.includes("limite mensal")) {
+      return toast.error(errorText);
+    }
     if (status === 429) return toast.error("Muitas requisições. Aguarde alguns segundos e tente novamente.");
     if (status === 402) return toast.error("Créditos esgotados. Adicione créditos em Configurações > Workspace.");
-    toast.error(fallback);
+    toast.error(errorText || fallback);
   };
 
   const generate = async () => {
