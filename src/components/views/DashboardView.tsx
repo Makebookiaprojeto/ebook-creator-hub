@@ -128,18 +128,17 @@ export function DashboardView() {
     "Usuário";
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col gap-1">
-        <h1 className="font-display text-3xl font-bold">Olá, {displayName} 👋</h1>
-        <p className="text-sm italic text-primary/80 animate-fade-in">"{quote}"</p>
-        <p className="mt-2 text-muted-foreground text-sm">Aqui está o resumo do seu negócio hoje.</p>
+    <div className="space-y-10 animate-fade-in py-4">
+      <div className="flex flex-col gap-1 border-b border-border/40 pb-6">
+        <h1 className="font-display text-4xl font-bold tracking-tight">Olá, {displayName} 👋</h1>
+        <p className="text-sm font-medium text-primary/70 italic">"{quote}"</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Ebooks criados" value={String(ebooks.length)} delta={ebooks.length > 0 ? `+${ebooks.length}` : "0"} icon={BookOpen} tint="from-violet-500 to-purple-500" />
-        <StatCard label="Visualizações" value={stats.views} delta="+0%" icon={Eye} tint="from-blue-500 to-cyan-500" />
-        <StatCard label="Vendas" value={String(stats.totalSales)} delta={stats.totalSales > 0 ? `+${stats.totalSales}` : "0"} icon={ShoppingCart} tint="from-emerald-500 to-teal-500" />
-        <StatCard label="Receita" value={`R$ ${stats.totalRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} delta="0%" icon={DollarSign} tint="from-amber-500 to-orange-500" />
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <StatCard label="Ebooks" value={String(ebooks.length)} delta={ebooks.length > 0 ? `+${ebooks.length}` : "0"} icon={BookOpen} tint="from-primary/10 to-primary/5" />
+        <StatCard label="Visualizações" value={stats.views} delta="+0%" icon={Eye} tint="from-primary/10 to-primary/5" />
+        <StatCard label="Vendas" value={String(stats.totalSales)} delta={stats.totalSales > 0 ? `+${stats.totalSales}` : "0"} icon={ShoppingCart} tint="from-primary/10 to-primary/5" />
+        <StatCard label="Receita" value={`R$ ${stats.totalRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} delta="0%" icon={DollarSign} tint="from-primary/10 to-primary/5" />
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
