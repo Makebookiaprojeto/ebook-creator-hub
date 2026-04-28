@@ -95,7 +95,7 @@ export const plans = [
     price: 249.90,
     period: "pagamento único",
     highlight: true,
-    features: ["Tudo do plano Mensal", "Acesso para sempre", "Sem mensalidade", "Bônus: Gerador de Criativos", "Suporte VIP vitalício"],
+    features: ["Até 20 ebooks/mês", "Acesso para sempre", "Sem mensalidade", "Bônus: Gerador de Criativos", "Suporte VIP vitalício"],
   },
 ];
 
