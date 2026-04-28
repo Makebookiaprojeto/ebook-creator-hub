@@ -171,16 +171,38 @@ export function ProfileView() {
 
   const email = user?.email || "";
 
+  const handleSavePayment = async () => {
+    if (!user) return;
+    setSavingPayment(true);
+    try {
+      const { error } = await supabase
+        .from("user_payment_configs" as any)
+        .upsert({
+          user_id: user.id,
+          payment_platform: paymentConfig.platform,
+          checkout_url: paymentConfig.checkout_url,
+          product_id: paymentConfig.product_id,
+          webhook_secret: paymentConfig.webhook_secret,
+        }, { onConflict: "user_id" });
+
+      if (error) throw error;
+      toast.success("Configurações de pagamento atualizadas!");
+    } catch (error: any) {
+      toast.error("Erro ao salvar: " + error.message);
+    } finally {
+      setSavingPayment(false);
+    }
+  };
+
+  const projectRef = (import.meta as any).env?.VITE_SUPABASE_PROJECT_ID ?? "";
+  const getWebhookUrl = (platform: string) =>
+    platform === "outro"
+      ? ""
+      : `https://${projectRef}.supabase.co/functions/v1/${platform}-webhook`;
+
   useEffect(() => {
     if (searchParams.get("upgrade") === "true") {
-      setTimeout(() => {
-        plansRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 300);
-      setSearchParams((prev) => {
-        const next = new URLSearchParams(prev);
-        next.delete("upgrade");
-        return next;
-      }, { replace: true });
+...
     }
   }, [searchParams, setSearchParams]);
 
