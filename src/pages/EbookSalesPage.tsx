@@ -120,14 +120,14 @@ export default function EbookSalesPage() {
     // 2) Fallback para o Link Global do perfil do autor
     setCheckoutLoading(true);
     try {
-      const { data: globalCfg } = await supabase
+      const { data: globalCfg } = await (supabase
         .from("user_payment_configs" as any)
         .select("checkout_url")
         .eq("user_id", ebook.user_id)
-        .maybeSingle();
+        .maybeSingle() as any);
 
-      if (globalCfg?.checkout_url) {
-        window.location.href = globalCfg.checkout_url;
+      if (globalCfg && (globalCfg as any).checkout_url) {
+        window.location.href = (globalCfg as any).checkout_url;
         return;
       }
 
