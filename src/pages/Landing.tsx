@@ -229,11 +229,11 @@ const Landing = () => {
             </div>
 
             {/* Vitalício */}
-            <div className="p-10 rounded-3xl border-2 border-primary bg-primary/5 flex flex-col relative shadow-[0_0_40px_rgba(var(--primary-rgb),0.15)] overflow-hidden">
+            <div className="p-10 rounded-3xl border-2 border-primary bg-primary/5 flex flex-col relative shadow-[0_0_40px_rgba(var(--primary-rgb),0.15)]">
               <div className="absolute top-0 right-0 p-6">
                 <Crown className="h-12 w-12 text-primary/10" />
               </div>
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 gradient-primary px-6 py-1.5 text-[10px] font-black text-primary-foreground rounded-full tracking-widest uppercase whitespace-nowrap z-10 shadow-lg">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 gradient-primary px-6 py-2 text-[10px] font-black text-primary-foreground rounded-full tracking-widest uppercase whitespace-nowrap shadow-xl z-20 border border-white/10">
                 OFERTA VITALÍCIA
               </div>
               <p className="text-xs font-bold uppercase tracking-widest text-primary mb-4">Acesso Eterno</p>
