@@ -95,99 +95,69 @@ Deno.serve(async (req) => {
     const body = await req.json();
     const { mode } = body;
 
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+    const userId = await getUserId(req);
+
+    // ---------- Limit Check (Only for generating structure or images) ----------
+    if ((mode === "structure" || mode === "image") && userId) {
+      // 1. Get user profile and limits
+      const { data: profile, error: profErr } = await supabase
+        .from("profiles")
+        .select("monthly_ebook_limit, ebooks_generated_this_month, last_ebook_reset_at")
+        .eq("user_id", userId)
+        .single();
+
+      if (profErr) {
+        console.error("Error fetching profile:", profErr);
+      } else if (profile) {
+        const now = new Date();
+        const lastReset = new Date(profile.last_ebook_reset_at);
+        let currentUsage = profile.ebooks_generated_this_month;
+
+        // Check if we need to reset the monthly counter
+        const isNewMonth = 
+          now.getMonth() !== lastReset.getMonth() || 
+          now.getFullYear() !== lastReset.getFullYear();
+
+        if (isNewMonth) {
+          currentUsage = 0;
+          await supabase
+            .from("profiles")
+            .update({ ebooks_generated_this_month: 0, last_ebook_reset_at: now.toISOString() })
+            .eq("user_id", userId);
+        }
+
+        // Only enforce limit on 'structure' (start of a new ebook)
+        if (mode === "structure" && currentUsage >= profile.monthly_ebook_limit) {
+          return jsonResponse({ 
+            error: `Você atingiu seu limite mensal de ${profile.monthly_ebook_limit} eBooks. Seu limite será resetado no próximo mês.` 
+          }, 403);
+        }
+        
+        // Increment usage ONLY when starting a new structure
+        if (mode === "structure") {
+          await supabase
+            .from("profiles")
+            .update({ ebooks_generated_this_month: currentUsage + 1 })
+            .eq("user_id", userId);
+        }
+      }
+    }
+
     // ---------- structure ----------
     if (mode === "structure") {
       const { niche, audience } = body;
-      const result = await callAI({
-        model: TEXT_MODEL,
-        messages: [
-          {
-            role: "system",
-            content:
-              "Você é um copywriter especialista em ebooks digitais comerciais em português do Brasil. Sempre responda chamando a tool fornecida.",
-          },
-          {
-            role: "user",
-            content: `Crie a estrutura de um ebook profissional sobre "${niche}".${
-              audience ? ` Público-alvo: ${audience}.` : ""
-            } Gere: título magnético (máx 60 caracteres), subtítulo persuasivo (máx 120 caracteres), e 6 capítulos com título curto e subtítulo descritivo. Os capítulos devem ter progressão lógica (introdução → fundamentos → prática → resultados).`,
-          },
-        ],
-        tools: [
-          {
-            type: "function",
-            function: {
-              name: "create_ebook_structure",
-              description: "Retorna a estrutura do ebook",
-              parameters: {
-                type: "object",
-                properties: {
-                  title: { type: "string" },
-                  subtitle: { type: "string" },
-                  cover_prompt: {
-                    type: "string",
-                    description:
-                      "Detailed English prompt to generate the ebook cover image. Describe a concrete, photorealistic scene that visually represents the ebook's core theme: include the main subject, setting, lighting (natural or cinematic), camera angle, mood, and color palette. Prefer real-world photography or hyperrealistic 3D rendering over abstract or generic art. NO text, NO typography, NO letters in the image.",
-                  },
-                  chapters: {
-                    type: "array",
-                    items: {
-                      type: "object",
-                      properties: {
-                        title: { type: "string" },
-                        subtitle: { type: "string" },
-                      },
-                      required: ["title", "subtitle"],
-                      additionalProperties: false,
-                    },
-                    minItems: 5,
-                    maxItems: 8,
-                  },
-                },
-                required: ["title", "subtitle", "cover_prompt", "chapters"],
-                additionalProperties: false,
-              },
-            },
-          },
-        ],
-        tool_choice: { type: "function", function: { name: "create_ebook_structure" } },
-      });
-
-      if ("error" in result && result.error) return jsonResponse({ error: result.error.text }, result.error.status);
-
-      const args = result.data.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
-      return jsonResponse(JSON.parse(args));
+// ... keep existing code
     }
 
     // ---------- chapter content ----------
     if (mode === "chapter") {
       const { ebookTitle, audience, chapterTitle, chapterSubtitle, chapterIndex, totalChapters } = body;
-      const result = await callAI({
-        model: TEXT_MODEL,
-        messages: [
-          {
-            role: "system",
-            content:
-              "Você é um escritor profissional de ebooks comerciais em português do Brasil. Escreva conteúdo aprofundado, natural, envolvente e humano. Use parágrafos bem espaçados, exemplos práticos, e quando útil, listas numeradas ou com bullet (use '- ' no início da linha). Use '## ' para subtítulos dentro do capítulo. Não use '# ' (título principal). Evite linguagem robótica.",
-          },
-          {
-            role: "user",
-            content: `Ebook: "${ebookTitle}".${audience ? ` Público: ${audience}.` : ""}
-Escreva o capítulo ${chapterIndex + 1} de ${totalChapters}: "${chapterTitle}" — ${chapterSubtitle ?? ""}.
-Estrutura sugerida: abertura envolvente, 2-3 subtítulos com '## ', exemplos práticos, fechamento com gancho para o próximo capítulo.
-Tamanho: 700-1000 palavras. Tom: profissional, próximo, motivador.`,
-          },
-        ],
-      });
-
-      if ("error" in result && result.error) return jsonResponse({ error: result.error.text }, result.error.status);
-      const content = result.data.choices?.[0]?.message?.content ?? "";
-      return jsonResponse({ content });
+// ... keep existing code
     }
 
     // ---------- image generation (cover or chapter) ----------
     if (mode === "image") {
-      const userId = await getUserId(req);
       if (!userId) return jsonResponse({ error: "Não autenticado" }, 401);
 
       const { prompt, kind } = body as { prompt: string; kind: "cover" | "chapter" };
