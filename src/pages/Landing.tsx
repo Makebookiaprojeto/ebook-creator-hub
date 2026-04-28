@@ -1,20 +1,32 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { 
   Sparkles, BookOpen, Wand2, TrendingUp, ArrowRight, Check, 
   ShieldCheck, Zap, Star, Users, MessageSquare, Timer,
-  Target, Rocket, Heart, Crown
+  Target, Rocket, Heart, Crown, Clock
 } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
 
 const Landing = () => {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
+  const [timeLeft, setTimeLeft] = useState({ hours: 23, minutes: 59, seconds: 59 });
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
+    
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
+        if (prev.minutes > 0) return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
+        if (prev.hours > 0) return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
+        return prev;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
   }, []);
 
   useEffect(() => {
@@ -242,7 +254,10 @@ const Landing = () => {
                 <span className="text-5xl font-black">R$ 249,90</span>
                 <span className="text-muted-foreground font-medium"> única vez</span>
               </div>
-              <p className="text-xs text-primary font-medium mb-6 animate-pulse">Preço promocional: restam apenas 12 vagas</p>
+              <div className="flex items-center gap-2 text-xs text-primary font-bold mb-6">
+                <Clock className="h-3.5 w-3.5 animate-pulse" />
+                <span>Oferta encerra em: {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}</span>
+              </div>
               <ul className="space-y-4 mb-10 flex-1">
                 {["Tudo do PRO", "Pagamento único (Sem mensalidade)", "Acesso para sempre", "Atualizações vitalícias inclusas", "Suporte VIP via WhatsApp"].map(item => (
                   <li key={item} className="flex items-center gap-3 text-sm font-semibold">
