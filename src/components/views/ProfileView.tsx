@@ -175,21 +175,7 @@ export function ProfileView() {
         </div>
       </div>
 
-      {isAdmin && (
-        <a
-          href="/admin/templates"
-          className="block rounded-2xl border border-primary/40 bg-primary/5 p-4 hover:bg-primary/10 transition"
-        >
-          <div className="flex items-center gap-3">
-            <Sparkles className="h-5 w-5 text-primary" />
-            <div className="flex-1">
-              <p className="font-semibold">Catálogo de Templates (admin)</p>
-              <p className="text-sm text-muted-foreground">Gerenciar ebooks-base por nicho.</p>
-            </div>
-            <Badge variant="outline">Admin</Badge>
-          </div>
-        </a>
-      )}
+      {/* Admin access removed based on user request */}
 
       <div className="rounded-2xl border bg-card p-6 shadow-soft">
         <div className="flex items-center gap-6 flex-wrap sm:flex-nowrap">
