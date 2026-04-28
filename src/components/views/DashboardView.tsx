@@ -17,6 +17,7 @@ export function DashboardView() {
   const { user: authUser } = useAuth();
   const { ebooks, loading: loadingEbooks } = useEbooks();
   const [dbDisplayName, setDbDisplayName] = useState<string | null>(null);
+  const [quote, setQuote] = useState("");
   const [stats, setStats] = useState({
     totalSales: 0,
     totalRevenue: 0,
@@ -24,6 +25,24 @@ export function DashboardView() {
   });
   const [salesHistory, setSalesHistory] = useState<any[]>([]);
   const [loadingStats, setLoadingStats] = useState(true);
+
+  const quotes = [
+    "Sua criatividade é a única fronteira para o seu sucesso.",
+    "Cada eBook é uma nova porta aberta para a sua liberdade digital.",
+    "O sucesso é a soma de pequenos esforços repetidos dia após dia.",
+    "Não espere pela inspiração, crie sua própria oportunidade.",
+    "Seu conhecimento tem valor. Transforme-o em lucro hoje.",
+    "A melhor forma de prever o futuro é criando-o.",
+    "Grandes impérios começam com uma simples ideia.",
+    "Foque no progresso, não na perfeição.",
+    "Você está a um passo de mudar sua realidade financeira.",
+    "A consistência é a chave que abre a porta da escala."
+  ];
+
+  useEffect(() => {
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    setQuote(randomQuote);
+  }, []);
 
   useEffect(() => {
     if (!authUser) return;
@@ -110,9 +129,10 @@ export function DashboardView() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div>
+      <div className="flex flex-col gap-1">
         <h1 className="font-display text-3xl font-bold">Olá, {displayName} 👋</h1>
-        <p className="mt-1 text-muted-foreground">Aqui está o resumo do seu negócio hoje.</p>
+        <p className="text-sm italic text-primary/80 animate-fade-in">"{quote}"</p>
+        <p className="mt-2 text-muted-foreground text-sm">Aqui está o resumo do seu negócio hoje.</p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
