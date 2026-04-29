@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, ArrowRight, Check, Sparkles, Loader2, Copy, Users, Rocket,
-  Search, ChevronDown, Star, Flame, ShieldCheck, Clock, Zap, Quote, Download, FileText, Eye
+  Search, ChevronDown, Star, Flame, ShieldCheck, Clock, Zap, Quote, Download, FileText, Eye, Globe
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -808,6 +808,33 @@ export function CreateEbookView() {
                     </Button>
                   </div>
                 </div>
+
+                {/* Sales Link Section */}
+                {ebookLink && (
+                  <div className="mt-6 rounded-2xl border bg-primary/5 p-5 border-primary/20">
+                    <div className="flex items-center gap-2 text-primary">
+                      <Globe className="h-5 w-5" />
+                      <h3 className="font-display font-bold">Seu link de vendas está pronto!</h3>
+                    </div>
+                    <p className="mt-1 text-xs text-muted-foreground">Este é o link da página que seus clientes usarão para comprar o ebook.</p>
+                    <div className="mt-3 flex items-center gap-2">
+                      <Input 
+                        readOnly 
+                        value={ebookLink}
+                        className="bg-background text-xs h-10"
+                      />
+                      <Button 
+                        className="gradient-primary text-primary-foreground shadow-glow h-10"
+                        onClick={() => {
+                          navigator.clipboard.writeText(ebookLink);
+                          toast.success("Link de vendas copiado!");
+                        }}
+                      >
+                        <Copy className="mr-2 h-4 w-4" /> Copiar Link
+                      </Button>
+                    </div>
+                  </div>
+                )}
 
                 {/* Manual Search Links */}
                 {searchedGroups.length > 0 && (
