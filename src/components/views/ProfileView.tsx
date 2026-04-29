@@ -16,6 +16,7 @@ import {
   Link2,
   Lock,
   Copy,
+  Calendar,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
@@ -274,6 +275,16 @@ export function ProfileView() {
           </div>
           <div>
             <h2 className="font-display text-2xl font-semibold">{displayName}</h2>
+            <div className="flex flex-col gap-1 mt-1">
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <Crown className="h-3 w-3 text-amber-500" />
+                <span className="font-medium">Plano {usage.limit > 20 ? 'Premium' : 'Gratuito'}</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground/80">
+                <Calendar className="h-3 w-3" />
+                <span>Membro desde {user?.created_at ? new Date(user.created_at).toLocaleDateString('pt-BR') : '...'}</span>
+              </div>
+            </div>
           </div>
         </div>
 
