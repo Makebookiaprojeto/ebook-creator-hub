@@ -236,7 +236,7 @@ export default function Plans() {
             <Card className="p-8 border-border/60 flex flex-col">
               <div className="mb-6">
                 <div className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
-                  Mensal
+                  Plano Mensal
                 </div>
                 <div className="flex items-baseline gap-1">
                   <span className="text-4xl font-bold">R$ 149,90</span>
@@ -278,7 +278,7 @@ export default function Plans() {
 
               <div className="mb-6">
                 <div className="text-sm font-medium text-primary uppercase tracking-wide mb-2">
-                  Vitalício
+                  Acesso Vitalício
                 </div>
                 <div className="flex items-baseline gap-1">
                   <span className="text-4xl font-bold">R$ 249,90</span>
