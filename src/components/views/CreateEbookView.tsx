@@ -271,8 +271,19 @@ export function CreateEbookView() {
     },
   ];
 
-  const next = () => setStep((s) => Math.min(s + 1, steps.length - 1));
-  const prev = () => setStep((s) => Math.max(s - 1, 0));
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const next = () => {
+    setStep((s) => Math.min(s + 1, steps.length - 1));
+    scrollToTop();
+  };
+
+  const prev = () => {
+    setStep((s) => Math.max(s - 1, 0));
+    scrollToTop();
+  };
 
   return (
     <div className="space-y-6 animate-fade-in">
