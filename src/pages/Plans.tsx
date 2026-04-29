@@ -295,12 +295,10 @@ export default function Plans() {
 
               <ul className="space-y-3 mb-8 flex-1">
                 {[
-                  "Editor com IA integrada",
-                  "Capa profissional automática",
-                  "Página de vendas pronta",
-                  "Receba pagamentos diretamente",
-                  "Suporte prioritário",
-                  "Acesso vitalício, sem renovações",
+                  "Tudo do PRO",
+                  "Pagamento único",
+                  "Acesso para sempre",
+                  "Atualizações vitalícias inclusas",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm font-medium">
                     <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
