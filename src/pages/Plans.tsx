@@ -336,19 +336,6 @@ export default function Plans() {
             </div>
           </Card>
 
-          {/* GARANTIA */}
-          <div className="mt-8 max-w-2xl mx-auto flex items-center gap-4 p-5 rounded-lg border border-primary/30 bg-primary/5">
-            <div className="h-12 w-12 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
-              <Shield className="h-6 w-6 text-primary" />
-            </div>
-            <div>
-              <p className="font-semibold">Garantia incondicional de 7 dias</p>
-              <p className="text-sm text-muted-foreground">
-                Se por qualquer motivo você não gostar, devolvemos 100% do seu
-                dinheiro. Sem perguntas, sem burocracia.
-              </p>
-            </div>
-          </div>
         </section>
 
         {/* DEPOIMENTOS */}
