@@ -222,7 +222,7 @@ const Landing = () => {
           <div className="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
             {/* Mensal */}
             <div className="p-10 rounded-3xl border bg-card/30 flex flex-col hover:border-white/20 transition-all">
-              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Plano Impulso</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4"></p>
               <h3 className="text-2xl font-bold mb-2">Mensal PRO</h3>
               <div className="flex items-baseline gap-1 mb-6">
                 <span className="text-5xl font-black">R$ 149,90</span>
@@ -248,7 +248,7 @@ const Landing = () => {
               <div className="absolute -top-4 left-1/2 -translate-x-1/2 gradient-primary px-6 py-2 text-[10px] font-black text-primary-foreground rounded-full tracking-widest uppercase whitespace-nowrap shadow-xl z-20 border border-white/10">
                 OFERTA VITALÍCIA
               </div>
-              <p className="text-xs font-bold uppercase tracking-widest text-primary mb-4">Acesso Eterno</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-primary mb-4"></p>
               <h3 className="text-2xl font-bold mb-2">Vitalício VIP</h3>
               <div className="flex items-baseline gap-1 mb-2">
                 <span className="text-5xl font-black">R$ 249,90</span>
