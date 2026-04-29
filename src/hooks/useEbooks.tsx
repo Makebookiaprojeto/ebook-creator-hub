@@ -111,20 +111,34 @@ export function useEbooks() {
   };
 
   const getEbookWithChapters = async (id: string) => {
+    console.log("Fetching ebook with chapters for ID:", id);
     const { data: ebook, error: eErr } = await supabase
       .from("ebooks")
       .select("*")
       .eq("id", id)
       .single();
-    if (eErr || !ebook) throw eErr ?? new Error("Ebook não encontrado");
+    
+    if (eErr) {
+      console.error("Error fetching ebook:", eErr);
+      throw eErr;
+    }
+    if (!ebook) {
+      console.error("Ebook not found");
+      throw new Error("Ebook não encontrado");
+    }
 
     const { data: chapters, error: cErr } = await supabase
       .from("chapters")
       .select("*")
       .eq("ebook_id", id)
       .order("order_index", { ascending: true });
-    if (cErr) throw cErr;
+    
+    if (cErr) {
+      console.error("Error fetching chapters:", cErr);
+      throw cErr;
+    }
 
+    console.log("Fetched chapters count:", chapters?.length ?? 0);
     return { ebook, chapters: chapters ?? [] };
   };
 
