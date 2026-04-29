@@ -498,21 +498,6 @@ export function LibraryView({ onCreateNew }: Props) {
                 </div>
 
 
-                <div className="mt-2">
-                  {eb.slug ? (
-                    <Button
-                      size="sm"
-                      className="h-9 w-full gradient-primary text-primary-foreground text-xs font-semibold shadow-glow"
-                      onClick={() => copyPublicLink(eb)}
-                    >
-                      <Copy className="h-3.5 w-3.5 mr-2" /> Copiar link de vendas
-                    </Button>
-                  ) : (
-                    <div className="flex h-9 w-full items-center justify-center gap-1.5 rounded-lg border border-dashed bg-muted/20 px-3 text-xs font-medium text-muted-foreground italic">
-                      Link indisponível
-                    </div>
-                  )}
-                </div>
 
                 {/* Simplified Payment Badge */}
                 <div className="mt-2">
