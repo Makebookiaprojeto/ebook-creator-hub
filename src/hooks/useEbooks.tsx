@@ -111,18 +111,22 @@ export function useEbooks() {
   };
 
   const getEbookWithChapters = async (id: string) => {
+    // 1) Pegar o eBook
     const { data: ebook, error: eErr } = await supabase
       .from("ebooks")
       .select("*")
       .eq("id", id)
       .single();
+    
     if (eErr || !ebook) throw eErr ?? new Error("Ebook não encontrado");
 
+    // 2) Pegar capítulos via RLS (deve funcionar agora com as novas políticas)
     const { data: chapters, error: cErr } = await supabase
       .from("chapters")
       .select("*")
       .eq("ebook_id", id)
       .order("order_index", { ascending: true });
+    
     if (cErr) throw cErr;
 
     return { ebook, chapters: chapters ?? [] };
