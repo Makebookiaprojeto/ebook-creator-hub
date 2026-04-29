@@ -258,9 +258,9 @@ export function LibraryView({ onCreateNew }: Props) {
     try {
       const { chapters } = await getEbookWithChapters(eb.id);
       setOpenChapters(chapters);
-    } catch (err: any) {
-      console.error("Preview error details:", err);
-      toast.error(`Erro ao carregar: ${err.message || "Tente novamente"}`);
+    } catch (err) {
+      console.error(err);
+      toast.error("Não foi possível carregar o eBook.");
       setOpenEbook(null);
     } finally {
       setLoadingPreview(false);
