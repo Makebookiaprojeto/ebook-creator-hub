@@ -285,7 +285,7 @@ export default function Plans() {
                   <span className="text-muted-foreground">único</span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
-                  Pague uma vez e use para sempre. Sem mensalidade.
+                  Pague uma vez e use para sempre.
                 </p>
                 <div className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium bg-primary/15 text-primary px-2 py-1 rounded">
                   <TrendingUp className="h-3 w-3" />
