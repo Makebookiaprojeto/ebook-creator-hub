@@ -869,11 +869,6 @@ export function CreateEbookView() {
                         </div>
                       </div>
 
-                      <div className="rounded-lg bg-blue-50 p-4 border border-blue-100">
-                        <p className="text-xs text-blue-800 leading-relaxed">
-                          <strong>Como usar:</strong> Como o Facebook bloqueia acessos diretos, clique no botão <strong>Copiar Link</strong> acima, abra uma nova aba no seu navegador e cole o link lá.
-                        </p>
-                      </div>
                     </div>
                   </div>
                 )}
