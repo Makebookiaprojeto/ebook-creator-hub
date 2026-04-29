@@ -13,6 +13,7 @@ import {
   Zap,
   BookOpen,
 } from "lucide-react";
+import saasLogo from "@/assets/saas-logo.jpg";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -159,7 +160,9 @@ export default function Plans() {
       <header className="border-b border-border/40 sticky top-0 bg-background/80 backdrop-blur z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg overflow-hidden shadow-glow">
+              <img src={saasLogo} alt="Logo" className="h-full w-full object-cover" />
+            </div>
             <span className="font-semibold">{displayName || "Carregando..."}</span>
           </div>
           <Button variant="ghost" size="sm" onClick={signOut}>
