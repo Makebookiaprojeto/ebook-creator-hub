@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, ArrowRight, Check, Sparkles, Loader2, Copy, Users, Rocket,
-  Search, ChevronDown, Star, Flame, ShieldCheck, Clock, Zap, Quote, Download, FileText, Eye, ExternalLink, Facebook
+  Search, ChevronDown, Star, Flame, ShieldCheck, Clock, Zap, Quote, Download, FileText, Eye
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -812,56 +812,36 @@ export function CreateEbookView() {
                 {/* Manual Search Links */}
                 {searchedGroups.length > 0 && (
                   <div className="mt-6 space-y-4">
-                    <div className="rounded-xl border bg-card p-6 space-y-5 border-blue-100 shadow-soft">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2.5 text-blue-600">
-                          <Facebook className="h-6 w-6 fill-blue-600" />
-                          <h3 className="font-display text-lg font-bold">Acesso rápido aos Grupos</h3>
-                        </div>
-                        <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                          Busca Manual
-                        </Badge>
+                    <div className="rounded-xl border bg-card p-5 space-y-4">
+                      <div className="flex items-center gap-3 text-blue-600">
+                        <Users className="h-5 w-5" />
+                        <h3 className="font-bold">Busca Manual no Facebook</h3>
                       </div>
                       
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        O Facebook protege a privacidade dos grupos. Para encontrar os melhores lugares para divulgar, clique no botão abaixo para abrir a busca oficial diretamente na sua conta.
-                      </p>
-
-                      <div className="flex flex-col sm:flex-row gap-3">
-                        <Button 
-                          className="flex-1 h-12 bg-[#1877F2] hover:bg-[#166fe5] text-white font-bold shadow-lg transition-transform hover:scale-[1.02]"
-                          onClick={() => {
-                            window.open(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`, '_blank');
-                            toast.success("Abrindo busca no Facebook...");
-                          }}
-                        >
-                          <ExternalLink className="mr-2 h-4 w-4" /> Abrir Busca no Facebook
-                        </Button>
-                        <Button 
-                          variant="outline"
-                          className="h-12 border-blue-200 text-blue-700 hover:bg-blue-50"
-                          onClick={() => {
-                            navigator.clipboard.writeText(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`);
-                            toast.success("Link de busca copiado!");
-                          }}
-                        >
-                          <Copy className="mr-2 h-4 w-4" /> Copiar Link
-                        </Button>
+                      <div className="space-y-3">
+                        <p className="text-xs font-medium text-muted-foreground uppercase">Link da Busca</p>
+                        <div className="flex items-center gap-2">
+                          <Input 
+                            readOnly 
+                            value={`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`}
+                            className="bg-muted/50 text-xs"
+                          />
+                          <Button 
+                            className="gradient-primary text-primary-foreground shadow-glow shrink-0"
+                            onClick={() => {
+                              navigator.clipboard.writeText(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`);
+                              toast.success("Link copiado! Cole no seu navegador.");
+                            }}
+                          >
+                            <Copy className="mr-2 h-4 w-4" /> Copiar Link
+                          </Button>
+                        </div>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <div className="rounded-lg bg-slate-50 p-3 border border-slate-200 flex items-center gap-3">
-                          <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold shrink-0">1</div>
-                          <p className="text-[11px] font-medium leading-tight">Escolha grupos com 10k+ membros</p>
-                        </div>
-                        <div className="rounded-lg bg-slate-50 p-3 border border-slate-200 flex items-center gap-3">
-                          <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold shrink-0">2</div>
-                          <p className="text-[11px] font-medium leading-tight">Priorize grupos com posts hoje</p>
-                        </div>
-                        <div className="rounded-lg bg-slate-50 p-3 border border-slate-200 flex items-center gap-3">
-                          <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold shrink-0">3</div>
-                          <p className="text-[11px] font-medium leading-tight">Leia as regras antes de postar</p>
-                        </div>
+                      <div className="rounded-lg bg-blue-50 p-4 border border-blue-100">
+                        <p className="text-xs text-blue-800 leading-relaxed">
+                          <strong>Como usar:</strong> Como o Facebook bloqueia acessos diretos, clique no botão <strong>Copiar Link</strong> acima, abra uma nova aba no seu navegador e cole o link lá.
+                        </p>
                       </div>
                     </div>
                   </div>
