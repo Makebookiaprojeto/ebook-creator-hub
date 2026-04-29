@@ -427,11 +427,6 @@ export function ProfileView() {
               </div>
             )}
             
-            <div className="rounded-xl border border-amber-200/50 bg-amber-50/30 p-4">
-              <p className="text-[11px] text-amber-700 leading-relaxed italic">
-                "Esta configuração é global. Isso significa que você configura seus dados de venda uma única vez e todos os seus eBooks herdam essas regras de segurança e checkout."
-              </p>
-            </div>
           </div>
         </div>
       </div>
