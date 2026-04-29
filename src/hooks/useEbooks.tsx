@@ -120,17 +120,23 @@ export function useEbooks() {
     
     if (eErr || !ebook) throw eErr ?? new Error("Ebook não encontrado");
 
-    // 2) Tentar pegar capítulos via owner access (RLS normal)
+    // 2) Tentar pegar capítulos via owner access
     const { data: chapters, error: cErr } = await supabase
       .from("chapters")
       .select("*")
       .eq("ebook_id", id)
       .order("order_index", { ascending: true });
     
-    // 3) Se falhou ou veio vazio e o ebook é público, tentar pegar via preview access
-    // O RLS permite visualizar o primeiro capítulo de ebooks públicos (order_index = 0)
-    // Para a biblioteca do criador, ele deveria ver todos.
-    if (cErr) throw cErr;
+    if (cErr) {
+      console.error("Error fetching chapters:", cErr);
+      // Fallback for debugging - check if we can at least get chapter titles
+      const { data: minimalChapters } = await supabase
+        .from("chapters")
+        .select("id, title, order_index")
+        .eq("ebook_id", id);
+      console.log("Minimal chapters check:", minimalChapters);
+      throw cErr;
+    }
 
     return { ebook, chapters: chapters ?? [] };
   };
