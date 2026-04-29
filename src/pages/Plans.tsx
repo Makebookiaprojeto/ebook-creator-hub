@@ -326,7 +326,7 @@ export default function Plans() {
                 <p className="text-muted-foreground">
                   Mensal por 1 ano = <span className="line-through">R$ 1.798,80</span>{" "}
                   · Vitalício = <span className="font-semibold text-foreground">R$ 249,90</span>{" "}
-                  pra sempre. Você economiza{" "}
+                  para sempre. Você economiza{" "}
                   <span className="font-semibold text-primary">R$ 1.548,90</span> só
                   no primeiro ano.
                 </p>
