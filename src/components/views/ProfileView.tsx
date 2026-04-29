@@ -274,16 +274,6 @@ export function ProfileView() {
           </div>
           <div>
             <h2 className="font-display text-2xl font-semibold">{displayName}</h2>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="mt-3 gap-2"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={uploadingAvatar}
-            >
-              <Upload className="h-3.5 w-3.5" />
-              Upload Nova Foto
-            </Button>
           </div>
         </div>
 
