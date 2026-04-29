@@ -176,7 +176,7 @@ export default function Plans() {
         <section className="max-w-4xl mx-auto px-6 pt-16 pb-10 text-center">
           <div className="inline-flex items-center gap-2 text-xs font-medium bg-primary/10 text-primary px-3 py-1.5 rounded-full mb-6">
             <Zap className="h-3.5 w-3.5" />
-            Acesso liberado na hora
+            Acesso liberado imediatamente
           </div>
           <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
             Comece a vender seu primeiro eBook ainda <span className="text-primary">esta semana</span>
