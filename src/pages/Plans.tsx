@@ -224,7 +224,7 @@ export default function Plans() {
         <section id="planos" className="max-w-5xl mx-auto px-6 py-12 scroll-mt-20">
           <div className="text-center mb-10">
             <h2 className="text-2xl md:text-4xl font-bold mb-3">
-              Escolha o plano ideal pra você
+              Escolha o plano ideal para você
             </h2>
             <p className="text-muted-foreground">
               Garantia incondicional de 7 dias. Cancele quando quiser.
