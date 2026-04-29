@@ -405,7 +405,7 @@ export default function Plans() {
         {/* CTA FINAL */}
         <section className="max-w-3xl mx-auto px-6 py-16 text-center">
           <h2 className="text-2xl md:text-4xl font-bold mb-4">
-            Pronto pra publicar seu primeiro eBook?
+            Pronto para publicar seu primeiro eBook?
           </h2>
           <p className="text-muted-foreground mb-8">
             Junte-se a mais de 2.000 criadores que já estão faturando com a plataforma.
