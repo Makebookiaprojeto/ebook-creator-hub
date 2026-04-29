@@ -785,7 +785,6 @@ export function CreateEbookView() {
                 {/* Search box */}
                 <div className="mt-6 rounded-2xl border bg-muted/30 p-5">
                   <label className="text-sm font-semibold">Qual o assunto do seu ebook?</label>
-                  <p className="mt-1 text-xs text-muted-foreground">O Facebook bloqueia buscas automáticas por segurança. Use os links manuais abaixo.</p>
                   <div className="mt-3 flex flex-col sm:flex-row gap-2">
                     <div className="relative flex-1">
                       <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
