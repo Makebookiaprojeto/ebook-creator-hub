@@ -120,23 +120,14 @@ export function useEbooks() {
     
     if (eErr || !ebook) throw eErr ?? new Error("Ebook não encontrado");
 
-    // 2) Tentar pegar capítulos via owner access
+    // 2) Pegar capítulos via RLS (deve funcionar agora com as novas políticas)
     const { data: chapters, error: cErr } = await supabase
       .from("chapters")
       .select("*")
       .eq("ebook_id", id)
       .order("order_index", { ascending: true });
     
-    if (cErr) {
-      console.error("Error fetching chapters:", cErr);
-      // Fallback for debugging - check if we can at least get chapter titles
-      const { data: minimalChapters } = await supabase
-        .from("chapters")
-        .select("id, title, order_index")
-        .eq("ebook_id", id);
-      console.log("Minimal chapters check:", minimalChapters);
-      throw cErr;
-    }
+    if (cErr) throw cErr;
 
     return { ebook, chapters: chapters ?? [] };
   };
