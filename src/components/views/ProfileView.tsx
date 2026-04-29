@@ -274,7 +274,6 @@ export function ProfileView() {
           </div>
           <div>
             <h2 className="font-display text-2xl font-semibold">{displayName}</h2>
-            <p className="text-muted-foreground">{email}</p>
             <Button 
               variant="outline" 
               size="sm" 
