@@ -259,7 +259,7 @@ const Landing = () => {
                 <span>Oferta encerra em: {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}</span>
               </div>
               <ul className="space-y-4 mb-10 flex-1">
-                {["Tudo do PRO", "Pagamento único (Sem mensalidade)", "Acesso para sempre", "Atualizações vitalícias inclusas"].map(item => (
+                {["Tudo do PRO", "Pagamento único", "Acesso para sempre", "Atualizações vitalícias inclusas"].map(item => (
                   <li key={item} className="flex items-center gap-3 text-sm font-semibold">
                     <Check className="h-4 w-4 text-primary shrink-0" /> {item}
                   </li>
