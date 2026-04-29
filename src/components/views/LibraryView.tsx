@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BookOpen, Check, Download, ExternalLink, Eye, Globe, Link2, Loader2, Lock, Tag, Trash2, Plus, Settings } from "lucide-react";
+import { BookOpen, Check, Download, ExternalLink, Eye, Globe, Link2, Loader2, Lock, Tag, Trash2, Plus, Settings, Copy } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useEbooks, type Ebook, type Chapter } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
@@ -498,16 +498,26 @@ export function LibraryView({ onCreateNew }: Props) {
                 </div>
 
 
-                <div className="mt-2">
+                <div className="mt-2 space-y-1.5">
                   {eb.slug ? (
-                    <a
-                      href={`/e/${eb.slug}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex h-9 w-full items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-primary to-accent px-3 text-xs font-semibold text-primary-foreground shadow-glow transition hover:opacity-90"
-                    >
-                      <ExternalLink className="h-3.5 w-3.5" /> Ver página de vendas
-                    </a>
+                    <>
+                      <a
+                        href={`/e/${eb.slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex h-9 w-full items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-primary to-accent px-3 text-xs font-semibold text-primary-foreground shadow-glow transition hover:opacity-90"
+                      >
+                        <ExternalLink className="h-3.5 w-3.5" /> Ver página de vendas
+                      </a>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-9 w-full border-primary/30 text-xs"
+                        onClick={() => copyPublicLink(eb)}
+                      >
+                        <Copy className="h-3.5 w-3.5 mr-2" /> Copiar link de vendas
+                      </Button>
+                    </>
                   ) : (
                     <div className="flex h-9 w-full items-center justify-center gap-1.5 rounded-lg border border-dashed bg-muted/20 px-3 text-xs font-medium text-muted-foreground italic">
                       Link indisponível
