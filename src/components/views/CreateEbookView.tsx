@@ -252,11 +252,22 @@ export function CreateEbookView() {
   };
 
   const promoTemplates = (topic: string, link: string) => [
-    `🔥 Pessoal, acabei de encontrar o melhor material sobre ${topic || "[ASSUNTO]"} que já vi! Mudou meu jogo completamente. Dá uma olhada: ${link}`,
-    `✨ Você luta com ${topic || "[ASSUNTO]"}? Descobri um ebook passo a passo que resolve isso de verdade. Recomendo demais 👉 ${link}`,
-    `💡 Se você quer dominar ${topic || "[ASSUNTO]"} sem perder tempo, esse material é OBRIGATÓRIO. Vale cada centavo: ${link}`,
-    `🎯 Estou aplicando o método deste ebook de ${topic || "[ASSUNTO]"} e os resultados são reais. Quem quiser, segue o link: ${link}`,
-    `⚡ Promoção especial por tempo limitado! O melhor ebook de ${topic || "[ASSUNTO]"} com desconto. Garanta agora 👉 ${link}`,
+    {
+      title: "🔥 Gancho de Curiosidade (Alto Engajamento)",
+      content: `Gente, eu tô sem acreditar no que acabei de descobrir sobre ${topic || "[ASSUNTO]"}. 😱\n\nSempre achei que era impossível ter resultados rápidos nessa área, mas esse material que encontrei mudou tudo. Não é curso, é um passo a passo prático que vai direto ao ponto.\n\nLiberei o acesso aqui pra quem também quer virar o jogo: ${link}\n\nAproveitem enquanto o link ainda tá ativo! 🚀`,
+    },
+    {
+      title: "✨ Autoridade e Prova Social",
+      content: `Você também sente que está estagnado em ${topic || "[ASSUNTO]"}? 😰\n\nDepois de testar de tudo, finalmente encontrei o método que as grandes autoridades usam (e não contam pra ninguém). Esse ebook é praticamente um mapa do tesouro pra quem busca resultados reais e profissionais.\n\nConfira os detalhes aqui 👉 ${link}\n\nPS: A garantia de 7 dias me deu a segurança que eu precisava pra começar. Vale cada centavo!`,
+    },
+    {
+      title: "💡 Educativo e Resolutivo (Ideal para Grupos)",
+      content: `Dica de ouro para o grupo! 💡\n\nMuita gente me pergunta como resolver [DOR COMUM EM ${topic || "ESTE NICHO"}]. A resposta curta? Estratégia.\n\nEncontrei este guia completo de ${topic || "[ASSUNTO]"} que desmistifica todo o processo. Se você quer parar de perder tempo e começar a fazer do jeito certo, esse é o caminho.\n\nLink do material: ${link}\n\nBons estudos! 📚`,
+    },
+    {
+      title: "🎯 Oferta Irresistível (Escassez)",
+      content: `ALERTA DE OPORTUNIDADE! ⚡\n\nConsegui um link exclusivo com desconto para o melhor ebook de ${topic || "[ASSUNTO]"} do mercado. O conteúdo é denso, prático e focado em gerar lucro/resultado rápido.\n\nNão sei por quanto tempo esse valor promocional vai durar, então corre lá: ${link}\n\nQuem chegar primeiro leva os bônus exclusivos! 🏃💨`,
+    },
   ];
 
   const next = () => setStep((s) => Math.min(s + 1, steps.length - 1));
@@ -844,19 +855,24 @@ export function CreateEbookView() {
                   </p>
                   <div className="mt-3 space-y-3">
                     {promoTemplates(searchTopic, ebookLink).map((m, i) => (
-                      <div key={i} className="rounded-xl border bg-card p-4">
-                        <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">{m}</p>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="mt-2 h-7 text-xs"
-                          onClick={() => {
-                            navigator.clipboard.writeText(m);
-                            toast.success("Texto copiado!");
-                          }}
-                        >
-                          <Copy className="mr-1.5 h-3 w-3" /> Copiar mensagem
-                        </Button>
+                      <div key={i} className="rounded-xl border bg-card p-5 space-y-3 transition hover:border-primary/40 hover:shadow-soft">
+                        <div className="flex items-center justify-between border-b pb-2">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-primary">{m.title}</span>
+                          <Badge variant="outline" className="text-[9px] font-bold">RECOMENDADO</Badge>
+                        </div>
+                        <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap italic">"{m.content}"</p>
+                        <div className="flex justify-end">
+                          <Button
+                            size="sm"
+                            className="h-8 gradient-primary text-primary-foreground shadow-glow"
+                            onClick={() => {
+                              navigator.clipboard.writeText(m.content);
+                              toast.success("Mensagem profissional copiada!");
+                            }}
+                          >
+                            <Copy className="mr-2 h-3.5 w-3.5" /> Copiar Mensagem
+                          </Button>
+                        </div>
                       </div>
                     ))}
                   </div>
