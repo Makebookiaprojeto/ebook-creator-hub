@@ -91,11 +91,11 @@ export const plans = [
   },
   {
     id: "lifetime",
-    name: "Plano Vitalício",
+    name: "Acesso Vitalício",
     price: 249.90,
     period: "pagamento único",
     highlight: true,
-    features: ["Até 20 ebooks/mês", "Páginas de vendas inclusas", "Sem mensalidade", "Bônus: Gerador de Criativos", "Suporte VIP vitalício"],
+    features: ["Até 20 ebooks/mês", "Acesso para sempre", "Sem mensalidade", "Bônus: Gerador de Criativos", "Suporte VIP vitalício"],
   },
 ];
 
