@@ -54,6 +54,7 @@ export function CreateEbookView() {
   const [createdEbookSlug, setCreatedEbookSlug] = useState<string | null>(null);
   const [searchedGroups, setSearchedGroups] = useState<FbGroup[]>([]);
   const [searchingGroups, setSearchingGroups] = useState(false);
+  const [isPublished, setIsPublished] = useState(false);
 
   const handleAIError = (status?: number, fallback = "Falha ao gerar com IA", errorText?: string) => {
     if (status === 403 && errorText?.includes("limite mensal")) {
@@ -768,12 +769,30 @@ export function CreateEbookView() {
                   </div>
                 </div>
 
-                <Button
-                  className="mt-6 w-full gradient-primary text-primary-foreground shadow-glow sm:w-auto"
-                  onClick={() => toast.success("Página publicada! 🚀")}
-                >
-                  <Rocket className="mr-2 h-4 w-4" /> Publicar página
-                </Button>
+                <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                  <Button
+                    className="flex-1 gradient-primary text-primary-foreground shadow-glow"
+                    onClick={() => {
+                      setIsPublished(true);
+                      toast.success("Página publicada! 🚀");
+                    }}
+                  >
+                    <Rocket className="mr-2 h-4 w-4" /> Publicar página
+                  </Button>
+                  
+                  {isPublished && (
+                    <Button
+                      variant="outline"
+                      className="flex-1 border-primary/20 hover:bg-primary/5 gap-2"
+                      onClick={() => {
+                        const previewUrl = `${window.location.origin}/e/preview?title=${encodeURIComponent(title)}&price=${price}&subtitle=${encodeURIComponent(subtitle)}`;
+                        window.open(previewUrl, '_blank');
+                      }}
+                    >
+                      <Eye className="h-4 w-4" /> Ver na Web
+                    </Button>
+                  )}
+                </div>
               </div>
             )}
 
