@@ -149,12 +149,8 @@ export function CreateEbookView() {
             ),
           );
 
-      // 3) Capa
-      const coverPromise = useAiCover 
-        ? supabase.functions.invoke("generate-ebook", {
-            body: { mode: "image", kind: "cover", prompt: coverPromptFromTemplate ?? niche },
-          })
-        : Promise.resolve({ 
+      // 3) Capa (Imagem temática gratuita)
+      const coverPromise = Promise.resolve({ 
             data: { url: `https://source.unsplash.com/featured/800x1100?${encodeURIComponent(niche)}` }, 
             error: null 
           });
