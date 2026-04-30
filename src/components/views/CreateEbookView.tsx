@@ -47,6 +47,8 @@ export function CreateEbookView() {
   const [generatingPdf, setGeneratingPdf] = useState(false);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [uploadingPdf, setUploadingPdf] = useState(false);
+  const [useAiCover, setUseAiCover] = useState(true);
+  const [coverSearch, setCoverSearch] = useState("");
 
   // Divulgação
   const [searchTopic, setSearchTopic] = useState("");
@@ -148,10 +150,15 @@ export function CreateEbookView() {
             ),
           );
 
-      // 3) Capa (sempre IA — personalização visual)
-      const coverPromise = supabase.functions.invoke("generate-ebook", {
-        body: { mode: "image", kind: "cover", prompt: coverPromptFromTemplate ?? niche },
-      });
+      // 3) Capa
+      const coverPromise = useAiCover 
+        ? supabase.functions.invoke("generate-ebook", {
+            body: { mode: "image", kind: "cover", prompt: coverPromptFromTemplate ?? niche },
+          })
+        : Promise.resolve({ 
+            data: { url: `https://source.unsplash.com/featured/800x1100?${encodeURIComponent(niche)}` }, 
+            error: null 
+          });
 
       // 4) Imagens dos capítulos (Fotos gratuitas para economizar)
       const chapterImagesPromise = Promise.resolve(
@@ -452,9 +459,28 @@ export function CreateEbookView() {
                     </div>
                     <p className="mt-4 font-display text-lg font-semibold">Pronto para a mágica?</p>
                     <p className="mt-1 text-sm text-muted-foreground">Vamos gerar título, subtítulo e capítulos.</p>
-                    <Button onClick={generate} size="lg" className="mt-6 gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
-                      <Sparkles className="mr-2 h-4 w-4" /> Gerar com IA
-                    </Button>
+                    
+                    <div className="mt-6 flex flex-col items-center gap-4 w-full max-w-xs">
+                      <div className="flex w-full items-center justify-between rounded-xl border bg-background p-3">
+                        <div className="flex items-center gap-2">
+                          <Sparkles className={`h-4 w-4 ${useAiCover ? "text-primary" : "text-muted-foreground"}`} />
+                          <div className="text-left">
+                            <p className="text-xs font-semibold">Capa com IA</p>
+                            <p className="text-[10px] text-muted-foreground">Consome créditos</p>
+                          </div>
+                        </div>
+                        <button 
+                          onClick={() => setUseAiCover(!useAiCover)}
+                          className={`relative h-6 w-11 rounded-full transition-colors ${useAiCover ? "bg-primary" : "bg-muted"}`}
+                        >
+                          <div className={`absolute top-1 h-4 w-4 rounded-full bg-white transition-all ${useAiCover ? "left-6" : "left-1"}`} />
+                        </button>
+                      </div>
+
+                      <Button onClick={generate} size="lg" className="w-full gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
+                        <Sparkles className="mr-2 h-4 w-4" /> Gerar com IA
+                      </Button>
+                    </div>
                   </div>
                 )}
 
@@ -556,6 +582,24 @@ export function CreateEbookView() {
                         </div>
                       </div>
                       <div className="flex flex-wrap gap-2">
+                        <div className="flex items-center gap-1 rounded-lg border bg-background px-1.5">
+                          <Search className="h-3.5 w-3.5 text-muted-foreground ml-1" />
+                          <Input 
+                            placeholder="Buscar capa (ex: nature)..." 
+                            className="h-8 border-0 shadow-none focus-visible:ring-0 text-xs w-32 sm:w-40"
+                            value={coverSearch}
+                            onChange={(e) => setCoverSearch(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' && coverSearch.trim()) {
+                                setCoverUrl(`https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=800&h=1100&q=${encodeURIComponent(coverSearch)}`);
+                                // Using a more direct search trick for Unsplash images if possible, 
+                                // but for now let's just use a source that works:
+                                setCoverUrl(`https://source.unsplash.com/featured/800x1100?${encodeURIComponent(coverSearch)}`);
+                                toast.success("Buscando nova capa...");
+                              }
+                            }}
+                          />
+                        </div>
                         <Button size="sm" variant="outline" onClick={() => setShowFullPreview((v) => !v)}>
                           <Eye className="mr-2 h-3.5 w-3.5" /> {showFullPreview ? "Fechar preview" : "Preview completo"}
                         </Button>
