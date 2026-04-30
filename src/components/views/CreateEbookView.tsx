@@ -42,6 +42,8 @@ export function CreateEbookView() {
   const [subtitle, setSubtitle] = useState("");
   const [coverUrl, setCoverUrl] = useState<string | null>(null);
   const [chapters, setChapters] = useState<ChapterDraft[]>([]);
+  const [generatedEbookId, setGeneratedEbookId] = useState<string | null>(null);
+  const [generationProgress, setGenerationProgress] = useState<{ done: number; total: number } | null>(null);
   const [openChapter, setOpenChapter] = useState<number | null>(null);
   const [showFullPreview, setShowFullPreview] = useState(false);
   const [generatingPdf, setGeneratingPdf] = useState(false);
