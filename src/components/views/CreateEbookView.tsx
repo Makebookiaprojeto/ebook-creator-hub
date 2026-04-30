@@ -908,7 +908,7 @@ export function CreateEbookView() {
                 <div className="mt-8">
                   <h3 className="font-display text-base font-semibold">Mensagens prontas para divulgação</h3>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    {searchTopic ? `Personalizadas para "${searchTopic}"` : "Digite o assunto acima para personalizar as mensagens"} — já incluem o link do seu ebook.
+                    {searchTopic ? `Personalizadas para "${searchTopic}"` : "Digite o assunto acima para personalizar as mensagens"}.
                   </p>
                   <div className="mt-3 space-y-3">
                     {promoTemplates(searchTopic, ebookLink).map((m, i) => (
