@@ -42,6 +42,8 @@ export function CreateEbookView() {
   const [subtitle, setSubtitle] = useState("");
   const [coverUrl, setCoverUrl] = useState<string | null>(null);
   const [chapters, setChapters] = useState<ChapterDraft[]>([]);
+  const [generatedEbookId, setGeneratedEbookId] = useState<string | null>(null);
+  const [generationProgress, setGenerationProgress] = useState<{ done: number; total: number } | null>(null);
   const [openChapter, setOpenChapter] = useState<number | null>(null);
   const [showFullPreview, setShowFullPreview] = useState(false);
   const [generatingPdf, setGeneratingPdf] = useState(false);
@@ -72,121 +74,103 @@ export function CreateEbookView() {
       return;
     }
     setGenerating(true);
-    setGenerationStage("Procurando ebook-base no catálogo...");
+    setGenerated(false);
+    setGenerationStage("Iniciando geração...");
+    setGenerationProgress(null);
+    setTitle("");
+    setSubtitle("");
+    setCoverUrl(null);
+    setChapters([]);
+
     try {
-      // 0) Tenta usar template do catálogo (modelo híbrido)
-      let usedTemplate = false;
-      let chapterDefs: { title: string; subtitle: string }[] = [];
-      let templateChapterContents: string[] = [];
-      let coverPromptFromTemplate: string | null = null;
-
-      try {
-        const { data: tplRes } = await supabase.functions.invoke("personalize-template", {
-          body: { niche, audience },
-        });
-        const tpl = (tplRes as any)?.template;
-        if (tpl) {
-          usedTemplate = true;
-          setTitle(tpl.title);
-          setSubtitle(tpl.subtitle);
-          chapterDefs = tpl.chapters.map((c: any) => ({ title: c.title, subtitle: c.subtitle }));
-          templateChapterContents = tpl.chapters.map((c: any) => c.content);
-          coverPromptFromTemplate = tpl.cover_prompt ?? null;
-          setChapters(
-            tpl.chapters.map((c: any) => ({
-              title: c.title,
-              subtitle: c.subtitle,
-              content: c.content,
-              image_url: null,
-            })),
-          );
-          setGenerated(true);
-          setGenerationStage("Gerando capa e imagens dos capítulos...");
-        }
-      } catch (e) {
-        console.warn("Template lookup falhou, caindo para geração completa", e);
+      // 1) Inicia a geração assíncrona
+      const { data: startRes, error: startErr } = await supabase.functions.invoke("generate-ebook", {
+        body: { mode: "start", niche, audience },
+      });
+      if (startErr || !startRes?.ebook_id) {
+        const status = (startErr as any)?.context?.status;
+        const errorMsg = (startErr as any)?.message || (startRes as any)?.error;
+        handleAIError(status, "Falha ao iniciar geração", errorMsg);
+        setGenerating(false);
+        return;
       }
+      const ebookId: string = startRes.ebook_id;
+      setGeneratedEbookId(ebookId);
 
-      // 1) Sem template → gera estrutura do zero
-      if (!usedTemplate) {
-        setGenerationStage("Analisando o nicho...");
-        const { data: structure, error: sErr } = await supabase.functions.invoke("generate-ebook", {
-          body: { mode: "structure", niche, audience },
-        });
-        if (sErr || !structure) {
-          const status = (sErr as any)?.context?.status;
-          const errorMsg = (sErr as any)?.message || (structure as any)?.error;
-          handleAIError(status, "Falha ao gerar estrutura", errorMsg);
+      // 2) Polling do status do ebook + carregamento incremental dos capítulos
+      const POLL_MS = 2500;
+      const MAX_TRIES = 240; // 10 minutos máx
+      let tries = 0;
+
+      const poll = async (): Promise<void> => {
+        tries += 1;
+        const { data: eb } = await supabase
+          .from("ebooks")
+          .select("title, subtitle, cover_url, generation_status, generation_progress, generation_error")
+          .eq("id", ebookId)
+          .maybeSingle();
+
+        if (!eb) {
+          if (tries < MAX_TRIES) {
+            setTimeout(poll, POLL_MS);
+            return;
+          }
+          throw new Error("Ebook não encontrado após geração");
+        }
+
+        if (eb.title && eb.title !== "Gerando...") setTitle(eb.title);
+        if (eb.subtitle) setSubtitle(eb.subtitle);
+        if (eb.cover_url) setCoverUrl(eb.cover_url);
+
+        const prog: any = eb.generation_progress ?? {};
+        if (prog.message) setGenerationStage(prog.message);
+        if (typeof prog.total === "number" && typeof prog.done === "number") {
+          setGenerationProgress({ done: prog.done, total: prog.total });
+          // Carrega capítulos parciais para feedback visual
+          if (prog.done > 0) {
+            const { data: chs } = await supabase
+              .from("chapters")
+              .select("title, content, image_url, order_index")
+              .eq("ebook_id", ebookId)
+              .order("order_index", { ascending: true });
+            if (chs) {
+              setChapters(
+                chs.map((c) => ({
+                  title: c.title,
+                  subtitle: "",
+                  content: c.content ?? "",
+                  image_url: c.image_url ?? null,
+                })),
+              );
+              if (!generated) setGenerated(true);
+            }
+          }
+        }
+
+        if (eb.generation_status === "done") {
+          setGenerationStage("");
+          setGenerating(false);
+          setGenerated(true);
+          toast.success("Ebook completo gerado com IA! 🎉");
           return;
         }
-        setTitle(structure.title);
-        setSubtitle(structure.subtitle);
-        chapterDefs = structure.chapters;
-        coverPromptFromTemplate = structure.cover_prompt;
-        setChapters(
-          chapterDefs.map((c) => ({ title: c.title, subtitle: c.subtitle, content: "", image_url: null })),
-        );
-        setGenerated(true);
-        setGenerationStage(`Escrevendo ${chapterDefs.length} capítulos e gerando imagens...`);
-      }
+        if (eb.generation_status === "failed") {
+          setGenerating(false);
+          toast.error(eb.generation_error || "Falha na geração");
+          return;
+        }
+        if (tries < MAX_TRIES) {
+          setTimeout(poll, POLL_MS);
+        } else {
+          setGenerating(false);
+          toast.error("Tempo esgotado aguardando a geração.");
+        }
+      };
 
-      // 2) Conteúdo dos capítulos: vem do template (custo zero) ou gera com IA
-      const contentPromise = usedTemplate
-        ? Promise.resolve(templateChapterContents.map((content) => ({ data: { content }, error: null })))
-        : Promise.all(
-            chapterDefs.map((c, idx) =>
-              supabase.functions.invoke("generate-ebook", {
-                body: {
-                  mode: "chapter",
-                  ebookTitle: title || (chapterDefs[0]?.title ?? ""),
-                  audience,
-                  chapterTitle: c.title,
-                  chapterSubtitle: c.subtitle,
-                  chapterIndex: idx,
-                  totalChapters: chapterDefs.length,
-                },
-              }),
-            ),
-          );
-
-      // 3) Capa (Imagem temática gratuita)
-      const coverPromise = Promise.resolve({ 
-            data: { url: `https://source.unsplash.com/featured/800x1100?${encodeURIComponent(niche)}` }, 
-            error: null 
-          });
-
-      // 4) Imagens dos capítulos (Fotos gratuitas para economizar)
-      const chapterImagesPromise = Promise.resolve(
-        chapterDefs.map((c) => ({
-          data: { url: `https://source.unsplash.com/featured/800x450?${encodeURIComponent(niche + " " + c.title)}` }
-        }))
-      );
-
-      const [contents, coverRes, chapterImages] = await Promise.all([
-        contentPromise,
-        coverPromise,
-        chapterImagesPromise,
-      ]);
-
-      if (coverRes.data?.url) setCoverUrl(coverRes.data.url);
-
-      const filled: ChapterDraft[] = chapterDefs.map((c, i) => ({
-        title: c.title,
-        subtitle: c.subtitle,
-        content: (contents as any)[i].data?.content ?? "Conteúdo não gerado.",
-        image_url: chapterImages[i].data?.url ?? null,
-      }));
-      setChapters(filled);
-      setGenerationStage("");
-      toast.success(
-        usedTemplate
-          ? "Ebook entregue do catálogo + personalizado! 🎯"
-          : "Ebook completo gerado com IA! 🎉",
-      );
-    } catch (e) {
+      poll();
+    } catch (e: any) {
       console.error(e);
-      toast.error("Erro inesperado ao gerar ebook");
-    } finally {
+      toast.error(e?.message ?? "Erro inesperado ao gerar ebook");
       setGenerating(false);
     }
   };
@@ -463,14 +447,28 @@ export function CreateEbookView() {
                   </div>
                 )}
 
-                {generating && (
+                {generating && !generated && (
                   <div className="mt-10 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-center">
                     <Loader2 className="h-10 w-10 animate-spin text-primary" />
                     <p className="mt-4 font-medium">Gerando seu ebook...</p>
                     <p className="mt-1 text-sm text-muted-foreground">{generationStage || "Trabalhando..."}</p>
-                    <p className="mt-3 text-xs text-muted-foreground">Pode levar 30-60 segundos. Estamos criando capa, capítulos e ilustrações.</p>
+                    {generationProgress && generationProgress.total > 0 && (
+                      <div className="mt-4 w-full max-w-xs">
+                        <div className="h-2 rounded-full bg-muted overflow-hidden">
+                          <div
+                            className="h-full gradient-primary transition-all duration-500"
+                            style={{ width: `${(generationProgress.done / generationProgress.total) * 100}%` }}
+                          />
+                        </div>
+                        <p className="mt-2 text-xs text-muted-foreground">
+                          {generationProgress.done} de {generationProgress.total} capítulos
+                        </p>
+                      </div>
+                    )}
+                    <p className="mt-3 text-xs text-muted-foreground">Pode levar 1-3 minutos. Estamos criando capa, capítulos e ilustrações em alta qualidade.</p>
                   </div>
                 )}
+
 
                 {generated && (
                   <div className="mt-6 space-y-6">
@@ -982,23 +980,71 @@ export function CreateEbookView() {
               }
               try {
                 setSaving(true);
-                const res = await createEbookWithChapters(
-                  {
-                    title,
-                    subtitle,
-                    description: subtitle,
-                    category: niche,
-                    niche,
-                    audience,
-                    cover_url: coverUrl,
-                    status: "published",
-                    pdf_url: pdfUrl,
-                  },
-                  chapters,
-                );
-                if (res?.slug) {
-                  setCreatedEbookSlug(res.slug);
-                  setEbookLink(`${window.location.origin}/e/${res.slug}`);
+
+                if (generatedEbookId) {
+                  // Ebook já existe (gerado em background). Atualiza + publica + sincroniza capítulos editados.
+                  const { data: updated, error: updErr } = await supabase
+                    .from("ebooks")
+                    .update({
+                      title,
+                      subtitle,
+                      description: subtitle,
+                      category: niche,
+                      niche,
+                      audience,
+                      cover_url: coverUrl,
+                      status: "published",
+                      is_public: true,
+                      pdf_url: pdfUrl,
+                    })
+                    .eq("id", generatedEbookId)
+                    .select("slug")
+                    .single();
+                  if (updErr) throw updErr;
+
+                  // Sincroniza edições nos capítulos
+                  const { data: existingChs } = await supabase
+                    .from("chapters")
+                    .select("id, order_index")
+                    .eq("ebook_id", generatedEbookId)
+                    .order("order_index", { ascending: true });
+                  if (existingChs) {
+                    await Promise.all(
+                      chapters.map((c, i) => {
+                        const row = existingChs[i];
+                        if (!row) return Promise.resolve();
+                        return supabase
+                          .from("chapters")
+                          .update({ title: c.title, content: c.content, image_url: c.image_url })
+                          .eq("id", row.id);
+                      }),
+                    );
+                  }
+
+                  if (updated?.slug) {
+                    setCreatedEbookSlug(updated.slug);
+                    setEbookLink(`${window.location.origin}/e/${updated.slug}`);
+                  }
+                } else {
+                  // Fluxo legado (sem geração assíncrona)
+                  const res = await createEbookWithChapters(
+                    {
+                      title,
+                      subtitle,
+                      description: subtitle,
+                      category: niche,
+                      niche,
+                      audience,
+                      cover_url: coverUrl,
+                      status: "published",
+                      pdf_url: pdfUrl,
+                    },
+                    chapters,
+                  );
+                  if (res?.slug) {
+                    setCreatedEbookSlug(res.slug);
+                    setEbookLink(`${window.location.origin}/e/${res.slug}`);
+                  }
                 }
                 toast.success("Ebook salvo com sucesso! 🎉");
               } catch (e: any) {
@@ -1007,6 +1053,7 @@ export function CreateEbookView() {
                 setSaving(false);
               }
             }}
+
             disabled={saving}
             className="gradient-primary text-primary-foreground shadow-glow"
           >

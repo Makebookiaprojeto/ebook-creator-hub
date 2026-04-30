@@ -1,5 +1,8 @@
-// Generates ebook structure, chapter content, and AI images via Lovable AI Gateway.
-// Images are uploaded to the public `ebook-images` storage bucket and the public URL is returned.
+// Async ebook generator.
+// Mode "start": creates the ebook row in DB with status=processing and kicks
+// off the heavy work in the background (EdgeRuntime.waitUntil). Returns
+// immediately with the ebook id. Frontend polls the `ebooks` row to get
+// progress and the finished chapters.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
@@ -14,29 +17,45 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
 const TEXT_MODEL = "google/gemini-2.5-flash";
-const IMAGE_MODEL = "google/gemini-3.1-flash-image-preview";
+const IMAGE_MODEL = "google/gemini-2.5-flash-image";
 
-async function callAI(body: Record<string, unknown>) {
-  const resp = await fetch(GATEWAY, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${LOVABLE_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-  if (!resp.ok) {
-    const text = await resp.text();
-    return { error: { status: resp.status, text } };
-  }
-  return { data: await resp.json() };
-}
+type Json = Record<string, unknown>;
+const admin = () => createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 function jsonResponse(payload: unknown, status = 200) {
   return new Response(JSON.stringify(payload), {
     status,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
+}
+
+async function callAI(body: Json, attempt = 0): Promise<{ data?: any; error?: { status: number; text: string } }> {
+  try {
+    const resp = await fetch(GATEWAY, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    if (!resp.ok) {
+      const text = await resp.text();
+      // Retry on transient
+      if ((resp.status === 429 || resp.status >= 500) && attempt < 2) {
+        await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
+        return callAI(body, attempt + 1);
+      }
+      return { error: { status: resp.status, text } };
+    }
+    return { data: await resp.json() };
+  } catch (e) {
+    if (attempt < 2) {
+      await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
+      return callAI(body, attempt + 1);
+    }
+    return { error: { status: 500, text: e instanceof Error ? e.message : String(e) } };
+  }
 }
 
 function dataUrlToBytes(dataUrl: string): { bytes: Uint8Array; contentType: string } {
@@ -50,41 +69,219 @@ function dataUrlToBytes(dataUrl: string): { bytes: Uint8Array; contentType: stri
   return { bytes, contentType };
 }
 
-async function generateAndUploadImage(prompt: string, userId: string, kind: "cover" | "chapter") {
+async function generateAndUploadImage(prompt: string, userId: string, kind: "cover" | "chapter"): Promise<string | null> {
   const result = await callAI({
     model: IMAGE_MODEL,
     messages: [{ role: "user", content: prompt }],
     modalities: ["image", "text"],
   });
-  if ("error" in result) return { error: result.error };
-
+  if (result.error) {
+    console.error(`Image gen failed (${kind}):`, result.error);
+    return null;
+  }
   const dataUrl: string | undefined =
-    result.data.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-  if (!dataUrl) return { error: { status: 500, text: "No image returned by model" } };
+    result.data?.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+  if (!dataUrl) return null;
 
-  const { bytes, contentType } = dataUrlToBytes(dataUrl);
-  const ext = contentType.split("/")[1] || "png";
-  const path = `${userId}/${kind}-${crypto.randomUUID()}.${ext}`;
-
-  const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-  const { error: upErr } = await supabase.storage
-    .from("ebook-images")
-    .upload(path, bytes, { contentType, upsert: false });
-  if (upErr) return { error: { status: 500, text: upErr.message } };
-
-  const { data: pub } = supabase.storage.from("ebook-images").getPublicUrl(path);
-  return { url: pub.publicUrl };
+  try {
+    const { bytes, contentType } = dataUrlToBytes(dataUrl);
+    const ext = contentType.split("/")[1] || "png";
+    const path = `${userId}/${kind}-${crypto.randomUUID()}.${ext}`;
+    const sb = admin();
+    const { error: upErr } = await sb.storage
+      .from("ebook-images")
+      .upload(path, bytes, { contentType, upsert: false });
+    if (upErr) {
+      console.error("Upload failed:", upErr);
+      return null;
+    }
+    const { data: pub } = sb.storage.from("ebook-images").getPublicUrl(path);
+    return pub.publicUrl;
+  } catch (e) {
+    console.error("Image upload error:", e);
+    return null;
+  }
 }
 
 async function getUserId(req: Request): Promise<string | null> {
   const auth = req.headers.get("Authorization");
   if (!auth) return null;
-  const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+  const sb = admin();
   const token = auth.replace("Bearer ", "");
-  const { data, error } = await supabase.auth.getUser(token);
+  const { data, error } = await sb.auth.getUser(token);
   if (error || !data.user) return null;
   return data.user.id;
 }
+
+// ----------- AI calls -----------
+
+async function generateStructure(niche: string, audience: string) {
+  const sys = `Você é um autor profissional de ebooks digitais bestsellers em português brasileiro.
+Crie a estrutura COMPLETA de um ebook irresistível. Responda APENAS com JSON válido (sem markdown, sem comentários).
+Formato exato:
+{
+  "title": "string (máx 70 chars, chamativo)",
+  "subtitle": "string (máx 120 chars, promessa clara)",
+  "cover_prompt": "string (descrição visual da capa, em inglês, sem texto/letras)",
+  "chapters": [
+    { "title": "string", "subtitle": "string curto (1 frase de promessa)", "image_prompt": "descrição visual em inglês, sem texto" }
+  ]
+}
+Gere entre 6 e 8 capítulos.`;
+  const user = `Nicho: ${niche}\nPúblico-alvo: ${audience || "geral"}`;
+  const result = await callAI({
+    model: TEXT_MODEL,
+    messages: [
+      { role: "system", content: sys },
+      { role: "user", content: user },
+    ],
+    response_format: { type: "json_object" },
+  });
+  if (result.error) throw new Error(`structure: ${result.error.text}`);
+  const txt = result.data?.choices?.[0]?.message?.content ?? "{}";
+  return JSON.parse(txt);
+}
+
+async function generateChapter(args: {
+  ebookTitle: string;
+  audience: string;
+  chapterTitle: string;
+  chapterSubtitle: string;
+  chapterIndex: number;
+  totalChapters: number;
+}) {
+  const sys = `Você é um autor profissional de ebooks digitais.
+Escreva um capítulo COMPLETO, denso e prático em português brasileiro.
+- Mínimo 700 palavras, máximo 1200.
+- Use parágrafos curtos, listas, exemplos concretos e CTAs sutis.
+- Use markdown leve (## subtítulos, **negrito**, - listas).
+- NÃO repita o título do capítulo no início.
+Responda APENAS com o conteúdo do capítulo.`;
+  const user = `Ebook: "${args.ebookTitle}"
+Público: ${args.audience || "geral"}
+Capítulo ${args.chapterIndex + 1} de ${args.totalChapters}: "${args.chapterTitle}"
+Promessa do capítulo: ${args.chapterSubtitle}`;
+  const result = await callAI({
+    model: TEXT_MODEL,
+    messages: [
+      { role: "system", content: sys },
+      { role: "user", content: user },
+    ],
+  });
+  if (result.error) throw new Error(`chapter ${args.chapterIndex}: ${result.error.text}`);
+  return result.data?.choices?.[0]?.message?.content ?? "";
+}
+
+// ----------- Background worker -----------
+
+async function runWorker(ebookId: string, userId: string, niche: string, audience: string) {
+  const sb = admin();
+  const updateProgress = (progress: Json, extra: Json = {}) =>
+    sb.from("ebooks").update({ generation_progress: progress, ...extra }).eq("id", ebookId);
+
+  try {
+    // 1. Structure
+    await updateProgress({ stage: "structure", message: "Criando estrutura..." });
+    const structure = await generateStructure(niche, audience);
+    const chapters: Array<{ title: string; subtitle: string; image_prompt: string }> =
+      structure.chapters ?? [];
+    const total = chapters.length;
+
+    await sb.from("ebooks").update({
+      title: structure.title,
+      subtitle: structure.subtitle,
+      generation_progress: { stage: "content", message: "Estrutura pronta. Gerando conteúdo e imagens...", total, done: 0 },
+    }).eq("id", ebookId);
+
+    // 2. Cover (in parallel with first chapter content)
+    const coverPrompt = `Photorealistic ebook cover photograph, ultra-detailed, cinematic lighting, shallow depth of field, professional DSLR photography, magazine-quality composition. Absolutely NO text, letters, typography, logos or watermarks. Subject: ${structure.cover_prompt || niche}`;
+    const coverPromise = generateAndUploadImage(coverPrompt, userId, "cover").then(async (url) => {
+      if (url) await sb.from("ebooks").update({ cover_url: url }).eq("id", ebookId);
+      return url;
+    });
+
+    // 3. Chapters: process in parallel batches of 3 to avoid rate limits
+    let done = 0;
+    const BATCH = 3;
+    for (let i = 0; i < total; i += BATCH) {
+      const slice = chapters.slice(i, i + BATCH);
+      await Promise.all(
+        slice.map(async (ch, k) => {
+          const idx = i + k;
+          try {
+            const [content, imageUrl] = await Promise.all([
+              generateChapter({
+                ebookTitle: structure.title,
+                audience,
+                chapterTitle: ch.title,
+                chapterSubtitle: ch.subtitle,
+                chapterIndex: idx,
+                totalChapters: total,
+              }),
+              generateAndUploadImage(
+                `Photorealistic editorial photograph for an ebook chapter, ultra-detailed real-world scene, natural lighting, professional photography, magazine quality. Absolutely NO text, letters, typography, logos or watermarks. Subject: ${ch.image_prompt || ch.title}`,
+                userId,
+                "chapter",
+              ),
+            ]);
+
+            await sb.from("chapters").insert({
+              ebook_id: ebookId,
+              user_id: userId,
+              title: ch.title,
+              content,
+              image_url: imageUrl,
+              order_index: idx,
+            });
+          } catch (e) {
+            console.error(`Chapter ${idx} failed:`, e);
+            // Insert a placeholder so the user still has something
+            await sb.from("chapters").insert({
+              ebook_id: ebookId,
+              user_id: userId,
+              title: ch.title,
+              content: `_Não foi possível gerar este capítulo automaticamente. Edite o conteúdo aqui._`,
+              image_url: null,
+              order_index: idx,
+            });
+          } finally {
+            done += 1;
+            await updateProgress({ stage: "content", message: `Capítulo ${done} de ${total} pronto`, total, done });
+          }
+        }),
+      );
+    }
+
+    await coverPromise; // ensure cover finishes too
+
+    await sb.from("ebooks").update({
+      generation_status: "done",
+      generation_progress: { stage: "done", message: "Concluído!", total, done: total },
+    }).eq("id", ebookId);
+
+    // Increment monthly counter only on success
+    const { data: profile } = await sb
+      .from("profiles")
+      .select("ebooks_generated_this_month")
+      .eq("user_id", userId)
+      .single();
+    if (profile) {
+      await sb.from("profiles")
+        .update({ ebooks_generated_this_month: (profile.ebooks_generated_this_month ?? 0) + 1 })
+        .eq("user_id", userId);
+    }
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error("Worker failed:", msg);
+    await sb.from("ebooks").update({
+      generation_status: "failed",
+      generation_error: msg,
+      generation_progress: { stage: "failed", message: msg },
+    }).eq("id", ebookId);
+  }
+}
+
+// ----------- HTTP entrypoint -----------
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -94,81 +291,66 @@ Deno.serve(async (req) => {
 
     const body = await req.json();
     const { mode } = body;
-
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
     const userId = await getUserId(req);
+    if (!userId) return jsonResponse({ error: "Não autenticado" }, 401);
 
-    // ---------- Limit Check (Only for generating structure or images) ----------
-    if ((mode === "structure" || mode === "image") && userId) {
-      // 1. Get user profile and limits
-      const { data: profile, error: profErr } = await supabase
+    if (mode === "start") {
+      const { niche, audience } = body as { niche: string; audience?: string };
+      if (!niche?.trim()) return jsonResponse({ error: "Nicho obrigatório" }, 400);
+
+      const sb = admin();
+
+      // Limit check
+      const { data: profile } = await sb
         .from("profiles")
         .select("monthly_ebook_limit, ebooks_generated_this_month, last_ebook_reset_at")
         .eq("user_id", userId)
         .single();
 
-      if (profErr) {
-        console.error("Error fetching profile:", profErr);
-      } else if (profile) {
+      if (profile) {
         const now = new Date();
-        const lastReset = new Date(profile.last_ebook_reset_at);
-        let currentUsage = profile.ebooks_generated_this_month;
-
-        // Check if we need to reset the monthly counter
-        const isNewMonth = 
-          now.getMonth() !== lastReset.getMonth() || 
+        const lastReset = new Date(profile.last_ebook_reset_at ?? now);
+        let usage = profile.ebooks_generated_this_month ?? 0;
+        const isNewMonth =
+          now.getMonth() !== lastReset.getMonth() ||
           now.getFullYear() !== lastReset.getFullYear();
-
         if (isNewMonth) {
-          currentUsage = 0;
-          await supabase
-            .from("profiles")
+          usage = 0;
+          await sb.from("profiles")
             .update({ ebooks_generated_this_month: 0, last_ebook_reset_at: now.toISOString() })
             .eq("user_id", userId);
         }
-
-        // Only enforce limit on 'structure' (start of a new ebook)
-        if (mode === "structure" && currentUsage >= profile.monthly_ebook_limit) {
-          return jsonResponse({ 
-            error: `Você atingiu seu limite mensal de ${profile.monthly_ebook_limit} eBooks. Seu limite será resetado no próximo mês.` 
+        if (usage >= (profile.monthly_ebook_limit ?? 20)) {
+          return jsonResponse({
+            error: `Você atingiu seu limite mensal de ${profile.monthly_ebook_limit} eBooks.`,
           }, 403);
         }
-        
-        // Increment usage ONLY when starting a new structure
-        if (mode === "structure") {
-          await supabase
-            .from("profiles")
-            .update({ ebooks_generated_this_month: currentUsage + 1 })
-            .eq("user_id", userId);
-        }
       }
-    }
 
-    // ---------- structure ----------
-    if (mode === "structure") {
-      const { niche, audience } = body;
-// ... keep existing code
-    }
+      // Create skeleton row
+      const { data: ebook, error: insErr } = await sb
+        .from("ebooks")
+        .insert({
+          user_id: userId,
+          title: "Gerando...",
+          niche,
+          audience: audience ?? null,
+          category: niche,
+          status: "draft",
+          is_public: false,
+          generation_status: "processing",
+          generation_progress: { stage: "queued", message: "Iniciando..." },
+          generation_input: { niche, audience: audience ?? null },
+        })
+        .select("id")
+        .single();
+      if (insErr || !ebook) throw insErr ?? new Error("Falha ao criar ebook");
 
-    // ---------- chapter content ----------
-    if (mode === "chapter") {
-      const { ebookTitle, audience, chapterTitle, chapterSubtitle, chapterIndex, totalChapters } = body;
-// ... keep existing code
-    }
+      // Kick off background work
+      // @ts-ignore EdgeRuntime is available in Supabase Edge runtime
+      EdgeRuntime.waitUntil(runWorker(ebook.id, userId, niche, audience ?? ""));
 
-    // ---------- image generation (cover or chapter) ----------
-    if (mode === "image") {
-      if (!userId) return jsonResponse({ error: "Não autenticado" }, 401);
-
-      const { prompt, kind } = body as { prompt: string; kind: "cover" | "chapter" };
-      const styled =
-        kind === "cover"
-          ? `Photorealistic ebook cover photograph, ultra-detailed, cinematic lighting, shallow depth of field, professional DSLR photography, natural colors, real-world scene, high resolution, intuitive visual metaphor that clearly represents the topic, magazine-quality composition. Absolutely NO text, NO letters, NO typography, NO logos, NO watermarks anywhere in the image. Subject: ${prompt}`
-          : `Photorealistic editorial photograph for an ebook chapter, ultra-detailed real-world scene, natural lighting, professional photography, intuitive and literal visual representation of the concept (show real people, objects, or environments — not abstract shapes), shallow depth of field, magazine quality, lifelike textures and colors. Absolutely NO text, NO letters, NO typography, NO logos, NO watermarks anywhere in the image. Subject: ${prompt}`;
-
-      const result = await generateAndUploadImage(styled, userId, kind);
-      if ("error" in result && result.error) return jsonResponse({ error: result.error.text }, result.error.status);
-      return jsonResponse({ url: result.url });
+      return jsonResponse({ ebook_id: ebook.id });
     }
 
     return jsonResponse({ error: "mode inválido" }, 400);
