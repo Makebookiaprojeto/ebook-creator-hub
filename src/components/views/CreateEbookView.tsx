@@ -47,7 +47,6 @@ export function CreateEbookView() {
   const [generatingPdf, setGeneratingPdf] = useState(false);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [uploadingPdf, setUploadingPdf] = useState(false);
-  const [useAiCover, setUseAiCover] = useState(true);
   const [coverSearch, setCoverSearch] = useState("");
 
   // Divulgação
@@ -150,12 +149,8 @@ export function CreateEbookView() {
             ),
           );
 
-      // 3) Capa
-      const coverPromise = useAiCover 
-        ? supabase.functions.invoke("generate-ebook", {
-            body: { mode: "image", kind: "cover", prompt: coverPromptFromTemplate ?? niche },
-          })
-        : Promise.resolve({ 
+      // 3) Capa (Imagem temática gratuita)
+      const coverPromise = Promise.resolve({ 
             data: { url: `https://source.unsplash.com/featured/800x1100?${encodeURIComponent(niche)}` }, 
             error: null 
           });
@@ -461,22 +456,6 @@ export function CreateEbookView() {
                     <p className="mt-1 text-sm text-muted-foreground">Vamos gerar título, subtítulo e capítulos.</p>
                     
                     <div className="mt-6 flex flex-col items-center gap-4 w-full max-w-xs">
-                      <div className="flex w-full items-center justify-between rounded-xl border bg-background p-3">
-                        <div className="flex items-center gap-2">
-                          <Sparkles className={`h-4 w-4 ${useAiCover ? "text-primary" : "text-muted-foreground"}`} />
-                          <div className="text-left">
-                            <p className="text-xs font-semibold">Capa com IA</p>
-                            <p className="text-[10px] text-muted-foreground">Consome créditos</p>
-                          </div>
-                        </div>
-                        <button 
-                          onClick={() => setUseAiCover(!useAiCover)}
-                          className={`relative h-6 w-11 rounded-full transition-colors ${useAiCover ? "bg-primary" : "bg-muted"}`}
-                        >
-                          <div className={`absolute top-1 h-4 w-4 rounded-full bg-white transition-all ${useAiCover ? "left-6" : "left-1"}`} />
-                        </button>
-                      </div>
-
                       <Button onClick={generate} size="lg" className="w-full gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
                         <Sparkles className="mr-2 h-4 w-4" /> Gerar com IA
                       </Button>
