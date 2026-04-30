@@ -792,7 +792,7 @@ export function CreateEbookView() {
             {step === 4 && (
               <div>
                 <h2 className="font-display text-xl font-semibold">Divulgação</h2>
-                <p className="mt-1 text-sm text-muted-foreground">Encontre grupos relevantes e gere mensagens prontas.</p>
+                <p className="mt-1 text-sm text-muted-foreground">Encontre grupos relevantes para divulgar seu ebook.</p>
 
                 {/* Search box */}
                 <div className="mt-6 rounded-2xl border bg-muted/30 p-5">
