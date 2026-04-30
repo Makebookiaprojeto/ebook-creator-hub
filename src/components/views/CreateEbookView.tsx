@@ -47,6 +47,8 @@ export function CreateEbookView() {
   const [generatingPdf, setGeneratingPdf] = useState(false);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [uploadingPdf, setUploadingPdf] = useState(false);
+  const [useAiCover, setUseAiCover] = useState(true);
+  const [coverSearch, setCoverSearch] = useState("");
 
   // Divulgação
   const [searchTopic, setSearchTopic] = useState("");
