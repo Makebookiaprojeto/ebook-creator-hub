@@ -582,6 +582,24 @@ export function CreateEbookView() {
                         </div>
                       </div>
                       <div className="flex flex-wrap gap-2">
+                        <div className="flex items-center gap-1 rounded-lg border bg-background px-1.5">
+                          <Search className="h-3.5 w-3.5 text-muted-foreground ml-1" />
+                          <Input 
+                            placeholder="Buscar capa (ex: nature)..." 
+                            className="h-8 border-0 shadow-none focus-visible:ring-0 text-xs w-32 sm:w-40"
+                            value={coverSearch}
+                            onChange={(e) => setCoverSearch(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' && coverSearch.trim()) {
+                                setCoverUrl(`https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=800&h=1100&q=${encodeURIComponent(coverSearch)}`);
+                                // Using a more direct search trick for Unsplash images if possible, 
+                                // but for now let's just use a source that works:
+                                setCoverUrl(`https://source.unsplash.com/featured/800x1100?${encodeURIComponent(coverSearch)}`);
+                                toast.success("Buscando nova capa...");
+                              }
+                            }}
+                          />
+                        </div>
                         <Button size="sm" variant="outline" onClick={() => setShowFullPreview((v) => !v)}>
                           <Eye className="mr-2 h-3.5 w-3.5" /> {showFullPreview ? "Fechar preview" : "Preview completo"}
                         </Button>
