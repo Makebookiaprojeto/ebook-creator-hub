@@ -254,6 +254,10 @@ export type Database = {
           cover_url: string | null
           created_at: string
           description: string | null
+          generation_error: string | null
+          generation_input: Json | null
+          generation_progress: Json
+          generation_status: string
           id: string
           is_public: boolean
           niche: string | null
@@ -275,6 +279,10 @@ export type Database = {
           cover_url?: string | null
           created_at?: string
           description?: string | null
+          generation_error?: string | null
+          generation_input?: Json | null
+          generation_progress?: Json
+          generation_status?: string
           id?: string
           is_public?: boolean
           niche?: string | null
@@ -296,6 +304,10 @@ export type Database = {
           cover_url?: string | null
           created_at?: string
           description?: string | null
+          generation_error?: string | null
+          generation_input?: Json | null
+          generation_progress?: Json
+          generation_status?: string
           id?: string
           is_public?: boolean
           niche?: string | null
