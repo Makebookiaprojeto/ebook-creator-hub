@@ -980,23 +980,71 @@ export function CreateEbookView() {
               }
               try {
                 setSaving(true);
-                const res = await createEbookWithChapters(
-                  {
-                    title,
-                    subtitle,
-                    description: subtitle,
-                    category: niche,
-                    niche,
-                    audience,
-                    cover_url: coverUrl,
-                    status: "published",
-                    pdf_url: pdfUrl,
-                  },
-                  chapters,
-                );
-                if (res?.slug) {
-                  setCreatedEbookSlug(res.slug);
-                  setEbookLink(`${window.location.origin}/e/${res.slug}`);
+
+                if (generatedEbookId) {
+                  // Ebook já existe (gerado em background). Atualiza + publica + sincroniza capítulos editados.
+                  const { data: updated, error: updErr } = await supabase
+                    .from("ebooks")
+                    .update({
+                      title,
+                      subtitle,
+                      description: subtitle,
+                      category: niche,
+                      niche,
+                      audience,
+                      cover_url: coverUrl,
+                      status: "published",
+                      is_public: true,
+                      pdf_url: pdfUrl,
+                    })
+                    .eq("id", generatedEbookId)
+                    .select("slug")
+                    .single();
+                  if (updErr) throw updErr;
+
+                  // Sincroniza edições nos capítulos
+                  const { data: existingChs } = await supabase
+                    .from("chapters")
+                    .select("id, order_index")
+                    .eq("ebook_id", generatedEbookId)
+                    .order("order_index", { ascending: true });
+                  if (existingChs) {
+                    await Promise.all(
+                      chapters.map((c, i) => {
+                        const row = existingChs[i];
+                        if (!row) return Promise.resolve();
+                        return supabase
+                          .from("chapters")
+                          .update({ title: c.title, content: c.content, image_url: c.image_url })
+                          .eq("id", row.id);
+                      }),
+                    );
+                  }
+
+                  if (updated?.slug) {
+                    setCreatedEbookSlug(updated.slug);
+                    setEbookLink(`${window.location.origin}/e/${updated.slug}`);
+                  }
+                } else {
+                  // Fluxo legado (sem geração assíncrona)
+                  const res = await createEbookWithChapters(
+                    {
+                      title,
+                      subtitle,
+                      description: subtitle,
+                      category: niche,
+                      niche,
+                      audience,
+                      cover_url: coverUrl,
+                      status: "published",
+                      pdf_url: pdfUrl,
+                    },
+                    chapters,
+                  );
+                  if (res?.slug) {
+                    setCreatedEbookSlug(res.slug);
+                    setEbookLink(`${window.location.origin}/e/${res.slug}`);
+                  }
                 }
                 toast.success("Ebook salvo com sucesso! 🎉");
               } catch (e: any) {
@@ -1005,6 +1053,7 @@ export function CreateEbookView() {
                 setSaving(false);
               }
             }}
+
             disabled={saving}
             className="gradient-primary text-primary-foreground shadow-glow"
           >
