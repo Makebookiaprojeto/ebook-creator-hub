@@ -447,14 +447,28 @@ export function CreateEbookView() {
                   </div>
                 )}
 
-                {generating && (
+                {generating && !generated && (
                   <div className="mt-10 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-center">
                     <Loader2 className="h-10 w-10 animate-spin text-primary" />
                     <p className="mt-4 font-medium">Gerando seu ebook...</p>
                     <p className="mt-1 text-sm text-muted-foreground">{generationStage || "Trabalhando..."}</p>
-                    <p className="mt-3 text-xs text-muted-foreground">Pode levar 30-60 segundos. Estamos criando capa, capítulos e ilustrações.</p>
+                    {generationProgress && generationProgress.total > 0 && (
+                      <div className="mt-4 w-full max-w-xs">
+                        <div className="h-2 rounded-full bg-muted overflow-hidden">
+                          <div
+                            className="h-full gradient-primary transition-all duration-500"
+                            style={{ width: `${(generationProgress.done / generationProgress.total) * 100}%` }}
+                          />
+                        </div>
+                        <p className="mt-2 text-xs text-muted-foreground">
+                          {generationProgress.done} de {generationProgress.total} capítulos
+                        </p>
+                      </div>
+                    )}
+                    <p className="mt-3 text-xs text-muted-foreground">Pode levar 1-3 minutos. Estamos criando capa, capítulos e ilustrações em alta qualidade.</p>
                   </div>
                 )}
+
 
                 {generated && (
                   <div className="mt-6 space-y-6">
