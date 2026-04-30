@@ -150,15 +150,20 @@ export function CreateEbookView() {
             ),
           );
 
-      // 3) Capa (sempre IA — personalização visual)
-      const coverPromise = supabase.functions.invoke("generate-ebook", {
-        body: { mode: "image", kind: "cover", prompt: coverPromptFromTemplate ?? niche },
-      });
+      // 3) Capa
+      const coverPromise = useAiCover 
+        ? supabase.functions.invoke("generate-ebook", {
+            body: { mode: "image", kind: "cover", prompt: coverPromptFromTemplate ?? niche },
+          })
+        : Promise.resolve({ 
+            data: { url: `https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=800&h=1100` }, 
+            error: null 
+          });
 
       // 4) Imagens dos capítulos (Fotos gratuitas para economizar)
       const chapterImagesPromise = Promise.resolve(
         chapterDefs.map((c) => ({
-          data: { url: `https://source.unsplash.com/featured/800x450?${encodeURIComponent(niche + " " + c.title)}` }
+          data: { url: `https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=800&h=450` }
         }))
       );
 
