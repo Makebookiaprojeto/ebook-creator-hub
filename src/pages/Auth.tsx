@@ -117,7 +117,17 @@ const Auth = () => {
         });
 
         if (error) {
-          if (error.status === 422 || error.message.toLowerCase().includes("already registered") || error.status === 400) {
+          const msg = error.message?.toLowerCase() ?? "";
+          const isPwned =
+            msg.includes("pwned") ||
+            msg.includes("compromised") ||
+            msg.includes("data breach") ||
+            msg.includes("has been found in a data breach") ||
+            (error.status === 422 && msg.includes("password"));
+
+          if (isPwned) {
+            toast.error("Insira uma senha mais segura");
+          } else if (error.message.toLowerCase().includes("already registered") || (error.status === 422 && !msg.includes("password")) || error.status === 400) {
             toast.error("Este e-mail já possui uma conta vinculada. Por favor, faça login.");
             setTab("login");
           } else {
