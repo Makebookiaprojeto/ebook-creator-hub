@@ -502,6 +502,28 @@ export type Database = {
       }
     }
     Views: {
+      public_ebook_checkout: {
+        Row: {
+          checkout_url: string | null
+          ebook_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ebook_payment_config_ebook_id_fkey"
+            columns: ["ebook_id"]
+            isOneToOne: true
+            referencedRelation: "ebooks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ebook_payment_config_ebook_id_fkey"
+            columns: ["ebook_id"]
+            isOneToOne: true
+            referencedRelation: "public_ebooks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       public_ebooks: {
         Row: {
           audience: string | null
