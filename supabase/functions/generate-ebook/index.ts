@@ -58,16 +58,6 @@ async function callAI(body: Json, attempt = 0): Promise<{ data?: any; error?: { 
   }
 }
 
-function dataUrlToBytes(dataUrl: string): { bytes: Uint8Array; contentType: string } {
-  const match = dataUrl.match(/^data:([^;]+);base64,(.+)$/);
-  if (!match) throw new Error("Invalid data URL from image model");
-  const contentType = match[1];
-  const b64 = match[2];
-  const bin = atob(b64);
-  const bytes = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  return { bytes, contentType };
-}
 
 async function searchPexelsAndUpload(
   query: string,
