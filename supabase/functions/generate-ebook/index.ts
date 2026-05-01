@@ -201,19 +201,19 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
     // 1. Structure
     await updateProgress({ stage: "structure", message: "Criando estrutura..." });
     const structure = await generateStructure(niche, audience);
-    const chapters: Array<{ title: string; subtitle: string; image_prompt: string }> =
+    const chapters: Array<{ title: string; subtitle: string; image_keywords?: string }> =
       structure.chapters ?? [];
     const total = chapters.length;
 
     await sb.from("ebooks").update({
       title: structure.title,
       subtitle: structure.subtitle,
-      generation_progress: { stage: "content", message: "Estrutura pronta. Gerando conteúdo e imagens...", total, done: 0 },
+      generation_progress: { stage: "content", message: "Estrutura pronta. Gerando conteúdo e buscando imagens...", total, done: 0 },
     }).eq("id", ebookId);
 
-    // 2. Cover (in parallel with first chapter content)
-    const coverPrompt = `Photorealistic ebook cover photograph, ultra-detailed, cinematic lighting, shallow depth of field, professional DSLR photography, magazine-quality composition. Absolutely NO text, letters, typography, logos or watermarks. Subject: ${structure.cover_prompt || niche}`;
-    const coverPromise = generateAndUploadImage(coverPrompt, userId, "cover").then(async (url) => {
+    // 2. Cover (in parallel with first chapter content) — uses Pexels
+    const coverQuery = (structure.cover_keywords || niche || "business").toString().slice(0, 80);
+    const coverPromise = searchPexelsAndUpload(coverQuery, userId, "cover", "portrait").then(async (url) => {
       if (url) await sb.from("ebooks").update({ cover_url: url }).eq("id", ebookId);
       return url;
     });
