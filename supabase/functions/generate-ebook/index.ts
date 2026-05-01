@@ -145,7 +145,7 @@ Formato exato:
     { "title": "string", "subtitle": "string curto (1 frase de promessa)", "image_keywords": "2 a 4 palavras EM INGLÊS para buscar uma foto temática no banco de imagens (ex: 'morning routine coffee'). Termos visuais concretos, sem texto." }
   ]
 }
-Gere entre 6 e 8 capítulos.`;
+Gere EXATAMENTE 6 capítulos (nem mais, nem menos).`;
   const user = `Nicho: ${niche}\nPúblico-alvo: ${audience || "geral"}`;
   const result = await callAI({
     model: TEXT_MODEL,
@@ -201,8 +201,17 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
     // 1. Structure
     await updateProgress({ stage: "structure", message: "Criando estrutura..." });
     const structure = await generateStructure(niche, audience);
-    const chapters: Array<{ title: string; subtitle: string; image_keywords?: string }> =
+    let chapters: Array<{ title: string; subtitle: string; image_keywords?: string }> =
       structure.chapters ?? [];
+    // Garantir exatamente 6 capítulos
+    if (chapters.length > 6) chapters = chapters.slice(0, 6);
+    while (chapters.length < 6) {
+      chapters.push({
+        title: `Capítulo ${chapters.length + 1}`,
+        subtitle: "Conteúdo complementar",
+        image_keywords: niche,
+      });
+    }
     const total = chapters.length;
 
     await sb.from("ebooks").update({
@@ -227,6 +236,8 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
         slice.map(async (ch, k) => {
           const idx = i + k;
           try {
+            // 1 imagem a cada 2 capítulos: capítulos com índice par (0, 2, 4) recebem imagem
+            const shouldHaveImage = idx % 2 === 0;
             const [content, imageUrl] = await Promise.all([
               generateChapter({
                 ebookTitle: structure.title,
@@ -236,12 +247,14 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
                 chapterIndex: idx,
                 totalChapters: total,
               }),
-              searchPexelsAndUpload(
-                (ch.image_keywords || ch.title || niche).toString().slice(0, 80),
-                userId,
-                "chapter",
-                "landscape",
-              ),
+              shouldHaveImage
+                ? searchPexelsAndUpload(
+                    (ch.image_keywords || ch.title || niche).toString().slice(0, 80),
+                    userId,
+                    "chapter",
+                    "landscape",
+                  )
+                : Promise.resolve(null),
             ]);
 
             await sb.from("chapters").insert({
