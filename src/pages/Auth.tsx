@@ -229,7 +229,17 @@ const Auth = () => {
                     className="mt-1.5"
                   />
                 </div>
-                <Button type="submit" disabled={submitting} className="w-full">
+                <div className="flex justify-center">
+                  <HCaptcha
+                    ref={captchaRef}
+                    sitekey={HCAPTCHA_SITE_KEY}
+                    theme="dark"
+                    onVerify={(token) => setCaptchaToken(token)}
+                    onExpire={() => setCaptchaToken(null)}
+                    onError={() => setCaptchaToken(null)}
+                  />
+                </div>
+                <Button type="submit" disabled={submitting || !captchaToken} className="w-full">
                   {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Enviar link
                 </Button>
@@ -327,14 +337,25 @@ const Auth = () => {
                   )}
                 </div>
 
+                <div className="flex justify-center">
+                  <HCaptcha
+                    ref={captchaRef}
+                    sitekey={HCAPTCHA_SITE_KEY}
+                    theme="dark"
+                    onVerify={(token) => setCaptchaToken(token)}
+                    onExpire={() => setCaptchaToken(null)}
+                    onError={() => setCaptchaToken(null)}
+                  />
+                </div>
+
                 <TabsContent value="login" className="m-0">
-                  <Button type="submit" disabled={submitting} className="w-full">
+                  <Button type="submit" disabled={submitting || !captchaToken} className="w-full">
                     {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Entrar
                   </Button>
                 </TabsContent>
                 <TabsContent value="signup" className="m-0">
-                  <Button type="submit" disabled={submitting || !!emailError} className="w-full">
+                  <Button type="submit" disabled={submitting || !!emailError || !captchaToken} className="w-full">
                     {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Criar minha conta
                   </Button>
