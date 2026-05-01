@@ -236,10 +236,11 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
                 chapterIndex: idx,
                 totalChapters: total,
               }),
-              generateAndUploadImage(
-                `Photorealistic editorial photograph for an ebook chapter, ultra-detailed real-world scene, natural lighting, professional photography, magazine quality. Absolutely NO text, letters, typography, logos or watermarks. Subject: ${ch.image_prompt || ch.title}`,
+              searchPexelsAndUpload(
+                (ch.image_keywords || ch.title || niche).toString().slice(0, 80),
                 userId,
                 "chapter",
+                "landscape",
               ),
             ]);
 
