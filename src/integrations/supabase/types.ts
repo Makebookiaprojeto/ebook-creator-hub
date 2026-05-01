@@ -528,7 +528,6 @@ export type Database = {
         Row: {
           audience: string | null
           author_name: string | null
-          cakto_checkout_url: string | null
           category: string | null
           cover_url: string | null
           created_at: string | null
@@ -548,7 +547,6 @@ export type Database = {
         Insert: {
           audience?: string | null
           author_name?: string | null
-          cakto_checkout_url?: string | null
           category?: string | null
           cover_url?: string | null
           created_at?: string | null
@@ -568,7 +566,6 @@ export type Database = {
         Update: {
           audience?: string | null
           author_name?: string | null
-          cakto_checkout_url?: string | null
           category?: string | null
           cover_url?: string | null
           created_at?: string | null
