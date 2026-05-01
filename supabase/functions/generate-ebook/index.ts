@@ -187,6 +187,8 @@ Promessa do capítulo: ${args.chapterSubtitle}`;
       { role: "system", content: sys },
       { role: "user", content: user },
     ],
+    max_tokens: 700,
+    temperature: 0.7,
   });
   if (result.error) throw new Error(`chapter ${args.chapterIndex}: ${result.error.text}`);
   return result.data?.choices?.[0]?.message?.content ?? "";
