@@ -100,9 +100,19 @@ const Auth = () => {
       }
 
       if (resetMode) {
+        // Verify captcha via edge function
+        const { data: verifyData, error: verifyError } = await supabase.functions.invoke("verify-captcha", {
+          body: { token: captchaToken }
+        });
+
+        if (verifyError || !verifyData?.success) {
+          toast.error("Erro na verificação do Captcha. Tente novamente.");
+          resetCaptcha();
+          return;
+        }
+
         const { error } = await supabase.auth.resetPasswordForEmail(emailParsed.data, {
           redirectTo: `${window.location.origin}/reset-password`,
-          captchaToken,
         });
         resetCaptcha();
         if (error) throw error;
@@ -124,13 +134,23 @@ const Auth = () => {
           return;
         }
 
+        // Verify captcha via edge function
+        const { data: verifyData, error: verifyError } = await supabase.functions.invoke("verify-captcha", {
+          body: { token: captchaToken }
+        });
+
+        if (verifyError || !verifyData?.success) {
+          toast.error("Erro na verificação do Captcha. Tente novamente.");
+          resetCaptcha();
+          return;
+        }
+
         const { error } = await supabase.auth.signUp({
           email: emailParsed.data,
           password: passParsed.data,
           options: {
             emailRedirectTo: `${window.location.origin}/app`,
             data: { username: usernameParsed.data },
-            captchaToken,
           },
         });
         resetCaptcha();
@@ -157,10 +177,20 @@ const Auth = () => {
 
         toast.success("Cadastro solicitado! Verifique sua caixa de entrada para confirmar o e-mail.");
       } else {
+        // Verify captcha via edge function
+        const { data: verifyData, error: verifyError } = await supabase.functions.invoke("verify-captcha", {
+          body: { token: captchaToken }
+        });
+
+        if (verifyError || !verifyData?.success) {
+          toast.error("Erro na verificação do Captcha. Tente novamente.");
+          resetCaptcha();
+          return;
+        }
+
         const { error } = await supabase.auth.signInWithPassword({
           email: emailParsed.data,
           password: passParsed.data,
-          options: { captchaToken },
         });
         resetCaptcha();
 
