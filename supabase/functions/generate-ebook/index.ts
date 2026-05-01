@@ -69,23 +69,51 @@ function dataUrlToBytes(dataUrl: string): { bytes: Uint8Array; contentType: stri
   return { bytes, contentType };
 }
 
-async function generateAndUploadImage(prompt: string, userId: string, kind: "cover" | "chapter"): Promise<string | null> {
-  const result = await callAI({
-    model: IMAGE_MODEL,
-    messages: [{ role: "user", content: prompt }],
-    modalities: ["image", "text"],
-  });
-  if (result.error) {
-    console.error(`Image gen failed (${kind}):`, result.error);
+async function searchPexelsAndUpload(
+  query: string,
+  userId: string,
+  kind: "cover" | "chapter",
+  orientation: "landscape" | "portrait" = "landscape",
+): Promise<string | null> {
+  if (!PEXELS_API_KEY) {
+    console.error("PEXELS_API_KEY not configured");
     return null;
   }
-  const dataUrl: string | undefined =
-    result.data?.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-  if (!dataUrl) return null;
-
   try {
-    const { bytes, contentType } = dataUrlToBytes(dataUrl);
-    const ext = contentType.split("/")[1] || "png";
+    // Pexels search
+    const url = new URL("https://api.pexels.com/v1/search");
+    url.searchParams.set("query", query);
+    url.searchParams.set("per_page", "15");
+    url.searchParams.set("orientation", orientation);
+    url.searchParams.set("size", "large");
+    const resp = await fetch(url.toString(), {
+      headers: { Authorization: PEXELS_API_KEY },
+    });
+    if (!resp.ok) {
+      console.error(`Pexels error ${resp.status}:`, await resp.text());
+      return null;
+    }
+    const data = await resp.json();
+    const photos: any[] = data.photos ?? [];
+    if (!photos.length) {
+      console.warn(`Pexels: no results for "${query}"`);
+      return null;
+    }
+    // Pick a random one from the top results to add variety between ebooks
+    const pick = photos[Math.floor(Math.random() * Math.min(photos.length, 10))];
+    const imgUrl: string =
+      pick.src?.large2x || pick.src?.large || pick.src?.original;
+    if (!imgUrl) return null;
+
+    // Download bytes
+    const imgResp = await fetch(imgUrl);
+    if (!imgResp.ok) {
+      console.error("Pexels image download failed:", imgResp.status);
+      return null;
+    }
+    const contentType = imgResp.headers.get("content-type") || "image/jpeg";
+    const bytes = new Uint8Array(await imgResp.arrayBuffer());
+    const ext = contentType.includes("png") ? "png" : "jpg";
     const path = `${userId}/${kind}-${crypto.randomUUID()}.${ext}`;
     const sb = admin();
     const { error: upErr } = await sb.storage
@@ -98,7 +126,7 @@ async function generateAndUploadImage(prompt: string, userId: string, kind: "cov
     const { data: pub } = sb.storage.from("ebook-images").getPublicUrl(path);
     return pub.publicUrl;
   } catch (e) {
-    console.error("Image upload error:", e);
+    console.error(`Pexels (${kind}) error:`, e);
     return null;
   }
 }
