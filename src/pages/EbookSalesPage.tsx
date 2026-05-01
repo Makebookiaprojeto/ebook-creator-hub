@@ -110,11 +110,20 @@ export default function EbookSalesPage() {
   const handleCheckout = async () => {
     if (!ebook) return;
 
-    // 1) Link específico do eBook
-    const specificUrl = (ebook as any).cakto_checkout_url;
-    if (specificUrl) {
-      window.location.href = specificUrl;
-      return;
+    // 1) Link específico do eBook (via view pública segura)
+    try {
+      const { data: checkoutData } = await (supabase
+        .from("public_ebook_checkout" as any)
+        .select("checkout_url")
+        .eq("ebook_id", ebook.id)
+        .maybeSingle() as any);
+      const specificUrl = (checkoutData as any)?.checkout_url;
+      if (specificUrl) {
+        window.location.href = specificUrl;
+        return;
+      }
+    } catch (err) {
+      console.error("checkout lookup failed", err);
     }
 
     // 2) Fallback para o Link Global do perfil do autor
@@ -145,12 +154,11 @@ export default function EbookSalesPage() {
     (async () => {
       if (!slug) return;
       setLoading(true);
-      const { data: ebookData, error: ebookErr } = await supabase
-        .from("ebooks")
+      const { data: ebookData, error: ebookErr } = await (supabase
+        .from("public_ebooks" as any)
         .select("*")
         .eq("slug", slug)
-        .eq("is_public", true)
-        .maybeSingle();
+        .maybeSingle() as any);
 
       if (!active) return;
       if (ebookErr || !ebookData) {
