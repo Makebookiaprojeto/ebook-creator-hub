@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { z } from "zod";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/useAuth";
@@ -11,6 +12,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Sparkles, Loader2, Eye, EyeOff } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
+
+const HCAPTCHA_SITE_KEY = "594c5b80-3cf8-4ab4-aa78-11189a50f094";
 
 const emailSchema = z.string().trim().email("Email inválido").max(255);
 const passwordSchema = z.string().min(6, "Senha deve ter no mínimo 6 caracteres").max(72);
@@ -28,6 +31,13 @@ const Auth = () => {
   const [resetMode, setResetMode] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [isValidatingEmail, setIsValidatingEmail] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captchaRef = useRef<HCaptcha>(null);
+
+  const resetCaptcha = () => {
+    setCaptchaToken(null);
+    captchaRef.current?.resetCaptcha();
+  };
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
@@ -78,6 +88,11 @@ const Auth = () => {
         return;
       }
 
+      if (!captchaToken) {
+        toast.error("Por favor, complete a verificação de segurança.");
+        return;
+      }
+
       const emailParsed = emailSchema.safeParse(email);
       if (!emailParsed.success) {
         toast.error(emailParsed.error.issues[0].message);
@@ -87,7 +102,9 @@ const Auth = () => {
       if (resetMode) {
         const { error } = await supabase.auth.resetPasswordForEmail(emailParsed.data, {
           redirectTo: `${window.location.origin}/reset-password`,
+          captchaToken,
         });
+        resetCaptcha();
         if (error) throw error;
         toast.success("Enviamos um link de recuperação para seu email.");
         setResetMode(false);
@@ -113,8 +130,10 @@ const Auth = () => {
           options: {
             emailRedirectTo: `${window.location.origin}/app`,
             data: { username: usernameParsed.data },
+            captchaToken,
           },
         });
+        resetCaptcha();
 
         if (error) {
           const msg = error.message?.toLowerCase() ?? "";
@@ -141,7 +160,9 @@ const Auth = () => {
         const { error } = await supabase.auth.signInWithPassword({
           email: emailParsed.data,
           password: passParsed.data,
+          options: { captchaToken },
         });
+        resetCaptcha();
 
         if (error) {
           if (error.message.includes("Invalid login")) {
@@ -158,6 +179,7 @@ const Auth = () => {
         navigate("/app", { replace: true });
       }
     } catch (err: any) {
+      resetCaptcha();
       toast.error(err.message ?? "Ocorreu um erro inesperado.");
     } finally {
       setSubmitting(false);
