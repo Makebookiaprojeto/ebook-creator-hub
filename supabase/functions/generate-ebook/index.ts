@@ -13,11 +13,11 @@ const corsHeaders = {
 };
 
 const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+const PEXELS_API_KEY = Deno.env.get("PEXELS_API_KEY");
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
 const TEXT_MODEL = "google/gemini-2.5-flash";
-const IMAGE_MODEL = "google/gemini-2.5-flash-image";
 
 type Json = Record<string, unknown>;
 const admin = () => createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
@@ -58,34 +58,52 @@ async function callAI(body: Json, attempt = 0): Promise<{ data?: any; error?: { 
   }
 }
 
-function dataUrlToBytes(dataUrl: string): { bytes: Uint8Array; contentType: string } {
-  const match = dataUrl.match(/^data:([^;]+);base64,(.+)$/);
-  if (!match) throw new Error("Invalid data URL from image model");
-  const contentType = match[1];
-  const b64 = match[2];
-  const bin = atob(b64);
-  const bytes = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  return { bytes, contentType };
-}
 
-async function generateAndUploadImage(prompt: string, userId: string, kind: "cover" | "chapter"): Promise<string | null> {
-  const result = await callAI({
-    model: IMAGE_MODEL,
-    messages: [{ role: "user", content: prompt }],
-    modalities: ["image", "text"],
-  });
-  if (result.error) {
-    console.error(`Image gen failed (${kind}):`, result.error);
+async function searchPexelsAndUpload(
+  query: string,
+  userId: string,
+  kind: "cover" | "chapter",
+  orientation: "landscape" | "portrait" = "landscape",
+): Promise<string | null> {
+  if (!PEXELS_API_KEY) {
+    console.error("PEXELS_API_KEY not configured");
     return null;
   }
-  const dataUrl: string | undefined =
-    result.data?.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-  if (!dataUrl) return null;
-
   try {
-    const { bytes, contentType } = dataUrlToBytes(dataUrl);
-    const ext = contentType.split("/")[1] || "png";
+    // Pexels search
+    const url = new URL("https://api.pexels.com/v1/search");
+    url.searchParams.set("query", query);
+    url.searchParams.set("per_page", "15");
+    url.searchParams.set("orientation", orientation);
+    url.searchParams.set("size", "large");
+    const resp = await fetch(url.toString(), {
+      headers: { Authorization: PEXELS_API_KEY },
+    });
+    if (!resp.ok) {
+      console.error(`Pexels error ${resp.status}:`, await resp.text());
+      return null;
+    }
+    const data = await resp.json();
+    const photos: any[] = data.photos ?? [];
+    if (!photos.length) {
+      console.warn(`Pexels: no results for "${query}"`);
+      return null;
+    }
+    // Pick a random one from the top results to add variety between ebooks
+    const pick = photos[Math.floor(Math.random() * Math.min(photos.length, 10))];
+    const imgUrl: string =
+      pick.src?.large2x || pick.src?.large || pick.src?.original;
+    if (!imgUrl) return null;
+
+    // Download bytes
+    const imgResp = await fetch(imgUrl);
+    if (!imgResp.ok) {
+      console.error("Pexels image download failed:", imgResp.status);
+      return null;
+    }
+    const contentType = imgResp.headers.get("content-type") || "image/jpeg";
+    const bytes = new Uint8Array(await imgResp.arrayBuffer());
+    const ext = contentType.includes("png") ? "png" : "jpg";
     const path = `${userId}/${kind}-${crypto.randomUUID()}.${ext}`;
     const sb = admin();
     const { error: upErr } = await sb.storage
@@ -98,7 +116,7 @@ async function generateAndUploadImage(prompt: string, userId: string, kind: "cov
     const { data: pub } = sb.storage.from("ebook-images").getPublicUrl(path);
     return pub.publicUrl;
   } catch (e) {
-    console.error("Image upload error:", e);
+    console.error(`Pexels (${kind}) error:`, e);
     return null;
   }
 }
@@ -122,9 +140,9 @@ Formato exato:
 {
   "title": "string (máx 70 chars, chamativo)",
   "subtitle": "string (máx 120 chars, promessa clara)",
-  "cover_prompt": "string (descrição visual da capa, em inglês, sem texto/letras)",
+  "cover_keywords": "2 a 4 palavras EM INGLÊS para buscar uma foto de capa em banco de imagens (ex: 'business success laptop', 'healthy food kitchen'). Use termos visuais concretos.",
   "chapters": [
-    { "title": "string", "subtitle": "string curto (1 frase de promessa)", "image_prompt": "descrição visual em inglês, sem texto" }
+    { "title": "string", "subtitle": "string curto (1 frase de promessa)", "image_keywords": "2 a 4 palavras EM INGLÊS para buscar uma foto temática no banco de imagens (ex: 'morning routine coffee'). Termos visuais concretos, sem texto." }
   ]
 }
 Gere entre 6 e 8 capítulos.`;
@@ -183,19 +201,19 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
     // 1. Structure
     await updateProgress({ stage: "structure", message: "Criando estrutura..." });
     const structure = await generateStructure(niche, audience);
-    const chapters: Array<{ title: string; subtitle: string; image_prompt: string }> =
+    const chapters: Array<{ title: string; subtitle: string; image_keywords?: string }> =
       structure.chapters ?? [];
     const total = chapters.length;
 
     await sb.from("ebooks").update({
       title: structure.title,
       subtitle: structure.subtitle,
-      generation_progress: { stage: "content", message: "Estrutura pronta. Gerando conteúdo e imagens...", total, done: 0 },
+      generation_progress: { stage: "content", message: "Estrutura pronta. Gerando conteúdo e buscando imagens...", total, done: 0 },
     }).eq("id", ebookId);
 
-    // 2. Cover (in parallel with first chapter content)
-    const coverPrompt = `Photorealistic ebook cover photograph, ultra-detailed, cinematic lighting, shallow depth of field, professional DSLR photography, magazine-quality composition. Absolutely NO text, letters, typography, logos or watermarks. Subject: ${structure.cover_prompt || niche}`;
-    const coverPromise = generateAndUploadImage(coverPrompt, userId, "cover").then(async (url) => {
+    // 2. Cover (in parallel with first chapter content) — uses Pexels
+    const coverQuery = (structure.cover_keywords || niche || "business").toString().slice(0, 80);
+    const coverPromise = searchPexelsAndUpload(coverQuery, userId, "cover", "portrait").then(async (url) => {
       if (url) await sb.from("ebooks").update({ cover_url: url }).eq("id", ebookId);
       return url;
     });
@@ -218,10 +236,11 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
                 chapterIndex: idx,
                 totalChapters: total,
               }),
-              generateAndUploadImage(
-                `Photorealistic editorial photograph for an ebook chapter, ultra-detailed real-world scene, natural lighting, professional photography, magazine quality. Absolutely NO text, letters, typography, logos or watermarks. Subject: ${ch.image_prompt || ch.title}`,
+              searchPexelsAndUpload(
+                (ch.image_keywords || ch.title || niche).toString().slice(0, 80),
                 userId,
                 "chapter",
+                "landscape",
               ),
             ]);
 
