@@ -169,11 +169,13 @@ async function generateChapter(args: {
   totalChapters: number;
 }) {
   const sys = `Você é um autor profissional de ebooks digitais.
-Escreva um capítulo COMPLETO, denso e prático em português brasileiro.
-- Mínimo 700 palavras, máximo 1200.
-- Use parágrafos curtos, listas, exemplos concretos e CTAs sutis.
-- Use markdown leve (## subtítulos, **negrito**, - listas).
+Escreva um capítulo OBJETIVO e prático em português brasileiro.
+- PADRÃO ÚNICO: entre 280 e 350 palavras (NÃO ultrapasse 350).
+- Vá direto ao ponto: 1 introdução curta + 3 a 5 dicas/passos + fechamento de 1 frase.
+- Use markdown leve (## 1 subtítulo opcional, **negrito**, - listas curtas).
+- Parágrafos curtos (2-3 linhas).
 - NÃO repita o título do capítulo no início.
+- NÃO use enchimento, frases genéricas ou repetições.
 Responda APENAS com o conteúdo do capítulo.`;
   const user = `Ebook: "${args.ebookTitle}"
 Público: ${args.audience || "geral"}
@@ -185,6 +187,8 @@ Promessa do capítulo: ${args.chapterSubtitle}`;
       { role: "system", content: sys },
       { role: "user", content: user },
     ],
+    max_tokens: 700,
+    temperature: 0.7,
   });
   if (result.error) throw new Error(`chapter ${args.chapterIndex}: ${result.error.text}`);
   return result.data?.choices?.[0]?.message?.content ?? "";
