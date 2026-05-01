@@ -140,9 +140,9 @@ Formato exato:
 {
   "title": "string (máx 70 chars, chamativo)",
   "subtitle": "string (máx 120 chars, promessa clara)",
-  "cover_prompt": "string (descrição visual da capa, em inglês, sem texto/letras)",
+  "cover_keywords": "2 a 4 palavras EM INGLÊS para buscar uma foto de capa em banco de imagens (ex: 'business success laptop', 'healthy food kitchen'). Use termos visuais concretos.",
   "chapters": [
-    { "title": "string", "subtitle": "string curto (1 frase de promessa)", "image_prompt": "descrição visual em inglês, sem texto" }
+    { "title": "string", "subtitle": "string curto (1 frase de promessa)", "image_keywords": "2 a 4 palavras EM INGLÊS para buscar uma foto temática no banco de imagens (ex: 'morning routine coffee'). Termos visuais concretos, sem texto." }
   ]
 }
 Gere entre 6 e 8 capítulos.`;
