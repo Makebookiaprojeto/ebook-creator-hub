@@ -23,11 +23,12 @@ const PRODUCT_PLAN_MAP: Record<string, "monthly" | "lifetime"> = {
   "3fyghev": "lifetime", // Offer ID do Thiago
   "5d2dc8bf-4ec4-40b5-9b37-d077b7541bad": "lifetime", // Product ID do Thiago
 };
-const AMOUNT_PLAN_MAP: Record<number, "monthly" | "lifetime"> = {
-  14990: "monthly",
-  24990: "lifetime",
-  25089: "lifetime", // Valor com taxas (250.89)
-};
+
+// Faixas de preço para tolerar taxas da Cakto
+const AMOUNT_PLAN_MAP: Array<{ min: number; max: number; plan: "monthly" | "lifetime" }> = [
+  { min: 14000, max: 16500, plan: "monthly" },   // R$ 140 - R$ 165
+  { min: 24000, max: 26500, plan: "lifetime" },  // R$ 240 - R$ 265
+];
 
 function pickEmail(p: any): string | null {
   const c = [p?.customer?.email, p?.customer_email, p?.buyer?.email, p?.buyer_email, p?.email,
@@ -131,6 +132,7 @@ Deno.serve(async (req) => {
     // ============================================================
     // ROUTE 1: venda de eBook (procura via ebook_payment_config)
     // ============================================================
+    // eBooks já são identificados automaticamente pelo productId na tabela ebook_payment_config
     if (productId) {
       const { data: cfg } = await supabase
         .from("ebook_payment_config")
@@ -215,8 +217,15 @@ Deno.serve(async (req) => {
     }
 
     let planType: "monthly" | "lifetime" | null = null;
-    if (productId && PRODUCT_PLAN_MAP[productId]) planType = PRODUCT_PLAN_MAP[productId];
-    if (!planType && amountCents && AMOUNT_PLAN_MAP[amountCents]) planType = AMOUNT_PLAN_MAP[amountCents];
+    if (productId && PRODUCT_PLAN_MAP[productId]) {
+      planType = PRODUCT_PLAN_MAP[productId];
+    }
+    
+    // Se não identificou por ID, tenta por faixa de preço (tolerância de taxas)
+    if (!planType && amountCents) {
+      const match = AMOUNT_PLAN_MAP.find(range => amountCents >= range.min && amountCents <= range.max);
+      if (match) planType = match.plan;
+    }
 
     if (!planType) {
       console.warn("cakto-webhook: produto não identificado", { productId, amountCents });
