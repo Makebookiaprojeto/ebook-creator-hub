@@ -37,6 +37,10 @@ export function ProfileView() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [usage, setUsage] = useState({ limit: 20, current: 0 });
+  const [activeSubscription, setActiveSubscription] = useState<{
+    plan_type: string;
+    status: string;
+  } | null>(null);
   const [paymentConfig, setPaymentConfig] = useState<{
     platform: string;
     checkout_url: string;
@@ -92,6 +96,34 @@ export function ProfileView() {
         _role: "admin",
       });
       setIsAdmin(!!roleData);
+
+      // Carregar assinatura ativa
+      const { data: subData } = await supabase
+        .from("subscriptions")
+        .select("plan_type, status")
+        .eq("user_id", user.id)
+        .eq("status", "active")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      
+      if (subData) {
+        setActiveSubscription(subData);
+      } else {
+        // Tentar buscar por e-mail se não encontrar por user_id
+        const { data: subEmailData } = await supabase
+          .from("subscriptions")
+          .select("plan_type, status")
+          .eq("buyer_email", user.email)
+          .eq("status", "active")
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        
+        if (subEmailData) {
+          setActiveSubscription(subEmailData);
+        }
+      }
     };
 
     loadData();
@@ -278,7 +310,11 @@ export function ProfileView() {
             <div className="flex flex-col gap-1 mt-1">
               <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <Crown className="h-3 w-3 text-amber-500" />
-                <span className="font-medium">Plano {usage.limit > 20 ? 'Premium' : 'Gratuito'}</span>
+                <span className="font-medium">
+                  {activeSubscription 
+                    ? `Plano ${activeSubscription.plan_type === 'lifetime' ? 'Vitalício' : 'Mensal'}` 
+                    : `Plano ${usage.limit > 20 ? 'Premium' : 'Gratuito'}`}
+                </span>
               </div>
               <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground/80">
                 <Calendar className="h-3 w-3" />
