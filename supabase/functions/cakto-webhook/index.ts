@@ -26,8 +26,8 @@ const PRODUCT_PLAN_MAP: Record<string, "monthly" | "lifetime"> = {
 
 // Faixas de preço para tolerar taxas da Cakto
 const AMOUNT_PLAN_MAP: Array<{ min: number; max: number; plan: "monthly" | "lifetime" }> = [
-  { min: 14000, max: 16500, plan: "monthly" },   // R$ 140 - R$ 165
-  { min: 24000, max: 26500, plan: "lifetime" },  // R$ 240 - R$ 265
+  { min: 5000, max: 18000, plan: "monthly" },   // R$ 50 - R$ 180 (Cobre assinaturas mensais baratas e taxas)
+  { min: 18001, max: 50000, plan: "lifetime" }, // R$ 180+ - R$ 500 (Cobre planos vitalícios e taxas)
 ];
 
 function pickEmail(p: any): string | null {
