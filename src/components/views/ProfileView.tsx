@@ -310,7 +310,11 @@ export function ProfileView() {
             <div className="flex flex-col gap-1 mt-1">
               <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <Crown className="h-3 w-3 text-amber-500" />
-                <span className="font-medium">Plano {usage.limit > 20 ? 'Premium' : 'Gratuito'}</span>
+                <span className="font-medium">
+                  {activeSubscription 
+                    ? `Plano ${activeSubscription.plan_type === 'lifetime' ? 'Vitalício' : 'Mensal'}` 
+                    : `Plano ${usage.limit > 20 ? 'Premium' : 'Gratuito'}`}
+                </span>
               </div>
               <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground/80">
                 <Calendar className="h-3 w-3" />
