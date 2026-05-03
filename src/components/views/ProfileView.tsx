@@ -126,7 +126,30 @@ export function ProfileView() {
       }
     };
 
+
     loadData();
+
+    // Inscrição para atualizações em tempo real do perfil (para o contador de uso)
+    const channel = supabase
+      .channel("profile-usage")
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "profiles", filter: `user_id=eq.${user.id}` },
+        (payload) => {
+          const newData = payload.new as any;
+          if (newData.monthly_ebook_limit !== undefined || newData.ebooks_generated_this_month !== undefined) {
+            setUsage(prev => ({
+              limit: newData.monthly_ebook_limit ?? prev.limit,
+              current: newData.ebooks_generated_this_month ?? prev.current
+            }));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [user]);
 
   const handleSubscribe = (planId: string) => {
