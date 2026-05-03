@@ -63,6 +63,16 @@ const REFUND = new Set(["refunded","chargeback","canceled","cancelled","refund",
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  
+  if (req.method === "GET") {
+    return new Response(JSON.stringify({ 
+      status: "alive", 
+      message: "Endpoint do Webhook Cakto está ativo. Use POST para enviar dados." 
+    }), {
+      status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ error: "Method not allowed" }), {
       status: 405, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -70,15 +80,19 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // Validação global do SaaS (opcional). Sempre bloqueia se setado e errado.
     const expectedSecret = Deno.env.get("CAKTO_WEBHOOK_SECRET");
     const providedGlobalSecret =
       req.headers.get("x-cakto-signature") ||
       req.headers.get("x-webhook-secret") ||
       new URL(req.url).searchParams.get("secret");
 
+    const headersObj: Record<string, string> = {};
+    req.headers.forEach((v, k) => { headersObj[k] = v; });
+    
     const payload = await req.json().catch(() => ({}));
-    console.log("cakto-webhook payload:", JSON.stringify(payload));
+    console.log("Cakto Webhook Request Received:");
+    console.log("- Headers:", JSON.stringify(headersObj));
+    console.log("- Payload:", JSON.stringify(payload));
 
     const status = pickStatus(payload);
     const email = pickEmail(payload);
