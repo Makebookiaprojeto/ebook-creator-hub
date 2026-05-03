@@ -44,7 +44,13 @@ const Auth = () => {
   }, []);
 
   useEffect(() => {
-    if (!authLoading && user) navigate("/app", { replace: true });
+    if (!authLoading && user) {
+      // Pequeno delay para garantir que o redirecionamento ocorra após o estado carregar
+      const timer = setTimeout(() => {
+        navigate("/app", { replace: true });
+      }, 50);
+      return () => clearTimeout(timer);
+    }
   }, [user, authLoading, navigate]);
 
   // Validação em tempo real para e-mail duplicado
