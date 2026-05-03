@@ -37,6 +37,10 @@ export function ProfileView() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [usage, setUsage] = useState({ limit: 20, current: 0 });
+  const [activeSubscription, setActiveSubscription] = useState<{
+    plan_type: string;
+    status: string;
+  } | null>(null);
   const [paymentConfig, setPaymentConfig] = useState<{
     platform: string;
     checkout_url: string;
