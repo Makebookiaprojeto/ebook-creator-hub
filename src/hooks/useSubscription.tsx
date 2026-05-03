@@ -19,56 +19,66 @@ export function useSubscription(): SubscriptionStatus {
   });
 
   useEffect(() => {
+    let cancelled = false;
+
     if (authLoading) return;
+    
     if (!user) {
       setState({ loading: false, isActive: false, planType: null, expiresAt: null });
       return;
     }
 
-    let cancelled = false;
+    const checkSubscription = async () => {
+      try {
+        const email = user.email?.toLowerCase() ?? "";
 
-    (async () => {
-      const email = user.email?.toLowerCase() ?? "";
+        // 1. Verificar Admin
+        const { data: isAdminData } = await supabase.rpc("has_role", {
+          _user_id: user.id,
+          _role: "admin",
+        });
+        
+        if (cancelled) return;
+        
+        if (isAdminData === true) {
+          setState({ loading: false, isActive: true, planType: "lifetime", expiresAt: null });
+          return;
+        }
 
-      // Admins têm acesso total, ignoram checagem de assinatura
-      const { data: isAdminData } = await supabase.rpc("has_role", {
-        _user_id: user.id,
-        _role: "admin",
-      });
-      if (cancelled) return;
-      if (isAdminData === true) {
-        setState({ loading: false, isActive: true, planType: "lifetime", expiresAt: null });
-        return;
+        // 2. Buscar assinatura (user_id ou email)
+        const { data, error } = await supabase
+          .from("subscriptions")
+          .select("plan_type, status, expires_at")
+          .or(`user_id.eq.${user.id},buyer_email.eq.${email}`)
+          .eq("status", "active")
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (cancelled) return;
+
+        if (error || !data) {
+          setState({ loading: false, isActive: false, planType: null, expiresAt: null });
+          return;
+        }
+
+        const planType = data.plan_type as "monthly" | "lifetime";
+        const expiresAt = data.expires_at ? new Date(data.expires_at) : null;
+
+        const isActive =
+          planType === "lifetime" ||
+          (planType === "monthly" && !!expiresAt && expiresAt.getTime() > Date.now());
+
+        setState({ loading: false, isActive, planType, expiresAt });
+      } catch (err) {
+        console.error("Erro useSubscription:", err);
+        if (!cancelled) {
+          setState(prev => ({ ...prev, loading: false }));
+        }
       }
+    };
 
-      // Busca a assinatura mais recente do usuário (por user_id OU pelo e-mail)
-      const { data, error } = await supabase
-        .from("subscriptions")
-        .select("plan_type, status, expires_at")
-        .or(`user_id.eq.${user.id},buyer_email.eq.${email}`)
-        .eq("status", "active")
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-
-      if (cancelled) return;
-
-      if (error || !data) {
-        setState({ loading: false, isActive: false, planType: null, expiresAt: null });
-        return;
-      }
-
-      const planType = data.plan_type as "monthly" | "lifetime";
-      const expiresAt = data.expires_at ? new Date(data.expires_at) : null;
-
-      // Vitalício = sempre ativo
-      // Mensal = ativo se expires_at > now
-      const isActive =
-        planType === "lifetime" ||
-        (planType === "monthly" && !!expiresAt && expiresAt.getTime() > Date.now());
-
-      setState({ loading: false, isActive, planType, expiresAt });
-    })();
+    checkSubscription();
 
     return () => {
       cancelled = true;
