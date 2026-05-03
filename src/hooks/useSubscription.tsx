@@ -30,8 +30,8 @@ export function useSubscription(): SubscriptionStatus {
 
     const checkSubscription = async () => {
       try {
-        const email = user.email?.toLowerCase() ?? "";
-
+        console.log("Checking subscription for:", user.email);
+        
         // 1. Verificar Admin
         const { data: isAdminData } = await supabase.rpc("has_role", {
           _user_id: user.id,
@@ -41,15 +41,16 @@ export function useSubscription(): SubscriptionStatus {
         if (cancelled) return;
         
         if (isAdminData === true) {
+          console.log("User is admin");
           setState({ loading: false, isActive: true, planType: "lifetime", expiresAt: null });
           return;
         }
 
-        // 2. Buscar assinatura (user_id ou email)
+        // 2. Buscar assinatura
+        // Nota: A política de RLS permite ver se (uid = user_id) OU (email = buyer_email)
         const { data, error } = await supabase
           .from("subscriptions")
           .select("plan_type, status, expires_at")
-          .or(`user_id.eq.${user.id},buyer_email.eq.${email}`)
           .eq("status", "active")
           .order("created_at", { ascending: false })
           .limit(1)
@@ -57,7 +58,14 @@ export function useSubscription(): SubscriptionStatus {
 
         if (cancelled) return;
 
-        if (error || !data) {
+        if (error) {
+          console.error("Subscription query error:", error);
+          setState({ loading: false, isActive: false, planType: null, expiresAt: null });
+          return;
+        }
+
+        if (!data) {
+          console.log("No active subscription found for", user.email);
           setState({ loading: false, isActive: false, planType: null, expiresAt: null });
           return;
         }
@@ -69,6 +77,7 @@ export function useSubscription(): SubscriptionStatus {
           planType === "lifetime" ||
           (planType === "monthly" && !!expiresAt && expiresAt.getTime() > Date.now());
 
+        console.log("Subscription status:", { isActive, planType });
         setState({ loading: false, isActive, planType, expiresAt });
       } catch (err) {
         console.error("Erro useSubscription:", err);
@@ -84,6 +93,9 @@ export function useSubscription(): SubscriptionStatus {
       cancelled = true;
     };
   }, [user, authLoading]);
+
+  return state;
+}
 
   return state;
 }
