@@ -184,7 +184,8 @@ Deno.serve(async (req) => {
     // ============================================================
     // ROUTE 2: assinatura SaaS — exige secret global (se setado)
     // ============================================================
-    if (expectedSecret && providedGlobalSecret !== expectedSecret) {
+    if (!expectedSecret || providedGlobalSecret !== expectedSecret) {
+      console.warn("cakto-webhook: tentativa de acesso SaaS sem secret configurado ou inválido.");
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
