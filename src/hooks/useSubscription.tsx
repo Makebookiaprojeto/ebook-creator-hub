@@ -96,6 +96,3 @@ export function useSubscription(): SubscriptionStatus {
 
   return state;
 }
-
-  return state;
-}
