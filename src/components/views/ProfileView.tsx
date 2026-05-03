@@ -96,6 +96,34 @@ export function ProfileView() {
         _role: "admin",
       });
       setIsAdmin(!!roleData);
+
+      // Carregar assinatura ativa
+      const { data: subData } = await supabase
+        .from("subscriptions")
+        .select("plan_type, status")
+        .eq("user_id", user.id)
+        .eq("status", "active")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      
+      if (subData) {
+        setActiveSubscription(subData);
+      } else {
+        // Tentar buscar por e-mail se não encontrar por user_id
+        const { data: subEmailData } = await supabase
+          .from("subscriptions")
+          .select("plan_type, status")
+          .eq("buyer_email", user.email)
+          .eq("status", "active")
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        
+        if (subEmailData) {
+          setActiveSubscription(subEmailData);
+        }
+      }
     };
 
     loadData();
