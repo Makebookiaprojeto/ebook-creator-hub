@@ -81,6 +81,10 @@ Deno.serve(async (req) => {
 
   try {
     const expectedSecret = Deno.env.get("CAKTO_WEBHOOK_SECRET");
+    if (!expectedSecret) {
+      console.error("CAKTO_WEBHOOK_SECRET não está configurado nas Secrets do projeto!");
+    }
+
     const providedGlobalSecret =
       req.headers.get("x-cakto-signature") ||
       req.headers.get("x-webhook-secret") ||
