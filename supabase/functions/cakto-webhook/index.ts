@@ -85,19 +85,18 @@ Deno.serve(async (req) => {
       console.error("CAKTO_WEBHOOK_SECRET não está configurado nas Secrets do projeto!");
     }
 
+    const payload = await req.json().catch(() => ({}));
+    console.log("Cakto Webhook Request Received:");
+    const headersObj: Record<string, string> = {};
+    req.headers.forEach((v, k) => { headersObj[k] = v; });
+    console.log("- Headers:", JSON.stringify(headersObj));
+    console.log("- Payload:", JSON.stringify(payload));
+
     const providedGlobalSecret =
       req.headers.get("x-cakto-signature") ||
       req.headers.get("x-webhook-secret") ||
       new URL(req.url).searchParams.get("secret") ||
       payload.secret;
-
-    const headersObj: Record<string, string> = {};
-    req.headers.forEach((v, k) => { headersObj[k] = v; });
-    
-    const payload = await req.json().catch(() => ({}));
-    console.log("Cakto Webhook Request Received:");
-    console.log("- Headers:", JSON.stringify(headersObj));
-    console.log("- Payload:", JSON.stringify(payload));
 
     const status = pickStatus(payload);
     const email = pickEmail(payload);
