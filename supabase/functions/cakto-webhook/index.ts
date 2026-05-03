@@ -88,7 +88,8 @@ Deno.serve(async (req) => {
     const providedGlobalSecret =
       req.headers.get("x-cakto-signature") ||
       req.headers.get("x-webhook-secret") ||
-      new URL(req.url).searchParams.get("secret");
+      new URL(req.url).searchParams.get("secret") ||
+      payload.secret;
 
     const headersObj: Record<string, string> = {};
     req.headers.forEach((v, k) => { headersObj[k] = v; });
