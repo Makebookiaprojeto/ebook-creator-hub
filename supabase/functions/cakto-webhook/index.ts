@@ -14,14 +14,19 @@ const corsHeaders = {
 
 const PLATFORM = "cakto";
 
-// Mapeamento product_id (Cakto) -> plano do SaaS (mantido)
+// Mapeamento product_id (Cakto) -> plano do SaaS
+// IDs encontrados nos logs: 
+// 864624/864639 (Offer ID) ou 5d2dc8bf... (Product ID)
 const PRODUCT_PLAN_MAP: Record<string, "monthly" | "lifetime"> = {
   "864624": "monthly",
   "864639": "lifetime",
+  "3fyghev": "lifetime", // Offer ID do Thiago
+  "5d2dc8bf-4ec4-40b5-9b37-d077b7541bad": "lifetime", // Product ID do Thiago
 };
 const AMOUNT_PLAN_MAP: Record<number, "monthly" | "lifetime"> = {
   14990: "monthly",
   24990: "lifetime",
+  25089: "lifetime", // Valor com taxas (250.89)
 };
 
 function pickEmail(p: any): string | null {
