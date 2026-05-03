@@ -129,8 +129,8 @@ Deno.serve(async (req) => {
           .eq("ebook_id", ebook.id)
           .maybeSingle();
         const ebookSecret = (secretRow as any)?.webhook_secret as string | null;
-        if (ebookSecret && providedGlobalSecret !== ebookSecret) {
-          console.warn("cakto-webhook: assinatura inválida pro ebook", ebook.id);
+        if (!ebookSecret || providedGlobalSecret !== ebookSecret) {
+          console.warn("cakto-webhook: assinatura inválida ou secret não configurado pro ebook", ebook.id);
           return new Response(JSON.stringify({ error: "Invalid signature" }), {
             status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
@@ -184,7 +184,8 @@ Deno.serve(async (req) => {
     // ============================================================
     // ROUTE 2: assinatura SaaS — exige secret global (se setado)
     // ============================================================
-    if (expectedSecret && providedGlobalSecret !== expectedSecret) {
+    if (!expectedSecret || providedGlobalSecret !== expectedSecret) {
+      console.warn("cakto-webhook: tentativa de acesso SaaS sem secret configurado ou inválido.");
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
