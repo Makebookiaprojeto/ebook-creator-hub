@@ -170,7 +170,7 @@ async function generateChapter(args: {
 }) {
   const sys = `Você é um autor profissional de ebooks digitais bestsellers.
 Escreva um capítulo COMPLETO, profundo e prático em português brasileiro.
-- REQUISITO DE TAMANHO: O conteúdo DEVE ter exatamente entre 800 e 1200 palavras para ser um capítulo equilibrado. EXPLIQUE CADA TÓPICO DE FORMA DIRETA.
+- REQUISITO DE TAMANHO: O conteúdo DEVE ter entre 1000 e 1500 palavras para ser um capítulo profundo. EXPLIQUE DETALHADAMENTE CADA TÓPICO.
 - Estrutura interna obrigatória:
   1. Introdução cativante que conecte com a dor do leitor (3-4 parágrafos).
   2. 4 a 6 subseções aprofundadas com subtítulos (##) explorando conceitos, técnicas ou estratégias.
@@ -277,14 +277,20 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
           throw new Error("Conteúdo gerado é insuficiente.");
         }
 
-        await sb.from("chapters").insert({
+        const insertData = {
           ebook_id: ebookId,
           user_id: userId,
           title: ch.title,
           content,
           image_url: imageUrl,
           order_index: i,
-        });
+        };
+        console.log(`Inserting chapter ${i + 1} with ${content.length} chars content`);
+        const { error: insertErr } = await sb.from("chapters").insert(insertData);
+        if (insertErr) {
+          console.error(`Chapter ${i + 1} insertion error:`, insertErr);
+          throw insertErr;
+        }
 
         console.log(`Chapter ${i + 1} finished successfully`);
       } catch (e) {
