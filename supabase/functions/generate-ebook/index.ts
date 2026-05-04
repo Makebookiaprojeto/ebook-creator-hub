@@ -168,26 +168,29 @@ async function generateChapter(args: {
   chapterIndex: number;
   totalChapters: number;
 }) {
-  const sys = `Você é um autor profissional de ebooks digitais.
-Escreva um capítulo OBJETIVO e prático em português brasileiro.
-- PADRÃO ÚNICO: entre 600 e 800 palavras (NÃO ultrapasse 800).
-- Estrutura: 1 introdução envolvente (2-3 parágrafos) + 4 a 6 seções/dicas com explicação aprofundada + exemplo prático + fechamento de 1-2 frases.
-- Use markdown leve (## 2-3 subtítulos, **negrito**, - listas curtas quando fizer sentido).
-- Parágrafos de 3-5 linhas, com conteúdo substancial.
+  const sys = `Você é um autor profissional de ebooks digitais bestsellers.
+Escreva um capítulo COMPLETO, profundo e prático em português brasileiro.
+- REQUISITO DE TAMANHO: O conteúdo DEVE ter entre 800 e 1200 palavras para ser considerado um capítulo de alta qualidade.
+- Estrutura interna obrigatória:
+  1. Introdução cativante que conecte com a dor do leitor (3-4 parágrafos).
+  2. 4 a 6 subseções aprofundadas com subtítulos (##) explorando conceitos, técnicas ou estratégias.
+  3. Exemplos práticos, estudos de caso ou exercícios passo a passo.
+  4. Conclusão ou resumo com os próximos passos imediatos.
+- Formatação: Use markdown (## para subtítulos, **negrito** para ênfase, listas com marcadores).
+- Tom: Profissional, motivador e autoritário.
 - NÃO repita o título do capítulo no início.
-- NÃO use enchimento, clichês ou repetições — cada parágrafo deve agregar valor real.
-Responda APENAS com o conteúdo do capítulo.`;
+Responda APENAS com o conteúdo em markdown, sem comentários extras.`;
   const user = `Ebook: "${args.ebookTitle}"
-Público: ${args.audience || "geral"}
+Público-alvo: ${args.audience || "geral"}
 Capítulo ${args.chapterIndex + 1} de ${args.totalChapters}: "${args.chapterTitle}"
-Promessa do capítulo: ${args.chapterSubtitle}`;
+Objetivo/Promessa deste capítulo: ${args.chapterSubtitle}`;
   const result = await callAI({
     model: TEXT_MODEL,
     messages: [
       { role: "system", content: sys },
       { role: "user", content: user },
     ],
-    max_tokens: 1500,
+    max_tokens: 3000,
     temperature: 0.7,
   });
   if (result.error) throw new Error(`chapter ${args.chapterIndex}: ${result.error.text}`);
