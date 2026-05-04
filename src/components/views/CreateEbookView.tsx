@@ -88,7 +88,7 @@ export function CreateEbookView() {
           
           const { data: chs } = await supabase
             .from("chapters")
-            .select("title, content, image_url")
+            .select("title, content, image_url, order_index")
             .eq("ebook_id", eb.id)
             .order("order_index", { ascending: true });
             
