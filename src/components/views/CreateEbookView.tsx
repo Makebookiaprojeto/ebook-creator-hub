@@ -119,8 +119,8 @@ export function CreateEbookView() {
       const prog: any = eb.generation_progress ?? {};
       if (prog.message) setGenerationStage(prog.message);
       
-      if (typeof prog.total === "number" && typeof prog.done === "number") {
-        setGenerationProgress({ done: prog.done, total: prog.total });
+      if (typeof prog.total === "number" && (typeof prog.done === "number" || prog.stage === "done")) {
+        setGenerationProgress({ done: prog.done || 0, total: prog.total });
         
         const { data: chs } = await supabase
           .from("chapters")
@@ -128,7 +128,7 @@ export function CreateEbookView() {
           .eq("ebook_id", ebookId)
           .order("order_index", { ascending: true });
         
-        if (chs && chs.length > 0) {
+        if (chs) {
           setChapters(
             chs.map((c) => ({
               title: c.title,
