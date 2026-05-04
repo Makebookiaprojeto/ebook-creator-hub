@@ -138,7 +138,10 @@ export function CreateEbookView() {
               image_url: c.image_url ?? null,
             })),
           );
-          setGenerated(true);
+          // Only mark as fully generated if it's done OR we have all chapters (6)
+          if (eb.generation_status === "done" || chs.length >= (prog.total || 6)) {
+            setGenerated(true);
+          }
         } else if (chsErr) {
           console.error("Polling: Error fetching chapters:", chsErr);
         }
