@@ -119,8 +119,11 @@ export function CreateEbookView() {
       const prog: any = eb.generation_progress ?? {};
       if (prog.message) setGenerationStage(prog.message);
       
-      if (prog.total > 0 && (prog.done >= 0 || prog.stage === "done" || prog.stage === "content")) {
-        setGenerationProgress({ done: prog.done || 0, total: prog.total });
+      // Always try to fetch chapters if we have some progress, or if it's already done
+      if (prog.total > 0 || eb.generation_status === "done") {
+        if (prog.total > 0) {
+          setGenerationProgress({ done: prog.done || 0, total: prog.total });
+        }
         
         const { data: chs, error: chsErr } = await supabase
           .from("chapters")
@@ -129,7 +132,6 @@ export function CreateEbookView() {
           .order("order_index", { ascending: true });
         
         if (chs && chs.length > 0) {
-          console.log(`Polling: Found ${chs.length} chapters for ebook ${ebookId}`);
           setChapters(
             chs.map((c) => ({
               title: c.title,
@@ -138,8 +140,8 @@ export function CreateEbookView() {
               image_url: c.image_url ?? null,
             })),
           );
-          // Only mark as fully generated if it's done OR we have all chapters (6)
-          if (eb.generation_status === "done" || chs.length >= (prog.total || 6)) {
+          
+          if (eb.generation_status === "done") {
             setGenerated(true);
           }
         } else if (chsErr) {
@@ -151,8 +153,7 @@ export function CreateEbookView() {
         setGenerationStage("");
         setGenerating(false);
         setGenerated(true);
-        toast.success("Ebook completo gerado com IA! 🎉");
-        return;
+        // ... keep existing code
       }
       
       if (eb.generation_status === "failed") {
