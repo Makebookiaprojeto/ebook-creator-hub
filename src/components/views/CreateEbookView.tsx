@@ -142,34 +142,37 @@ export function CreateEbookView() {
       if (prog.message) setGenerationStage(prog.message);
       
       // Always try to fetch chapters if we have some progress, or if it's already done
-      if (prog.total > 0 || eb.generation_status === "done") {
-        if (prog.total > 0) {
-          setGenerationProgress({ done: prog.done || 0, total: prog.total });
-        }
-        
-        const { data: chs, error: chsErr } = await supabase
-          .from("chapters")
-          .select("title, content, image_url, order_index")
-          .eq("ebook_id", ebookId)
-          .order("order_index", { ascending: true });
-        
-        if (chs && chs.length > 0) {
-          setChapters(
-            chs.map((c) => ({
-              title: c.title,
-              subtitle: "",
-              content: c.content ?? "",
-              image_url: c.image_url ?? null,
-            })),
-          );
-          
-          if (eb.generation_status === "done") {
-            setGenerated(true);
+        if (prog.total > 0 || eb.generation_status === "done") {
+          if (prog.total > 0) {
+            setGenerationProgress({ done: prog.done || 0, total: prog.total });
           }
-        } else if (chsErr) {
-          console.error("Polling: Error fetching chapters:", chsErr);
+          
+          const { data: chs, error: chsErr } = await supabase
+            .from("chapters")
+            .select("title, content, image_url, order_index")
+            .eq("ebook_id", ebookId)
+            .order("order_index", { ascending: true });
+          
+          if (chs && chs.length > 0) {
+            setChapters(
+              chs.map((c) => ({
+                title: c.title,
+                subtitle: "",
+                content: c.content ?? "",
+                image_url: c.image_url ?? null,
+              })),
+            );
+            
+            if (eb.generation_status === "done") {
+              setGenerated(true);
+            }
+          } else if (chsErr) {
+            console.error("Polling: Error fetching chapters:", chsErr);
+          } else if (eb.generation_status === "done") {
+            // Se o status for "done" mas ainda não retornou capítulos, tenta novamente em breve
+            console.log("Polling: Status is done but no chapters found yet, retrying...");
+          }
         }
-      }
 
       if (eb.generation_status === "done") {
         setGenerationStage("");
