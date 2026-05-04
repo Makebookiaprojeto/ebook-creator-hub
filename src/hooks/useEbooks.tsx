@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Tables } from "@/integrations/supabase/types";
 
-export type Ebook = Tables<"ebooks">;
+export type Ebook = Tables<"ebooks"> & { chapter_count?: number };
 export type Chapter = Tables<"chapters">;
 
 export type NewChapter = {
