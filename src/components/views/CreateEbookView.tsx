@@ -50,14 +50,116 @@ export function CreateEbookView() {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [uploadingPdf, setUploadingPdf] = useState(false);
   const [coverSearch, setCoverSearch] = useState("");
-
-  // Divulgação
-  const [searchTopic, setSearchTopic] = useState("");
-  const [ebookLink, setEbookLink] = useState("");
-  const [createdEbookSlug, setCreatedEbookSlug] = useState<string | null>(null);
-  const [searchedGroups, setSearchedGroups] = useState<FbGroup[]>([]);
-  const [searchingGroups, setSearchingGroups] = useState(false);
   const [isPublished, setIsPublished] = useState(false);
+
+  // Recovery effect: check for ongoing generations on mount
+  useState(() => {
+    const checkOngoing = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: eb } = await supabase
+        .from("ebooks")
+        .select("id, niche, audience, generation_status")
+        .eq("user_id", user.id)
+        .eq("generation_status", "processing")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (eb) {
+        setNiche(eb.niche || "");
+        setAudience(eb.audience || "");
+        setStep(2);
+        // We'll let the generate function handle the polling logic
+        // by manually triggering a specialized polling-only flow if needed,
+        // but for now let's just allow the user to see the status.
+        // Actually, let's just auto-start polling if we find one.
+        startPolling(eb.id);
+      }
+    };
+    checkOngoing();
+  });
+
+  // Polling logic extracted to be reusable
+  const startPolling = async (ebookId: string) => {
+    setGenerating(true);
+    setGeneratedEbookId(ebookId);
+    
+    const POLL_MS = 2500;
+    const MAX_TRIES = 240; 
+    let tries = 0;
+
+    const poll = async (): Promise<void> => {
+      tries += 1;
+      const { data: eb } = await supabase
+        .from("ebooks")
+        .select("title, subtitle, cover_url, generation_status, generation_progress, generation_error")
+        .eq("id", ebookId)
+        .maybeSingle();
+
+      if (!eb) {
+        if (tries < MAX_TRIES) {
+          setTimeout(poll, POLL_MS);
+          return;
+        }
+        setGenerating(false);
+        return;
+      }
+
+      if (eb.title && eb.title !== "Gerando...") setTitle(eb.title);
+      if (eb.subtitle) setSubtitle(eb.subtitle);
+      if (eb.cover_url) setCoverUrl(eb.cover_url);
+
+      const prog: any = eb.generation_progress ?? {};
+      if (prog.message) setGenerationStage(prog.message);
+      
+      if (typeof prog.total === "number" && typeof prog.done === "number") {
+        setGenerationProgress({ done: prog.done, total: prog.total });
+        
+        const { data: chs } = await supabase
+          .from("chapters")
+          .select("title, content, image_url, order_index")
+          .eq("ebook_id", ebookId)
+          .order("order_index", { ascending: true });
+        
+        if (chs && chs.length > 0) {
+          setChapters(
+            chs.map((c) => ({
+              title: c.title,
+              subtitle: "",
+              content: c.content ?? "",
+              image_url: c.image_url ?? null,
+            })),
+          );
+          setGenerated(true);
+        }
+      }
+
+      if (eb.generation_status === "done") {
+        setGenerationStage("");
+        setGenerating(false);
+        setGenerated(true);
+        toast.success("Ebook completo gerado com IA! 🎉");
+        return;
+      }
+      
+      if (eb.generation_status === "failed") {
+        setGenerating(false);
+        toast.error(eb.generation_error || "Falha na geração");
+        return;
+      }
+      
+      if (tries < MAX_TRIES) {
+        setTimeout(poll, POLL_MS);
+      } else {
+        setGenerating(false);
+        toast.error("Tempo esgotado aguardando a geração.");
+      }
+    };
+
+    poll();
+  };
 
   const handleAIError = (status?: number, fallback = "Falha ao gerar com IA", errorText?: string) => {
     if (status === 403 && errorText?.includes("limite mensal")) {
@@ -83,7 +185,6 @@ export function CreateEbookView() {
     setChapters([]);
 
     try {
-      // 1) Inicia a geração assíncrona
       const { data: startRes, error: startErr } = await supabase.functions.invoke("generate-ebook", {
         body: { mode: "start", niche, audience },
       });
@@ -94,78 +195,8 @@ export function CreateEbookView() {
         setGenerating(false);
         return;
       }
-      const ebookId: string = startRes.ebook_id;
-      setGeneratedEbookId(ebookId);
-
-      // 2) Polling do status do ebook + carregamento incremental dos capítulos
-      const POLL_MS = 2500;
-      const MAX_TRIES = 240; // 10 minutos máx
-      let tries = 0;
-
-      const poll = async (): Promise<void> => {
-        tries += 1;
-        const { data: eb } = await supabase
-          .from("ebooks")
-          .select("title, subtitle, cover_url, generation_status, generation_progress, generation_error")
-          .eq("id", ebookId)
-          .maybeSingle();
-
-        if (!eb) {
-          if (tries < MAX_TRIES) {
-            setTimeout(poll, POLL_MS);
-            return;
-          }
-          throw new Error("Ebook não encontrado após geração");
-        }
-
-        if (eb.title && eb.title !== "Gerando...") setTitle(eb.title);
-        if (eb.subtitle) setSubtitle(eb.subtitle);
-        if (eb.cover_url) setCoverUrl(eb.cover_url);
-
-        const prog: any = eb.generation_progress ?? {};
-        if (prog.message) setGenerationStage(prog.message);
-        if (typeof prog.total === "number" && typeof prog.done === "number") {
-          setGenerationProgress({ done: prog.done, total: prog.total });
-          // Carrega capítulos parciais para feedback visual
-          const { data: chs } = await supabase
-            .from("chapters")
-            .select("title, content, image_url, order_index")
-            .eq("ebook_id", ebookId)
-            .order("order_index", { ascending: true });
-          if (chs && chs.length > 0) {
-            setChapters(
-              chs.map((c) => ({
-                title: c.title,
-                subtitle: "",
-                content: c.content ?? "",
-                image_url: c.image_url ?? null,
-              })),
-            );
-            if (!generated) setGenerated(true);
-          }
-        }
-
-        if (eb.generation_status === "done") {
-          setGenerationStage("");
-          setGenerating(false);
-          setGenerated(true);
-          toast.success("Ebook completo gerado com IA! 🎉");
-          return;
-        }
-        if (eb.generation_status === "failed") {
-          setGenerating(false);
-          toast.error(eb.generation_error || "Falha na geração");
-          return;
-        }
-        if (tries < MAX_TRIES) {
-          setTimeout(poll, POLL_MS);
-        } else {
-          setGenerating(false);
-          toast.error("Tempo esgotado aguardando a geração.");
-        }
-      };
-
-      poll();
+      
+      startPolling(startRes.ebook_id);
     } catch (e: any) {
       console.error(e);
       toast.error(e?.message ?? "Erro inesperado ao gerar ebook");
