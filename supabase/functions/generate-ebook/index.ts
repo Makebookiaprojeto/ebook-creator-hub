@@ -340,7 +340,6 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
     }).eq("id", ebookId);
   }
 }
-}
 
 // ----------- HTTP entrypoint -----------
 
