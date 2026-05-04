@@ -375,7 +375,7 @@ Deno.serve(async (req) => {
         }
         if (usage >= (profile.monthly_ebook_limit ?? 20)) {
           return jsonResponse({
-            error: `Você atingiu seu limite mensal de ${profile.monthly_ebook_limit} eBooks.`,
+            error: `Você atingiu seu limite mensal de ${profile.monthly_ebook_limit} eBooks. Que tal aguardar o próximo mês ou entrar em contato com o suporte?`,
           }, 403);
         }
       }
