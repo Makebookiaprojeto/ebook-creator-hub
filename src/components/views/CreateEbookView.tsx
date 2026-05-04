@@ -738,6 +738,19 @@ export function CreateEbookView() {
                       {subtitle || "Seu subtítulo persuasivo vai aqui"}
                     </p>
 
+                    {chapters.length > 0 && (
+                      <div className="mx-auto mt-6 max-w-lg">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-left">
+                          {chapters.map((c, i) => (
+                            <div key={i} className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+                              <Check className="h-3 w-3 text-success" />
+                              <span className="line-clamp-1">{c.title}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
                     {/* Mock cover */}
                     <div className="mt-6 flex justify-center">
                       <div className="relative w-44 h-60 rounded-lg gradient-conversion shadow-conversion flex items-center justify-center text-white p-4 rotate-[-4deg]">
