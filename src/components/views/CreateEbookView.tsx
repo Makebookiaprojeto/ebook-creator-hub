@@ -119,7 +119,7 @@ export function CreateEbookView() {
       const prog: any = eb.generation_progress ?? {};
       if (prog.message) setGenerationStage(prog.message);
       
-      if (typeof prog.total === "number" && (typeof prog.done === "number" || prog.stage === "done")) {
+      if (prog.total > 0 && (prog.done >= 0 || prog.stage === "done" || prog.stage === "content")) {
         setGenerationProgress({ done: prog.done || 0, total: prog.total });
         
         const { data: chs, error: chsErr } = await supabase
@@ -138,7 +138,10 @@ export function CreateEbookView() {
               image_url: c.image_url ?? null,
             })),
           );
-          setGenerated(true);
+          // Only mark as fully generated if it's done OR we have all chapters (6)
+          if (eb.generation_status === "done" || chs.length >= (prog.total || 6)) {
+            setGenerated(true);
+          }
         } else if (chsErr) {
           console.error("Polling: Error fetching chapters:", chsErr);
         }
@@ -494,7 +497,7 @@ export function CreateEbookView() {
                         <div className="h-2 rounded-full bg-muted overflow-hidden">
                           <div
                             className="h-full gradient-primary transition-all duration-500"
-                            style={{ width: `${(generationProgress.done / generationProgress.total) * 100}%` }}
+                            style={{ width: `${Math.max(5, (generationProgress.done / generationProgress.total) * 100)}%` }}
                           />
                         </div>
                         <p className="mt-2 text-xs text-muted-foreground">
