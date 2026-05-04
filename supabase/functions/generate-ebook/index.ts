@@ -170,7 +170,7 @@ async function generateChapter(args: {
 }) {
   const sys = `Você é um autor profissional de ebooks digitais bestsellers.
 Escreva um capítulo COMPLETO, profundo e prático em português brasileiro.
-- REQUISITO DE TAMANHO: O conteúdo DEVE ter entre 800 e 1200 palavras para ser considerado um capítulo de alta qualidade.
+- REQUISITO DE TAMANHO: O conteúdo DEVE ter entre 1000 e 1500 palavras para ser considerado um capítulo de alta qualidade. EXPLIQUE DETALHADAMENTE CADA TÓPICO.
 - Estrutura interna obrigatória:
   1. Introdução cativante que conecte com a dor do leitor (3-4 parágrafos).
   2. 4 a 6 subseções aprofundadas com subtítulos (##) explorando conceitos, técnicas ou estratégias.
@@ -211,7 +211,8 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
     const structure = await generateStructure(niche, audience);
     
     if (!structure || !structure.title) {
-      throw new Error("Falha ao gerar a estrutura inicial do ebook.");
+      console.error("Structure generation failed or returned empty title:", structure);
+      throw new Error("Falha ao gerar a estrutura inicial do ebook. Verifique os logs.");
     }
 
     let chapters: any[] = structure.chapters ?? [];

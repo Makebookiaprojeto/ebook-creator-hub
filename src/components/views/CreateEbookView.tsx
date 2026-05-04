@@ -122,13 +122,14 @@ export function CreateEbookView() {
       if (typeof prog.total === "number" && (typeof prog.done === "number" || prog.stage === "done")) {
         setGenerationProgress({ done: prog.done || 0, total: prog.total });
         
-        const { data: chs } = await supabase
+        const { data: chs, error: chsErr } = await supabase
           .from("chapters")
           .select("title, content, image_url, order_index")
           .eq("ebook_id", ebookId)
           .order("order_index", { ascending: true });
         
         if (chs && chs.length > 0) {
+          console.log(`Polling: Found ${chs.length} chapters for ebook ${ebookId}`);
           setChapters(
             chs.map((c) => ({
               title: c.title,
@@ -138,6 +139,8 @@ export function CreateEbookView() {
             })),
           );
           setGenerated(true);
+        } else if (chsErr) {
+          console.error("Polling: Error fetching chapters:", chsErr);
         }
       }
 
