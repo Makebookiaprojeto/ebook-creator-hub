@@ -352,6 +352,23 @@ export default function EbookSalesPage() {
             {ebook.subtitle && (
               <p className="text-lg text-muted-foreground sm:text-xl">{ebook.subtitle}</p>
             )}
+
+            {chapters.length > 0 && (
+              <div className="flex flex-col gap-2 py-4">
+                <p className="text-xs font-bold uppercase tracking-widest text-primary/80">O que você vai encontrar:</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
+                  {chapters.map((c, i) => (
+                    <div key={c.id} className="flex items-center gap-2 text-sm font-medium text-foreground/90">
+                      <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
+                        {i + 1}
+                      </div>
+                      <span className="line-clamp-1">{c.title}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {ebook.sales_pitch && (
               <p className="text-base text-foreground/80 leading-relaxed">{ebook.sales_pitch}</p>
             )}

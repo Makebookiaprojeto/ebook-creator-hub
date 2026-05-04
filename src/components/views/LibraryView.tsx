@@ -345,6 +345,7 @@ export function LibraryView({ onCreateNew }: Props) {
               </div>
               <div className="flex flex-1 flex-col p-4">
                 <h3 className="line-clamp-2 font-display font-bold leading-tight">{eb.title}</h3>
+                <p className="mt-1 text-xs text-muted-foreground">{eb.chapter_count ?? 0} capítulos</p>
 
                 <p className="mt-2 text-[11px] text-muted-foreground">
                   {new Date(eb.created_at).toLocaleDateString("pt-BR")}

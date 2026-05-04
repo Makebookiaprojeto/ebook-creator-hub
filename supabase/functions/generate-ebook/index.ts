@@ -145,7 +145,7 @@ Formato exato:
     { "title": "string", "subtitle": "string curto (1 frase de promessa)", "image_keywords": "2 a 4 palavras EM INGLÊS para buscar uma foto temática no banco de imagens (ex: 'morning routine coffee'). Termos visuais concretos, sem texto." }
   ]
 }
-Gere EXATAMENTE 6 capítulos (nem mais, nem menos).`;
+Gere EXATAMENTE 7 capítulos (nem mais, nem menos).`;
   const user = `Nicho: ${niche}\nPúblico-alvo: ${audience || "geral"}`;
   const result = await callAI({
     model: TEXT_MODEL,
@@ -216,16 +216,16 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
     }
 
     let chapters: any[] = structure.chapters ?? [];
-    // Garantir exatamente 6 capítulos
-    if (chapters.length > 6) chapters = chapters.slice(0, 6);
-    while (chapters.length < 6) {
+    // Garantir exatamente 7 capítulos
+    if (chapters.length > 7) chapters = chapters.slice(0, 7);
+    while (chapters.length < 7) {
       chapters.push({
         title: `Capítulo ${chapters.length + 1}`,
         subtitle: "Conteúdo detalhado",
         image_keywords: niche,
       });
     }
-    const total = 6;
+    const total = 7;
 
     await sb.from("ebooks").update({
       title: structure.title,
@@ -251,8 +251,8 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
       });
 
       try {
-        // 1 imagem a cada 3 capítulos (Capítulo 1 e Capítulo 4)
-        const shouldHaveImage = i === 0 || i === 3;
+        // 1 imagem a cada 3 capítulos (Capítulo 1, Capítulo 4, Capítulo 7)
+        const shouldHaveImage = i === 0 || i === 3 || i === 6;
         
         // Generate content and image in parallel for this chapter
         const [content, imageUrl] = await Promise.all([
@@ -329,7 +329,7 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
         .update({ ebooks_generated_this_month: (profile.ebooks_generated_this_month ?? 0) + 1 })
         .eq("user_id", userId);
     }
-    console.log(`Ebook ${ebookId} generation complete (title, subtitle, cover and 6 chapters).`);
+    console.log(`Ebook ${ebookId} generation complete (title, subtitle, cover and 7 chapters).`);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     console.error("Worker failed:", msg);
