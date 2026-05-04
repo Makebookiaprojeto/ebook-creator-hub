@@ -65,22 +65,44 @@ export function CreateEbookView() {
 
       const { data: eb } = await supabase
         .from("ebooks")
-        .select("id, niche, audience, generation_status")
+        .select("id, niche, audience, generation_status, title, subtitle, cover_url")
         .eq("user_id", user.id)
-        .eq("generation_status", "processing")
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle();
 
       if (eb) {
-        setNiche(eb.niche || "");
-        setAudience(eb.audience || "");
-        setStep(2);
-        // We'll let the generate function handle the polling logic
-        // by manually triggering a specialized polling-only flow if needed,
-        // but for now let's just allow the user to see the status.
-        // Actually, let's just auto-start polling if we find one.
-        startPolling(eb.id);
+        if (eb.generation_status === "processing") {
+          setNiche(eb.niche || "");
+          setAudience(eb.audience || "");
+          setStep(2);
+          startPolling(eb.id);
+        } else if (eb.generation_status === "done") {
+          // If the last one is done, let's also load its content so it's not empty if the user is in step 2
+          setNiche(eb.niche || "");
+          setAudience(eb.audience || "");
+          setTitle(eb.title || "");
+          setSubtitle(eb.subtitle || "");
+          setCoverUrl(eb.cover_url);
+          setGeneratedEbookId(eb.id);
+          
+          const { data: chs } = await supabase
+            .from("chapters")
+            .select("title, content, image_url")
+            .eq("ebook_id", eb.id)
+            .order("order_index", { ascending: true });
+            
+          if (chs) {
+            setChapters(chs.map(c => ({
+              title: c.title,
+              subtitle: "",
+              content: c.content || "",
+              image_url: c.image_url
+            })));
+            setGenerated(true);
+            setStep(2);
+          }
+        }
       }
     };
     checkOngoing();
