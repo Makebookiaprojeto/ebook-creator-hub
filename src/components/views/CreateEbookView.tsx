@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, ArrowRight, Check, Sparkles, Loader2, Copy, Users, Rocket,
@@ -51,9 +51,14 @@ export function CreateEbookView() {
   const [uploadingPdf, setUploadingPdf] = useState(false);
   const [coverSearch, setCoverSearch] = useState("");
   const [isPublished, setIsPublished] = useState(false);
+  const [searchTopic, setSearchTopic] = useState("");
+  const [ebookLink, setEbookLink] = useState("");
+  const [createdEbookSlug, setCreatedEbookSlug] = useState<string | null>(null);
+  const [searchedGroups, setSearchedGroups] = useState<FbGroup[]>([]);
+  const [searchingGroups, setSearchingGroups] = useState(false);
 
   // Recovery effect: check for ongoing generations on mount
-  useState(() => {
+  useEffect(() => {
     const checkOngoing = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
@@ -79,7 +84,7 @@ export function CreateEbookView() {
       }
     };
     checkOngoing();
-  });
+  }, []);
 
   // Polling logic extracted to be reusable
   const startPolling = async (ebookId: string) => {
