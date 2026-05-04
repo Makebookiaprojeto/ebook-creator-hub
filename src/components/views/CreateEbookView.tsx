@@ -775,7 +775,7 @@ export function CreateEbookView() {
                   <div className="border-t bg-card p-8">
                     <h3 className="font-display text-2xl font-bold text-center">O que você vai aprender</h3>
                     <ul className="mt-6 grid gap-3 sm:grid-cols-2">
-                      {(chapters.length ? chapters.map(c => c.title) : ["Benefício 1", "Benefício 2", "Benefício 3"]).slice(0, 6).map((b, i) => (
+                      {(chapters.length ? chapters.map(c => c.title) : ["Benefício 1", "Benefício 2", "Benefício 3", "Benefício 4", "Benefício 5", "Benefício 6", "Benefício 7"]).slice(0, 7).map((b, i) => (
                         <li key={i} className="flex items-start gap-3 rounded-xl border bg-background p-3 text-sm">
                           <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-success/10">
                             <Check className="h-4 w-4 text-success" />
