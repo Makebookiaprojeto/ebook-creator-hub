@@ -301,6 +301,9 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
 
     await coverPromise;
 
+    // Small delay to ensure DB consistency before finishing
+    await new Promise(r => setTimeout(r, 2000));
+
     await sb.from("ebooks").update({
       generation_status: "done",
       generation_progress: { stage: "done", message: "Ebook gerado com sucesso!", total, done: total },
