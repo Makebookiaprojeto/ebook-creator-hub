@@ -38,9 +38,19 @@ export function useEbooks() {
     setLoading(true);
     const { data, error } = await supabase
       .from("ebooks")
-      .select("*")
+      .select(`
+        *,
+        chapters:chapters(count)
+      `)
       .order("created_at", { ascending: false });
-    if (!error && data) setEbooks(data);
+    
+    if (!error && data) {
+      const formatted = (data as any[]).map(eb => ({
+        ...eb,
+        chapter_count: eb.chapters?.[0]?.count ?? 0
+      }));
+      setEbooks(formatted);
+    }
     setLoading(false);
   }, [user]);
 
