@@ -234,61 +234,66 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
       return url;
     });
 
-    // 3. Chapters: process in parallel batches of 3 to avoid rate limits
+    // 3. Chapters: process sequentially to be robust and avoid timeouts/rate limits
     let done = 0;
-    const BATCH = 3;
-    for (let i = 0; i < total; i += BATCH) {
-      const slice = chapters.slice(i, i + BATCH);
-      await Promise.all(
-        slice.map(async (ch, k) => {
-          const idx = i + k;
-          try {
-            // 1 imagem a cada 2 capítulos: capítulos com índice par (0, 2, 4) recebem imagem
-            const shouldHaveImage = idx % 2 === 0;
-            const [content, imageUrl] = await Promise.all([
-              generateChapter({
-                ebookTitle: structure.title,
-                audience,
-                chapterTitle: ch.title,
-                chapterSubtitle: ch.subtitle,
-                chapterIndex: idx,
-                totalChapters: total,
-              }),
-              shouldHaveImage
-                ? searchPexelsAndUpload(
-                    (ch.image_keywords || ch.title || niche).toString().slice(0, 80),
-                    userId,
-                    "chapter",
-                    "landscape",
-                  )
-                : Promise.resolve(null),
-            ]);
+    for (let i = 0; i < total; i++) {
+      const ch = chapters[i];
+      try {
+        // 1 imagem a cada 2 capítulos: capítulos com índice 0, 2, 4 recebem imagem (total 3)
+        const shouldHaveImage = i % 2 === 0;
+        
+        const contentPromise = generateChapter({
+          ebookTitle: structure.title,
+          audience,
+          chapterTitle: ch.title,
+          chapterSubtitle: ch.subtitle,
+          chapterIndex: i,
+          totalChapters: total,
+        });
 
-            await sb.from("chapters").insert({
-              ebook_id: ebookId,
-              user_id: userId,
-              title: ch.title,
-              content,
-              image_url: imageUrl,
-              order_index: idx,
-            });
-          } catch (e) {
-            console.error(`Chapter ${idx} failed:`, e);
-            // Insert a placeholder so the user still has something
-            await sb.from("chapters").insert({
-              ebook_id: ebookId,
-              user_id: userId,
-              title: ch.title,
-              content: `_Não foi possível gerar este capítulo automaticamente. Edite o conteúdo aqui._`,
-              image_url: null,
-              order_index: idx,
-            });
-          } finally {
-            done += 1;
-            await updateProgress({ stage: "content", message: `Capítulo ${done} de ${total} pronto`, total, done });
-          }
-        }),
-      );
+        const imagePromise = shouldHaveImage
+          ? searchPexelsAndUpload(
+              (ch.image_keywords || ch.title || niche).toString().slice(0, 80),
+              userId,
+              "chapter",
+              "landscape",
+            )
+          : Promise.resolve(null);
+
+        const [content, imageUrl] = await Promise.all([contentPromise, imagePromise]);
+
+        if (!content || content.length < 100) {
+          throw new Error("Conteúdo gerado muito curto ou vazio");
+        }
+
+        await sb.from("chapters").insert({
+          ebook_id: ebookId,
+          user_id: userId,
+          title: ch.title,
+          content,
+          image_url: imageUrl,
+          order_index: i,
+        });
+      } catch (e) {
+        console.error(`Chapter ${i} failed:`, e);
+        // Retry once or insert placeholder
+        await sb.from("chapters").insert({
+          ebook_id: ebookId,
+          user_id: userId,
+          title: ch.title,
+          content: `## ${ch.title}\n\n_Desculpe, houve um erro ao gerar este capítulo automaticamente. Você pode editá-lo manualmente clicando no capítulo abaixo._`,
+          image_url: null,
+          order_index: i,
+        });
+      } finally {
+        done += 1;
+        await updateProgress({ 
+          stage: "content", 
+          message: `Gerando capítulo ${done} de ${total}...`, 
+          total, 
+          done 
+        });
+      }
     }
 
     await coverPromise; // ensure cover finishes too
