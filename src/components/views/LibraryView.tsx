@@ -268,27 +268,7 @@ export function LibraryView({ onCreateNew }: Props) {
   };
 
   const handleDownload = async (eb: Ebook) => {
-    setDownloadingId(eb.id);
-    try {
-      const { chapters } = await getEbookWithChapters(eb.id);
-      const blob = await generateEbookPdf({
-        title: eb.title,
-        subtitle: eb.subtitle,
-        cover_url: eb.cover_url,
-        chapters: chapters.map((c) => ({
-          title: c.title,
-          content: c.content ?? "",
-          image_url: c.image_url,
-        })),
-      });
-      downloadPdf(blob, eb.title);
-      toast.success("PDF gerado com sucesso!");
-    } catch (err) {
-      console.error(err);
-      toast.error("Erro ao gerar PDF.");
-    } finally {
-      setDownloadingId(null);
-    }
+    toast.error("A exportação de PDF não está disponível.");
   };
 
   const handleDelete = async () => {

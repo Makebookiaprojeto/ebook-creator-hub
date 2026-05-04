@@ -151,7 +151,7 @@ export function CreateEbookView() {
         setGenerationStage("");
         setGenerating(false);
         setGenerated(true);
-        toast.success("Ebook completo gerado com IA! 🎉");
+        toast.success("Ebook (Título, Subtítulo e Capa) gerado com IA! 🎉");
         return;
       }
       
@@ -216,43 +216,7 @@ export function CreateEbookView() {
   };
 
   const handleGeneratePdf = async () => {
-    if (!title || chapters.length === 0) {
-      toast.error("Gere o ebook primeiro");
-      return;
-    }
-    setGeneratingPdf(true);
-    try {
-      const blob = await generateEbookPdf({
-        title,
-        subtitle,
-        cover_url: coverUrl,
-        chapters,
-      });
-      const fileName = title.toLowerCase().replace(/[^a-z0-9]+/gi, "-").slice(0, 60);
-      downloadPdf(blob, fileName);
-      
-      // Upload automático após gerar
-      setUploadingPdf(true);
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const filePath = `${user.id}/${Date.now()}-${fileName}.pdf`;
-        const { error: uploadError } = await supabase.storage
-          .from("ebook-files")
-          .upload(filePath, blob);
-        
-        if (!uploadError) {
-          const { data: { publicUrl } } = supabase.storage.from("ebook-files").getPublicUrl(filePath);
-          setPdfUrl(publicUrl);
-        }
-      }
-      
-      toast.success("PDF gerado e pronto para entrega!");
-    } catch (e) {
-      console.error(e);
-      toast.error("Falha ao gerar PDF");
-    } finally {
-      setGeneratingPdf(false);
-    }
+    toast.error("A exportação de PDF não está disponível para este modelo.");
   };
 
   const searchGroups = () => {
