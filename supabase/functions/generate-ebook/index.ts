@@ -170,7 +170,7 @@ async function generateChapter(args: {
 }) {
   const sys = `Você é um autor profissional de ebooks digitais bestsellers.
 Escreva um capítulo COMPLETO, profundo e prático em português brasileiro.
-- REQUISITO DE TAMANHO: O conteúdo DEVE ter entre 1000 e 1500 palavras para ser considerado um capítulo de alta qualidade. EXPLIQUE DETALHADAMENTE CADA TÓPICO.
+- REQUISITO DE TAMANHO: O conteúdo DEVE ter exatamente entre 800 e 1200 palavras para ser um capítulo equilibrado. EXPLIQUE CADA TÓPICO DE FORMA DIRETA.
 - Estrutura interna obrigatória:
   1. Introdução cativante que conecte com a dor do leitor (3-4 parágrafos).
   2. 4 a 6 subseções aprofundadas com subtítulos (##) explorando conceitos, técnicas ou estratégias.
