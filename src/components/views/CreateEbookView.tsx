@@ -127,23 +127,21 @@ export function CreateEbookView() {
         if (typeof prog.total === "number" && typeof prog.done === "number") {
           setGenerationProgress({ done: prog.done, total: prog.total });
           // Carrega capítulos parciais para feedback visual
-          if (prog.done > 0) {
-            const { data: chs } = await supabase
-              .from("chapters")
-              .select("title, content, image_url, order_index")
-              .eq("ebook_id", ebookId)
-              .order("order_index", { ascending: true });
-            if (chs) {
-              setChapters(
-                chs.map((c) => ({
-                  title: c.title,
-                  subtitle: "",
-                  content: c.content ?? "",
-                  image_url: c.image_url ?? null,
-                })),
-              );
-              if (!generated) setGenerated(true);
-            }
+          const { data: chs } = await supabase
+            .from("chapters")
+            .select("title, content, image_url, order_index")
+            .eq("ebook_id", ebookId)
+            .order("order_index", { ascending: true });
+          if (chs && chs.length > 0) {
+            setChapters(
+              chs.map((c) => ({
+                title: c.title,
+                subtitle: "",
+                content: c.content ?? "",
+                image_url: c.image_url ?? null,
+              })),
+            );
+            if (!generated) setGenerated(true);
           }
         }
 
