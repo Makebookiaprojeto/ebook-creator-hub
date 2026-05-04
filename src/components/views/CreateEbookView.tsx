@@ -128,7 +128,7 @@ export function CreateEbookView() {
           .eq("ebook_id", ebookId)
           .order("order_index", { ascending: true });
         
-        if (chs) {
+        if (chs && chs.length > 0) {
           setChapters(
             chs.map((c) => ({
               title: c.title,
