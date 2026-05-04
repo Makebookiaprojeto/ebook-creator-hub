@@ -17,7 +17,7 @@ const PEXELS_API_KEY = Deno.env.get("PEXELS_API_KEY");
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
-const TEXT_MODEL = "google/gemini-2.5-flash";
+const TEXT_MODEL = "google/gemini-1.5-flash";
 
 type Json = Record<string, unknown>;
 const admin = () => createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
@@ -205,100 +205,108 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
     sb.from("ebooks").update({ generation_progress: progress, ...extra }).eq("id", ebookId);
 
   try {
+    console.log(`Starting worker for ebook ${ebookId}`);
     // 1. Structure
-    await updateProgress({ stage: "structure", message: "Criando estrutura..." });
+    await updateProgress({ stage: "structure", message: "Criando estrutura do ebook..." });
     const structure = await generateStructure(niche, audience);
-    let chapters: Array<{ title: string; subtitle: string; image_keywords?: string }> =
-      structure.chapters ?? [];
+    
+    if (!structure || !structure.title) {
+      throw new Error("Falha ao gerar a estrutura inicial do ebook.");
+    }
+
+    let chapters: any[] = structure.chapters ?? [];
     // Garantir exatamente 6 capítulos
     if (chapters.length > 6) chapters = chapters.slice(0, 6);
     while (chapters.length < 6) {
       chapters.push({
         title: `Capítulo ${chapters.length + 1}`,
-        subtitle: "Conteúdo complementar",
+        subtitle: "Conteúdo detalhado",
         image_keywords: niche,
       });
     }
-    const total = chapters.length;
+    const total = 6;
 
     await sb.from("ebooks").update({
       title: structure.title,
-      subtitle: structure.subtitle,
-      generation_progress: { stage: "content", message: "Estrutura pronta. Gerando conteúdo e buscando imagens...", total, done: 0 },
+      subtitle: structure.subtitle || "",
+      generation_progress: { stage: "content", message: "Estrutura criada. Iniciando escrita...", total, done: 0 },
     }).eq("id", ebookId);
 
-    // 2. Cover (in parallel with first chapter content) — uses Pexels
-    const coverQuery = (structure.cover_keywords || niche || "business").toString().slice(0, 80);
+    // 2. Cover (background)
+    const coverQuery = (structure.cover_keywords || niche || "lifestyle").toString().slice(0, 80);
     const coverPromise = searchPexelsAndUpload(coverQuery, userId, "cover", "portrait").then(async (url) => {
       if (url) await sb.from("ebooks").update({ cover_url: url }).eq("id", ebookId);
       return url;
     });
 
-    // 3. Chapters: process in parallel batches of 3 to avoid rate limits
-    let done = 0;
-    const BATCH = 3;
-    for (let i = 0; i < total; i += BATCH) {
-      const slice = chapters.slice(i, i + BATCH);
-      await Promise.all(
-        slice.map(async (ch, k) => {
-          const idx = i + k;
-          try {
-            // 1 imagem a cada 2 capítulos: capítulos com índice par (0, 2, 4) recebem imagem
-            const shouldHaveImage = idx % 2 === 0;
-            const [content, imageUrl] = await Promise.all([
-              generateChapter({
-                ebookTitle: structure.title,
-                audience,
-                chapterTitle: ch.title,
-                chapterSubtitle: ch.subtitle,
-                chapterIndex: idx,
-                totalChapters: total,
-              }),
-              shouldHaveImage
-                ? searchPexelsAndUpload(
-                    (ch.image_keywords || ch.title || niche).toString().slice(0, 80),
-                    userId,
-                    "chapter",
-                    "landscape",
-                  )
-                : Promise.resolve(null),
-            ]);
+    // 3. Chapters sequentially for maximum reliability
+    for (let i = 0; i < total; i++) {
+      const ch = chapters[i];
+      await updateProgress({ 
+        stage: "content", 
+        message: `Escrevendo capítulo ${i + 1} de ${total}: "${ch.title}"...`, 
+        total, 
+        done: i 
+      });
 
-            await sb.from("chapters").insert({
-              ebook_id: ebookId,
-              user_id: userId,
-              title: ch.title,
-              content,
-              image_url: imageUrl,
-              order_index: idx,
-            });
-          } catch (e) {
-            console.error(`Chapter ${idx} failed:`, e);
-            // Insert a placeholder so the user still has something
-            await sb.from("chapters").insert({
-              ebook_id: ebookId,
-              user_id: userId,
-              title: ch.title,
-              content: `_Não foi possível gerar este capítulo automaticamente. Edite o conteúdo aqui._`,
-              image_url: null,
-              order_index: idx,
-            });
-          } finally {
-            done += 1;
-            await updateProgress({ stage: "content", message: `Capítulo ${done} de ${total} pronto`, total, done });
-          }
-        }),
-      );
+      try {
+        const shouldHaveImage = i % 2 === 0;
+        
+        // Generate content and image in parallel for this chapter
+        const [content, imageUrl] = await Promise.all([
+          generateChapter({
+            ebookTitle: structure.title,
+            audience,
+            chapterTitle: ch.title,
+            chapterSubtitle: ch.subtitle || "Conteúdo prático e detalhado",
+            chapterIndex: i,
+            totalChapters: total,
+          }),
+          shouldHaveImage
+            ? searchPexelsAndUpload(
+                (ch.image_keywords || ch.title || niche).toString().slice(0, 80),
+                userId,
+                "chapter",
+                "landscape",
+              )
+            : Promise.resolve(null),
+        ]);
+
+        if (!content || content.length < 200) {
+          throw new Error("Conteúdo gerado é insuficiente.");
+        }
+
+        await sb.from("chapters").insert({
+          ebook_id: ebookId,
+          user_id: userId,
+          title: ch.title,
+          content,
+          image_url: imageUrl,
+          order_index: i,
+        });
+
+        console.log(`Chapter ${i + 1} finished successfully`);
+      } catch (e) {
+        console.error(`Error in chapter ${i + 1}:`, e);
+        await sb.from("chapters").insert({
+          ebook_id: ebookId,
+          user_id: userId,
+          title: ch.title,
+          content: `## ${ch.title}\n\nOcorreu um erro técnico ao gerar este capítulo. Por favor, utilize o botão de edição abaixo para adicionar o conteúdo manualmente.\n\n_Erro: ${e instanceof Error ? e.message : "Desconhecido"}_`,
+          image_url: null,
+          order_index: i,
+        });
+      }
     }
 
-    await coverPromise; // ensure cover finishes too
+    await coverPromise;
 
     await sb.from("ebooks").update({
       generation_status: "done",
-      generation_progress: { stage: "done", message: "Concluído!", total, done: total },
+      generation_progress: { stage: "done", message: "Ebook gerado com sucesso!", total, done: total },
     }).eq("id", ebookId);
 
-    // Increment monthly counter only on success
+    // Profile counter update
     const { data: profile } = await sb
       .from("profiles")
       .select("ebooks_generated_this_month")
@@ -309,13 +317,14 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
         .update({ ebooks_generated_this_month: (profile.ebooks_generated_this_month ?? 0) + 1 })
         .eq("user_id", userId);
     }
+    console.log(`Ebook ${ebookId} generation complete.`);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     console.error("Worker failed:", msg);
     await sb.from("ebooks").update({
       generation_status: "failed",
       generation_error: msg,
-      generation_progress: { stage: "failed", message: msg },
+      generation_progress: { stage: "failed", message: "Erro: " + msg },
     }).eq("id", ebookId);
   }
 }
