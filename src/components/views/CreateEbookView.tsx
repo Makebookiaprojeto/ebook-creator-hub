@@ -151,7 +151,7 @@ export function CreateEbookView() {
         setGenerationStage("");
         setGenerating(false);
         setGenerated(true);
-        toast.success("Ebook (Título, Subtítulo e Capa) gerado com IA! 🎉");
+        toast.success("Ebook completo gerado com IA! 🎉");
         return;
       }
       
@@ -216,7 +216,8 @@ export function CreateEbookView() {
   };
 
   const handleGeneratePdf = async () => {
-    toast.error("A exportação de PDF não está disponível para este modelo.");
+    // A exportação de PDF foi removida conforme solicitado.
+    toast.info("A exportação de PDF foi desativada.");
   };
 
   const searchGroups = () => {

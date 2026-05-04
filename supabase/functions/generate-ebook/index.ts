@@ -215,25 +215,106 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
       throw new Error("Falha ao gerar a estrutura inicial do ebook. Verifique os logs.");
     }
 
+    let chapters: any[] = structure.chapters ?? [];
+    // Garantir exatamente 6 capítulos
+    if (chapters.length > 6) chapters = chapters.slice(0, 6);
+    while (chapters.length < 6) {
+      chapters.push({
+        title: `Capítulo ${chapters.length + 1}`,
+        subtitle: "Conteúdo detalhado",
+        image_keywords: niche,
+      });
+    }
+    const total = 6;
+
     await sb.from("ebooks").update({
       title: structure.title,
       subtitle: structure.subtitle || "",
-      generation_progress: { stage: "cover", message: "Buscando imagem de capa...", total: 1, done: 0 },
+      generation_progress: { stage: "content", message: "Estrutura criada. Iniciando escrita...", total, done: 0 },
     }).eq("id", ebookId);
 
     // 2. Cover
     const coverQuery = (structure.cover_keywords || niche || "lifestyle").toString().slice(0, 80);
-    const coverUrl = await searchPexelsAndUpload(coverQuery, userId, "cover", "portrait");
-    if (coverUrl) {
-      await sb.from("ebooks").update({ cover_url: coverUrl }).eq("id", ebookId);
+    const coverPromise = searchPexelsAndUpload(coverQuery, userId, "cover", "portrait").then(async (url) => {
+      if (url) await sb.from("ebooks").update({ cover_url: url }).eq("id", ebookId);
+      return url;
+    });
+
+    // 3. Chapters sequentially
+    for (let i = 0; i < total; i++) {
+      const ch = chapters[i];
+      await updateProgress({ 
+        stage: "content", 
+        message: `Escrevendo capítulo ${i + 1} de ${total}: "${ch.title}"...`, 
+        total, 
+        done: i 
+      });
+
+      try {
+        // 1 imagem a cada 3 capítulos (Capítulo 1 e Capítulo 4)
+        const shouldHaveImage = i === 0 || i === 3;
+        
+        // Generate content and image in parallel for this chapter
+        const [content, imageUrl] = await Promise.all([
+          generateChapter({
+            ebookTitle: structure.title,
+            audience,
+            chapterTitle: ch.title,
+            chapterSubtitle: ch.subtitle || "Conteúdo prático e detalhado",
+            chapterIndex: i,
+            totalChapters: total,
+          }),
+          shouldHaveImage
+            ? searchPexelsAndUpload(
+                (ch.image_keywords || ch.title || niche).toString().slice(0, 80),
+                userId,
+                "chapter",
+                "landscape",
+              )
+            : Promise.resolve(null),
+        ]);
+
+        if (!content || content.length < 200) {
+          throw new Error("Conteúdo gerado é insuficiente.");
+        }
+
+        const insertData = {
+          ebook_id: ebookId,
+          user_id: userId,
+          title: ch.title,
+          content,
+          image_url: imageUrl,
+          order_index: i,
+        };
+        console.log(`Inserting chapter ${i + 1} with ${content.length} chars content`);
+        const { error: insertErr } = await sb.from("chapters").insert(insertData);
+        if (insertErr) {
+          console.error(`Chapter ${i + 1} insertion error:`, insertErr);
+          throw insertErr;
+        }
+
+        console.log(`Chapter ${i + 1} finished successfully`);
+      } catch (e) {
+        console.error(`Error in chapter ${i + 1}:`, e);
+        await sb.from("chapters").insert({
+          ebook_id: ebookId,
+          user_id: userId,
+          title: ch.title,
+          content: `## ${ch.title}\n\nOcorreu um erro técnico ao gerar este capítulo. Por favor, utilize o botão de edição abaixo para adicionar o conteúdo manualmente.\n\n_Erro: ${e instanceof Error ? e.message : "Desconhecido"}_`,
+          image_url: null,
+          order_index: i,
+        });
+      }
     }
 
+    await coverPromise;
+
     // Small delay to ensure DB consistency before finishing
-    await new Promise(r => setTimeout(r, 1000));
+    await new Promise(r => setTimeout(r, 2000));
 
     await sb.from("ebooks").update({
       generation_status: "done",
-      generation_progress: { stage: "done", message: "Ebook gerado com sucesso!", total: 1, done: 1 },
+      generation_progress: { stage: "done", message: "Ebook gerado com sucesso!", total, done: total },
       status: "published",
     }).eq("id", ebookId);
 
@@ -248,7 +329,7 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
         .update({ ebooks_generated_this_month: (profile.ebooks_generated_this_month ?? 0) + 1 })
         .eq("user_id", userId);
     }
-    console.log(`Ebook ${ebookId} generation complete (title, subtitle, cover).`);
+    console.log(`Ebook ${ebookId} generation complete (title, subtitle, cover and 6 chapters).`);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     console.error("Worker failed:", msg);
@@ -258,7 +339,6 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
       generation_progress: { stage: "failed", message: "Erro: " + msg },
     }).eq("id", ebookId);
   }
-}
 }
 
 // ----------- HTTP entrypoint -----------

@@ -268,7 +268,8 @@ export function LibraryView({ onCreateNew }: Props) {
   };
 
   const handleDownload = async (eb: Ebook) => {
-    toast.error("A exportação de PDF não está disponível.");
+    // A exportação de PDF foi removida conforme solicitado.
+    toast.info("A exportação de PDF foi desativada.");
   };
 
   const handleDelete = async () => {
