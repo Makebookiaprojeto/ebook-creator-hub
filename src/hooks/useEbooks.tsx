@@ -52,7 +52,7 @@ export function useEbooks() {
     if (!error && data) {
       const formatted = (data as any[]).map(eb => ({
         ...eb,
-        chapter_count: eb.chapters?.length ?? 0
+        chapter_count: eb.content_json?.length ?? 0
       }));
       setEbooks(formatted);
     }
