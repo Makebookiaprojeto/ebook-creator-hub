@@ -89,7 +89,7 @@ export function CreateEbookView() {
 
       const { data: eb } = await supabase
         .from("ebooks")
-        .select("id, niche, audience, generation_status, title, subtitle, cover_url, content_json, status")
+        .select("id, niche, audience, generation_status, title, subtitle, cover_url, content_json, status, slug")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(1)
@@ -101,6 +101,10 @@ export function CreateEbookView() {
         setNiche(eb.niche || "");
         setAudience(eb.audience || "");
         setGeneratedEbookId(eb.id);
+        if (eb.slug) {
+          setCreatedEbookSlug(eb.slug);
+          setEbookLink(`${window.location.origin}/e/${eb.slug}`);
+        }
         
         if (eb.generation_status === "processing") {
           setStep(2);
@@ -140,7 +144,7 @@ export function CreateEbookView() {
       tries += 1;
       const { data: eb } = await supabase
         .from("ebooks")
-        .select("title, subtitle, cover_url, generation_status, generation_progress, generation_error, content_json")
+        .select("title, subtitle, cover_url, generation_status, generation_progress, generation_error, content_json, slug")
         .eq("id", ebookId)
         .maybeSingle();
 
@@ -156,6 +160,10 @@ export function CreateEbookView() {
       if (eb.title && eb.title !== "Gerando...") setTitle(eb.title);
       if (eb.subtitle) setSubtitle(eb.subtitle);
       if (eb.cover_url) setCoverUrl(eb.cover_url);
+      if (eb.slug) {
+        setCreatedEbookSlug(eb.slug);
+        setEbookLink(`${window.location.origin}/e/${eb.slug}`);
+      }
 
       const prog: any = eb.generation_progress ?? {};
       if (prog.message) setGenerationStage(prog.message);
@@ -871,12 +879,12 @@ export function CreateEbookView() {
                   <p className="mt-1 text-xs text-muted-foreground">
                     {ebookLink 
                       ? "Este é o link da página que seus clientes usarão para comprar o ebook."
-                      : "O link será gerado assim que você clicar em 'Finalizar e salvar'."}
+                      : "O link está sendo gerado. Ele aparecerá aqui automaticamente assim que a criação for concluída."}
                   </p>
                   <div className="mt-3 flex items-center gap-2">
                     <Input 
                       readOnly 
-                      value={ebookLink || "Link será gerado ao salvar..."}
+                      value={ebookLink || "Aguardando conclusão..."}
                       className="bg-background text-xs h-10"
                     />
                     <Button 
