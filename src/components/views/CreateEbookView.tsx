@@ -114,7 +114,7 @@ export function CreateEbookView() {
       tries += 1;
       const { data: eb } = await supabase
         .from("ebooks")
-        .select("title, subtitle, cover_url, generation_status, generation_progress, generation_error")
+        .select("title, subtitle, cover_url, generation_status, generation_progress, generation_error, content_json")
         .eq("id", ebookId)
         .maybeSingle();
 
@@ -134,13 +134,8 @@ export function CreateEbookView() {
       const prog: any = eb.generation_progress ?? {};
       if (prog.message) setGenerationStage(prog.message);
       
-      const { data: chs, error: chsErr } = await supabase
-        .from("chapters")
-        .select("title, content, image_url, order_index")
-        .eq("ebook_id", ebookId)
-        .order("order_index", { ascending: true });
-      
-      if (chs && chs.length > 0) {
+      const chs = (eb.content_json as any[]) || [];
+      if (chs.length > 0) {
         setChapters(
           chs.map((c) => ({
             title: c.title,
@@ -149,8 +144,6 @@ export function CreateEbookView() {
             image_url: c.image_url ?? null,
           })),
         );
-      } else if (chsErr) {
-        console.error("Polling: Error fetching chapters:", chsErr);
       }
       
       if (prog.total > 0) {
