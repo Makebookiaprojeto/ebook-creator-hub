@@ -16,31 +16,9 @@ async function getPexelsImage(query) {
     const data = await response.json();
     return data.photos && data.photos.length > 0 ? data.photos[0].src.large : 'https://images.pexels.com/photos/159866/books-book-pages-read-literature-159866.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
   } catch (e) {
-    console.error('Pexels error:', e);
     return 'https://images.pexels.com/photos/159866/books-book-pages-read-literature-159866.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
   }
 }
-
-const niches = [
-  { name: "Emagrecimento", theme: "saúde, dieta, perda de peso, foco" },
-  { name: "Renda extra", theme: "dinheiro, negócios, finanças, liberdade" },
-  { name: "Marketing digital", theme: "estratégia, vendas, internet, tráfego" },
-  { name: "Relacionamentos", theme: "amor, casal, conversa, psicologia" },
-  { name: "Desenvolvimento pessoal", theme: "mente, sucesso, hábito, evolução" },
-  { name: "Finanças", theme: "investimento, economia, banco, planejamento" },
-  { name: "Saúde mental", theme: "calma, meditação, mente, paz" },
-  { name: "Fitness e musculação", theme: "treino, academia, força, resultado" },
-  { name: "Receitas e culinária", theme: "cozinha, sabor, tempero, gourmet" },
-  { name: "Maternidade", theme: "bebê, carinho, família, cuidado" },
-  { name: "Pets", theme: "cachorro, gato, animal, cuidado" },
-  { name: "Espiritualidade", theme: "energia, fé, universo, conexão" },
-  { name: "Estudos e concursos", theme: "livros, prova, aprovação, foco" },
-  { name: "Tecnologia e programação", theme: "código, futuro, computador, ia" },
-  { name: "Beleza e autocuidado", theme: "skincare, maquiagem, espelho, brilho" },
-  { name: "Empreendedorismo", theme: "empresa, liderança, startup, ideia" },
-  { name: "Idiomas", theme: "mundo, bandeira, conversa, dicionário" },
-  { name: "Viagens", theme: "mala, avião, mapa, descoberta" }
-];
 
 const chapterTopics = [
   "Introdução e Mentalidade: O ponto de partida para o sucesso.",
@@ -52,30 +30,26 @@ const chapterTopics = [
 ];
 
 async function updateEbooks() {
-  for (const niche of niches) {
-    console.log(`Processing ${niche.name}...`);
+  const { data: templates } = await supabase
+    .from('ebooks')
+    .select('*')
+    .eq('is_template', true);
+
+  if (!templates) return;
+
+  for (const template of templates) {
+    const niche = template.niche || "Geral";
+    console.log(`Processing template ${template.id} for niche: ${niche}...`);
     
-    const { data: template } = await supabase
-      .from('ebooks')
-      .select('id, title, subtitle')
-      .eq('niche', niche.name)
-      .eq('is_template', true)
-      .maybeSingle();
-
-    if (!template) {
-      console.log(`No template for ${niche.name}`);
-      continue;
-    }
-
     const chapters = [];
-    const coverUrl = await getPexelsImage(niche.name + " " + niche.theme.split(',')[0]);
+    const coverUrl = await getPexelsImage(niche + " cover");
 
     for (let i = 0; i < 6; i++) {
       const title = chapterTopics[i].split(':')[0];
       const subtitle = chapterTopics[i].split(':')[1].trim();
-      const content = `Neste capítulo sobre ${niche.name}, mergulharemos fundo no tema "${subtitle}". Você aprenderá como aplicar estratégias de ${niche.theme} para transformar seus resultados. \n\nA importância de dominar este pilar é fundamental para quem busca excelência. Ao longo destas páginas, detalhamos o passo a passo necessário para que você não apenas entenda a teoria, mas saiba exatamente como agir na prática. \n\nEstratégias-chave abordadas: \n1. Análise detalhada do cenário atual.\n2. Implementação de ferramentas específicas de ${niche.name}.\n3. Métricas para acompanhar sua evolução constante.`;
+      const content = `Este capítulo de alta qualidade explora "${subtitle}" no contexto de ${niche}. \n\nAqui, fornecemos insights profundos e estratégias práticas que foram validadas pelo mercado. O objetivo é permitir que você implemente estas mudanças imediatamente para ver resultados reais. \n\nAbaixo, os pontos principais cobertos:\n\n• Análise técnica e prática do tema.\n• Checklist de implementação imediata.\n• Dicas de especialistas no nicho de ${niche}.\n• Como evitar os obstáculos mais comuns nesta etapa.`;
       
-      const imageUrl = await getPexelsImage(niche.name + " " + (niche.theme.split(',')[i % niche.theme.split(',').length].trim()));
+      const imageUrl = await getPexelsImage(niche + " " + (i % 2 === 0 ? "minimalist" : "professional"));
       
       chapters.push({
         title: title,
@@ -84,7 +58,7 @@ async function updateEbooks() {
       });
     }
 
-    const { error } = await supabase
+    await supabase
       .from('ebooks')
       .update({
         cover_url: coverUrl,
@@ -92,9 +66,8 @@ async function updateEbooks() {
         updated_at: new Date()
       })
       .eq('id', template.id);
-
-    if (error) console.error(`Error updating ${niche.name}:`, error);
-    else console.log(`Successfully updated ${niche.name}`);
+      
+    console.log(`Updated ${niche} (ID: ${template.id})`);
   }
 }
 
