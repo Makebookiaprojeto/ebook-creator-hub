@@ -86,15 +86,10 @@ export function useEbooks() {
     if (ebookError || !newEbook) throw ebookError ?? new Error("Falha ao criar ebook");
 
     if (chapters.length > 0) {
-      const rows = chapters.map((c, i) => ({
-        ebook_id: newEbook.id,
-        user_id: user.id,
-        title: c.title,
-        content: c.content,
-        image_url: c.image_url ?? null,
-        order_index: i,
-      }));
-      const { error: chErr } = await supabase.from("chapters").insert(rows);
+      const { error: chErr } = await supabase
+        .from("ebooks")
+        .update({ content_json: chapters })
+        .eq("id", newEbook.id);
       if (chErr) throw chErr;
     }
 
