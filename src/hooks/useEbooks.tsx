@@ -27,6 +27,8 @@ export type NewEbook = {
   cover_url?: string | null;
   status?: "draft" | "published" | "archived";
   pdf_url?: string | null;
+  price?: number;
+  is_public?: boolean;
 };
 
 export function useEbooks() {
