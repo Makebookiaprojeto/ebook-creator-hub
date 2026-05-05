@@ -999,7 +999,7 @@ export function CreateEbookView() {
                       is_public: true,
                       pdf_url: pdfUrl,
                       price: price
-                    })
+                    } as any)
                     .eq("id", generatedEbookId)
                     .select("slug")
                     .single();
