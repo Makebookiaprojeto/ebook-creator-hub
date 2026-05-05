@@ -554,19 +554,6 @@ export function CreateEbookView() {
                         <Button size="sm" variant="outline" onClick={() => setShowFullPreview((v) => !v)}>
                           <Eye className="mr-2 h-3.5 w-3.5" /> {showFullPreview ? "Fechar preview" : "Preview completo"}
                         </Button>
-                        <Button
-                          size="sm"
-                          onClick={handleGeneratePdf}
-                          disabled={generatingPdf}
-                          className="gradient-primary text-primary-foreground shadow-glow"
-                        >
-                          {generatingPdf ? (
-                            <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-                          ) : (
-                            <Download className="mr-2 h-3.5 w-3.5" />
-                          )}
-                          Gerar PDF
-                        </Button>
                       </div>
                     </div>
 
