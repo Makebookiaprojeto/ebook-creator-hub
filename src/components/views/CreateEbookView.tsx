@@ -640,7 +640,7 @@ export function CreateEbookView() {
                           <Input value={subtitle} onChange={(e) => setSubtitle(e.target.value)} className="mt-1.5" />
                         </div>
                         <div>
-                          <label className="text-xs font-medium uppercase text-muted-foreground">Capítulos</label>
+                          <label className="text-xs font-medium uppercase text-muted-foreground">Capítulos ({chapters.length})</label>
                           <p className="text-xs text-muted-foreground mt-1">Clique em um capítulo para ver e editar o conteúdo completo.</p>
                           <div className="mt-2 space-y-2">
                             {chapters.map((c, i) => {
