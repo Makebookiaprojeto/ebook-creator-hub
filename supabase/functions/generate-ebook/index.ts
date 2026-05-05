@@ -220,16 +220,16 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
     }
 
     let chapterStructures: any[] = structure.chapters ?? [];
-    // Garantir exatamente 7 capítulos
-    if (chapterStructures.length > 7) chapterStructures = chapterStructures.slice(0, 7);
-    while (chapterStructures.length < 7) {
+    // Garantir exatamente 6 capítulos
+    if (chapterStructures.length > 6) chapterStructures = chapterStructures.slice(0, 6);
+    while (chapterStructures.length < 6) {
       chapterStructures.push({
         title: `Capítulo ${chapterStructures.length + 1}`,
         subtitle: "Conteúdo detalhado",
         image_keywords: niche,
       });
     }
-    const total = 7;
+    const total = 6;
     const ebookContent: any[] = [];
 
     await sb.from("ebooks").update({
