@@ -261,6 +261,7 @@ export type Database = {
           generation_status: string
           id: string
           is_public: boolean
+          is_template: boolean | null
           niche: string | null
           pdf_url: string | null
           price: number | null
@@ -271,7 +272,7 @@ export type Database = {
           subtitle: string | null
           title: string
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           audience?: string | null
@@ -288,6 +289,7 @@ export type Database = {
           generation_status?: string
           id?: string
           is_public?: boolean
+          is_template?: boolean | null
           niche?: string | null
           pdf_url?: string | null
           price?: number | null
@@ -298,7 +300,7 @@ export type Database = {
           subtitle?: string | null
           title: string
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           audience?: string | null
@@ -315,6 +317,7 @@ export type Database = {
           generation_status?: string
           id?: string
           is_public?: boolean
+          is_template?: boolean | null
           niche?: string | null
           pdf_url?: string | null
           price?: number | null
@@ -325,7 +328,7 @@ export type Database = {
           subtitle?: string | null
           title?: string
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: []
       }

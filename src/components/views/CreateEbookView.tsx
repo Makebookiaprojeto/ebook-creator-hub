@@ -275,7 +275,7 @@ export function CreateEbookView() {
     }
     setGenerating(true);
     setGenerated(false);
-    setGenerationStage("Iniciando geração...");
+    setGenerationStage("Buscando ebook no banco de dados...");
     setGenerationProgress(null);
     setTitle("");
     setSubtitle("");
@@ -283,21 +283,77 @@ export function CreateEbookView() {
     setChapters([]);
 
     try {
-      const { data: startRes, error: startErr } = await supabase.functions.invoke("generate-ebook", {
-        body: { mode: "start", niche, audience },
-      });
-      if (startErr || !startRes?.ebook_id) {
-        const status = (startErr as any)?.context?.status;
-        const errorMsg = (startErr as any)?.message || (startRes as any)?.error;
-        handleAIError(status, "Falha ao iniciar geração", errorMsg);
+      // Look for a template ebook for this niche
+      const { data: template, error: fetchErr } = await supabase
+        .from("ebooks")
+        .select("*")
+        .eq("niche", niche)
+        .eq("is_template", true)
+        .limit(1)
+        .maybeSingle();
+
+      if (fetchErr) throw fetchErr;
+
+      if (!template) {
         setGenerating(false);
+        toast.error("Ebook ainda não disponível para este nicho");
         return;
       }
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Usuário não autenticado");
+
+      // Clone the template for the current user
+      const { data: newEbook, error: cloneErr } = await supabase
+        .from("ebooks")
+        .insert({
+          user_id: user.id,
+          title: template.title,
+          subtitle: template.subtitle,
+          description: template.description,
+          category: template.category,
+          niche: template.niche,
+          audience: audience || template.audience,
+          cover_url: template.cover_url,
+          status: "published",
+          is_public: true,
+          content_json: template.content_json,
+          pdf_url: template.pdf_url,
+          price: price || 29.9,
+          slug: `${template.slug || 'ebook'}-${Math.random().toString(36).substring(2, 7)}`,
+          generation_status: "done"
+        })
+        .select()
+        .single();
+
+      if (cloneErr) throw cloneErr;
+
+      setGeneratedEbookId(newEbook.id);
+      setTitle(newEbook.title || "");
+      setSubtitle(newEbook.subtitle || "");
+      setCoverUrl(newEbook.cover_url);
+      setPdfUrl(newEbook.pdf_url);
       
-      startPolling(startRes.ebook_id);
+      if (newEbook.slug) {
+        setCreatedEbookSlug(newEbook.slug);
+        setEbookLink(`${window.location.origin}/e/${newEbook.slug}`);
+      }
+
+      const chs = (newEbook.content_json as any[]) || [];
+      setChapters(chs.map(c => ({
+        title: c.title,
+        subtitle: "",
+        content: c.content || "",
+        image_url: c.image_url
+      })));
+
+      setGenerated(true);
+      setGenerating(false);
+      setGenerationStage("");
+      toast.success("Ebook pronto!");
     } catch (e: any) {
       console.error(e);
-      toast.error(e?.message ?? "Erro inesperado ao gerar ebook");
+      toast.error(e?.message ?? "Erro ao buscar ebook");
       setGenerating(false);
     }
   };
@@ -471,7 +527,7 @@ export function CreateEbookView() {
                     Quem é o público-alvo do seu ebook? <span className="text-muted-foreground font-normal">(opcional, mas recomendado)</span>
                   </label>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Descreva idade, interesses, dores e objetivos. Quanto mais específico, melhor a IA gera o conteúdo.
+                    Descreva idade, interesses, dores e objetivos para personalizar seu ebook.
                   </p>
                   <Textarea
                     className="mt-3 min-h-[110px]"
@@ -539,8 +595,8 @@ export function CreateEbookView() {
 
             {step === 2 && (
               <div>
-                <h2 className="font-display text-xl font-semibold">Gerar com IA</h2>
-                <p className="mt-1 text-sm text-muted-foreground">Nossa IA criará a estrutura completa do seu ebook.</p>
+                <h2 className="font-display text-xl font-semibold">Gerar Ebook</h2>
+                <p className="mt-1 text-sm text-muted-foreground">O sistema buscará um ebook pronto correspondente ao seu nicho.</p>
 
                 {!generated && !generating && (
                   <div className="mt-10 flex flex-col items-center justify-center rounded-2xl gradient-hero p-10 text-center">
@@ -552,7 +608,7 @@ export function CreateEbookView() {
                     
                     <div className="mt-6 flex flex-col items-center gap-4 w-full max-w-xs">
                       <Button onClick={generate} size="lg" className="w-full gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
-                        <Sparkles className="mr-2 h-4 w-4" /> Gerar com IA
+                        <Sparkles className="mr-2 h-4 w-4" /> Gerar Ebook
                       </Button>
                     </div>
                   </div>
