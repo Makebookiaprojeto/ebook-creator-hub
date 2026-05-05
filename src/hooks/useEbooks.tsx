@@ -3,14 +3,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Tables } from "@/integrations/supabase/types";
 
-export type Ebook = Tables<"ebooks"> & { chapter_count?: number };
-export type Chapter = Tables<"chapters">;
-
-export type NewChapter = {
+export type Chapter = {
   title: string;
   content: string;
   image_url?: string | null;
+  order_index?: number;
 };
+
+export type Ebook = Tables<"ebooks"> & { 
+  chapter_count?: number;
+  content_json?: Chapter[];
+};
+
+export type NewChapter = Chapter;
 
 export type NewEbook = {
   title: string;
