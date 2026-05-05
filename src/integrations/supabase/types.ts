@@ -251,6 +251,7 @@ export type Database = {
           author_name: string | null
           cakto_checkout_url: string | null
           category: string | null
+          content_json: Json | null
           cover_url: string | null
           created_at: string
           description: string | null
@@ -276,6 +277,7 @@ export type Database = {
           author_name?: string | null
           cakto_checkout_url?: string | null
           category?: string | null
+          content_json?: Json | null
           cover_url?: string | null
           created_at?: string
           description?: string | null
@@ -301,6 +303,7 @@ export type Database = {
           author_name?: string | null
           cakto_checkout_url?: string | null
           category?: string | null
+          content_json?: Json | null
           cover_url?: string | null
           created_at?: string
           description?: string | null
