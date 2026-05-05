@@ -261,6 +261,7 @@ export type Database = {
           generation_status: string
           id: string
           is_public: boolean
+          is_template: boolean | null
           niche: string | null
           pdf_url: string | null
           price: number | null
@@ -288,6 +289,7 @@ export type Database = {
           generation_status?: string
           id?: string
           is_public?: boolean
+          is_template?: boolean | null
           niche?: string | null
           pdf_url?: string | null
           price?: number | null
@@ -315,6 +317,7 @@ export type Database = {
           generation_status?: string
           id?: string
           is_public?: boolean
+          is_template?: boolean | null
           niche?: string | null
           pdf_url?: string | null
           price?: number | null
