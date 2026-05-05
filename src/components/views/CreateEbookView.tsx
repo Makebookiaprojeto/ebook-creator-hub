@@ -774,8 +774,15 @@ export function CreateEbookView() {
                       variant="outline"
                       className="flex-1 border-primary/20 hover:bg-primary/5 gap-2"
                       onClick={() => {
-                        const previewUrl = `${window.location.origin}/e/preview?title=${encodeURIComponent(title)}&price=${price}&subtitle=${encodeURIComponent(subtitle)}&chapters=${encodeURIComponent(JSON.stringify(chapters.map(c => ({ title: c.title, content: c.content }))))}`;
-                        window.open(previewUrl, '_blank');
+                        // Usamos sessionStorage para passar os dados do preview sem estourar o limite da URL (HTTP 414)
+                        const previewData = {
+                          title,
+                          subtitle,
+                          price,
+                          chapters: chapters.map(c => ({ title: c.title, content: c.content }))
+                        };
+                        sessionStorage.setItem('ebook_preview_data', JSON.stringify(previewData));
+                        window.open(`${window.location.origin}/e/preview`, '_blank');
                       }}
                     >
                       <Eye className="h-4 w-4" /> Ver na Web
