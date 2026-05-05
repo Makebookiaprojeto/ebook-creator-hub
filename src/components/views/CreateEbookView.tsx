@@ -65,34 +65,27 @@ export function CreateEbookView() {
 
       const { data: eb } = await supabase
         .from("ebooks")
-        .select("id, niche, audience, generation_status, title, subtitle, cover_url")
+        .select("id, niche, audience, generation_status, title, subtitle, cover_url, content_json")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle();
 
       if (eb) {
+        setNiche(eb.niche || "");
+        setAudience(eb.audience || "");
+        setGeneratedEbookId(eb.id);
+        
         if (eb.generation_status === "processing") {
-          setNiche(eb.niche || "");
-          setAudience(eb.audience || "");
           setStep(2);
           startPolling(eb.id);
         } else if (eb.generation_status === "done") {
-          // If the last one is done, let's also load its content so it's not empty if the user is in step 2
-          setNiche(eb.niche || "");
-          setAudience(eb.audience || "");
           setTitle(eb.title || "");
           setSubtitle(eb.subtitle || "");
           setCoverUrl(eb.cover_url);
-          setGeneratedEbookId(eb.id);
           
-          const { data: chs } = await supabase
-            .from("chapters")
-            .select("title, content, image_url, order_index")
-            .eq("ebook_id", eb.id)
-            .order("order_index", { ascending: true });
-            
-          if (chs) {
+          const chs = (eb.content_json as any[]) || [];
+          if (chs.length > 0) {
             setChapters(chs.map(c => ({
               title: c.title,
               subtitle: "",
