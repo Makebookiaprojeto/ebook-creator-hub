@@ -200,7 +200,19 @@ export default function EbookSalesPage() {
 
       if (!active) return;
       setEbook(ebookData);
-      setChapters(chData ?? []);
+      
+      // Se houver chapters na tabela, usamos eles. Caso contrário, usamos content_json do ebook.
+      if (chData && chData.length > 0) {
+        setChapters(chData);
+      } else if (ebookData.content_json && Array.isArray(ebookData.content_json)) {
+        setChapters(ebookData.content_json.map((c: any, index: number) => ({
+          ...c,
+          order_index: c.order_index ?? index,
+          id: c.id ?? `json-${index}`
+        })));
+      } else {
+        setChapters([]);
+      }
 
       setLoading(false);
     })();
