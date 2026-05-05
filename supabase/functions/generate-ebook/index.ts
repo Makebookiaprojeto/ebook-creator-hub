@@ -135,17 +135,17 @@ async function getUserId(req: Request): Promise<string | null> {
 
 async function generateStructure(niche: string, audience: string) {
   const sys = `Você é um autor profissional de ebooks digitais bestsellers em português brasileiro.
-Crie a estrutura COMPLETA de um ebook irresistível. Responda APENAS com JSON válido (sem markdown, sem comentários).
+Crie a estrutura COMPLETA de um ebook irresistível. Responda APENAS com JSON válido (sem markdown, sem blocos de código \`\`\`, sem comentários).
 Formato exato:
 {
   "title": "string (máx 70 chars, chamativo)",
   "subtitle": "string (máx 120 chars, promessa clara)",
-  "cover_keywords": "2 a 4 palavras EM INGLÊS para buscar uma foto de capa em banco de imagens (ex: 'business success laptop', 'healthy food kitchen'). Use termos visuais concretos.",
+  "cover_keywords": "2 a 4 palavras EM INGLÊS para buscar uma foto de capa em banco de imagens (ex: 'business success laptop').",
   "chapters": [
-    { "title": "string", "subtitle": "string curto (1 frase de promessa)", "image_keywords": "2 a 4 palavras EM INGLÊS para buscar uma foto temática no banco de imagens (ex: 'morning routine coffee'). Termos visuais concretos, sem texto." }
+    { "title": "string", "subtitle": "string curto (1 frase de promessa)", "image_keywords": "2 a 4 palavras EM INGLÊS para buscar uma foto temática (ex: 'morning routine coffee')." }
   ]
 }
-Gere EXATAMENTE 7 capítulos (nem mais, nem menos).`;
+Gere EXATAMENTE 7 capítulos.`;
   const user = `Nicho: ${niche}\nPúblico-alvo: ${audience || "geral"}`;
   const result = await callAI({
     model: TEXT_MODEL,
@@ -153,10 +153,14 @@ Gere EXATAMENTE 7 capítulos (nem mais, nem menos).`;
       { role: "system", content: sys },
       { role: "user", content: user },
     ],
+    // Remove structured output for a moment to see if it helps with some models, 
+    // or keep it if it's reliable. Gemini usually likes it.
     response_format: { type: "json_object" },
   });
   if (result.error) throw new Error(`structure: ${result.error.text}`);
-  const txt = result.data?.choices?.[0]?.message?.content ?? "{}";
+  let txt = result.data?.choices?.[0]?.message?.content ?? "{}";
+  // Clean potential markdown wrap
+  txt = txt.replace(/```json/g, "").replace(/```/g, "").trim();
   return JSON.parse(txt);
 }
 
@@ -312,11 +316,15 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
     // Small delay to ensure DB consistency before finishing
     await new Promise(r => setTimeout(r, 2000));
 
-    await sb.from("ebooks").update({
+    const { error: finalUpdErr } = await sb.from("ebooks").update({
       generation_status: "done",
       generation_progress: { stage: "done", message: "Ebook gerado com sucesso!", total, done: total },
       status: "published",
     }).eq("id", ebookId);
+
+    if (finalUpdErr) {
+      console.error("Error finalizing ebook status:", finalUpdErr);
+    }
 
     // Profile counter update
     const { data: profile } = await sb
