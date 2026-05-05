@@ -57,6 +57,30 @@ export function CreateEbookView() {
   const [searchedGroups, setSearchedGroups] = useState<FbGroup[]>([]);
   const [searchingGroups, setSearchingGroups] = useState(false);
 
+  const resetForm = () => {
+    setStep(0);
+    setNiche("");
+    setAudience("");
+    setPrice(29.9);
+    setPriceInput("29,90");
+    setGenerating(false);
+    setGenerated(false);
+    setGenerationStage("");
+    setTitle("");
+    setSubtitle("");
+    setCoverUrl(null);
+    setChapters([]);
+    setGeneratedEbookId(null);
+    setGenerationProgress(null);
+    setOpenChapter(null);
+    setPdfUrl(null);
+    setIsPublished(false);
+    setSearchTopic("");
+    setEbookLink("");
+    setCreatedEbookSlug(null);
+    setSearchedGroups([]);
+  };
+
   // Recovery effect: check for ongoing generations on mount
   useEffect(() => {
     const checkOngoing = async () => {
@@ -65,13 +89,15 @@ export function CreateEbookView() {
 
       const { data: eb } = await supabase
         .from("ebooks")
-        .select("id, niche, audience, generation_status, title, subtitle, cover_url, content_json")
+        .select("id, niche, audience, generation_status, title, subtitle, cover_url, content_json, status")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle();
 
-      if (eb) {
+      // Só recupera se for um rascunho ou estiver processando.
+      // Se já estiver "published", ignoramos para permitir criar um novo.
+      if (eb && eb.status !== "published") {
         setNiche(eb.niche || "");
         setAudience(eb.audience || "");
         setGeneratedEbookId(eb.id);
