@@ -101,6 +101,10 @@ export function CreateEbookView() {
         setNiche(eb.niche || "");
         setAudience(eb.audience || "");
         setGeneratedEbookId(eb.id);
+        if (eb.slug) {
+          setCreatedEbookSlug(eb.slug);
+          setEbookLink(`${window.location.origin}/e/${eb.slug}`);
+        }
         
         if (eb.generation_status === "processing") {
           setStep(2);
