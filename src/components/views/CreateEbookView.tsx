@@ -879,7 +879,7 @@ export function CreateEbookView() {
                   <p className="mt-1 text-xs text-muted-foreground">
                     {ebookLink 
                       ? "Este é o link da página que seus clientes usarão para comprar o ebook."
-                      : "O link será gerado assim que você clicar em 'Finalizar e salvar'."}
+                      : "O link está sendo gerado. Ele aparecerá aqui automaticamente assim que a criação for concluída."}
                   </p>
                   <div className="mt-3 flex items-center gap-2">
                     <Input 
