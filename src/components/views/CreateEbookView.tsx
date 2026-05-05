@@ -300,6 +300,10 @@ export function CreateEbookView() {
         return;
       }
 
+      // Small delay to simulate "finding" and "cloning" the best ebook
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      setGenerationStage("Clonando modelo exclusivo...");
+
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Usuário não autenticado");
 
@@ -317,6 +321,7 @@ export function CreateEbookView() {
           cover_url: template.cover_url,
           status: "published",
           is_public: true,
+          is_template: false,
           content_json: template.content_json,
           pdf_url: template.pdf_url,
           price: price || 29.9,
