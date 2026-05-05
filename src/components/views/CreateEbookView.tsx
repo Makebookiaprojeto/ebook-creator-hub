@@ -223,8 +223,27 @@ export function CreateEbookView() {
   };
 
   const handleGeneratePdf = async () => {
-    // A exportação de PDF foi removida conforme solicitado.
-    toast.info("A exportação de PDF foi desativada.");
+    if (!title) return toast.error("Gere o conteúdo primeiro");
+    setGeneratingPdf(true);
+    try {
+      const blob = await generateEbookPdf({
+        title,
+        subtitle,
+        cover_url: coverUrl,
+        chapters: chapters.map(c => ({
+          title: c.title,
+          content: c.content,
+          image_url: c.image_url
+        }))
+      });
+      downloadPdf(blob, title);
+      toast.success("PDF gerado com sucesso!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao gerar PDF");
+    } finally {
+      setGeneratingPdf(false);
+    }
   };
 
   const searchGroups = () => {
