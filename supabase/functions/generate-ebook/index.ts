@@ -145,7 +145,7 @@ Formato exato:
     { "title": "string", "subtitle": "string curto (1 frase de promessa)", "image_keywords": "2 a 4 palavras EM INGLÊS para buscar uma foto temática (ex: 'morning routine coffee')." }
   ]
 }
-Gere EXATAMENTE 7 capítulos.`;
+Gere EXATAMENTE 6 capítulos.`;
   const user = `Nicho: ${niche}\nPúblico-alvo: ${audience || "geral"}`;
   const result = await callAI({
     model: TEXT_MODEL,
