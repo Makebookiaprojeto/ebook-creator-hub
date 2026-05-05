@@ -155,6 +155,19 @@ export function CreateEbookView() {
         setGenerating(false);
         setGenerationStage("");
 
+        // Marcar ebook como publicado automaticamente ao terminar de gerar
+        try {
+          await supabase
+            .from("ebooks")
+            .update({ 
+              status: "published",
+              is_public: true
+            })
+            .eq("id", ebookId);
+        } catch (pubErr) {
+          console.error("Auto publish failed:", pubErr);
+        }
+
         // Automatic PDF generation and delivery if not already done
         if (eb.title && eb.content_json && Array.isArray(eb.content_json) && eb.content_json.length > 0) {
           try {
@@ -185,7 +198,7 @@ export function CreateEbookView() {
                 
                 await supabase.from("ebooks").update({ pdf_url: publicUrl }).eq("id", ebookId);
                 setPdfUrl(publicUrl);
-                toast.success("PDF gerado e pronto para entrega!");
+                toast.success("Ebook criado e PDF pronto para entrega!");
               }
             }
           } catch (pdfErr) {
