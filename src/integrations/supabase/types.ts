@@ -263,6 +263,7 @@ export type Database = {
           is_public: boolean
           niche: string | null
           pdf_url: string | null
+          price: number | null
           price_cents: number | null
           sales_pitch: string | null
           slug: string | null
@@ -289,6 +290,7 @@ export type Database = {
           is_public?: boolean
           niche?: string | null
           pdf_url?: string | null
+          price?: number | null
           price_cents?: number | null
           sales_pitch?: string | null
           slug?: string | null
@@ -315,6 +317,7 @@ export type Database = {
           is_public?: boolean
           niche?: string | null
           pdf_url?: string | null
+          price?: number | null
           price_cents?: number | null
           sales_pitch?: string | null
           slug?: string | null

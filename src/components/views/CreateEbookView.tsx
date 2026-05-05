@@ -57,6 +57,30 @@ export function CreateEbookView() {
   const [searchedGroups, setSearchedGroups] = useState<FbGroup[]>([]);
   const [searchingGroups, setSearchingGroups] = useState(false);
 
+  const resetForm = () => {
+    setStep(0);
+    setNiche("");
+    setAudience("");
+    setPrice(29.9);
+    setPriceInput("29,90");
+    setGenerating(false);
+    setGenerated(false);
+    setGenerationStage("");
+    setTitle("");
+    setSubtitle("");
+    setCoverUrl(null);
+    setChapters([]);
+    setGeneratedEbookId(null);
+    setGenerationProgress(null);
+    setOpenChapter(null);
+    setPdfUrl(null);
+    setIsPublished(false);
+    setSearchTopic("");
+    setEbookLink("");
+    setCreatedEbookSlug(null);
+    setSearchedGroups([]);
+  };
+
   // Recovery effect: check for ongoing generations on mount
   useEffect(() => {
     const checkOngoing = async () => {
@@ -65,13 +89,15 @@ export function CreateEbookView() {
 
       const { data: eb } = await supabase
         .from("ebooks")
-        .select("id, niche, audience, generation_status, title, subtitle, cover_url, content_json")
+        .select("id, niche, audience, generation_status, title, subtitle, cover_url, content_json, status")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle();
 
-      if (eb) {
+      // Só recupera se for um rascunho ou estiver processando.
+      // Se já estiver "published", ignoramos para permitir criar um novo.
+      if (eb && eb.status !== "published") {
         setNiche(eb.niche || "");
         setAudience(eb.audience || "");
         setGeneratedEbookId(eb.id);
@@ -972,7 +998,8 @@ export function CreateEbookView() {
                       status: "published",
                       is_public: true,
                       pdf_url: pdfUrl,
-                    })
+                      price: price
+                    } as any)
                     .eq("id", generatedEbookId)
                     .select("slug")
                     .single();
@@ -984,7 +1011,8 @@ export function CreateEbookView() {
                     .select("id, order_index")
                     .eq("ebook_id", generatedEbookId)
                     .order("order_index", { ascending: true });
-                  if (existingChs) {
+                  
+                  if (existingChs && chapters.length > 0) {
                     await Promise.all(
                       chapters.map((c, i) => {
                         const row = existingChs[i];
@@ -1014,6 +1042,8 @@ export function CreateEbookView() {
                       cover_url: coverUrl,
                       status: "published",
                       pdf_url: pdfUrl,
+                      price: price,
+                      is_public: true
                     },
                     chapters,
                   );
@@ -1022,14 +1052,22 @@ export function CreateEbookView() {
                     setEbookLink(`${window.location.origin}/e/${res.slug}`);
                   }
                 }
-                toast.success("Ebook salvo com sucesso! 🎉");
+                toast.success("Ebook finalizado com sucesso! Redirecionando...");
+                
+                // Aguarda um pouco para o usuário ver a mensagem e o link ser gerado antes de limpar/sair
+                setTimeout(() => {
+                  resetForm();
+                  // Força um "refresh" na visualização enviando o usuário para a dashboard/biblioteca 
+                  // ou apenas limpando o estado para um novo ebook
+                  window.location.href = "/";
+                }, 2000);
               } catch (e: any) {
+                console.error("Save error:", e);
                 toast.error(e.message ?? "Erro ao salvar ebook");
               } finally {
                 setSaving(false);
               }
             }}
-
             disabled={saving}
             className="gradient-primary text-primary-foreground shadow-glow"
           >
