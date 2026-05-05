@@ -194,7 +194,11 @@ export function DashboardView() {
             {ebooks.length > 0 && (
               <li className="flex items-center gap-3 rounded-lg p-2 hover:bg-muted/50 transition">
                 <span className="h-2 w-2 rounded-full bg-primary" />
-                <span className="text-sm">{ebooks[0].title} criado recentemente</span>
+                <span className="text-sm">
+                  {ebooks[0].title === "Gerando..." 
+                    ? "Um eBook está sendo gerado" 
+                    : `${ebooks[0].title} criado recentemente`}
+                </span>
               </li>
             )}
             <li className="flex items-center gap-3 rounded-lg p-2 hover:bg-muted/50 transition">
