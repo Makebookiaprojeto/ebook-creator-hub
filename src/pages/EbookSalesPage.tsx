@@ -154,6 +154,37 @@ export default function EbookSalesPage() {
     (async () => {
       if (!slug) return;
       setLoading(true);
+      
+      // Se for um preview com dados na URL
+      if (slug === "preview") {
+        const pTitle = searchParams.get("title");
+        const pSubtitle = searchParams.get("subtitle");
+        const pPrice = searchParams.get("price");
+        const pChapters = searchParams.get("chapters");
+
+        if (pTitle) {
+          setEbook({
+            title: pTitle,
+            subtitle: pSubtitle,
+            price_cents: pPrice ? parseFloat(pPrice) * 100 : 0,
+            id: 'preview',
+            user_id: '',
+            slug: 'preview',
+            status: 'published'
+          } as any);
+          
+          if (pChapters) {
+            try {
+              setChapters(JSON.parse(pChapters));
+            } catch (e) {
+              console.error("Error parsing chapters preview", e);
+            }
+          }
+          setLoading(false);
+          return;
+        }
+      }
+
       const { data: ebookData, error: ebookErr } = await (supabase
         .from("public_ebooks" as any)
         .select("*")
