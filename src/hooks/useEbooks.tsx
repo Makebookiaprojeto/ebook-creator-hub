@@ -3,14 +3,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Tables } from "@/integrations/supabase/types";
 
-export type Ebook = Tables<"ebooks"> & { chapter_count?: number };
-export type Chapter = Tables<"chapters">;
-
-export type NewChapter = {
+export type Chapter = {
   title: string;
   content: string;
   image_url?: string | null;
+  order_index?: number;
 };
+
+export type Ebook = Tables<"ebooks"> & { 
+  chapter_count?: number;
+  content_json?: Chapter[];
+};
+
+export type NewChapter = Chapter;
 
 export type NewEbook = {
   title: string;
@@ -47,7 +52,7 @@ export function useEbooks() {
     if (!error && data) {
       const formatted = (data as any[]).map(eb => ({
         ...eb,
-        chapter_count: eb.chapters?.length ?? 0
+        chapter_count: eb.content_json?.length ?? 0
       }));
       setEbooks(formatted);
     }
@@ -81,15 +86,10 @@ export function useEbooks() {
     if (ebookError || !newEbook) throw ebookError ?? new Error("Falha ao criar ebook");
 
     if (chapters.length > 0) {
-      const rows = chapters.map((c, i) => ({
-        ebook_id: newEbook.id,
-        user_id: user.id,
-        title: c.title,
-        content: c.content,
-        image_url: c.image_url ?? null,
-        order_index: i,
-      }));
-      const { error: chErr } = await supabase.from("chapters").insert(rows);
+      const { error: chErr } = await supabase
+        .from("ebooks")
+        .update({ content_json: chapters })
+        .eq("id", newEbook.id);
       if (chErr) throw chErr;
     }
 
@@ -127,7 +127,6 @@ export function useEbooks() {
   };
 
   const getEbookWithChapters = async (id: string) => {
-    // 1) Pegar o eBook
     const { data: ebook, error: eErr } = await supabase
       .from("ebooks")
       .select("*")
@@ -136,16 +135,8 @@ export function useEbooks() {
     
     if (eErr || !ebook) throw eErr ?? new Error("Ebook não encontrado");
 
-    // 2) Pegar capítulos via RLS (deve funcionar agora com as novas políticas)
-    const { data: chapters, error: cErr } = await supabase
-      .from("chapters")
-      .select("*")
-      .eq("ebook_id", id)
-      .order("order_index", { ascending: true });
-    
-    if (cErr) throw cErr;
-
-    return { ebook, chapters: chapters ?? [] };
+    const chapters = (ebook.content_json as Chapter[]) || [];
+    return { ebook, chapters };
   };
 
   return {
