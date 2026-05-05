@@ -141,41 +141,32 @@ export function CreateEbookView() {
       const prog: any = eb.generation_progress ?? {};
       if (prog.message) setGenerationStage(prog.message);
       
-      // Always try to fetch chapters if we have some progress, or if it's already done
-      // The condition is updated to be more inclusive
-      const shouldFetchChapters = 
-        eb.generation_status === "done" || 
-        eb.generation_status === "processing" ||
-        (prog.total > 0);
+      const { data: chs, error: chsErr } = await supabase
+        .from("chapters")
+        .select("title, content, image_url, order_index")
+        .eq("ebook_id", ebookId)
+        .order("order_index", { ascending: true });
+      
+      if (chs && chs.length > 0) {
+        setChapters(
+          chs.map((c) => ({
+            title: c.title,
+            subtitle: "",
+            content: c.content ?? "",
+            image_url: c.image_url ?? null,
+          })),
+        );
+      } else if (chsErr) {
+        console.error("Polling: Error fetching chapters:", chsErr);
+      }
+      
+      if (prog.total > 0) {
+        setGenerationProgress({ done: prog.done || 0, total: prog.total });
+      }
 
-      if (shouldFetchChapters) {
-        const { data: chs, error: chsErr } = await supabase
-          .from("chapters")
-          .select("title, content, image_url, order_index")
-          .eq("ebook_id", ebookId)
-          .order("order_index", { ascending: true });
-        
-        if (chs && chs.length > 0) {
-          setChapters(
-            chs.map((c) => ({
-              title: c.title,
-              subtitle: "",
-              content: c.content ?? "",
-              image_url: c.image_url ?? null,
-            })),
-          );
-          
-          if (eb.generation_status === "done") {
-            setGenerated(true);
-            setGenerating(false); // Make sure to stop loading
-          }
-        } else if (chsErr) {
-          console.error("Polling: Error fetching chapters:", chsErr);
-        }
-        
-        if (prog.total > 0) {
-          setGenerationProgress({ done: prog.done || 0, total: prog.total });
-        }
+      if (eb.generation_status === "done") {
+        setGenerated(true);
+        setGenerating(false);
       }
 
       if (eb.generation_status === "done") {

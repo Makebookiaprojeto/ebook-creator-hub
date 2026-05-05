@@ -40,14 +40,14 @@ export function useEbooks() {
       .from("ebooks")
       .select(`
         *,
-        chapters:chapters(count)
+        chapters(id)
       `)
       .order("created_at", { ascending: false });
     
     if (!error && data) {
       const formatted = (data as any[]).map(eb => ({
         ...eb,
-        chapter_count: eb.chapters?.[0]?.count ?? 0
+        chapter_count: eb.chapters?.length ?? 0
       }));
       setEbooks(formatted);
     }
