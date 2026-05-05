@@ -272,7 +272,7 @@ export type Database = {
           subtitle: string | null
           title: string
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           audience?: string | null
@@ -300,7 +300,7 @@ export type Database = {
           subtitle?: string | null
           title: string
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           audience?: string | null
@@ -328,7 +328,7 @@ export type Database = {
           subtitle?: string | null
           title?: string
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: []
       }
