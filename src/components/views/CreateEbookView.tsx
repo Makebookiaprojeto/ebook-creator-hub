@@ -774,7 +774,7 @@ export function CreateEbookView() {
                       variant="outline"
                       className="flex-1 border-primary/20 hover:bg-primary/5 gap-2"
                       onClick={() => {
-                        const previewUrl = `${window.location.origin}/e/preview?title=${encodeURIComponent(title)}&price=${price}&subtitle=${encodeURIComponent(subtitle)}`;
+                        const previewUrl = `${window.location.origin}/e/preview?title=${encodeURIComponent(title)}&price=${price}&subtitle=${encodeURIComponent(subtitle)}&chapters=${encodeURIComponent(JSON.stringify(chapters.map(c => ({ title: c.title, content: c.content }))))}`;
                         window.open(previewUrl, '_blank');
                       }}
                     >
