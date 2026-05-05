@@ -153,13 +153,46 @@ export function CreateEbookView() {
       if (eb.generation_status === "done") {
         setGenerated(true);
         setGenerating(false);
-      }
-
-      if (eb.generation_status === "done") {
         setGenerationStage("");
-        setGenerating(false);
-        setGenerated(true);
-        // ... keep existing code
+
+        // Automatic PDF generation and delivery if not already done
+        if (eb.title && eb.content_json && Array.isArray(eb.content_json) && eb.content_json.length > 0) {
+          try {
+            console.log("Automatically generating PDF for newly finished ebook...");
+            const blob = await generateEbookPdf({
+              title: eb.title,
+              subtitle: eb.subtitle,
+              cover_url: eb.cover_url,
+              chapters: (eb.content_json as any[]).map(c => ({
+                title: c.title,
+                content: c.content,
+                image_url: c.image_url
+              }))
+            });
+            
+            // Upload to storage so it can be delivered
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+              const filePath = `${user.id}/${Date.now()}-${eb.title.replace(/[^a-z0-9]/gi, '_')}.pdf`;
+              const { error: uploadError } = await supabase.storage
+                .from("ebook-files")
+                .upload(filePath, blob);
+
+              if (!uploadError) {
+                const { data: { publicUrl } } = supabase.storage
+                  .from("ebook-files")
+                  .getPublicUrl(filePath);
+                
+                await supabase.from("ebooks").update({ pdf_url: publicUrl }).eq("id", ebookId);
+                setPdfUrl(publicUrl);
+                toast.success("PDF gerado e pronto para entrega!");
+              }
+            }
+          } catch (pdfErr) {
+            console.error("Auto PDF generation failed:", pdfErr);
+          }
+        }
+        return;
       }
       
       if (eb.generation_status === "failed") {
