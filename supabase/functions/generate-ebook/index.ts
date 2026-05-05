@@ -257,8 +257,8 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
       });
 
       try {
-        // 1 imagem a cada 3 capítulos (Capítulo 1, Capítulo 4, Capítulo 7)
-        const shouldHaveImage = i === 0 || i === 3 || i === 6;
+        // 1 imagem a cada 3 capítulos (Capítulo 1, Capítulo 4)
+        const shouldHaveImage = i === 0 || i === 3;
         
         // Generate content and image in parallel for this chapter
         const [content, imageUrl] = await Promise.all([
