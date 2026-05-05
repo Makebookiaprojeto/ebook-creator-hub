@@ -145,7 +145,7 @@ Formato exato:
     { "title": "string", "subtitle": "string curto (1 frase de promessa)", "image_keywords": "2 a 4 palavras EM INGLÊS para buscar uma foto temática (ex: 'morning routine coffee')." }
   ]
 }
-Gere EXATAMENTE 7 capítulos.`;
+Gere EXATAMENTE 6 capítulos.`;
   const user = `Nicho: ${niche}\nPúblico-alvo: ${audience || "geral"}`;
   const result = await callAI({
     model: TEXT_MODEL,
@@ -220,16 +220,16 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
     }
 
     let chapterStructures: any[] = structure.chapters ?? [];
-    // Garantir exatamente 7 capítulos
-    if (chapterStructures.length > 7) chapterStructures = chapterStructures.slice(0, 7);
-    while (chapterStructures.length < 7) {
+    // Garantir exatamente 6 capítulos
+    if (chapterStructures.length > 6) chapterStructures = chapterStructures.slice(0, 6);
+    while (chapterStructures.length < 6) {
       chapterStructures.push({
         title: `Capítulo ${chapterStructures.length + 1}`,
         subtitle: "Conteúdo detalhado",
         image_keywords: niche,
       });
     }
-    const total = 7;
+    const total = 6;
     const ebookContent: any[] = [];
 
     await sb.from("ebooks").update({
@@ -257,8 +257,8 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
       });
 
       try {
-        // 1 imagem a cada 3 capítulos (Capítulo 1, Capítulo 4, Capítulo 7)
-        const shouldHaveImage = i === 0 || i === 3 || i === 6;
+        // 1 imagem a cada 3 capítulos (Capítulo 1, Capítulo 4)
+        const shouldHaveImage = i === 0 || i === 3;
         
         // Generate content and image in parallel for this chapter
         const [content, imageUrl] = await Promise.all([
