@@ -142,14 +142,14 @@ export function CreateEbookView() {
       if (prog.message) setGenerationStage(prog.message);
       
         // Always try to fetch chapters if we have some progress, or if it's already done
-        if (prog.total > 0 || eb.generation_status === "done") {
+        if (prog.total > 0 || eb.generation_status === "done" || eb.generation_status === "processing") {
           const { data: chs, error: chsErr } = await supabase
             .from("chapters")
             .select("title, content, image_url, order_index")
             .eq("ebook_id", ebookId)
             .order("order_index", { ascending: true });
           
-          if (chs) {
+          if (chs && chs.length > 0) {
             setChapters(
               chs.map((c) => ({
                 title: c.title,
@@ -640,7 +640,7 @@ export function CreateEbookView() {
                           <Input value={subtitle} onChange={(e) => setSubtitle(e.target.value)} className="mt-1.5" />
                         </div>
                         <div>
-                          <label className="text-xs font-medium uppercase text-muted-foreground">Capítulos</label>
+                          <label className="text-xs font-medium uppercase text-muted-foreground">Capítulos ({chapters.length})</label>
                           <p className="text-xs text-muted-foreground mt-1">Clique em um capítulo para ver e editar o conteúdo completo.</p>
                           <div className="mt-2 space-y-2">
                             {chapters.map((c, i) => {
