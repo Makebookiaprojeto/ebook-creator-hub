@@ -884,7 +884,7 @@ export function CreateEbookView() {
                   <div className="mt-3 flex items-center gap-2">
                     <Input 
                       readOnly 
-                      value={ebookLink || "Link será gerado ao salvar..."}
+                      value={ebookLink || "Aguardando conclusão..."}
                       className="bg-background text-xs h-10"
                     />
                     <Button 
