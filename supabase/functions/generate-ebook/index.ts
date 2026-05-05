@@ -219,21 +219,23 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
       throw new Error("Falha ao gerar a estrutura inicial do ebook. Verifique os logs.");
     }
 
-    let chapters: any[] = structure.chapters ?? [];
+    let chapterStructures: any[] = structure.chapters ?? [];
     // Garantir exatamente 7 capítulos
-    if (chapters.length > 7) chapters = chapters.slice(0, 7);
-    while (chapters.length < 7) {
-      chapters.push({
-        title: `Capítulo ${chapters.length + 1}`,
+    if (chapterStructures.length > 7) chapterStructures = chapterStructures.slice(0, 7);
+    while (chapterStructures.length < 7) {
+      chapterStructures.push({
+        title: `Capítulo ${chapterStructures.length + 1}`,
         subtitle: "Conteúdo detalhado",
         image_keywords: niche,
       });
     }
     const total = 7;
+    const ebookContent: any[] = [];
 
     await sb.from("ebooks").update({
       title: structure.title,
       subtitle: structure.subtitle || "",
+      content_json: ebookContent,
       generation_progress: { stage: "content", message: "Estrutura criada. Iniciando escrita...", total, done: 0 },
     }).eq("id", ebookId);
 
@@ -246,7 +248,7 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
 
     // 3. Chapters sequentially
     for (let i = 0; i < total; i++) {
-      const ch = chapters[i];
+      const ch = chapterStructures[i];
       await updateProgress({ 
         stage: "content", 
         message: `Escrevendo capítulo ${i + 1} de ${total}: "${ch.title}"...`, 
@@ -282,39 +284,41 @@ async function runWorker(ebookId: string, userId: string, niche: string, audienc
           throw new Error("Conteúdo gerado é insuficiente.");
         }
 
-        const insertData = {
-          ebook_id: ebookId,
-          user_id: userId,
+        const chapterData = {
           title: ch.title,
           content,
           image_url: imageUrl,
           order_index: i,
         };
-        console.log(`Inserting chapter ${i + 1} with ${content.length} chars content`);
-        const { error: insertErr } = await sb.from("chapters").insert(insertData);
-        if (insertErr) {
-          console.error(`Chapter ${i + 1} insertion error:`, insertErr);
-          throw insertErr;
+        
+        ebookContent.push(chapterData);
+        console.log(`Chapter ${i + 1} finished with ${content.length} chars. Updating ebook content_json...`);
+        
+        // Update the ebook row with the growing content_json array
+        const { error: updateErr } = await sb.from("ebooks")
+          .update({ content_json: ebookContent })
+          .eq("id", ebookId);
+          
+        if (updateErr) {
+          console.error(`Error updating content_json with chapter ${i + 1}:`, updateErr);
         }
 
-        console.log(`Chapter ${i + 1} finished successfully`);
+        console.log(`Chapter ${i + 1} finalized in content_json`);
       } catch (e) {
         console.error(`Error in chapter ${i + 1}:`, e);
-        await sb.from("chapters").insert({
-          ebook_id: ebookId,
-          user_id: userId,
+        ebookContent.push({
           title: ch.title,
-          content: `## ${ch.title}\n\nOcorreu um erro técnico ao gerar este capítulo. Por favor, utilize o botão de edição abaixo para adicionar o conteúdo manualmente.\n\n_Erro: ${e instanceof Error ? e.message : "Desconhecido"}_`,
+          content: `## ${ch.title}\n\nOcorreu um erro técnico ao gerar este capítulo. Por favor, tente novamente.\n\n_Erro: ${e instanceof Error ? e.message : "Desconhecido"}_`,
           image_url: null,
           order_index: i,
         });
+        await sb.from("ebooks").update({ content_json: ebookContent }).eq("id", ebookId);
       }
     }
 
     await coverPromise;
-
     // Small delay to ensure DB consistency before finishing
-    await new Promise(r => setTimeout(r, 2000));
+    await new Promise(r => setTimeout(r, 1000));
 
     const { error: finalUpdErr } = await sb.from("ebooks").update({
       generation_status: "done",
