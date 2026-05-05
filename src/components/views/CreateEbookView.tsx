@@ -563,15 +563,19 @@ export function CreateEbookView() {
                       <>
                         <div>
                           <label className="text-xs font-medium uppercase text-muted-foreground">Título</label>
-                          <Input value={title} onChange={(e) => setTitle(e.target.value)} className="mt-1.5 font-display text-lg font-semibold" />
+                          <div className="mt-1.5 p-3 rounded-lg border bg-muted/20 font-display text-lg font-semibold">
+                            {title}
+                          </div>
                         </div>
                         <div>
                           <label className="text-xs font-medium uppercase text-muted-foreground">Subtítulo</label>
-                          <Input value={subtitle} onChange={(e) => setSubtitle(e.target.value)} className="mt-1.5" />
+                          <div className="mt-1.5 p-3 rounded-lg border bg-muted/20">
+                            {subtitle}
+                          </div>
                         </div>
                         <div>
                           <label className="text-xs font-medium uppercase text-muted-foreground">Capítulos ({chapters.length})</label>
-                          <p className="text-xs text-muted-foreground mt-1">Clique em um capítulo para ver e editar o conteúdo completo.</p>
+                          <p className="text-xs text-muted-foreground mt-1">Clique em um capítulo para ver o conteúdo completo.</p>
                           <div className="mt-2 space-y-2">
                             {chapters.map((c, i) => {
                               const isOpen = openChapter === i;
@@ -588,16 +592,9 @@ export function CreateEbookView() {
                                       <img src={c.image_url} alt="" className="h-7 w-7 rounded object-cover" />
                                     )}
                                     <div className="flex-1 min-w-0">
-                                      <Input
-                                        value={c.title}
-                                        onClick={(e) => e.stopPropagation()}
-                                        onChange={(e) => {
-                                          const copy = [...chapters];
-                                          copy[i] = { ...copy[i], title: e.target.value };
-                                          setChapters(copy);
-                                        }}
-                                        className="border-0 shadow-none focus-visible:ring-0 px-0 h-7 font-medium"
-                                      />
+                                      <div className="font-medium text-sm truncate">
+                                        {c.title}
+                                      </div>
                                       {c.subtitle && (
                                         <p className="text-xs text-muted-foreground line-clamp-1">{c.subtitle}</p>
                                       )}
@@ -614,20 +611,8 @@ export function CreateEbookView() {
                                         className="overflow-hidden"
                                       >
                                         <div className="border-t p-4 bg-muted/20">
-                                          <label className="text-[11px] font-medium uppercase text-muted-foreground">Conteúdo do capítulo</label>
-                                          <Textarea
-                                            value={c.content}
-                                            onChange={(e) => {
-                                              const copy = [...chapters];
-                                              copy[i] = { ...copy[i], content: e.target.value };
-                                              setChapters(copy);
-                                            }}
-                                            className="mt-2 min-h-[260px] text-sm leading-relaxed bg-background"
-                                          />
-                                          <div className="mt-3 flex justify-end">
-                                            <Button size="sm" variant="outline" onClick={() => setOpenChapter(null)}>
-                                              <Check className="mr-2 h-3.5 w-3.5" /> Salvar capítulo
-                                            </Button>
+                                          <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed">
+                                            {c.content}
                                           </div>
                                         </div>
                                       </motion.div>
