@@ -998,6 +998,7 @@ export function CreateEbookView() {
                       status: "published",
                       is_public: true,
                       pdf_url: pdfUrl,
+                      price: price
                     })
                     .eq("id", generatedEbookId)
                     .select("slug")
@@ -1010,7 +1011,8 @@ export function CreateEbookView() {
                     .select("id, order_index")
                     .eq("ebook_id", generatedEbookId)
                     .order("order_index", { ascending: true });
-                  if (existingChs) {
+                  
+                  if (existingChs && chapters.length > 0) {
                     await Promise.all(
                       chapters.map((c, i) => {
                         const row = existingChs[i];
@@ -1040,6 +1042,8 @@ export function CreateEbookView() {
                       cover_url: coverUrl,
                       status: "published",
                       pdf_url: pdfUrl,
+                      price: price,
+                      is_public: true
                     },
                     chapters,
                   );
@@ -1048,14 +1052,22 @@ export function CreateEbookView() {
                     setEbookLink(`${window.location.origin}/e/${res.slug}`);
                   }
                 }
-                toast.success("Ebook salvo com sucesso! 🎉");
+                toast.success("Ebook finalizado com sucesso! Redirecionando...");
+                
+                // Aguarda um pouco para o usuário ver a mensagem e o link ser gerado antes de limpar/sair
+                setTimeout(() => {
+                  resetForm();
+                  // Força um "refresh" na visualização enviando o usuário para a dashboard/biblioteca 
+                  // ou apenas limpando o estado para um novo ebook
+                  window.location.href = "/";
+                }, 2000);
               } catch (e: any) {
+                console.error("Save error:", e);
                 toast.error(e.message ?? "Erro ao salvar ebook");
               } finally {
                 setSaving(false);
               }
             }}
-
             disabled={saving}
             className="gradient-primary text-primary-foreground shadow-glow"
           >
