@@ -159,6 +159,7 @@ export function CreateEbookView() {
       if (eb.title && eb.title !== "Gerando...") setTitle(eb.title);
       if (eb.subtitle) setSubtitle(eb.subtitle);
       if (eb.cover_url) setCoverUrl(eb.cover_url);
+      if (eb.pdf_url) setPdfUrl(eb.pdf_url);
       if (eb.slug) {
         setCreatedEbookSlug(eb.slug);
         setEbookLink(`${window.location.origin}/e/${eb.slug}`);
