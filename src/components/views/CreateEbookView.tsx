@@ -325,6 +325,7 @@ export function CreateEbookView() {
           content_json: template.content_json,
           pdf_url: template.pdf_url,
           price: price || 29.9,
+          price_cents: Math.round((price || 29.9) * 100),
           slug: `${template.slug || 'ebook'}-${Math.random().toString(36).substring(2, 7)}`,
           generation_status: "done"
         })
