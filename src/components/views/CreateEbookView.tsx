@@ -48,7 +48,6 @@ export function CreateEbookView() {
   const [showFullPreview, setShowFullPreview] = useState(false);
   const [isPublished, setIsPublished] = useState(false);
   const [coverSearch, setCoverSearch] = useState("");
-  const [isPublished, setIsPublished] = useState(false);
   const [searchTopic, setSearchTopic] = useState("");
   const [ebookLink, setEbookLink] = useState("");
   const [createdEbookSlug, setCreatedEbookSlug] = useState<string | null>(null);
@@ -1060,7 +1059,6 @@ export function CreateEbookView() {
                       cover_url: coverUrl,
                       status: "published",
                       is_public: true,
-                      pdf_url: pdfUrl,
                       price: price
                     } as any)
                     .eq("id", generatedEbookId)
@@ -1104,7 +1102,6 @@ export function CreateEbookView() {
                       audience,
                       cover_url: coverUrl,
                       status: "published",
-                      pdf_url: pdfUrl,
                       price: price,
                       is_public: true
                     },
