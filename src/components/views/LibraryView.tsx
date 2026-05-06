@@ -41,6 +41,7 @@ export function LibraryView({ onCreateNew }: Props) {
   const [openChapters, setOpenChapters] = useState<Chapter[]>([]);
   const [loadingPreview, setLoadingPreview] = useState(false);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [togglingId, setTogglingId] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<Ebook | null>(null);
   const [priceDrafts, setPriceDrafts] = useState<Record<string, string>>({});
@@ -267,6 +268,41 @@ export function LibraryView({ onCreateNew }: Props) {
   };
 
 
+
+  const handleDownloadPDF = async (eb: Ebook) => {
+    if (eb.pdf_url) {
+      window.open(eb.pdf_url, "_blank");
+      return;
+    }
+
+    setDownloadingId(eb.id);
+    setIsGeneratingPDF(true);
+    
+    try {
+      toast.info("Gerando PDF... Isso pode levar alguns segundos.");
+      
+      const { data, error } = await supabase.functions.invoke("generate-pdf", {
+        body: { ebookId: eb.id },
+      });
+
+      if (error) throw error;
+
+      if (data?.pdfUrl) {
+        window.open(data.pdfUrl, "_blank");
+        toast.success("PDF gerado com sucesso!");
+        await refresh();
+      } else {
+        throw new Error("PDF não retornado");
+      }
+    } catch (err) {
+      console.error("Erro ao gerar PDF:", err);
+      toast.error("Não foi possível gerar o PDF no momento. Tente novamente em instantes.");
+    } finally {
+      setDownloadingId(null);
+      setIsGeneratingPDF(false);
+    }
+  };
+
   const handleDelete = async () => {
     if (!confirmDelete) return;
     try {
@@ -360,16 +396,16 @@ export function LibraryView({ onCreateNew }: Props) {
                     size="sm"
                     variant="outline"
                     className="flex-1 min-w-[70px] gap-1.5"
-                    onClick={() => {
-                      if (eb.pdf_url) {
-                        window.open(eb.pdf_url, "_blank");
-                      } else {
-                        toast.info("O PDF ainda não está disponível para este eBook.");
-                      }
-                    }}
+                    onClick={() => handleDownloadPDF(eb)}
+                    disabled={downloadingId === eb.id}
                     title="Baixar PDF"
                   >
-                    <Download className="h-3.5 w-3.5 text-primary" /> PDF
+                    {downloadingId === eb.id ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      <Download className="h-3.5 w-3.5 text-primary" />
+                    )}
+                    PDF
                   </Button>
 
                   {eb.slug && (
