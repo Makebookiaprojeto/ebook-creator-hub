@@ -87,7 +87,7 @@ export function CreateEbookView() {
 
       const { data: eb } = await supabase
         .from("ebooks")
-        .select("id, niche, audience, generation_status, title, subtitle, cover_url, content_json, status, slug")
+        .select("id, niche, audience, generation_status, title, subtitle, cover_url, content_json, status, slug, pdf_url")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(1)
