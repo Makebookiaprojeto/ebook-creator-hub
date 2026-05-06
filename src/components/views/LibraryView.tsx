@@ -248,6 +248,41 @@ export function LibraryView({ onCreateNew }: Props) {
     }
   };
 
+  const saveSlug = async (eb: Ebook) => {
+    const newSlug = (slugDrafts[eb.id] ?? eb.slug ?? "").trim().toLowerCase().replace(/[^a-z0-9-]/g, "-");
+    if (!newSlug) {
+      toast.error("O link não pode estar vazio.");
+      return;
+    }
+    setSavingSlugId(eb.id);
+    try {
+      const { error } = await supabase
+        .from("ebooks")
+        .update({ slug: newSlug })
+        .eq("id", eb.id);
+      if (error) {
+        if (error.code === "23505") {
+          toast.error("Este link já está em uso por outro eBook.");
+        } else {
+          throw error;
+        }
+        return;
+      }
+      toast.success("Link atualizado!");
+      setSlugDrafts((p) => {
+        const n = { ...p };
+        delete n[eb.id];
+        return n;
+      });
+      await refresh();
+    } catch (err) {
+      console.error(err);
+      toast.error("Não foi possível salvar o link.");
+    } finally {
+      setSavingSlugId(null);
+    }
+  };
+
   const copyPublicLink = (eb: Ebook) => {
     if (!eb.slug) return;
     const url = `${window.location.origin}/e/${eb.slug}`;
