@@ -345,11 +345,11 @@ export function LibraryView({ onCreateNew }: Props) {
                 <p className="mt-2 text-[11px] text-muted-foreground">
                   {new Date(eb.created_at).toLocaleDateString("pt-BR")}
                 </p>
-                <div className="mt-3 flex gap-1.5">
+                <div className="mt-3 flex flex-wrap gap-1.5">
                   <Button
                     size="sm"
                     variant="secondary"
-                    className="flex-1"
+                    className="flex-1 min-w-[70px]"
                     onClick={() => handlePreview(eb)}
                     title="Ver eBook"
                   >
@@ -359,7 +359,7 @@ export function LibraryView({ onCreateNew }: Props) {
                   <Button
                     size="sm"
                     variant="outline"
-                    className="flex-1 gap-1.5"
+                    className="flex-1 min-w-[70px] gap-1.5"
                     onClick={() => {
                       if (eb.pdf_url) {
                         window.open(eb.pdf_url, "_blank");
@@ -376,7 +376,7 @@ export function LibraryView({ onCreateNew }: Props) {
                     <Button
                       size="sm"
                       variant="ghost"
-                      className="px-2"
+                      className="w-9 h-9 p-0 shrink-0"
                       onClick={() => window.open(`/e/${eb.slug}`, "_blank")}
                       title="Abrir página de vendas"
                     >
@@ -388,7 +388,8 @@ export function LibraryView({ onCreateNew }: Props) {
                     size="sm"
                     variant="ghost"
                     onClick={() => setConfirmDelete(eb)}
-                    className="text-destructive hover:bg-destructive/10 hover:text-destructive px-2"
+                    className="w-9 h-9 p-0 shrink-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                    title="Deletar eBook"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </Button>
