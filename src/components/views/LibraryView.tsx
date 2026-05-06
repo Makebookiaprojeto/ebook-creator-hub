@@ -51,6 +51,8 @@ export function LibraryView({ onCreateNew }: Props) {
     Record<string, { url: string; pid: string; platform: string; secret: string }>
   >({});
   const [savingCaktoId, setSavingCaktoId] = useState<string | null>(null);
+  const [slugDrafts, setSlugDrafts] = useState<Record<string, string>>({});
+  const [savingSlugId, setSavingSlugId] = useState<string | null>(null);
   const [openCaktoId, setOpenCaktoId] = useState<string | null>(null);
   const [paymentConfigs, setPaymentConfigs] = useState<
     Record<string, { platform: string; checkout_url: string; product_id: string; webhook_secret: string }>
@@ -243,6 +245,41 @@ export function LibraryView({ onCreateNew }: Props) {
       toast.error("Não foi possível atualizar.");
     } finally {
       setTogglingId(null);
+    }
+  };
+
+  const saveSlug = async (eb: Ebook) => {
+    const newSlug = (slugDrafts[eb.id] ?? eb.slug ?? "").trim().toLowerCase().replace(/[^a-z0-9-]/g, "-");
+    if (!newSlug) {
+      toast.error("O link não pode estar vazio.");
+      return;
+    }
+    setSavingSlugId(eb.id);
+    try {
+      const { error } = await supabase
+        .from("ebooks")
+        .update({ slug: newSlug })
+        .eq("id", eb.id);
+      if (error) {
+        if (error.code === "23505") {
+          toast.error("Este link já está em uso por outro eBook.");
+        } else {
+          throw error;
+        }
+        return;
+      }
+      toast.success("Link atualizado!");
+      setSlugDrafts((p) => {
+        const n = { ...p };
+        delete n[eb.id];
+        return n;
+      });
+      await refresh();
+    } catch (err) {
+      console.error(err);
+      toast.error("Não foi possível salvar o link.");
+    } finally {
+      setSavingSlugId(null);
     }
   };
 
@@ -502,24 +539,46 @@ export function LibraryView({ onCreateNew }: Props) {
                        <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
                          <Globe className="h-3 w-3" /> Página de Vendas
                        </label>
-                       <div className="flex items-center gap-1.5">
-                         <Input
-                           readOnly
-                           value={`${window.location.origin}/e/${eb.slug}`}
-                           className="h-8 text-xs bg-muted/30"
-                         />
-                         <Button
-                           size="sm"
-                           variant="secondary"
-                           className="h-8 px-2"
-                           onClick={() => copyPublicLink(eb)}
-                           title="Copiar link"
-                         >
-                           <Copy className="h-3.5 w-3.5" />
-                         </Button>
-                       </div>
-                     </div>
-                   )}
+                        <div className="flex items-center gap-1.5">
+                          <div className="relative flex-1">
+                            <span className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground">
+                              .../e/
+                            </span>
+                            <Input
+                              value={slugDrafts[eb.id] ?? eb.slug ?? ""}
+                              onChange={(e) =>
+                                setSlugDrafts((p) => ({ ...p, [eb.id]: e.target.value }))
+                              }
+                              className="h-8 pl-11 text-xs"
+                              placeholder="link-do-ebook"
+                            />
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            className="h-8 px-2"
+                            onClick={() => saveSlug(eb)}
+                            disabled={savingSlugId === eb.id}
+                            title="Salvar link"
+                          >
+                            {savingSlugId === eb.id ? (
+                              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                            ) : (
+                              <Check className="h-3.5 w-3.5" />
+                            )}
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-8 px-2"
+                            onClick={() => copyPublicLink(eb)}
+                            title="Copiar link completo"
+                          >
+                            <Copy className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
+                      </div>
+                    )}
 
                    <div>
                     <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
