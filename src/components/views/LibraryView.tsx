@@ -539,24 +539,46 @@ export function LibraryView({ onCreateNew }: Props) {
                        <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
                          <Globe className="h-3 w-3" /> Página de Vendas
                        </label>
-                       <div className="flex items-center gap-1.5">
-                         <Input
-                           readOnly
-                           value={`${window.location.origin}/e/${eb.slug}`}
-                           className="h-8 text-xs bg-muted/30"
-                         />
-                         <Button
-                           size="sm"
-                           variant="secondary"
-                           className="h-8 px-2"
-                           onClick={() => copyPublicLink(eb)}
-                           title="Copiar link"
-                         >
-                           <Copy className="h-3.5 w-3.5" />
-                         </Button>
-                       </div>
-                     </div>
-                   )}
+                        <div className="flex items-center gap-1.5">
+                          <div className="relative flex-1">
+                            <span className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground">
+                              .../e/
+                            </span>
+                            <Input
+                              value={slugDrafts[eb.id] ?? eb.slug ?? ""}
+                              onChange={(e) =>
+                                setSlugDrafts((p) => ({ ...p, [eb.id]: e.target.value }))
+                              }
+                              className="h-8 pl-11 text-xs"
+                              placeholder="link-do-ebook"
+                            />
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            className="h-8 px-2"
+                            onClick={() => saveSlug(eb)}
+                            disabled={savingSlugId === eb.id}
+                            title="Salvar link"
+                          >
+                            {savingSlugId === eb.id ? (
+                              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                            ) : (
+                              <Check className="h-3.5 w-3.5" />
+                            )}
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-8 px-2"
+                            onClick={() => copyPublicLink(eb)}
+                            title="Copiar link completo"
+                          >
+                            <Copy className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
+                      </div>
+                    )}
 
                    <div>
                     <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
