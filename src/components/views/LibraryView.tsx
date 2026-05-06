@@ -369,7 +369,7 @@ export function LibraryView({ onCreateNew }: Props) {
                     }}
                     title="Baixar PDF"
                   >
-                    <Download className="h-3.5 w-3.5 text-primary" /> Baixar
+                    <Download className="h-3.5 w-3.5 text-primary" /> PDF
                   </Button>
 
                   {eb.slug && (
