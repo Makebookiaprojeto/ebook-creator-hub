@@ -271,8 +271,18 @@ export function LibraryView({ onCreateNew }: Props) {
 
 
   const handleDownloadPDF = async (eb: Ebook) => {
+    const triggerDownload = (url: string) => {
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${eb.title}.pdf`);
+      link.setAttribute("target", "_blank");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
     if (eb.pdf_url) {
-      window.open(eb.pdf_url, "_blank");
+      triggerDownload(eb.pdf_url);
       return;
     }
 
@@ -296,8 +306,8 @@ export function LibraryView({ onCreateNew }: Props) {
       );
 
       if (pdfUrl) {
-        window.open(pdfUrl, "_blank");
-        toast.success("PDF gerado e pronto para baixar!");
+        triggerDownload(pdfUrl);
+        toast.success("PDF gerado com sucesso!");
         await refresh();
       }
     } catch (err: any) {
