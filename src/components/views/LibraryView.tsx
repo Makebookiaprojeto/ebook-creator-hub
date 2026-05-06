@@ -356,27 +356,31 @@ export function LibraryView({ onCreateNew }: Props) {
                     <Eye className="h-3.5 w-3.5" /> Ver
                   </Button>
 
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="flex-1 gap-1.5"
+                    onClick={() => {
+                      if (eb.pdf_url) {
+                        window.open(eb.pdf_url, "_blank");
+                      } else {
+                        toast.info("O PDF ainda não está disponível para este eBook.");
+                      }
+                    }}
+                    title="Baixar PDF"
+                  >
+                    <Download className="h-3.5 w-3.5 text-primary" /> Baixar
+                  </Button>
+
                   {eb.slug && (
                     <Button
                       size="sm"
-                      variant="outline"
+                      variant="ghost"
                       className="px-2"
                       onClick={() => window.open(`/e/${eb.slug}`, "_blank")}
                       title="Abrir página de vendas"
                     >
                       <ExternalLink className="h-3.5 w-3.5" />
-                    </Button>
-                  )}
-
-                  {eb.pdf_url && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="px-2"
-                      onClick={() => window.open(eb.pdf_url, "_blank")}
-                      title="Baixar PDF"
-                    >
-                      <Download className="h-3.5 w-3.5" />
                     </Button>
                   )}
 
