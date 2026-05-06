@@ -502,20 +502,6 @@ export function LibraryView({ onCreateNew }: Props) {
             <Button variant="secondary" onClick={() => setOpenEbook(null)}>
               Fechar
             </Button>
-            {openEbook && (
-              <Button
-                className="gradient-primary text-primary-foreground"
-                onClick={() => handleDownload(openEbook)}
-                disabled={downloadingId === openEbook.id}
-              >
-                {downloadingId === openEbook.id ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Download className="h-4 w-4" />
-                )}
-                Baixar PDF
-              </Button>
-            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>
