@@ -273,23 +273,29 @@ export function LibraryView({ onCreateNew }: Props) {
   const handleDownloadPDF = async (eb: Ebook) => {
     const triggerDownload = async (url: string) => {
       try {
-        // Fetch the file and create a local blob URL to force download and bypass some browser blocks
-        const response = await fetch(url);
-        const blob = await response.blob();
+        let blob: Blob;
+
+        // Se for um link do Supabase Storage, tentamos baixar via SDK para evitar problemas de CORS
+        if (url.includes("storage/v1/object/public/ebook-files/")) {
+          const path = url.split("ebook-files/")[1];
+          const { data, error } = await supabase.storage.from("ebook-files").download(path);
+          if (error) throw error;
+          blob = data;
+        } else {
+          const response = await fetch(url);
+          blob = await response.blob();
+        }
+
         const blobUrl = window.URL.createObjectURL(blob);
-        
         const link = document.createElement("a");
         link.href = blobUrl;
         link.setAttribute("download", `${eb.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        
-        // Clean up the blob URL
         window.URL.revokeObjectURL(blobUrl);
       } catch (err) {
         console.error("Erro ao processar download:", err);
-        // Fallback to simple window.open if blob download fails
         window.open(url, "_blank");
       }
     };
