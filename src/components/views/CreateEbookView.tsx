@@ -324,7 +324,13 @@ export function CreateEbookView() {
       toast.success("Ebook pronto!");
     } catch (e: any) {
       console.error(e);
-      toast.error(e?.message ?? "Erro ao buscar ebook");
+      if (e?.message?.includes("Limite mensal")) {
+        toast.error("Você atingiu seu limite mensal de 20 eBooks. Seu limite será zerado no próximo mês!", {
+          duration: 6000,
+        });
+      } else {
+        toast.error(e?.message ?? "Erro ao buscar ebook");
+      }
       setGenerating(false);
     }
   };
