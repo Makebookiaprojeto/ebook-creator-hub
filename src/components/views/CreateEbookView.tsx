@@ -301,6 +301,7 @@ export function CreateEbookView() {
       setTitle(newEbook.title || "");
       setSubtitle(newEbook.subtitle || "");
       setCoverUrl(newEbook.cover_url);
+      setPdfUrl(newEbook.pdf_url);
       
       
       if (newEbook.slug) {
