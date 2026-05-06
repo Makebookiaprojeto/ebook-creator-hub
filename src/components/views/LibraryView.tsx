@@ -351,14 +351,40 @@ export function LibraryView({ onCreateNew }: Props) {
                     variant="secondary"
                     className="flex-1"
                     onClick={() => handlePreview(eb)}
+                    title="Ver eBook"
                   >
                     <Eye className="h-3.5 w-3.5" /> Ver
                   </Button>
+
+                  {eb.slug && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="px-2"
+                      onClick={() => window.open(`/e/${eb.slug}`, "_blank")}
+                      title="Abrir página de vendas"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </Button>
+                  )}
+
+                  {eb.pdf_url && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="px-2"
+                      onClick={() => window.open(eb.pdf_url, "_blank")}
+                      title="Baixar PDF"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                    </Button>
+                  )}
+
                   <Button
                     size="sm"
                     variant="ghost"
                     onClick={() => setConfirmDelete(eb)}
-                    className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                    className="text-destructive hover:bg-destructive/10 hover:text-destructive px-2"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </Button>
