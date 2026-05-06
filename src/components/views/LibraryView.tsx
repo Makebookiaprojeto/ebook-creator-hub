@@ -303,6 +303,7 @@ export function LibraryView({ onCreateNew }: Props) {
     }
   };
 
+  const handleDelete = async () => {
     if (!confirmDelete) return;
     try {
       await deleteEbook(confirmDelete.id);
