@@ -271,8 +271,39 @@ export function LibraryView({ onCreateNew }: Props) {
 
 
   const handleDownloadPDF = async (eb: Ebook) => {
+    const triggerDownload = async (url: string) => {
+      try {
+        let blob: Blob;
+
+        // Se for um link do Supabase Storage, tentamos baixar via SDK para evitar problemas de CORS
+        if (url.includes("storage/v1/object/public/ebook-files/")) {
+          const path = url.split("ebook-files/")[1];
+          const { data, error } = await supabase.storage.from("ebook-files").download(path);
+          if (error) throw error;
+          blob = data;
+        } else {
+          const response = await fetch(url);
+          blob = await response.blob();
+        }
+
+        const blobUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.setAttribute("download", `${eb.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+      } catch (err) {
+        console.error("Erro ao processar download:", err);
+        window.open(url, "_blank");
+      }
+    };
+
     if (eb.pdf_url) {
-      window.open(eb.pdf_url, "_blank");
+      setDownloadingId(eb.id);
+      await triggerDownload(eb.pdf_url);
+      setDownloadingId(null);
       return;
     }
 
@@ -296,8 +327,8 @@ export function LibraryView({ onCreateNew }: Props) {
       );
 
       if (pdfUrl) {
-        window.open(pdfUrl, "_blank");
-        toast.success("PDF gerado e pronto para baixar!");
+        await triggerDownload(pdfUrl);
+        toast.success("PDF gerado com sucesso!");
         await refresh();
       }
     } catch (err: any) {
