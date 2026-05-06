@@ -335,7 +335,7 @@ export function ProfileView() {
                 <Crown className="h-3 w-3 text-amber-500" />
                 <span className="font-medium">
                   {activeSubscription 
-                    ? `Plano ${activeSubscription.plan_type === 'lifetime' ? 'Vitalício' : 'Mensal'}` 
+                    ? `Plano ${activeSubscription.plan_type === 'lifetime' ? 'Premium' : 'Mensal'}` 
                     : `Plano ${usage.limit > 20 ? 'Premium' : 'Gratuito'}`}
                 </span>
               </div>
