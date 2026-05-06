@@ -957,7 +957,26 @@ export function CreateEbookView() {
                     >
                       <Copy className="mr-2 h-4 w-4" /> Copiar Link
                     </Button>
+                </div>
+
+                {/* PDF Download Section */}
+                {pdfUrl && (
+                  <div className="mt-4 rounded-2xl border bg-secondary/10 p-5 border-secondary/20">
+                    <div className="flex items-center gap-2 text-secondary-foreground">
+                      <Download className="h-5 w-5" />
+                      <h3 className="font-display font-bold">Arquivo do eBook</h3>
+                    </div>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Baixe a versão em PDF do seu eBook para ler ou distribuir.
+                    </p>
+                    <Button 
+                      className="mt-3 w-full sm:w-auto variant-secondary gap-2"
+                      onClick={() => window.open(pdfUrl, '_blank')}
+                    >
+                      <Download className="h-4 w-4" /> Baixar PDF
+                    </Button>
                   </div>
+                )}
                 </div>
 
                 {/* Manual Search Links */}
