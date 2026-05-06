@@ -271,18 +271,33 @@ export function LibraryView({ onCreateNew }: Props) {
 
 
   const handleDownloadPDF = async (eb: Ebook) => {
-    const triggerDownload = (url: string) => {
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `${eb.title}.pdf`);
-      link.setAttribute("target", "_blank");
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+    const triggerDownload = async (url: string) => {
+      try {
+        // Fetch the file and create a local blob URL to force download and bypass some browser blocks
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.setAttribute("download", `${eb.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Clean up the blob URL
+        window.URL.revokeObjectURL(blobUrl);
+      } catch (err) {
+        console.error("Erro ao processar download:", err);
+        // Fallback to simple window.open if blob download fails
+        window.open(url, "_blank");
+      }
     };
 
     if (eb.pdf_url) {
-      triggerDownload(eb.pdf_url);
+      setDownloadingId(eb.id);
+      await triggerDownload(eb.pdf_url);
+      setDownloadingId(null);
       return;
     }
 
@@ -306,7 +321,7 @@ export function LibraryView({ onCreateNew }: Props) {
       );
 
       if (pdfUrl) {
-        triggerDownload(pdfUrl);
+        await triggerDownload(pdfUrl);
         toast.success("PDF gerado com sucesso!");
         await refresh();
       }
