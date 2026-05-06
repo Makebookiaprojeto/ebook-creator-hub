@@ -116,8 +116,8 @@ async function main() {
   console.log(`Found ${ebooks.length} ebooks to update.`);
   for (const ebook of ebooks) {
     await updateEbookImages(ebook);
-    // Add a small delay to avoid rate limits
-    await new Promise(r => setTimeout(r, 1000));
+    // Add a longer delay to ensure complete execution without timeout
+    await new Promise(r => setTimeout(r, 2000));
   }
 }
 
