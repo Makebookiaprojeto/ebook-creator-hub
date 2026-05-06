@@ -432,9 +432,33 @@ export function LibraryView({ onCreateNew }: Props) {
                   )}
                 </div>
 
-                {/* Checkout Link & Product ID */}
-                <div className="mt-3 space-y-2">
-                  <div>
+                 {/* Links e Configurações */}
+                 <div className="mt-3 space-y-2">
+                   {eb.slug && (
+                     <div>
+                       <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
+                         <Globe className="h-3 w-3" /> Página de Vendas
+                       </label>
+                       <div className="flex items-center gap-1.5">
+                         <Input
+                           readOnly
+                           value={`${window.location.origin}/e/${eb.slug}`}
+                           className="h-8 text-xs bg-muted/30"
+                         />
+                         <Button
+                           size="sm"
+                           variant="secondary"
+                           className="h-8 px-2"
+                           onClick={() => copyPublicLink(eb)}
+                           title="Copiar link"
+                         >
+                           <Copy className="h-3.5 w-3.5" />
+                         </Button>
+                       </div>
+                     </div>
+                   )}
+
+                   <div>
                     <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
                       <Link2 className="h-3 w-3" /> Link de Checkout
                     </label>
