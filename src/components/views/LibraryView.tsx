@@ -23,7 +23,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { EbookPreview } from "@/components/EbookPreview";
-import { downloadPdf, generateEbookPdf } from "@/lib/ebookPdf";
 import { toast } from "sonner";
 
 const statusLabel: Record<string, string> = {
@@ -267,10 +266,6 @@ export function LibraryView({ onCreateNew }: Props) {
     }
   };
 
-  const handleDownload = async (eb: Ebook) => {
-    // A exportação de PDF foi removida conforme solicitado.
-    toast.info("A exportação de PDF foi desativada.");
-  };
 
   const handleDelete = async () => {
     if (!confirmDelete) return;
@@ -358,19 +353,6 @@ export function LibraryView({ onCreateNew }: Props) {
                     onClick={() => handlePreview(eb)}
                   >
                     <Eye className="h-3.5 w-3.5" /> Ver
-                  </Button>
-                  <Button
-                    size="sm"
-                    className="flex-1 gradient-primary text-primary-foreground"
-                    onClick={() => handleDownload(eb)}
-                    disabled={downloadingId === eb.id}
-                  >
-                    {downloadingId === eb.id ? (
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                    ) : (
-                      <Download className="h-3.5 w-3.5" />
-                    )}
-                    PDF
                   </Button>
                   <Button
                     size="sm"
@@ -520,20 +502,6 @@ export function LibraryView({ onCreateNew }: Props) {
             <Button variant="secondary" onClick={() => setOpenEbook(null)}>
               Fechar
             </Button>
-            {openEbook && (
-              <Button
-                className="gradient-primary text-primary-foreground"
-                onClick={() => handleDownload(openEbook)}
-                disabled={downloadingId === openEbook.id}
-              >
-                {downloadingId === openEbook.id ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Download className="h-4 w-4" />
-                )}
-                Baixar PDF
-              </Button>
-            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>
