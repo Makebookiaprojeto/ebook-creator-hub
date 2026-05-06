@@ -911,11 +911,6 @@ export function CreateEbookView() {
                         setIsPublished(true);
                         toast.success("Página publicada com sucesso! 🚀");
                         
-                        // Avança automaticamente para a etapa de divulgação
-                        setTimeout(() => {
-                          setStep(4);
-                          scrollToTop();
-                        }, 1000);
                       } catch (err) {
                         console.error("Error publishing:", err);
                         toast.error("Erro ao publicar página");
