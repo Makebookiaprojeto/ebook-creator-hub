@@ -869,31 +869,71 @@ export function CreateEbookView() {
                 <div className="mt-6 flex flex-col sm:flex-row gap-3">
                   <Button
                     className="flex-1 gradient-primary text-primary-foreground shadow-glow"
-                    onClick={() => {
-                      setIsPublished(true);
-                      toast.success("Página publicada! 🚀");
+                    onClick={async () => {
+                      if (!generatedEbookId) {
+                        toast.error("Gere o ebook primeiro");
+                        return;
+                      }
+                      
+                      setSaving(true);
+                      try {
+                        const { error } = await supabase
+                          .from("ebooks")
+                          .update({ 
+                            status: "published",
+                            is_public: true
+                          })
+                          .eq("id", generatedEbookId);
+                        
+                        if (error) throw error;
+                        
+                        setIsPublished(true);
+                        toast.success("Página publicada com sucesso! 🚀");
+                        
+                        // Avança automaticamente para a etapa de divulgação
+                        setTimeout(() => {
+                          setStep(4);
+                          scrollToTop();
+                        }, 1000);
+                      } catch (err) {
+                        console.error("Error publishing:", err);
+                        toast.error("Erro ao publicar página");
+                      } finally {
+                        setSaving(false);
+                      }
                     }}
+                    disabled={saving}
                   >
-                    <Rocket className="mr-2 h-4 w-4" /> Publicar página
+                    {saving ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Rocket className="mr-2 h-4 w-4" />
+                    )}
+                    Publicar página
                   </Button>
                   
-                  {isPublished && (
+                  {generated && (
                     <Button
                       variant="outline"
                       className="flex-1 border-primary/20 hover:bg-primary/5 gap-2"
                       onClick={() => {
-                        // Usamos sessionStorage para passar os dados do preview sem estourar o limite da URL (HTTP 414)
-                        const previewData = {
-                          title,
-                          subtitle,
-                          price,
-                          chapters: chapters.map(c => ({ title: c.title, content: c.content }))
-                        };
-                        sessionStorage.setItem('ebook_preview_data', JSON.stringify(previewData));
-                        window.open(`${window.location.origin}/e/preview`, '_blank');
+                        if (isPublished && ebookLink) {
+                          window.open(ebookLink, '_blank');
+                        } else {
+                          // Se ainda não publicou, usamos sessionStorage para passar os dados do preview
+                          const previewData = {
+                            title,
+                            subtitle,
+                            price,
+                            chapters: chapters.map(c => ({ title: c.title, content: c.content }))
+                          };
+                          sessionStorage.setItem('ebook_preview_data', JSON.stringify(previewData));
+                          window.open(`${window.location.origin}/e/preview`, '_blank');
+                        }
                       }}
                     >
-                      <Eye className="h-4 w-4" /> Ver na Web
+                      <Eye className="h-4 w-4" /> 
+                      {isPublished ? "Ver Página Ao Vivo" : "Ver na Web"}
                     </Button>
                   )}
                 </div>
