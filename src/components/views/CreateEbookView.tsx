@@ -53,6 +53,7 @@ export function CreateEbookView() {
   const [createdEbookSlug, setCreatedEbookSlug] = useState<string | null>(null);
   const [searchedGroups, setSearchedGroups] = useState<FbGroup[]>([]);
   const [searchingGroups, setSearchingGroups] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
   const resetForm = () => {
     setStep(0);
