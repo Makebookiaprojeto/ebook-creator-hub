@@ -143,7 +143,7 @@ export function CreateEbookView() {
       tries += 1;
       const { data: eb } = await supabase
         .from("ebooks")
-        .select("title, subtitle, cover_url, generation_status, generation_progress, generation_error, content_json, slug")
+        .select("title, subtitle, cover_url, generation_status, generation_progress, generation_error, content_json, slug, pdf_url")
         .eq("id", ebookId)
         .maybeSingle();
 
