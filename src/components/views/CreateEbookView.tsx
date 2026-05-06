@@ -796,7 +796,17 @@ export function CreateEbookView() {
                     </div>
 
                     <div className="mt-6 flex flex-col items-center gap-3">
-                      <Button size="lg" className="gradient-conversion text-white shadow-conversion text-base px-8 py-6 hover:opacity-95 animate-pulse">
+                      <Button 
+                        size="lg" 
+                        className="gradient-conversion text-white shadow-conversion text-base px-8 py-6 hover:opacity-95 animate-pulse"
+                        onClick={() => {
+                          if (isPublished && ebookLink) {
+                            window.open(ebookLink, '_blank');
+                          } else {
+                            toast.info("Esta é apenas uma prévia. Clique em 'Publicar página' para ativar as vendas.");
+                          }
+                        }}
+                      >
                         🛒 QUERO COMPRAR AGORA
                       </Button>
                       <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
