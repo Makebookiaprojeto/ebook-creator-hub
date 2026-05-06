@@ -99,7 +99,8 @@ async function main() {
   const { data: ebooks, error } = await sb.from("ebooks")
     .select("*")
     .eq("generation_status", "done")
-    .order("created_at", { ascending: false })
+    .eq("status", "published")
+    .order("created_at", { ascending: true })
     .limit(18);
     
   if (error) {
