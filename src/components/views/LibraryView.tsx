@@ -351,14 +351,40 @@ export function LibraryView({ onCreateNew }: Props) {
                     variant="secondary"
                     className="flex-1"
                     onClick={() => handlePreview(eb)}
+                    title="Ver eBook"
                   >
                     <Eye className="h-3.5 w-3.5" /> Ver
                   </Button>
+
+                  {eb.slug && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="px-2"
+                      onClick={() => window.open(`/e/${eb.slug}`, "_blank")}
+                      title="Abrir página de vendas"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </Button>
+                  )}
+
+                  {eb.pdf_url && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="px-2"
+                      onClick={() => window.open(eb.pdf_url, "_blank")}
+                      title="Baixar PDF"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                    </Button>
+                  )}
+
                   <Button
                     size="sm"
                     variant="ghost"
                     onClick={() => setConfirmDelete(eb)}
-                    className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                    className="text-destructive hover:bg-destructive/10 hover:text-destructive px-2"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </Button>
@@ -406,9 +432,33 @@ export function LibraryView({ onCreateNew }: Props) {
                   )}
                 </div>
 
-                {/* Checkout Link & Product ID */}
-                <div className="mt-3 space-y-2">
-                  <div>
+                 {/* Links e Configurações */}
+                 <div className="mt-3 space-y-2">
+                   {eb.slug && (
+                     <div>
+                       <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
+                         <Globe className="h-3 w-3" /> Página de Vendas
+                       </label>
+                       <div className="flex items-center gap-1.5">
+                         <Input
+                           readOnly
+                           value={`${window.location.origin}/e/${eb.slug}`}
+                           className="h-8 text-xs bg-muted/30"
+                         />
+                         <Button
+                           size="sm"
+                           variant="secondary"
+                           className="h-8 px-2"
+                           onClick={() => copyPublicLink(eb)}
+                           title="Copiar link"
+                         >
+                           <Copy className="h-3.5 w-3.5" />
+                         </Button>
+                       </div>
+                     </div>
+                   )}
+
+                   <div>
                     <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
                       <Link2 className="h-3 w-3" /> Link de Checkout
                     </label>

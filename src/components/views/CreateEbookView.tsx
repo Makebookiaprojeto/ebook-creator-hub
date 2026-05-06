@@ -53,6 +53,7 @@ export function CreateEbookView() {
   const [createdEbookSlug, setCreatedEbookSlug] = useState<string | null>(null);
   const [searchedGroups, setSearchedGroups] = useState<FbGroup[]>([]);
   const [searchingGroups, setSearchingGroups] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
   const resetForm = () => {
     setStep(0);
@@ -76,6 +77,7 @@ export function CreateEbookView() {
     setEbookLink("");
     setCreatedEbookSlug(null);
     setSearchedGroups([]);
+    setPdfUrl(null);
   };
 
   // Recovery effect: check for ongoing generations on mount
@@ -86,7 +88,7 @@ export function CreateEbookView() {
 
       const { data: eb } = await supabase
         .from("ebooks")
-        .select("id, niche, audience, generation_status, title, subtitle, cover_url, content_json, status, slug")
+        .select("id, niche, audience, generation_status, title, subtitle, cover_url, content_json, status, slug, pdf_url")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(1)
@@ -98,6 +100,7 @@ export function CreateEbookView() {
         setNiche(eb.niche || "");
         setAudience(eb.audience || "");
         setGeneratedEbookId(eb.id);
+        if (eb.pdf_url) setPdfUrl(eb.pdf_url);
         if (eb.slug) {
           setCreatedEbookSlug(eb.slug);
           setEbookLink(`${window.location.origin}/e/${eb.slug}`);
@@ -141,7 +144,7 @@ export function CreateEbookView() {
       tries += 1;
       const { data: eb } = await supabase
         .from("ebooks")
-        .select("title, subtitle, cover_url, generation_status, generation_progress, generation_error, content_json, slug")
+        .select("title, subtitle, cover_url, generation_status, generation_progress, generation_error, content_json, slug, pdf_url")
         .eq("id", ebookId)
         .maybeSingle();
 
@@ -157,6 +160,7 @@ export function CreateEbookView() {
       if (eb.title && eb.title !== "Gerando...") setTitle(eb.title);
       if (eb.subtitle) setSubtitle(eb.subtitle);
       if (eb.cover_url) setCoverUrl(eb.cover_url);
+      if (eb.pdf_url) setPdfUrl(eb.pdf_url);
       if (eb.slug) {
         setCreatedEbookSlug(eb.slug);
         setEbookLink(`${window.location.origin}/e/${eb.slug}`);
@@ -298,6 +302,7 @@ export function CreateEbookView() {
       setTitle(newEbook.title || "");
       setSubtitle(newEbook.subtitle || "");
       setCoverUrl(newEbook.cover_url);
+      setPdfUrl(newEbook.pdf_url);
       
       
       if (newEbook.slug) {
@@ -953,7 +958,26 @@ export function CreateEbookView() {
                     >
                       <Copy className="mr-2 h-4 w-4" /> Copiar Link
                     </Button>
+                </div>
+
+                {/* PDF Download Section */}
+                {pdfUrl && (
+                  <div className="mt-4 rounded-2xl border bg-secondary/10 p-5 border-secondary/20">
+                    <div className="flex items-center gap-2 text-secondary-foreground">
+                      <Download className="h-5 w-5" />
+                      <h3 className="font-display font-bold">Arquivo do eBook</h3>
+                    </div>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Baixe a versão em PDF do seu eBook para ler ou distribuir.
+                    </p>
+                    <Button 
+                      className="mt-3 w-full sm:w-auto variant-secondary gap-2"
+                      onClick={() => window.open(pdfUrl, '_blank')}
+                    >
+                      <Download className="h-4 w-4" /> Baixar PDF
+                    </Button>
                   </div>
+                )}
                 </div>
 
                 {/* Manual Search Links */}
