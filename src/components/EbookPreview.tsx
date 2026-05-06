@@ -1,4 +1,5 @@
-import { BookOpen } from "lucide-react";
+import { BookOpen, Download } from "lucide-react";
+import { Button } from "./ui/button";
 
 type Chapter = {
   title: string;
@@ -12,6 +13,7 @@ type Props = {
   subtitle?: string;
   coverUrl?: string | null;
   chapters: Chapter[];
+  pdfUrl?: string | null;
 };
 
 function renderContent(content: string) {
@@ -42,10 +44,22 @@ function renderContent(content: string) {
   });
 }
 
-export function EbookPreview({ title, subtitle, coverUrl, chapters }: Props) {
+export function EbookPreview({ title, subtitle, coverUrl, chapters, pdfUrl }: Props) {
   return (
     <div className="rounded-2xl border bg-muted/20 p-4 sm:p-6">
       <div className="mx-auto max-w-2xl space-y-6">
+        {pdfUrl && (
+          <div className="flex justify-end">
+            <Button 
+              variant="outline" 
+              className="gap-2 shadow-soft hover:bg-primary/5 border-primary/20"
+              onClick={() => window.open(pdfUrl, '_blank')}
+            >
+              <Download className="h-4 w-4 text-primary" />
+              Baixar PDF do eBook
+            </Button>
+          </div>
+        )}
         {/* Cover page */}
         <div className="aspect-[2/3] rounded-xl overflow-hidden shadow-2xl bg-gradient-to-br from-primary/80 to-primary relative">
           {coverUrl ? (
