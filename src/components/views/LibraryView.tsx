@@ -24,6 +24,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { EbookPreview } from "@/components/EbookPreview";
 import { toast } from "sonner";
+import { generateEbookPDF } from "@/lib/pdf-generator";
 
 const statusLabel: Record<string, string> = {
   draft: "Rascunho",
@@ -279,24 +280,29 @@ export function LibraryView({ onCreateNew }: Props) {
     setIsGeneratingPDF(true);
     
     try {
-      toast.info("Gerando PDF... Isso pode levar alguns segundos.");
+      toast.info("Preparando seu PDF...");
       
-      const { data, error } = await supabase.functions.invoke("generate-pdf", {
-        body: { ebookId: eb.id },
-      });
-
-      if (error) throw error;
-
-      if (data?.pdfUrl) {
-        window.open(data.pdfUrl, "_blank");
-        toast.success("PDF gerado com sucesso!");
-        await refresh();
-      } else {
-        throw new Error("PDF não retornado");
+      const { chapters } = await getEbookWithChapters(eb.id);
+      
+      if (!chapters || chapters.length === 0) {
+        throw new Error("O eBook ainda não possui conteúdo para gerar o PDF.");
       }
-    } catch (err) {
+
+      const pdfUrl = await generateEbookPDF(
+        eb.title,
+        eb.subtitle || null,
+        chapters,
+        eb.id
+      );
+
+      if (pdfUrl) {
+        window.open(pdfUrl, "_blank");
+        toast.success("PDF gerado e pronto para baixar!");
+        await refresh();
+      }
+    } catch (err: any) {
       console.error("Erro ao gerar PDF:", err);
-      toast.error("Não foi possível gerar o PDF no momento. Tente novamente em instantes.");
+      toast.error(err.message || "Não foi possível gerar o PDF. Tente novamente.");
     } finally {
       setDownloadingId(null);
       setIsGeneratingPDF(false);
