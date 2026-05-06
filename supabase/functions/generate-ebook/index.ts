@@ -73,9 +73,10 @@ async function searchPexelsAndUpload(
     // Pexels search
     const url = new URL("https://api.pexels.com/v1/search");
     url.searchParams.set("query", query);
-    url.searchParams.set("per_page", "15");
+    url.searchParams.set("per_page", "20");
     url.searchParams.set("orientation", orientation);
     url.searchParams.set("size", "large");
+    url.searchParams.set("sort", "popular");
     const resp = await fetch(url.toString(), {
       headers: { Authorization: PEXELS_API_KEY },
     });
@@ -140,9 +141,9 @@ Formato exato:
 {
   "title": "string (máx 70 chars, chamativo)",
   "subtitle": "string (máx 120 chars, promessa clara)",
-  "cover_keywords": "2 a 4 palavras EM INGLÊS para buscar uma foto de capa em banco de imagens (ex: 'business success laptop').",
+  "cover_keywords": "4 a 6 palavras EM INGLÊS específicas e descritivas para buscar uma foto de capa de alta qualidade em banco de imagens profissional (ex: 'modern minimalist minimalist desk setup 8k', 'vibrant healthy organic salad close-up').",
   "chapters": [
-    { "title": "string", "subtitle": "string curto (1 frase de promessa)", "image_keywords": "2 a 4 palavras EM INGLÊS para buscar uma foto temática (ex: 'morning routine coffee')." }
+    { "title": "string", "subtitle": "string curto (1 frase de promessa)", "image_keywords": "4 a 6 palavras EM INGLÊS específicas e cinematográficas para uma foto temática impactante (ex: 'serene mountain landscape morning mist 4k', 'professional athlete training high contrast')." }
   ]
 }
 Gere EXATAMENTE 6 capítulos.`;
