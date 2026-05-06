@@ -541,6 +541,7 @@ export function LibraryView({ onCreateNew }: Props) {
               title={openEbook.title}
               subtitle={openEbook.subtitle ?? undefined}
               coverUrl={openEbook.cover_url}
+              pdfUrl={openEbook.pdf_url}
               chapters={openChapters.map((c) => ({
                 title: c.title,
                 content: c.content ?? "",
