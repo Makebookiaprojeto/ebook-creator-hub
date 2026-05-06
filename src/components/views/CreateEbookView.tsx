@@ -77,6 +77,7 @@ export function CreateEbookView() {
     setEbookLink("");
     setCreatedEbookSlug(null);
     setSearchedGroups([]);
+    setPdfUrl(null);
   };
 
   // Recovery effect: check for ongoing generations on mount
