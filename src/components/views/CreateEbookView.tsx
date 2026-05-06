@@ -99,6 +99,7 @@ export function CreateEbookView() {
         setNiche(eb.niche || "");
         setAudience(eb.audience || "");
         setGeneratedEbookId(eb.id);
+        if (eb.pdf_url) setPdfUrl(eb.pdf_url);
         if (eb.slug) {
           setCreatedEbookSlug(eb.slug);
           setEbookLink(`${window.location.origin}/e/${eb.slug}`);
