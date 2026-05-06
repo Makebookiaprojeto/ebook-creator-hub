@@ -349,12 +349,9 @@ export default function EbookSalesPage() {
       {/* Top bar */}
       <header className="sticky top-0 z-20 border-b border-border/40 bg-background/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-primary shadow-glow">
-              <Sparkles className="h-4 w-4 text-primary-foreground" />
-            </div>
-            <span className="font-display text-sm font-bold">EbookAI</span>
-          </Link>
+          <div className="flex items-center gap-2">
+            {/* Branding elements removed at user request */}
+          </div>
           <Button
             size="sm"
             className="gradient-primary text-primary-foreground"
