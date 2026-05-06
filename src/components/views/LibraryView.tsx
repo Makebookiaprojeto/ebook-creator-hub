@@ -51,8 +51,6 @@ export function LibraryView({ onCreateNew }: Props) {
     Record<string, { url: string; pid: string; platform: string; secret: string }>
   >({});
   const [savingCaktoId, setSavingCaktoId] = useState<string | null>(null);
-  const [slugDrafts, setSlugDrafts] = useState<Record<string, string>>({});
-  const [savingSlugId, setSavingSlugId] = useState<string | null>(null);
   const [openCaktoId, setOpenCaktoId] = useState<string | null>(null);
   const [paymentConfigs, setPaymentConfigs] = useState<
     Record<string, { platform: string; checkout_url: string; product_id: string; webhook_secret: string }>
