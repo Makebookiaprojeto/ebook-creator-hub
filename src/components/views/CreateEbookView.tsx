@@ -949,7 +949,7 @@ export function CreateEbookView() {
                       }}
                     >
                       <Eye className="h-4 w-4" /> 
-                      {isPublished ? "Ver Página Ao Vivo" : "Ver na Web"}
+                      {isPublished ? "Ver Página na Web" : "Ver na Web"}
                     </Button>
                   )}
                 </div>
