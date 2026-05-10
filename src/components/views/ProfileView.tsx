@@ -312,42 +312,6 @@ export function ProfileView() {
 
       {/* Planos section remains below but payment config was removed */}
 
-                    Para liberar o eBook automaticamente após a compra, cole esta URL na sua conta {paymentConfig.platform.toUpperCase()}:
-                  </p>
-                  <div className="relative group">
-                    <code className="block w-full rounded-lg bg-background p-3 text-[10px] font-mono break-all border border-primary/20">
-                      {getWebhookUrl(paymentConfig.platform)}
-                    </code>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 opacity-0 group-hover:opacity-100 transition"
-                      onClick={() => {
-                        navigator.clipboard.writeText(getWebhookUrl(paymentConfig.platform));
-                        toast.success("URL copiada!");
-                      }}
-                    >
-                      <Copy className="h-3.5 w-3.5" />
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="space-y-3 pt-2">
-                  <div className="flex items-start gap-2 text-[10px] text-muted-foreground leading-relaxed">
-                    <div className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                    <p>Crie um webhook na sua plataforma apontando para a URL acima.</p>
-                  </div>
-                  <div className="flex items-start gap-2 text-[10px] text-muted-foreground leading-relaxed">
-                    <div className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                    <p>O eBook será enviado por email e liberado na biblioteca do cliente assim que o pagamento for aprovado.</p>
-                  </div>
-                </div>
-              </div>
-            )}
-            
-          </div>
-        </div>
-      </div>
 
       <div ref={plansRef}>
         <h2 className="font-display text-2xl font-bold">Escolha seu plano</h2>
