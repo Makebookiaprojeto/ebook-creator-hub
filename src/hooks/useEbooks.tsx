@@ -108,6 +108,7 @@ export function useEbooks() {
     try {
       // Deletar dependências que não estão configuradas com CASCADE
       await supabase.from("ebook_sales").delete().eq("ebook_id", id);
+      await supabase.from("purchases").delete().eq("ebook_id", id);
       
       const { error } = await supabase.from("ebooks").delete().eq("id", id);
       

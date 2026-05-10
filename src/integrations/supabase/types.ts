@@ -255,6 +255,7 @@ export type Database = {
           cover_url: string | null
           created_at: string
           description: string | null
+          external_product_id: string | null
           generation_error: string | null
           generation_input: Json | null
           generation_progress: Json
@@ -263,6 +264,7 @@ export type Database = {
           is_public: boolean
           is_template: boolean | null
           niche: string | null
+          payment_platform: string | null
           pdf_url: string | null
           price: number | null
           price_cents: number | null
@@ -283,6 +285,7 @@ export type Database = {
           cover_url?: string | null
           created_at?: string
           description?: string | null
+          external_product_id?: string | null
           generation_error?: string | null
           generation_input?: Json | null
           generation_progress?: Json
@@ -291,6 +294,7 @@ export type Database = {
           is_public?: boolean
           is_template?: boolean | null
           niche?: string | null
+          payment_platform?: string | null
           pdf_url?: string | null
           price?: number | null
           price_cents?: number | null
@@ -311,6 +315,7 @@ export type Database = {
           cover_url?: string | null
           created_at?: string
           description?: string | null
+          external_product_id?: string | null
           generation_error?: string | null
           generation_input?: Json | null
           generation_progress?: Json
@@ -319,6 +324,7 @@ export type Database = {
           is_public?: boolean
           is_template?: boolean | null
           niche?: string | null
+          payment_platform?: string | null
           pdf_url?: string | null
           price?: number | null
           price_cents?: number | null
@@ -418,6 +424,63 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      purchases: {
+        Row: {
+          amount_paid_cents: number | null
+          created_at: string
+          customer_email: string
+          ebook_id: string
+          ebook_owner_id: string | null
+          id: string
+          platform: string | null
+          platform_transaction_id: string | null
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          amount_paid_cents?: number | null
+          created_at?: string
+          customer_email: string
+          ebook_id: string
+          ebook_owner_id?: string | null
+          id?: string
+          platform?: string | null
+          platform_transaction_id?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          amount_paid_cents?: number | null
+          created_at?: string
+          customer_email?: string
+          ebook_id?: string
+          ebook_owner_id?: string | null
+          id?: string
+          platform?: string | null
+          platform_transaction_id?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "purchases_ebook_id_fkey"
+            columns: ["ebook_id"]
+            isOneToOne: false
+            referencedRelation: "ebooks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchases_ebook_id_fkey"
+            columns: ["ebook_id"]
+            isOneToOne: false
+            referencedRelation: "public_ebooks"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       subscriptions: {
         Row: {
@@ -609,6 +672,7 @@ export type Database = {
         }[]
       }
       get_public_ebook_pdf_url: { Args: { _ebook_id: string }; Returns: string }
+      get_user_id_by_email: { Args: { email_param: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

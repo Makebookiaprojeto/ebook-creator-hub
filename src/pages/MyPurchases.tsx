@@ -37,7 +37,7 @@ export default function MyPurchases() {
     (async () => {
       setLoading(true);
       const { data, error } = await supabase
-        .from("ebook_sales")
+        .from("purchases")
         .select("id, ebook_id, amount_paid_cents, status, created_at, ebooks(title, cover_url, slug)")
         .eq("status", "paid")
         .order("created_at", { ascending: false });

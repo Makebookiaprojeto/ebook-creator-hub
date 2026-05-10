@@ -59,9 +59,9 @@ export function DashboardView() {
         if (profile) setDbDisplayName(profile.display_name);
 
         // Vendas confirmadas dos eBooks deste autor
-        // ebook_sales tem RLS "Owners can view sales of their ebooks" → filtra automático
+        // purchases tem RLS "Autores podem ver vendas de seus ebooks" → filtra automático
         const { data: sales } = await supabase
-          .from("ebook_sales")
+          .from("purchases")
           .select("amount_paid_cents, created_at, status")
           .eq("status", "paid");
 
@@ -111,7 +111,7 @@ export function DashboardView() {
       .channel(`dashboard-sales-${authUser.id}`)
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "ebook_sales" },
+        { event: "*", schema: "public", table: "purchases" },
         () => fetchDashboardData(),
       )
       .subscribe();
