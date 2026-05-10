@@ -669,6 +669,7 @@ export type Database = {
         }[]
       }
       get_public_ebook_pdf_url: { Args: { _ebook_id: string }; Returns: string }
+      get_user_id_by_email: { Args: { email_param: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
