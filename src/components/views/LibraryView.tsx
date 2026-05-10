@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BookOpen, Check, Download, ExternalLink, Eye, Globe, Link2, Loader2, Lock, Tag, Trash2, Plus, Settings, Copy } from "lucide-react";
+import { BookOpen, Check, Download, ExternalLink, Eye, Globe, Loader2, Lock, Tag, Trash2, Plus, Settings, Copy } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useEbooks, type Ebook, type Chapter } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
@@ -47,151 +47,12 @@ export function LibraryView({ onCreateNew }: Props) {
   const [confirmDelete, setConfirmDelete] = useState<Ebook | null>(null);
   const [priceDrafts, setPriceDrafts] = useState<Record<string, string>>({});
   const [savingPriceId, setSavingPriceId] = useState<string | null>(null);
-  const [caktoDrafts, setCaktoDrafts] = useState<
-    Record<string, { url: string; pid: string; platform: string; secret: string }>
-  >({});
-  const [savingCaktoId, setSavingCaktoId] = useState<string | null>(null);
-  const [openCaktoId, setOpenCaktoId] = useState<string | null>(null);
-  const [paymentConfigs, setPaymentConfigs] = useState<
-    Record<string, { platform: string; checkout_url: string; product_id: string; webhook_secret: string }>
-  >({});
 
-  const PLATFORMS = [
-    { value: "cakto", label: "Cakto" },
-    { value: "hotmart", label: "Hotmart" },
-    { value: "kiwify", label: "Kiwify" },
-    { value: "outro", label: "Outro (só link)" },
-  ] as const;
-
-  const projectRef = (import.meta as any).env?.VITE_SUPABASE_PROJECT_ID ?? "";
-  const webhookUrl = (platform: string) =>
-    platform === "outro"
-      ? ""
-      : `https://${projectRef}.supabase.co/functions/v1/${platform}-webhook`;
-
-  // Carrega configs de pagamento (tabela protegida) sempre que ebooks mudarem
-  useEffect(() => {
-    let active = true;
-    (async () => {
-      if (ebooks.length === 0) return;
-      const ids = ebooks.map((e) => e.id);
-      const [{ data }, { data: secrets }] = await Promise.all([
-        supabase
-          .from("ebook_payment_config" as any)
-          .select("ebook_id, payment_platform, checkout_url, product_id")
-          .in("ebook_id", ids),
-        supabase
-          .from("ebook_webhook_secrets" as any)
-          .select("ebook_id, webhook_secret")
-          .in("ebook_id", ids),
-      ]);
-      if (!active || !data) return;
-      const secretMap: Record<string, string> = {};
-      for (const s of (secrets ?? []) as any[]) secretMap[s.ebook_id] = s.webhook_secret ?? "";
-      const map: typeof paymentConfigs = {};
-      for (const r of data as any[]) {
-        map[r.ebook_id] = {
-          platform: r.payment_platform ?? "cakto",
-          checkout_url: r.checkout_url ?? "",
-          product_id: r.product_id ?? "",
-          webhook_secret: secretMap[r.ebook_id] ?? "",
-        };
-      }
-      setPaymentConfigs(map);
-    })();
-    return () => { active = false; };
-  }, [ebooks]);
-
-  const getCaktoDraft = (eb: Ebook) => {
-    if (caktoDrafts[eb.id]) return caktoDrafts[eb.id];
-    const cfg = paymentConfigs[eb.id];
-    return {
-      url: cfg?.checkout_url ?? (eb as any).cakto_checkout_url ?? "",
-      pid: cfg?.product_id ?? "",
-      platform: cfg?.platform ?? "cakto",
-      secret: cfg?.webhook_secret ?? "",
-    };
-  };
-
-  const saveCakto = async (eb: Ebook) => {
-    const d = getCaktoDraft(eb);
-    const url = d.url.trim();
-    const pid = d.pid.trim();
-    const secret = d.secret.trim();
-    if (url && !/^https?:\/\//i.test(url)) {
-      toast.error("Use um link válido (começando com https://).");
-      return;
-    }
-    setSavingCaktoId(eb.id);
-    try {
-      // 1) Atualiza link público de checkout (continua na tabela ebooks)
-      const { error: ebErr } = await supabase
-        .from("ebooks")
-        .update({ cakto_checkout_url: url || null } as any)
-        .eq("id", eb.id);
-      if (ebErr) throw ebErr;
-
-      // 2) Upsert configs sensíveis na tabela protegida
-      const { data: userData } = await supabase.auth.getUser();
-      const ownerId = userData.user?.id;
-      if (!ownerId) throw new Error("Não autenticado");
-
-      const { error: cfgErr } = await supabase
-        .from("ebook_payment_config" as any)
-        .upsert(
-          {
-            ebook_id: eb.id,
-            owner_id: ownerId,
-            payment_platform: d.platform,
-            checkout_url: url || null,
-            product_id: pid || null,
-          },
-          { onConflict: "ebook_id" },
-        );
-      if (cfgErr) throw cfgErr;
-
-      // Salva secret na tabela protegida separada
-      if (secret) {
-        const { error: secErr } = await supabase
-          .from("ebook_webhook_secrets" as any)
-          .upsert(
-            { ebook_id: eb.id, owner_id: ownerId, webhook_secret: secret },
-            { onConflict: "ebook_id" },
-          );
-        if (secErr) throw secErr;
-      } else {
-        await supabase.from("ebook_webhook_secrets" as any).delete().eq("ebook_id", eb.id);
-      }
-
-      toast.success("Configuração de pagamento salva!");
-      setPaymentConfigs((prev) => ({
-        ...prev,
-        [eb.id]: {
-          platform: d.platform,
-          checkout_url: url,
-          product_id: pid,
-          webhook_secret: secret,
-        },
-      }));
-      setCaktoDrafts((p) => {
-        const n = { ...p };
-        delete n[eb.id];
-        return n;
-      });
-      await refresh();
-    } catch (err) {
-      console.error(err);
-      toast.error("Não foi possível salvar.");
-    } finally {
-      setSavingCaktoId(null);
-    }
-  };
-
-  const copyWebhookUrl = (platform: string) => {
-    const u = webhookUrl(platform);
-    if (!u) return;
-    navigator.clipboard.writeText(u);
-    toast.success("URL do webhook copiada!");
+  const copyPublicLink = (eb: Ebook) => {
+    if (!eb.slug) return;
+    const url = `${window.location.origin}/e/${eb.slug}`;
+    navigator.clipboard.writeText(url);
+    toast.success("Link copiado!");
   };
 
   const formatPriceBR = (cents?: number | null) =>
@@ -247,12 +108,6 @@ export function LibraryView({ onCreateNew }: Props) {
   };
 
 
-  const copyPublicLink = (eb: Ebook) => {
-    if (!eb.slug) return;
-    const url = `${window.location.origin}/e/${eb.slug}`;
-    navigator.clipboard.writeText(url);
-    toast.success("Link copiado!");
-  };
 
   const handlePreview = async (eb: Ebook) => {
     setOpenEbook(eb);
@@ -521,61 +376,7 @@ export function LibraryView({ onCreateNew }: Props) {
                         </div>
                       </div>
                     )}
-
-                   <div>
-                    <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
-                      <Link2 className="h-3 w-3" /> Link de Checkout
-                    </label>
-                    <div className="flex items-center gap-1.5">
-                      <Input
-                        placeholder="https://..."
-                        value={caktoDrafts[eb.id]?.url ?? (eb as any).cakto_checkout_url ?? ""}
-                        onChange={(e) =>
-                          setCaktoDrafts((p) => ({
-                            ...p,
-                            [eb.id]: { ...getCaktoDraft(eb), url: e.target.value },
-                          }))
-                        }
-                        className="h-8 text-xs"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
-                      <Tag className="h-3 w-3" /> ID do Produto
-                    </label>
-                    <div className="flex items-center gap-1.5">
-                      <Input
-                        placeholder="Ex: 123456"
-                        value={caktoDrafts[eb.id]?.pid ?? paymentConfigs[eb.id]?.product_id ?? ""}
-                        onChange={(e) =>
-                          setCaktoDrafts((p) => ({
-                            ...p,
-                            [eb.id]: { ...getCaktoDraft(eb), pid: e.target.value },
-                          }))
-                        }
-                        className="h-8 text-xs"
-                      />
-                      <Button
-                        size="sm"
-                        variant="secondary"
-                        className="h-8 px-2"
-                        onClick={() => saveCakto(eb)}
-                        disabled={savingCaktoId === eb.id}
-                        title="Salvar configurações"
-                      >
-                        {savingCaktoId === eb.id ? (
-                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                        ) : (
-                          <Check className="h-3.5 w-3.5" />
-                        )}
-                      </Button>
-                    </div>
-                  </div>
                 </div>
-
-
 
                 {/* Simplified Payment Badge */}
                 <div className="mt-2">
