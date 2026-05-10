@@ -441,13 +441,6 @@ export function LibraryView({ onCreateNew }: Props) {
                     </div>
                 </div>
 
-                {/* Simplified Payment Badge */}
-                <div className="mt-2">
-                  <p className="flex items-center gap-1.5 text-[10px] text-muted-foreground italic">
-                    <Settings className="h-2.5 w-2.5" />
-                    Checkout e Webhook são configurados globalmente no seu Perfil.
-                  </p>
-                </div>
               </div>
             </div>
           ))}
