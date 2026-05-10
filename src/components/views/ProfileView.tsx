@@ -36,23 +36,11 @@ export function ProfileView() {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [usage, setUsage] = useState({ limit: 20, current: 0 });
   const [activeSubscription, setActiveSubscription] = useState<{
     plan_type: string;
     status: string;
   } | null>(null);
-  const [paymentConfig, setPaymentConfig] = useState<{
-    platform: string;
-    checkout_url: string;
-    product_id: string;
-    webhook_secret: string;
-  }>({
-    platform: "cakto",
-    checkout_url: "",
-    product_id: "",
-    webhook_secret: "",
-  });
-  const [savingPayment, setSavingPayment] = useState(false);
+
 
   // Carrega dados do perfil
   useEffect(() => {
@@ -60,7 +48,7 @@ export function ProfileView() {
     const loadData = async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("avatar_url, display_name, monthly_ebook_limit, ebooks_generated_this_month")
+        .select("avatar_url, display_name")
         .eq("user_id", user.id)
         .maybeSingle();
       
@@ -68,27 +56,6 @@ export function ProfileView() {
       if (profileData) {
         setAvatarUrl(profileData.avatar_url || null);
         setDisplayName(resolveDisplayName(profileData.display_name, user));
-        setUsage({
-          limit: profileData.monthly_ebook_limit ?? 20,
-          current: profileData.ebooks_generated_this_month ?? 0
-        });
-      }
-
-      // Carregar configs de pagamento
-      const { data: payData } = await supabase
-        .from("user_payment_configs" as any)
-        .select("*")
-        .eq("user_id", user.id)
-        .maybeSingle();
-
-      if (payData) {
-        const config = payData as any;
-        setPaymentConfig({
-          platform: config.payment_platform ?? "cakto",
-          checkout_url: config.checkout_url ?? "",
-          product_id: config.product_id ?? "",
-          webhook_secret: config.webhook_secret ?? "",
-        });
       }
 
       const { data: roleData } = await supabase.rpc("has_role", {
@@ -96,6 +63,7 @@ export function ProfileView() {
         _role: "admin",
       });
       setIsAdmin(!!roleData);
+
 
       // Carregar assinatura ativa
       const { data: subData } = await supabase
@@ -129,20 +97,14 @@ export function ProfileView() {
 
     loadData();
 
-    // Inscrição para atualizações em tempo real do perfil (para o contador de uso)
+    // Inscrição para atualizações em tempo real do perfil
     const channel = supabase
       .channel("profile-usage")
       .on(
         "postgres_changes",
         { event: "UPDATE", schema: "public", table: "profiles", filter: `user_id=eq.${user.id}` },
         (payload) => {
-          const newData = payload.new as any;
-          if (newData.monthly_ebook_limit !== undefined || newData.ebooks_generated_this_month !== undefined) {
-            setUsage(prev => ({
-              limit: newData.monthly_ebook_limit ?? prev.limit,
-              current: newData.ebooks_generated_this_month ?? prev.current
-            }));
-          }
+          // No actions needed for removed fields
         }
       )
       .subscribe();
@@ -150,6 +112,7 @@ export function ProfileView() {
     return () => {
       supabase.removeChannel(channel);
     };
+
   }, [user]);
 
   const handleSubscribe = (planId: string) => {
@@ -228,34 +191,8 @@ export function ProfileView() {
 
   const email = user?.email || "";
 
-  const handleSavePayment = async () => {
-    if (!user) return;
-    setSavingPayment(true);
-    try {
-      const { error } = await supabase
-        .from("user_payment_configs" as any)
-        .upsert({
-          user_id: user.id,
-          payment_platform: paymentConfig.platform,
-          checkout_url: paymentConfig.checkout_url,
-          product_id: paymentConfig.product_id,
-          webhook_secret: paymentConfig.webhook_secret,
-        }, { onConflict: "user_id" });
-
-      if (error) throw error;
-      toast.success("Configurações de pagamento atualizadas!");
-    } catch (error: any) {
-      toast.error("Erro ao salvar: " + error.message);
-    } finally {
-      setSavingPayment(false);
-    }
-  };
-
   const projectRef = (import.meta as any).env?.VITE_SUPABASE_PROJECT_ID ?? "";
-  const getWebhookUrl = (platform: string) =>
-    platform === "outro"
-      ? ""
-      : `https://${projectRef}.supabase.co/functions/v1/${platform}-webhook`;
+
 
   useEffect(() => {
     if (searchParams.get("upgrade") === "true") {
@@ -278,19 +215,8 @@ export function ProfileView() {
           <p className="mt-1 text-muted-foreground">Gerencie sua conta, pagamentos e plano.</p>
         </div>
         
-        <div className="rounded-2xl border bg-card p-4 shadow-soft min-w-[200px]">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold uppercase text-muted-foreground">Uso Mensal</span>
-            <span className="text-xs font-bold">{usage.current} / {usage.limit}</span>
-          </div>
-          <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-            <div 
-              className={`h-full transition-all duration-500 ${usage.current >= usage.limit ? 'bg-destructive' : 'gradient-primary'}`}
-              style={{ width: `${Math.min((usage.current / usage.limit) * 100, 100)}%` }}
-            />
-          </div>
-          <p className="mt-2 text-[10px] text-muted-foreground text-center">Ebooks gerados este mês</p>
-        </div>
+        <div className="flex-1" />
+
       </div>
 
       {/* Admin access removed based on user request */}
@@ -336,7 +262,8 @@ export function ProfileView() {
                 <span className="font-medium">
                   {activeSubscription 
                     ? `Plano ${activeSubscription.plan_type === 'lifetime' ? 'Premium' : 'Mensal'}` 
-                    : `Plano ${usage.limit > 20 ? 'Premium' : 'Gratuito'}`}
+                    : "Plano Gratuito"}
+
                 </span>
               </div>
               <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground/80">
@@ -383,120 +310,8 @@ export function ProfileView() {
         </div>
       </div>
 
-      {/* Payment Configuration */}
-      <div className="rounded-2xl border bg-card p-6 shadow-soft">
-        <div className="flex items-center gap-2 mb-6">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-            <Settings className="h-4 w-4" />
-          </div>
-          <h2 className="font-display text-xl font-bold text-foreground">Configuração de Pagamento (Global)</h2>
-        </div>
+      {/* Planos section remains below but payment config was removed */}
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label className="text-xs uppercase text-muted-foreground">Plataforma de Checkout</Label>
-              <select
-                value={paymentConfig.platform}
-                onChange={(e) => setPaymentConfig(prev => ({ ...prev, platform: e.target.value }))}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <option value="cakto">Cakto</option>
-                <option value="hotmart">Hotmart</option>
-                <option value="kiwify">Kiwify</option>
-                <option value="outro">Outro (Apenas link)</option>
-              </select>
-            </div>
-
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2 text-xs uppercase text-muted-foreground">
-                <Link2 className="h-3.5 w-3.5" /> Link de Checkout Global (Opcional)
-              </Label>
-              <Input
-                placeholder="https://..."
-                value={paymentConfig.checkout_url}
-                onChange={(e) => setPaymentConfig(prev => ({ ...prev, checkout_url: e.target.value }))}
-              />
-              <p className="text-[10px] text-muted-foreground">
-                Este link será usado como fallback se o eBook não tiver um link específico configurado.
-              </p>
-            </div>
-
-            {paymentConfig.platform !== "outro" && (
-              <>
-                <div className="space-y-2">
-                  <Label className="flex items-center gap-2 text-xs uppercase text-muted-foreground">
-                    <Lock className="h-3.5 w-3.5" /> Token/Secret do Webhook (Global)
-                  </Label>
-                  <Input
-                    type="password"
-                    placeholder={
-                      paymentConfig.platform === "hotmart" ? "HOTTOK" : 
-                      paymentConfig.platform === "kiwify" ? "Webhook Token" : "Secret"
-                    }
-                    value={paymentConfig.webhook_secret}
-                    onChange={(e) => setPaymentConfig(prev => ({ ...prev, webhook_secret: e.target.value }))}
-                  />
-                </div>
-              </>
-            )}
-
-            <Button 
-              onClick={handleSavePayment} 
-              disabled={savingPayment}
-              className="w-full gradient-primary text-primary-foreground"
-            >
-              {savingPayment ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Check className="h-4 w-4 mr-2" />}
-              Salvar Configurações
-            </Button>
-          </div>
-
-          <div className="space-y-4">
-            {paymentConfig.platform !== "outro" && (
-              <div className="rounded-xl border bg-muted/30 p-4 space-y-4">
-                <div className="flex items-center justify-between">
-                  <Label className="text-xs uppercase text-muted-foreground font-bold">Integração via Webhook</Label>
-                  <Badge variant="outline" className="text-[10px]">Padrão</Badge>
-                </div>
-                
-                <div className="space-y-2">
-                  <p className="text-xs text-muted-foreground">
-                    Para liberar o eBook automaticamente após a compra, cole esta URL na sua conta {paymentConfig.platform.toUpperCase()}:
-                  </p>
-                  <div className="relative group">
-                    <code className="block w-full rounded-lg bg-background p-3 text-[10px] font-mono break-all border border-primary/20">
-                      {getWebhookUrl(paymentConfig.platform)}
-                    </code>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 opacity-0 group-hover:opacity-100 transition"
-                      onClick={() => {
-                        navigator.clipboard.writeText(getWebhookUrl(paymentConfig.platform));
-                        toast.success("URL copiada!");
-                      }}
-                    >
-                      <Copy className="h-3.5 w-3.5" />
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="space-y-3 pt-2">
-                  <div className="flex items-start gap-2 text-[10px] text-muted-foreground leading-relaxed">
-                    <div className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                    <p>Crie um webhook na sua plataforma apontando para a URL acima.</p>
-                  </div>
-                  <div className="flex items-start gap-2 text-[10px] text-muted-foreground leading-relaxed">
-                    <div className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                    <p>O eBook será enviado por email e liberado na biblioteca do cliente assim que o pagamento for aprovado.</p>
-                  </div>
-                </div>
-              </div>
-            )}
-            
-          </div>
-        </div>
-      </div>
 
       <div ref={plansRef}>
         <h2 className="font-display text-2xl font-bold">Escolha seu plano</h2>
