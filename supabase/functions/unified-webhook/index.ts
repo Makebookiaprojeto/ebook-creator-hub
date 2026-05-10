@@ -112,12 +112,18 @@ Deno.serve(async (req) => {
     }
 
     // Buscar ebook
-    const { data: ebook, error: ebookError } = await supabase
+    let ebookQuery = supabase
       .from("ebooks")
       .select("id, user_id, title, pdf_url")
-      .eq("external_product_id", productId)
-      .eq("payment_platform", platform)
-      .maybeSingle();
+      .eq("payment_platform", platform);
+
+    if (platform === "cakto") {
+      ebookQuery = ebookQuery.or(`cakto_product_id.eq."${productId}",external_product_id.eq."${productId}"`);
+    } else {
+      ebookQuery = ebookQuery.eq("external_product_id", productId);
+    }
+
+    const { data: ebook, error: ebookError } = await ebookQuery.maybeSingle();
 
     if (ebookError || !ebook) {
       console.warn(`Ebook não encontrado para product_id ${productId} na plataforma ${platform}`);

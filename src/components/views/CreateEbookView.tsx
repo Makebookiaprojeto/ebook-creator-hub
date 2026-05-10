@@ -291,7 +291,8 @@ export function CreateEbookView() {
           price: price || 29.9,
           price_cents: Math.round((price || 29.9) * 100),
           slug: `${template.slug || 'ebook'}-${Math.random().toString(36).substring(2, 7)}`,
-          generation_status: "done"
+          generation_status: "done",
+          payment_platform: "cakto"
         })
         .select()
         .single();

@@ -250,6 +250,7 @@ export type Database = {
           audience: string | null
           author_name: string | null
           cakto_checkout_url: string | null
+          cakto_product_id: string | null
           category: string | null
           content_json: Json | null
           cover_url: string | null
@@ -280,6 +281,7 @@ export type Database = {
           audience?: string | null
           author_name?: string | null
           cakto_checkout_url?: string | null
+          cakto_product_id?: string | null
           category?: string | null
           content_json?: Json | null
           cover_url?: string | null
@@ -310,6 +312,7 @@ export type Database = {
           audience?: string | null
           author_name?: string | null
           cakto_checkout_url?: string | null
+          cakto_product_id?: string | null
           category?: string | null
           content_json?: Json | null
           cover_url?: string | null
