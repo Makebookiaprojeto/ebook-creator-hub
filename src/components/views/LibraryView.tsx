@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BookOpen, Check, Download, ExternalLink, Eye, Globe, Loader2, Lock, Tag, Trash2, Plus, Settings, Copy } from "lucide-react";
+import { BookOpen, Check, Download, ExternalLink, Eye, Globe, Loader2, Lock, Tag, Trash2, Plus, Settings, Copy, Link2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useEbooks, type Ebook, type Chapter } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
@@ -47,12 +47,42 @@ export function LibraryView({ onCreateNew }: Props) {
   const [confirmDelete, setConfirmDelete] = useState<Ebook | null>(null);
   const [priceDrafts, setPriceDrafts] = useState<Record<string, string>>({});
   const [savingPriceId, setSavingPriceId] = useState<string | null>(null);
+  const [caktoDrafts, setCaktoDrafts] = useState<Record<string, { url: string }>>({});
+  const [savingCaktoId, setSavingCaktoId] = useState<string | null>(null);
 
   const copyPublicLink = (eb: Ebook) => {
     if (!eb.slug) return;
     const url = `${window.location.origin}/e/${eb.slug}`;
     navigator.clipboard.writeText(url);
     toast.success("Link copiado!");
+  };
+
+  const saveCheckoutUrl = async (eb: Ebook) => {
+    const url = (caktoDrafts[eb.id]?.url ?? (eb as any).cakto_checkout_url ?? "").trim();
+    if (url && !/^https?:\/\//i.test(url)) {
+      toast.error("Use um link válido (começando com https://).");
+      return;
+    }
+    setSavingCaktoId(eb.id);
+    try {
+      const { error } = await supabase
+        .from("ebooks")
+        .update({ cakto_checkout_url: url || null } as any)
+        .eq("id", eb.id);
+      if (error) throw error;
+      toast.success("Link de checkout salvo!");
+      setCaktoDrafts((p) => {
+        const n = { ...p };
+        delete n[eb.id];
+        return n;
+      });
+      await refresh();
+    } catch (err) {
+      console.error(err);
+      toast.error("Não foi possível salvar.");
+    } finally {
+      setSavingCaktoId(null);
+    }
   };
 
   const formatPriceBR = (cents?: number | null) =>
@@ -376,6 +406,39 @@ export function LibraryView({ onCreateNew }: Props) {
                         </div>
                       </div>
                     )}
+
+                    <div>
+                      <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
+                        <Link2 className="h-3 w-3" /> Link de Checkout
+                      </label>
+                      <div className="flex items-center gap-1.5">
+                        <Input
+                          placeholder="https://..."
+                          value={caktoDrafts[eb.id]?.url ?? (eb as any).cakto_checkout_url ?? ""}
+                          onChange={(e) =>
+                            setCaktoDrafts((p) => ({
+                              ...p,
+                              [eb.id]: { url: e.target.value },
+                            }))
+                          }
+                          className="h-8 text-xs"
+                        />
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          className="h-8 px-2"
+                          onClick={() => saveCheckoutUrl(eb)}
+                          disabled={savingCaktoId === eb.id}
+                          title="Salvar checkout"
+                        >
+                          {savingCaktoId === eb.id ? (
+                            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                          ) : (
+                            <Check className="h-3.5 w-3.5" />
+                          )}
+                        </Button>
+                      </div>
+                    </div>
                 </div>
 
                 {/* Simplified Payment Badge */}
