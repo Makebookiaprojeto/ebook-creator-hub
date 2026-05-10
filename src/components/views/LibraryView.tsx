@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { BookOpen, Check, Download, ExternalLink, Eye, Globe, Loader2, Lock, Tag, Trash2, Plus, Settings, Copy, Link2 } from "lucide-react";
+import { BookOpen, Check, Download, ExternalLink, Eye, Globe, Loader2, Lock, Tag, Trash2, Plus, Settings, Copy, Link2, Info, Layout } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useEbooks, type Ebook, type Chapter } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
@@ -47,8 +54,14 @@ export function LibraryView({ onCreateNew }: Props) {
   const [confirmDelete, setConfirmDelete] = useState<Ebook | null>(null);
   const [priceDrafts, setPriceDrafts] = useState<Record<string, string>>({});
   const [savingPriceId, setSavingPriceId] = useState<string | null>(null);
-  const [caktoDrafts, setCaktoDrafts] = useState<Record<string, { url: string }>>({});
-  const [savingCaktoId, setSavingCaktoId] = useState<string | null>(null);
+  const [externalIdDrafts, setExternalIdDrafts] = useState<Record<string, string>>({});
+  const [platformDrafts, setPlatformDrafts] = useState<Record<string, string>>({});
+  const [savingConfigId, setSavingConfigId] = useState<string | null>(null);
+  const [savingCheckoutId, setSavingCheckoutId] = useState<string | null>(null);
+  const [checkoutUrlDrafts, setCheckoutUrlDrafts] = useState<Record<string, string>>({});
+
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const webhookUrl = `${supabaseUrl}/functions/v1/unified-webhook`;
 
   const copyPublicLink = (eb: Ebook) => {
     if (!eb.slug) return;
@@ -58,12 +71,12 @@ export function LibraryView({ onCreateNew }: Props) {
   };
 
   const saveCheckoutUrl = async (eb: Ebook) => {
-    const url = (caktoDrafts[eb.id]?.url ?? (eb as any).cakto_checkout_url ?? "").trim();
+    const url = (checkoutUrlDrafts[eb.id] ?? (eb as any).cakto_checkout_url ?? "").trim();
     if (url && !/^https?:\/\//i.test(url)) {
       toast.error("Use um link válido (começando com https://).");
       return;
     }
-    setSavingCaktoId(eb.id);
+    setSavingCheckoutId(eb.id);
     try {
       const { error } = await supabase
         .from("ebooks")
@@ -71,7 +84,7 @@ export function LibraryView({ onCreateNew }: Props) {
         .eq("id", eb.id);
       if (error) throw error;
       toast.success("Link de checkout salvo!");
-      setCaktoDrafts((p) => {
+      setCheckoutUrlDrafts((p) => {
         const n = { ...p };
         delete n[eb.id];
         return n;
@@ -81,7 +94,36 @@ export function LibraryView({ onCreateNew }: Props) {
       console.error(err);
       toast.error("Não foi possível salvar.");
     } finally {
-      setSavingCaktoId(null);
+      setSavingCheckoutId(null);
+    }
+  };
+
+  const saveExternalConfig = async (eb: Ebook) => {
+    const platform = platformDrafts[eb.id] ?? (eb as any).payment_platform ?? "";
+    const externalId = externalIdDrafts[eb.id] ?? (eb as any).external_product_id ?? "";
+
+    if (!platform || !externalId) {
+      toast.error("Selecione a plataforma e informe o ID do Produto.");
+      return;
+    }
+
+    setSavingConfigId(eb.id);
+    try {
+      const { error } = await supabase
+        .from("ebooks")
+        .update({ 
+          payment_platform: platform,
+          external_product_id: externalId 
+        } as any)
+        .eq("id", eb.id);
+      if (error) throw error;
+      toast.success("Configuração de pagamento salva!");
+      await refresh();
+    } catch (err) {
+      console.error(err);
+      toast.error("Não foi possível salvar.");
+    } finally {
+      setSavingConfigId(null);
     }
   };
 
@@ -414,11 +456,11 @@ export function LibraryView({ onCreateNew }: Props) {
                       <div className="flex items-center gap-1.5">
                         <Input
                           placeholder="https://..."
-                          value={caktoDrafts[eb.id]?.url ?? (eb as any).cakto_checkout_url ?? ""}
+                          value={checkoutUrlDrafts[eb.id] ?? (eb as any).cakto_checkout_url ?? ""}
                           onChange={(e) =>
-                            setCaktoDrafts((p) => ({
+                            setCheckoutUrlDrafts((p) => ({
                               ...p,
-                              [eb.id]: { url: e.target.value },
+                              [eb.id]: e.target.value,
                             }))
                           }
                           className="h-8 text-xs"
@@ -428,15 +470,74 @@ export function LibraryView({ onCreateNew }: Props) {
                           variant="secondary"
                           className="h-8 px-2"
                           onClick={() => saveCheckoutUrl(eb)}
-                          disabled={savingCaktoId === eb.id}
+                          disabled={savingCheckoutId === eb.id}
                           title="Salvar checkout"
                         >
-                          {savingCaktoId === eb.id ? (
+                          {savingCheckoutId === eb.id ? (
                             <Loader2 className="h-3.5 w-3.5 animate-spin" />
                           ) : (
                             <Check className="h-3.5 w-3.5" />
                           )}
                         </Button>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 border-t border-border/50">
+                      <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
+                        <Layout className="h-3 w-3" /> Automação de Entrega
+                      </label>
+                      <div className="space-y-2">
+                        <Select
+                          value={platformDrafts[eb.id] ?? (eb as any).payment_platform ?? ""}
+                          onValueChange={(val) => setPlatformDrafts(p => ({ ...p, [eb.id]: val }))}
+                        >
+                          <SelectTrigger className="h-8 text-xs">
+                            <SelectValue placeholder="Plataforma" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="cakto">Cakto</SelectItem>
+                            <SelectItem value="hotmart">Hotmart</SelectItem>
+                            <SelectItem value="kiwify">Kiwify</SelectItem>
+                            <SelectItem value="stripe">Stripe</SelectItem>
+                          </SelectContent>
+                        </Select>
+
+                        <div className="flex items-center gap-1.5">
+                          <Input
+                            placeholder="Product ID ou Offer ID"
+                            value={externalIdDrafts[eb.id] ?? (eb as any).external_product_id ?? ""}
+                            onChange={(e) => setExternalIdDrafts(p => ({ ...p, [eb.id]: e.target.value }))}
+                            className="h-8 text-xs"
+                          />
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            className="h-8 px-2"
+                            onClick={() => saveExternalConfig(eb)}
+                            disabled={savingConfigId === eb.id}
+                            title="Salvar configuração"
+                          >
+                            {savingConfigId === eb.id ? (
+                              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                            ) : (
+                              <Check className="h-3.5 w-3.5" />
+                            )}
+                          </Button>
+                        </div>
+
+                        {(eb as any).payment_platform && (eb as any).external_product_id && (
+                          <div className="p-2 rounded bg-muted/30 text-[10px] space-y-1">
+                            <p className="font-semibold flex items-center gap-1">
+                              <Info className="h-3 w-3" /> Configuração do Webhook:
+                            </p>
+                            <p className="text-muted-foreground break-all">
+                              URL: {webhookUrl}?platform={(eb as any).payment_platform}
+                            </p>
+                            <p className="text-muted-foreground">
+                              Aponte o webhook da sua plataforma para esta URL. A entrega será automática.
+                            </p>
+                          </div>
+                        )}
                       </div>
                     </div>
                 </div>
