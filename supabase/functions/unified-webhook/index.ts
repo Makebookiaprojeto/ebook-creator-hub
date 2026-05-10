@@ -148,6 +148,7 @@ Deno.serve(async (req) => {
       const { error: purchaseError } = await supabase.from("purchases").upsert({
         ebook_id: ebook.id,
         user_id: userId,
+        ebook_owner_id: ebook.user_id,
         customer_email: email,
         platform: platform,
         platform_transaction_id: transactionId,
