@@ -100,7 +100,7 @@ export function LibraryView({ onCreateNew }: Props) {
 
   const saveExternalConfig = async (eb: Ebook) => {
     const platform = platformDrafts[eb.id] ?? (eb as any).payment_platform ?? "";
-    const externalId = externalIdDrafts[eb.id] ?? (eb as any).external_product_id ?? "";
+    const externalId = externalIdDrafts[eb.id] ?? (eb as any).cakto_product_id ?? (eb as any).external_product_id ?? "";
 
     if (!platform || !externalId) {
       toast.error("Selecione a plataforma e informe o ID do Produto.");
@@ -109,13 +109,20 @@ export function LibraryView({ onCreateNew }: Props) {
 
     setSavingConfigId(eb.id);
     try {
+      const updateData: any = { 
+        payment_platform: platform,
+        external_product_id: externalId 
+      };
+
+      if (platform === "cakto") {
+        updateData.cakto_product_id = externalId;
+      }
+
       const { error } = await supabase
         .from("ebooks")
-        .update({ 
-          payment_platform: platform,
-          external_product_id: externalId 
-        } as any)
+        .update(updateData)
         .eq("id", eb.id);
+
       if (error) throw error;
       toast.success("Configuração de pagamento salva!");
       await refresh();
