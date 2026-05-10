@@ -431,6 +431,7 @@ export type Database = {
           created_at: string
           customer_email: string
           ebook_id: string
+          ebook_owner_id: string | null
           id: string
           platform: string | null
           platform_transaction_id: string | null
@@ -443,6 +444,7 @@ export type Database = {
           created_at?: string
           customer_email: string
           ebook_id: string
+          ebook_owner_id?: string | null
           id?: string
           platform?: string | null
           platform_transaction_id?: string | null
@@ -455,6 +457,7 @@ export type Database = {
           created_at?: string
           customer_email?: string
           ebook_id?: string
+          ebook_owner_id?: string | null
           id?: string
           platform?: string | null
           platform_transaction_id?: string | null
