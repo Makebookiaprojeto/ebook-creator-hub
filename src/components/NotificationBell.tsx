@@ -59,25 +59,40 @@ export function NotificationBell() {
             playSaleSound();
             toast.success(newNotif.title, {
               description: newNotif.message,
+              duration: 8000,
             });
           }
         }
       )
       .subscribe();
 
-    // Also listen to purchases directly for real-time sound if needed, 
-    // but the user wants it to trigger when a sale is confirmed.
-    // If the webhook creates a notification, then the above listener is enough.
+    // User interaction listener to "unlock" audio (browser policy)
+    const unlockAudio = () => {
+      if (audioRef.current) {
+        audioRef.current.play().then(() => {
+          audioRef.current?.pause();
+          audioRef.current!.currentTime = 0;
+        }).catch(() => {});
+        window.removeEventListener('click', unlockAudio);
+        window.removeEventListener('touchstart', unlockAudio);
+      }
+    };
+    window.addEventListener('click', unlockAudio);
+    window.addEventListener('touchstart', unlockAudio);
     
     return () => {
       supabase.removeChannel(channel);
+      window.removeEventListener('click', unlockAudio);
+      window.removeEventListener('touchstart', unlockAudio);
     };
   }, [user]);
 
   const playSaleSound = () => {
     if (audioRef.current) {
       audioRef.current.currentTime = 0;
-      audioRef.current.play().catch(err => console.error("Erro ao tocar som:", err));
+      audioRef.current.play().catch(err => {
+        console.warn("Som de venda bloqueado pelo navegador. Interaja com a página primeiro.", err);
+      });
     }
   };
 
@@ -105,17 +120,17 @@ export function NotificationBell() {
       />
       <DropdownMenu onOpenChange={(open) => open && markAsRead()}>
         <DropdownMenuTrigger asChild>
-          <button className="relative flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background transition-colors hover:bg-muted">
-            <Bell className="h-4 w-4 text-muted-foreground" />
+          <button className="relative flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background transition-all hover:bg-muted active:scale-95">
+            <Bell className="h-4.5 w-4.5 text-muted-foreground" />
             {unreadCount > 0 && (
-              <Badge className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary p-0 text-[10px] text-primary-foreground">
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary p-0.5 text-[10px] font-bold text-primary-foreground animate-in zoom-in">
                 {unreadCount > 9 ? "9+" : unreadCount}
-              </Badge>
+              </span>
             )}
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-80">
-          <DropdownMenuLabel>Notificações</DropdownMenuLabel>
+        <DropdownMenuContent align="end" className="w-80 p-2">
+          <DropdownMenuLabel className="px-2 py-1.5">Notificações</DropdownMenuLabel>
           <DropdownMenuSeparator />
           {notifications.length === 0 ? (
             <div className="px-4 py-8 text-center text-sm text-muted-foreground">
@@ -124,16 +139,16 @@ export function NotificationBell() {
           ) : (
             <div className="max-h-80 overflow-y-auto">
               {notifications.map((notif) => (
-                <DropdownMenuItem key={notif.id} className="flex flex-col items-start gap-1 p-3 cursor-default">
+                <DropdownMenuItem key={notif.id} className="flex flex-col items-start gap-1 p-3 cursor-default rounded-lg focus:bg-muted">
                   <div className="flex w-full items-center justify-between">
-                    <span className={`text-sm font-semibold ${!notif.read ? "text-primary" : ""}`}>
+                    <span className={`text-sm font-semibold ${!notif.read ? "text-primary" : "text-foreground"}`}>
                       {notif.title}
                     </span>
                     <span className="text-[10px] text-muted-foreground">
                       {new Date(notif.created_at).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
-                  <p className="text-xs text-muted-foreground line-clamp-2">
+                  <p className="text-xs text-muted-foreground leading-relaxed">
                     {notif.message}
                   </p>
                 </DropdownMenuItem>
