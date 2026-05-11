@@ -272,42 +272,48 @@ export type Database = {
       purchases: {
         Row: {
           amount_paid_cents: number | null
+          buyer_email: string
           created_at: string
           currency: string | null
-          customer_email: string
           ebook_id: string
-          ebook_owner_id: string | null
           id: string
           platform: string | null
+          platform_payment_intent: string | null
+          platform_session_id: string | null
           platform_transaction_id: string | null
+          seller_user_id: string | null
           status: string
           updated_at: string
           user_id: string | null
         }
         Insert: {
           amount_paid_cents?: number | null
+          buyer_email: string
           created_at?: string
           currency?: string | null
-          customer_email: string
           ebook_id: string
-          ebook_owner_id?: string | null
           id?: string
           platform?: string | null
+          platform_payment_intent?: string | null
+          platform_session_id?: string | null
           platform_transaction_id?: string | null
+          seller_user_id?: string | null
           status?: string
           updated_at?: string
           user_id?: string | null
         }
         Update: {
           amount_paid_cents?: number | null
+          buyer_email?: string
           created_at?: string
           currency?: string | null
-          customer_email?: string
           ebook_id?: string
-          ebook_owner_id?: string | null
           id?: string
           platform?: string | null
+          platform_payment_intent?: string | null
+          platform_session_id?: string | null
           platform_transaction_id?: string | null
+          seller_user_id?: string | null
           status?: string
           updated_at?: string
           user_id?: string | null
