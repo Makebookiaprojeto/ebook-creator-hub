@@ -193,6 +193,7 @@ export type Database = {
           cover_url: string | null
           created_at: string
           description: string | null
+          ebook_file_url: string | null
           external_product_id: string | null
           generation_error: string | null
           generation_input: Json | null
@@ -224,6 +225,7 @@ export type Database = {
           cover_url?: string | null
           created_at?: string
           description?: string | null
+          ebook_file_url?: string | null
           external_product_id?: string | null
           generation_error?: string | null
           generation_input?: Json | null
@@ -255,6 +257,7 @@ export type Database = {
           cover_url?: string | null
           created_at?: string
           description?: string | null
+          ebook_file_url?: string | null
           external_product_id?: string | null
           generation_error?: string | null
           generation_input?: Json | null
