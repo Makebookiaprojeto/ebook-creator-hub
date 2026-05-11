@@ -68,6 +68,7 @@ const Index = () => {
             <SidebarTrigger />
             <div className="flex-1" />
             <div className="ml-auto flex items-center gap-3">
+              <NotificationBell />
               <button
                 onClick={() => setView("profile")}
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/20 bg-muted overflow-hidden gradient-primary text-sm font-semibold text-primary-foreground shadow-glow transition-transform hover:scale-105 active:scale-95"
