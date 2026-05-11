@@ -27,19 +27,19 @@ Deno.serve(async (req) => {
     );
 
     // Localizar order para descobrir conta Stripe Connect do vendedor
-    const { data: order } = await supabase
-      .from("orders")
-      .select("ebook_owner_id, ebook_id")
-      .eq("stripe_session_id", session_id)
+    const { data: purchase } = await supabase
+      .from("purchases")
+      .select("seller_user_id, ebook_id")
+      .eq("platform_session_id", session_id)
       .maybeSingle();
 
     let pdfUrl: string | null = null;
     let ebookTitle: string = "Seu eBook";
-    if (order?.ebook_id) {
+    if (purchase?.ebook_id) {
       const { data: ebook } = await supabase
         .from("ebooks")
         .select("pdf_url, title")
-        .eq("id", order.ebook_id)
+        .eq("id", purchase.ebook_id)
         .maybeSingle();
       pdfUrl = ebook?.pdf_url ?? null;
       ebookTitle = ebook?.title ?? ebookTitle;
@@ -47,16 +47,16 @@ Deno.serve(async (req) => {
 
     const session = await stripe.checkout.sessions.retrieve(session_id);
     const paid = session.payment_status === "paid";
-    const customerEmail = session.customer_details?.email;
+    const buyerEmail = session.customer_details?.email;
 
     await supabase
-      .from("orders")
+      .from("purchases")
       .update({
         status: paid ? "paid" : session.payment_status,
-        buyer_email: customerEmail ?? null,
-        stripe_payment_intent: typeof session.payment_intent === "string" ? session.payment_intent : null,
+        buyer_email: buyerEmail ?? null,
+        platform_payment_intent: typeof session.payment_intent === "string" ? session.payment_intent : null,
       })
-      .eq("stripe_session_id", session_id);
+      .eq("platform_session_id", session_id);
 
     // Disparar e-mail se estiver pago e tivermos as informações necessárias
     if (paid && customerEmail && pdfUrl) {
