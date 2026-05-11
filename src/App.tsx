@@ -14,6 +14,7 @@ import Plans from "./pages/Plans";
 import MyPurchases from "./pages/MyPurchases";
 import NotFound from "./pages/NotFound.tsx";
 import AdminTemplates from "./pages/AdminTemplates";
+import DownloadPage from "./pages/DownloadPage";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route path="/download/:token" element={<DownloadPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
