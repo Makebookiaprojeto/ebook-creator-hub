@@ -65,6 +65,51 @@ export type Database = {
           },
         ]
       }
+      download_access: {
+        Row: {
+          buyer_email: string
+          created_at: string
+          download_count: number | null
+          ebook_id: string
+          expires_at: string | null
+          id: string
+          token: string
+        }
+        Insert: {
+          buyer_email: string
+          created_at?: string
+          download_count?: number | null
+          ebook_id: string
+          expires_at?: string | null
+          id?: string
+          token: string
+        }
+        Update: {
+          buyer_email?: string
+          created_at?: string
+          download_count?: number | null
+          ebook_id?: string
+          expires_at?: string | null
+          id?: string
+          token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "download_access_ebook_id_fkey"
+            columns: ["ebook_id"]
+            isOneToOne: false
+            referencedRelation: "ebooks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "download_access_ebook_id_fkey"
+            columns: ["ebook_id"]
+            isOneToOne: false
+            referencedRelation: "public_ebooks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ebook_templates: {
         Row: {
           audience: string | null
