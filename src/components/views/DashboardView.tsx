@@ -58,12 +58,17 @@ export function DashboardView() {
           .maybeSingle();
         if (profile) setDbDisplayName(profile.display_name);
 
-        // Vendas confirmadas dos eBooks deste autor
-        // purchases tem RLS "Autores podem ver vendas de seus ebooks" → filtra automático
+
+        // 1. Vendas confirmadas
         const { data: sales } = await supabase
           .from("purchases")
           .select("amount_paid_cents, created_at, status")
           .eq("status", "paid");
+
+        // 2. Visualizações
+        const { count: viewsCount } = await supabase
+          .from("ebook_views")
+          .select("*", { count: 'exact', head: true });
 
         if (sales) {
           const totalSales = sales.length;
@@ -74,6 +79,7 @@ export function DashboardView() {
             ...prev,
             totalSales,
             totalRevenue,
+            views: String(viewsCount || 0)
           }));
 
           // Agrupa por mês (últimos 6 meses)
