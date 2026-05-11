@@ -8,7 +8,32 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { niches, testimonials } from "@/lib/mockData";
+const niches = [
+  { name: "Emagrecimento", emoji: "🔥", desc: "Alta demanda, ticket médio R$47" },
+  { name: "Renda extra", emoji: "💰", desc: "Público engajado, conversão alta" },
+  { name: "Marketing digital", emoji: "📈", desc: "Ticket alto, R$97-197" },
+  { name: "Relacionamentos", emoji: "💕", desc: "Mercado emocional forte" },
+  { name: "Desenvolvimento pessoal", emoji: "🧠", desc: "Crescimento constante" },
+  { name: "Finanças", emoji: "💵", desc: "Profissional, ticket alto" },
+  { name: "Saúde mental", emoji: "🧘", desc: "Ansiedade, sono, foco" },
+  { name: "Fitness e musculação", emoji: "💪", desc: "Hipertrofia, treinos" },
+  { name: "Receitas e culinária", emoji: "🍳", desc: "Low carb, fit, doces" },
+  { name: "Maternidade", emoji: "👶", desc: "Gestação, sono do bebê" },
+  { name: "Pets", emoji: "🐶", desc: "Adestramento, cuidados" },
+  { name: "Espiritualidade", emoji: "✨", desc: "Tarô, astrologia, fe" },
+  { name: "Estudos e concursos", emoji: "📚", desc: "ENEM, OAB, vestibular" },
+  { name: "Tecnologia e programação", emoji: "💻", desc: "Dev, IA, no-code" },
+  { name: "Beleza e autocuidado", emoji: "💄", desc: "Skincare, cabelo, makeup" },
+  { name: "Empreendedorismo", emoji: "🚀", desc: "Negócios, gestão, vendas" },
+  { name: "Idiomas", emoji: "🌍", desc: "Inglês, espanhol fluente" },
+  { name: "Viagens", emoji: "✈️", desc: "Roteiros, mochilão, dicas" },
+];
+
+const testimonials = [
+  { name: "Mariana Costa", role: "Mãe e empreendedora", text: "Comprei o ebook e em 2 semanas já tinha resultados visíveis. Mudou minha rotina!", rating: 5, avatar: "M" },
+  { name: "Rafael Lima", role: "Estudante", text: "Conteúdo direto ao ponto, sem enrolação. Vale cada centavo. Recomendo demais!", rating: 5, avatar: "R" },
+  { name: "Juliana Souza", role: "Designer", text: "Achei que seria mais um ebook genérico, mas me surpreendeu. Material excelente!", rating: 5, avatar: "J" },
+];
 import { toast } from "sonner";
 import { useEbooks } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
