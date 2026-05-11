@@ -107,7 +107,6 @@ export function useEbooks() {
   const deleteEbook = async (id: string) => {
     try {
       // Deletar dependências que não estão configuradas com CASCADE
-      await supabase.from("ebook_sales").delete().eq("ebook_id", id);
       await supabase.from("purchases").delete().eq("ebook_id", id);
       
       const { error } = await supabase.from("ebooks").delete().eq("id", id);
@@ -119,7 +118,6 @@ export function useEbooks() {
         // although chapters has CASCADE, it's a good safety measure
         if (error.code === '23503') {
           await supabase.from("chapters").delete().eq("ebook_id", id);
-          await supabase.from("ebook_payment_config" as any).delete().eq("ebook_id", id);
           const { error: retryError } = await supabase.from("ebooks").delete().eq("id", id);
           if (retryError) throw retryError;
         } else {
