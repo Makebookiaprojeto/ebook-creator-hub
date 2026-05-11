@@ -314,7 +314,4 @@ export function ProfileView() {
     </div>
   );
 }
-    </div>
-  );
-}
 
