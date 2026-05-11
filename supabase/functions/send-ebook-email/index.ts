@@ -29,10 +29,19 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    // Enviar e-mail usando a API de e-mail da Lovable
-    // Nota: Como o usuário não tem domínio, usamos o helper de envio simples
-    const { data, error } = await supabase.functions.invoke("resend", {
-      body: {
+    // Enviar e-mail usando a API do Resend diretamente
+    const resendKey = Deno.env.get("RESEND_API_KEY");
+    if (!resendKey) {
+      throw new Error("RESEND_API_KEY não configurado");
+    }
+
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${resendKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         from: "EbookAI <onboarding@resend.dev>",
         to: [customerEmail],
         subject: `Seu eBook chegou: ${ebookTitle}`,
@@ -49,10 +58,12 @@ Deno.serve(async (req) => {
             <p style="font-size: 12px; color: #999; text-align: center;">Enviado por EbookAI</p>
           </div>
         `,
-      },
+      }),
     });
 
-    if (error) throw error;
+    const resData = await response.json();
+    if (!response.ok) throw new Error(JSON.stringify(resData));
+
 
     return new Response(JSON.stringify({ success: true, data }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
