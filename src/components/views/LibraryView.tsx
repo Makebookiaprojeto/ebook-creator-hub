@@ -67,7 +67,25 @@ export function LibraryView({ onCreateNew }: Props) {
     if (!eb.slug) return;
     const url = `${window.location.origin}/e/${eb.slug}`;
     navigator.clipboard.writeText(url);
-    toast.success("Link copiado!");
+    toast.success("Link da página de vendas copiado!");
+  };
+
+  const copyCheckoutLinkWithParams = (eb: Ebook) => {
+    const checkoutUrl = (eb as any).cakto_checkout_url || (eb as any).checkout_url;
+    if (!checkoutUrl) {
+      toast.error("Configure o link de checkout primeiro.");
+      return;
+    }
+    try {
+      const url = new URL(checkoutUrl);
+      url.searchParams.set("ebook_id", eb.id);
+      url.searchParams.set("seller_user_id", eb.user_id);
+      navigator.clipboard.writeText(url.toString());
+      toast.success("Link de checkout com parâmetros copiado!");
+    } catch (e) {
+      navigator.clipboard.writeText(checkoutUrl);
+      toast.success("Link de checkout copiado!");
+    }
   };
 
   const saveCheckoutUrl = async (eb: Ebook) => {
