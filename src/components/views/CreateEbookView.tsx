@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { niches, groupTemplates, testimonials } from "@/lib/mockData";
+import { niches, testimonials } from "@/lib/mockData";
 import { toast } from "sonner";
 import { useEbooks } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
@@ -350,13 +350,13 @@ export function CreateEbookView() {
     }
     
     setTimeout(() => {
-      // Simula uma busca interna para não ser bloqueado pelo popup
+      // Simula uma busca interna
       const results: FbGroup[] = [
         { name: `Grupos de ${topic}`, members: 0, engagement: "Frequente" }
       ];
       setSearchedGroups(results);
       setSearchingGroups(false);
-      toast.success("Busca preparada! Clique no botão abaixo para ver no Facebook.");
+      toast.success("Links de busca gerados!");
     }, 600);
   };
 
