@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
-import { plans } from "@/lib/mockData";
+// import { plans } from "@/lib/mockData";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -310,54 +310,10 @@ export function ProfileView() {
         </div>
       </div>
 
-      {/* Planos section remains below but payment config was removed */}
-
-
-      <div ref={plansRef}>
-        <h2 className="font-display text-2xl font-bold">Escolha seu plano</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Desbloqueie todo o potencial do EbookAI Builder.</p>
-
-        <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-2">
-          {plans.map((plan) => (
-            <div
-              key={plan.id}
-              className={`relative rounded-2xl border-2 p-6 shadow-soft transition hover:shadow-elevated ${
-                plan.highlight ? "border-primary gradient-hero" : "border-border bg-card"
-              }`}
-            >
-              {plan.highlight && (
-                <Badge className="absolute -top-3 left-6 gradient-primary text-primary-foreground border-0">
-                  <Sparkles className="mr-1 h-3 w-3" /> Mais escolhido
-                </Badge>
-              )}
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl gradient-primary text-primary-foreground shadow-glow">
-                <Crown className="h-6 w-6" />
-              </div>
-              <h3 className="mt-4 font-display text-xl font-bold">{plan.name}</h3>
-              <div className="mt-3 flex items-baseline gap-1.5">
-                <span className="font-display text-4xl font-bold">
-                  R$ {plan.price.toFixed(2).replace(".", ",")}
-                </span>
-                <span className="text-sm text-muted-foreground">{plan.period}</span>
-              </div>
-              <ul className="mt-5 space-y-2.5">
-                {plan.features.map((b) => (
-                  <li key={b} className="flex items-center gap-2 text-sm">
-                    <Check className="h-4 w-4 text-success" /> {b}
-                  </li>
-                ))}
-              </ul>
-              <Button
-                onClick={() => handleSubscribe(plan.id)}
-                className={`mt-6 w-full ${plan.highlight ? "gradient-primary text-primary-foreground shadow-glow" : ""}`}
-                variant={plan.highlight ? "default" : "outline"}
-              >
-                Assinar agora
-              </Button>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Seção de planos removida conforme solicitação do usuário para uma experiência mais limpa */}
+    </div>
+  );
+}
     </div>
   );
 }
