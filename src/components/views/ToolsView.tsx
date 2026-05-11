@@ -1,5 +1,5 @@
 import { Sparkles, PenLine, Lightbulb, Search, Image, TrendingUp, ArrowUpRight } from "lucide-react";
-import { tools } from "@/lib/mockData";
+// tools from mockData removed
 import { toast } from "sonner";
 
 const iconMap = { Sparkles, PenLine, Lightbulb, Search, Image, TrendingUp };
@@ -13,7 +13,14 @@ export function ToolsView() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {tools.map((t) => {
+        {[
+          { id: 1, name: "Gerador de Títulos", desc: "Crie títulos magnéticos com IA", icon: "Sparkles", color: "from-violet-500 to-purple-500" },
+          { id: 2, name: "Gerador de Copy", desc: "Textos persuasivos para vendas", icon: "PenLine", color: "from-pink-500 to-rose-500" },
+          { id: 3, name: "Ideias de Nicho", desc: "Descubra nichos lucrativos", icon: "Lightbulb", color: "from-amber-500 to-orange-500" },
+          { id: 4, name: "Analisador de Concorrência", desc: "Estude o mercado em segundos", icon: "Search", color: "from-blue-500 to-cyan-500" },
+          { id: 5, name: "Gerador de Capas", desc: "Capas profissionais com IA", icon: "Image", color: "from-emerald-500 to-teal-500" },
+          { id: 6, name: "Otimizador SEO", desc: "Melhore seu posicionamento", icon: "TrendingUp", color: "from-indigo-500 to-violet-500" },
+        ].map((t) => {
           const Icon = iconMap[t.icon as keyof typeof iconMap];
           return (
             <button

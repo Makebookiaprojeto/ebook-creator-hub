@@ -549,14 +549,25 @@ export type Database = {
           audience: string | null
           author_name: string | null
           cakto_checkout_url: string | null
+          cakto_product_id: string | null
           category: string | null
+          content_json: Json | null
           cover_url: string | null
           created_at: string | null
           description: string | null
+          ebook_file_url: string | null
+          external_product_id: string | null
+          generation_error: string | null
+          generation_input: Json | null
+          generation_progress: Json | null
+          generation_status: string | null
           id: string | null
           is_public: boolean | null
+          is_template: boolean | null
           niche: string | null
           payment_platform: string | null
+          pdf_url: string | null
+          price: number | null
           price_cents: number | null
           sales_pitch: string | null
           slug: string | null
@@ -570,14 +581,25 @@ export type Database = {
           audience?: string | null
           author_name?: string | null
           cakto_checkout_url?: string | null
+          cakto_product_id?: string | null
           category?: string | null
+          content_json?: Json | null
           cover_url?: string | null
           created_at?: string | null
           description?: string | null
+          ebook_file_url?: string | null
+          external_product_id?: string | null
+          generation_error?: string | null
+          generation_input?: Json | null
+          generation_progress?: Json | null
+          generation_status?: string | null
           id?: string | null
           is_public?: boolean | null
+          is_template?: boolean | null
           niche?: string | null
           payment_platform?: string | null
+          pdf_url?: string | null
+          price?: number | null
           price_cents?: number | null
           sales_pitch?: string | null
           slug?: string | null
@@ -591,14 +613,25 @@ export type Database = {
           audience?: string | null
           author_name?: string | null
           cakto_checkout_url?: string | null
+          cakto_product_id?: string | null
           category?: string | null
+          content_json?: Json | null
           cover_url?: string | null
           created_at?: string | null
           description?: string | null
+          ebook_file_url?: string | null
+          external_product_id?: string | null
+          generation_error?: string | null
+          generation_input?: Json | null
+          generation_progress?: Json | null
+          generation_status?: string | null
           id?: string | null
           is_public?: boolean | null
+          is_template?: boolean | null
           niche?: string | null
           payment_platform?: string | null
+          pdf_url?: string | null
+          price?: number | null
           price_cents?: number | null
           sales_pitch?: string | null
           slug?: string | null
@@ -627,13 +660,15 @@ export type Database = {
       }
       get_public_ebook_pdf_url: { Args: { _ebook_id: string }; Returns: string }
       get_user_id_by_email: { Args: { email_param: string }; Returns: string }
-      has_role: {
-        Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
-        Returns: boolean
-      }
+      has_role:
+        | {
+            Args: {
+              _role: Database["public"]["Enums"]["app_role"]
+              _user_id: string
+            }
+            Returns: boolean
+          }
+        | { Args: { _role: string; _user_id: string }; Returns: boolean }
       increment_template_use: {
         Args: { _template_id: string }
         Returns: undefined
