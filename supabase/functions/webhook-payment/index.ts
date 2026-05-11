@@ -197,14 +197,33 @@ Deno.serve(async (req) => {
         console.error("Erro ao registrar compra:", purchaseError);
       }
 
+      // Gerar Token de Download Seguro
+      const downloadToken = crypto.randomUUID();
+      const { error: accessError } = await supabase
+        .from("download_access")
+        .insert({
+          token: downloadToken,
+          ebook_id: ebook.id,
+          buyer_email: email
+        });
+
+      if (accessError) {
+        console.error("Erro ao gerar token de acesso:", accessError);
+      }
+
       // Entrega Automática (E-mail)
       if (ebook.pdf_url) {
         console.info(`Iniciando entrega automática para: ${email}`);
+        
+        // Construir URL de download (usando a própria edge function de download que criaremos)
+        const projectUrl = Deno.env.get("SUPABASE_URL");
+        const downloadUrl = `${projectUrl}/functions/v1/download-ebook?token=${downloadToken}`;
+
         await supabase.functions.invoke("send-ebook-email", {
           body: { 
             customerEmail: email, 
             ebookTitle: ebook.title, 
-            pdfUrl: ebook.pdf_url 
+            pdfUrl: downloadUrl // Substituímos o link direto pelo link seguro
           },
         });
       }
