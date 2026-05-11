@@ -132,19 +132,6 @@ export function AppSidebar({ active, onChange }: Props) {
       <SidebarFooter className="border-t border-sidebar-border">
         {!collapsed && (
           <>
-            <div className="m-2 rounded-xl gradient-hero p-3">
-              <p className="text-xs font-semibold text-foreground">Plano PRO</p>
-              <p className="mt-0.5 text-[11px] text-muted-foreground">Aproveite todo o potencial da IA</p>
-              <button 
-                onClick={() => {
-                  onChange("profile");
-                  setSearchParams({ upgrade: "true" });
-                }}
-                className="mt-2 w-full rounded-lg gradient-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition hover:opacity-90"
-              >
-                Ver Planos
-              </button>
-            </div>
             {user && (() => {
               const display = resolveDisplayName(displayName, user);
 
