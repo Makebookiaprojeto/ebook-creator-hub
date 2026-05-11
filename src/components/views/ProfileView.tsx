@@ -274,9 +274,9 @@ export function ProfileView() {
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="mt-8 space-y-6 max-w-md">
           <div className="space-y-2">
-            <Label htmlFor="display-name" className="flex items-center gap-2 text-xs uppercase text-muted-foreground">
+            <Label htmlFor="display-name" className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               <UserIcon className="h-3.5 w-3.5" /> Nome de Exibição
             </Label>
             <div className="flex gap-2">
@@ -285,26 +285,25 @@ export function ProfileView() {
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
                 placeholder="Seu nome"
-                className="bg-background"
+                className="bg-background h-10"
               />
               <Button 
-                size="sm" 
                 onClick={handleSaveDisplayName}
                 disabled={savingName}
-                className="gradient-primary text-primary-foreground"
+                className="gradient-primary text-primary-foreground px-6"
               >
                 {savingName ? <Loader2 className="h-4 w-4 animate-spin" /> : "Salvar"}
               </Button>
             </div>
           </div>
           <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-xs uppercase text-muted-foreground">
+            <Label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               <Mail className="h-3.5 w-3.5" /> Email
             </Label>
             <Input
               value={email}
               disabled
-              className="bg-muted/50 cursor-not-allowed"
+              className="bg-muted/30 cursor-not-allowed h-10 border-dashed"
             />
           </div>
         </div>
