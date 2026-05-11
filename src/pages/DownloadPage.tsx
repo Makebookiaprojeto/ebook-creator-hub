@@ -33,20 +33,10 @@ const DownloadPage = () => {
           // ou ajustar a function para aceitar corpo POST também.
         });
 
-        // Alternativa: Buscar informações básicas via RPC ou consulta direta (se RLS permitir)
-        // Para segurança máxima, usamos a Edge Function que já criamos.
-        const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/download-ebook?token=${token}`);
-        
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(errorText || "Link inválido ou expirado");
-        }
-
-        // Se for um redirect (302), o fetch pode seguir ou falhar dependendo da config.
-        // Vamos apenas verificar se o token é válido na tabela download_access primeiro para mostrar a UI.
+        // Buscar informações básicas via consulta direta
         const { data: access, error: accessError } = await supabase
           .from("download_access" as any)
-          .select("*, ebooks(title, pdf_url)")
+          .select("*, ebook:ebooks(title, pdf_url)")
           .eq("token", token)
           .single();
 
@@ -54,9 +44,10 @@ const DownloadPage = () => {
           throw new Error("Link de download inválido ou expirado");
         }
 
+        const accessData = access as any;
         setEbook({
-          title: access.ebooks.title,
-          pdf_url: access.ebooks.pdf_url
+          title: accessData.ebook?.title || "E-book",
+          pdf_url: accessData.ebook?.pdf_url || ""
         });
       } catch (err: any) {
         setError(err.message);
