@@ -44,7 +44,7 @@ Deno.serve(async (req) => {
       if (req.headers.get("x-hotmart-hottok")) platform = "hotmart";
       else if (req.headers.get("x-cakto-signature")) platform = "cakto";
       else if (url.searchParams.get("signature")) platform = "kiwify";
-      else if (payload?.object === "event") platform = "stripe"; // Simplified check
+      else if (payload?.object === "event") platform = "stripe";
     }
 
     if (!platform) {
@@ -55,28 +55,35 @@ Deno.serve(async (req) => {
     }
 
     // Extrair dados comuns
-    const data = payload?.data ?? payload;
+    const data = payload?.data?.object || payload?.data || payload;
     
     const email = (
-      data?.customer?.email || data?.customer_email || data?.buyer?.email || data?.buyer_email || 
-      data?.email || payload?.Customer?.email || payload?.email || ""
+      data?.customer_details?.email || data?.customer?.email || data?.customer_email || 
+      data?.buyer?.email || data?.buyer_email || data?.email || 
+      payload?.Customer?.email || payload?.email || ""
     ).toLowerCase().trim();
 
     const productId = String(
+      data?.metadata?.ebook_id || data?.metadata?.product_id ||
       data?.product_id || data?.product?.id || data?.offer_id || data?.offer?.id || 
       payload?.Product?.product_id || payload?.product_id || ""
     ).trim();
 
     const transactionId = String(
-      data?.transaction_id || data?.id || data?.transaction?.id || 
+      data?.id || data?.transaction_id || data?.transaction?.id || 
       payload?.order_id || payload?.id || ""
     ).trim();
 
     const status = String(
-      data?.status || data?.payment_status || data?.event || data?.order_status || ""
+      payload?.type || data?.status || data?.payment_status || data?.event || data?.order_status || ""
     ).toLowerCase();
 
-    const isApproved = APPROVED_STATUSES.has(status) || status.includes("approved") || status.includes("paid");
+    const isApproved = APPROVED_STATUSES.has(status) || 
+                      status.includes("approved") || 
+                      status.includes("paid") || 
+                      status.includes("completed") ||
+                      status === "checkout.session.completed";
+
     const isRefund = REFUND_STATUSES.has(status) || status.includes("refund") || status.includes("canceled");
 
     if (!email || !productId) {
