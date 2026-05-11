@@ -44,6 +44,7 @@ Deno.serve(async (req) => {
       if (req.headers.get("x-hotmart-hottok")) platform = "hotmart";
       else if (req.headers.get("x-cakto-signature")) platform = "cakto";
       else if (url.searchParams.get("signature")) platform = "kiwify";
+      else if (payload?.object === "event") platform = "stripe";
     }
 
     if (!platform) {
@@ -54,28 +55,35 @@ Deno.serve(async (req) => {
     }
 
     // Extrair dados comuns
-    const data = payload?.data ?? payload;
+    const data = payload?.data?.object || payload?.data || payload;
     
     const email = (
-      data?.customer?.email || data?.customer_email || data?.buyer?.email || data?.buyer_email || 
-      data?.email || payload?.Customer?.email || payload?.email || ""
+      data?.customer_details?.email || data?.customer?.email || data?.customer_email || 
+      data?.buyer?.email || data?.buyer_email || data?.email || 
+      payload?.Customer?.email || payload?.email || ""
     ).toLowerCase().trim();
 
     const productId = String(
+      data?.metadata?.ebook_id || data?.metadata?.product_id ||
       data?.product_id || data?.product?.id || data?.offer_id || data?.offer?.id || 
       payload?.Product?.product_id || payload?.product_id || ""
     ).trim();
 
     const transactionId = String(
-      data?.transaction_id || data?.id || data?.transaction?.id || 
+      data?.id || data?.transaction_id || data?.transaction?.id || 
       payload?.order_id || payload?.id || ""
     ).trim();
 
     const status = String(
-      data?.status || data?.payment_status || data?.event || data?.order_status || ""
+      payload?.type || data?.status || data?.payment_status || data?.event || data?.order_status || ""
     ).toLowerCase();
 
-    const isApproved = APPROVED_STATUSES.has(status) || status.includes("approved") || status.includes("paid");
+    const isApproved = APPROVED_STATUSES.has(status) || 
+                      status.includes("approved") || 
+                      status.includes("paid") || 
+                      status.includes("completed") ||
+                      status === "checkout.session.completed";
+
     const isRefund = REFUND_STATUSES.has(status) || status.includes("refund") || status.includes("canceled");
 
     if (!email || !productId) {
@@ -85,7 +93,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Buscar ebook
+    // Buscar ebook pelo ID externo da plataforma
     let ebookQuery = supabase
       .from("ebooks")
       .select("id, user_id, title, pdf_url")
@@ -137,11 +145,9 @@ Deno.serve(async (req) => {
           status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-    } else {
-      console.info(`Webhook ${platform}: Nenhum segredo configurado para ebook ${ebook.id} ou globalmente. Continuando...`);
     }
 
-    // Verificar Idempotência (se a transação já foi processada)
+    // Verificar Idempotência
     const { data: existingPurchase } = await supabase
       .from("purchases")
       .select("id, status")
@@ -155,7 +161,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Buscar usuário pelo email para vincular à conta se existir
+    // Vincular usuário interno se existir
     let userId: string | null = null;
     const { data: userData } = await supabase.rpc('get_user_id_by_email', { email_param: email });
     if (userData) userId = userData;
@@ -191,9 +197,9 @@ Deno.serve(async (req) => {
         console.error("Erro ao registrar compra:", purchaseError);
       }
 
-      // Enviar e-mail de entrega automática
+      // Entrega Automática (E-mail)
       if (ebook.pdf_url) {
-        console.info(`Enviando eBook por e-mail: ${email}`);
+        console.info(`Iniciando entrega automática para: ${email}`);
         await supabase.functions.invoke("send-ebook-email", {
           body: { 
             customerEmail: email, 
@@ -203,8 +209,7 @@ Deno.serve(async (req) => {
         });
       }
 
-      console.info(`Compra aprovada e eBook liberado: ebook=${ebook.id}, email=${email}`);
-      return new Response(JSON.stringify({ ok: true, ebook_id: ebook.id, user_linked: !!userId }), {
+      return new Response(JSON.stringify({ ok: true, message: "Pagamento processado e entrega iniciada" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -214,7 +219,7 @@ Deno.serve(async (req) => {
     });
 
   } catch (e) {
-    console.error("unified-webhook error:", e);
+    console.error("webhook-payment error:", e);
     return new Response(JSON.stringify({ error: (e as Error).message }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

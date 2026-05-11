@@ -61,7 +61,7 @@ export function LibraryView({ onCreateNew }: Props) {
   const [checkoutUrlDrafts, setCheckoutUrlDrafts] = useState<Record<string, string>>({});
 
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const webhookUrl = `${supabaseUrl}/functions/v1/unified-webhook`;
+  const webhookUrl = `${supabaseUrl}/functions/v1/webhook-payment`;
 
   const copyPublicLink = (eb: Ebook) => {
     if (!eb.slug) return;
