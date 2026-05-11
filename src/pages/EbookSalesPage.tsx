@@ -110,43 +110,14 @@ export default function EbookSalesPage() {
   const handleCheckout = async () => {
     if (!ebook) return;
 
-    // 1) Link específico do eBook (via view pública segura)
-    try {
-      const { data: checkoutData } = await (supabase
-        .from("public_ebook_checkout" as any)
-        .select("checkout_url")
-        .eq("ebook_id", ebook.id)
-        .maybeSingle() as any);
-      const specificUrl = (checkoutData as any)?.checkout_url;
-      if (specificUrl) {
-        window.location.href = specificUrl;
-        return;
-      }
-    } catch (err) {
-      console.error("checkout lookup failed", err);
+    const checkoutUrl = (ebook as any).cakto_checkout_url || (ebook as any).checkout_url;
+    
+    if (checkoutUrl) {
+      window.location.href = checkoutUrl;
+      return;
     }
 
-    // 2) Fallback para o Link Global do perfil do autor
-    setCheckoutLoading(true);
-    try {
-      const { data: globalCfg } = await (supabase
-        .from("user_payment_configs" as any)
-        .select("checkout_url")
-        .eq("user_id", ebook.user_id)
-        .maybeSingle() as any);
-
-      if (globalCfg && (globalCfg as any).checkout_url) {
-        window.location.href = (globalCfg as any).checkout_url;
-        return;
-      }
-
-      toast.error("Este eBook ainda não tem link de pagamento configurado.");
-    } catch (err) {
-      console.error(err);
-      toast.error("Erro ao redirecionar para o checkout.");
-    } finally {
-      setCheckoutLoading(false);
-    }
+    toast.error("Este eBook ainda não tem link de pagamento configurado.");
   };
 
   useEffect(() => {

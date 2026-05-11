@@ -65,114 +65,6 @@ export type Database = {
           },
         ]
       }
-      ebook_payment_config: {
-        Row: {
-          checkout_url: string | null
-          created_at: string
-          ebook_id: string
-          id: string
-          owner_id: string
-          payment_platform: string
-          product_id: string | null
-          updated_at: string
-        }
-        Insert: {
-          checkout_url?: string | null
-          created_at?: string
-          ebook_id: string
-          id?: string
-          owner_id: string
-          payment_platform?: string
-          product_id?: string | null
-          updated_at?: string
-        }
-        Update: {
-          checkout_url?: string | null
-          created_at?: string
-          ebook_id?: string
-          id?: string
-          owner_id?: string
-          payment_platform?: string
-          product_id?: string | null
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "ebook_payment_config_ebook_id_fkey"
-            columns: ["ebook_id"]
-            isOneToOne: true
-            referencedRelation: "ebooks"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "ebook_payment_config_ebook_id_fkey"
-            columns: ["ebook_id"]
-            isOneToOne: true
-            referencedRelation: "public_ebooks"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      ebook_sales: {
-        Row: {
-          amount_paid_cents: number | null
-          cakto_transaction_id: string | null
-          created_at: string | null
-          customer_email: string
-          ebook_id: string | null
-          ebook_owner_id: string | null
-          id: string
-          platform: string
-          platform_transaction_id: string | null
-          status: string | null
-          stripe_session_id: string | null
-          updated_at: string
-        }
-        Insert: {
-          amount_paid_cents?: number | null
-          cakto_transaction_id?: string | null
-          created_at?: string | null
-          customer_email: string
-          ebook_id?: string | null
-          ebook_owner_id?: string | null
-          id?: string
-          platform?: string
-          platform_transaction_id?: string | null
-          status?: string | null
-          stripe_session_id?: string | null
-          updated_at?: string
-        }
-        Update: {
-          amount_paid_cents?: number | null
-          cakto_transaction_id?: string | null
-          created_at?: string | null
-          customer_email?: string
-          ebook_id?: string | null
-          ebook_owner_id?: string | null
-          id?: string
-          platform?: string
-          platform_transaction_id?: string | null
-          status?: string | null
-          stripe_session_id?: string | null
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "ebook_sales_ebook_id_fkey"
-            columns: ["ebook_id"]
-            isOneToOne: false
-            referencedRelation: "ebooks"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "ebook_sales_ebook_id_fkey"
-            columns: ["ebook_id"]
-            isOneToOne: false
-            referencedRelation: "public_ebooks"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       ebook_templates: {
         Row: {
           audience: string | null
@@ -341,57 +233,6 @@ export type Database = {
         }
         Relationships: []
       }
-      orders: {
-        Row: {
-          amount_cents: number
-          buyer_email: string | null
-          cakto_transaction_id: string | null
-          created_at: string
-          currency: string
-          ebook_id: string
-          ebook_owner_id: string
-          id: string
-          platform: string
-          platform_transaction_id: string | null
-          status: string
-          stripe_payment_intent: string | null
-          stripe_session_id: string | null
-          updated_at: string
-        }
-        Insert: {
-          amount_cents: number
-          buyer_email?: string | null
-          cakto_transaction_id?: string | null
-          created_at?: string
-          currency?: string
-          ebook_id: string
-          ebook_owner_id: string
-          id?: string
-          platform?: string
-          platform_transaction_id?: string | null
-          status?: string
-          stripe_payment_intent?: string | null
-          stripe_session_id?: string | null
-          updated_at?: string
-        }
-        Update: {
-          amount_cents?: number
-          buyer_email?: string | null
-          cakto_transaction_id?: string | null
-          created_at?: string
-          currency?: string
-          ebook_id?: string
-          ebook_owner_id?: string
-          id?: string
-          platform?: string
-          platform_transaction_id?: string | null
-          status?: string
-          stripe_payment_intent?: string | null
-          stripe_session_id?: string | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -432,6 +273,7 @@ export type Database = {
         Row: {
           amount_paid_cents: number | null
           created_at: string
+          currency: string | null
           customer_email: string
           ebook_id: string
           ebook_owner_id: string | null
@@ -445,6 +287,7 @@ export type Database = {
         Insert: {
           amount_paid_cents?: number | null
           created_at?: string
+          currency?: string | null
           customer_email: string
           ebook_id: string
           ebook_owner_id?: string | null
@@ -458,6 +301,7 @@ export type Database = {
         Update: {
           amount_paid_cents?: number | null
           created_at?: string
+          currency?: string | null
           customer_email?: string
           ebook_id?: string
           ebook_owner_id?: string | null
@@ -577,32 +421,11 @@ export type Database = {
       }
     }
     Views: {
-      public_ebook_checkout: {
-        Row: {
-          checkout_url: string | null
-          ebook_id: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "ebook_payment_config_ebook_id_fkey"
-            columns: ["ebook_id"]
-            isOneToOne: true
-            referencedRelation: "ebooks"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "ebook_payment_config_ebook_id_fkey"
-            columns: ["ebook_id"]
-            isOneToOne: true
-            referencedRelation: "public_ebooks"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       public_ebooks: {
         Row: {
           audience: string | null
           author_name: string | null
+          cakto_checkout_url: string | null
           category: string | null
           cover_url: string | null
           created_at: string | null
@@ -610,6 +433,7 @@ export type Database = {
           id: string | null
           is_public: boolean | null
           niche: string | null
+          payment_platform: string | null
           price_cents: number | null
           sales_pitch: string | null
           slug: string | null
@@ -622,6 +446,7 @@ export type Database = {
         Insert: {
           audience?: string | null
           author_name?: string | null
+          cakto_checkout_url?: string | null
           category?: string | null
           cover_url?: string | null
           created_at?: string | null
@@ -629,6 +454,7 @@ export type Database = {
           id?: string | null
           is_public?: boolean | null
           niche?: string | null
+          payment_platform?: string | null
           price_cents?: number | null
           sales_pitch?: string | null
           slug?: string | null
@@ -641,6 +467,7 @@ export type Database = {
         Update: {
           audience?: string | null
           author_name?: string | null
+          cakto_checkout_url?: string | null
           category?: string | null
           cover_url?: string | null
           created_at?: string | null
@@ -648,6 +475,7 @@ export type Database = {
           id?: string | null
           is_public?: boolean | null
           niche?: string | null
+          payment_platform?: string | null
           price_cents?: number | null
           sales_pitch?: string | null
           slug?: string | null
