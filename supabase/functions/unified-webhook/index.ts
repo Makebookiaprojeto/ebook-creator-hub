@@ -47,36 +47,9 @@ Deno.serve(async (req) => {
     }
 
     if (!platform) {
+      console.warn("Plataforma não identificada no webhook");
       return new Response(JSON.stringify({ error: "Plataforma não identificada" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Validação de Secret Global
-    const providedSecret = 
-      req.headers.get("x-cakto-signature") || 
-      req.headers.get("x-hotmart-hottok") || 
-      url.searchParams.get("signature") || 
-      url.searchParams.get("secret");
-
-    let isValid = false;
-    const globalSecret = Deno.env.get(`${platform.toUpperCase()}_WEBHOOK_SECRET`);
-
-    if (platform === "kiwify") {
-      if (globalSecret) {
-        const expectedSig = await hmacSha1Hex(globalSecret, rawBody);
-        isValid = providedSecret?.toLowerCase() === expectedSig.toLowerCase();
-      }
-    } else {
-      isValid = providedSecret === globalSecret;
-    }
-
-    // Se o secret global não estiver configurado, avisar no log mas permitir (por enquanto, para não quebrar setups existentes sem secrets)
-    // Mas o usuário pediu arquitetura profissional, então deveríamos exigir.
-    if (globalSecret && !isValid) {
-      console.warn(`Webhook ${platform}: Assinatura inválida.`);
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
@@ -106,6 +79,7 @@ Deno.serve(async (req) => {
     const isRefund = REFUND_STATUSES.has(status) || status.includes("refund") || status.includes("canceled");
 
     if (!email || !productId) {
+      console.warn(`Dados incompletos no webhook ${platform}: email=${email}, productId=${productId}`);
       return new Response(JSON.stringify({ error: "Email ou Product ID ausente", email, productId }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -132,7 +106,56 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Buscar usuário pelo email
+    // Validação de Assinatura (Segurança)
+    const providedSecret = 
+      req.headers.get("x-cakto-signature") || 
+      req.headers.get("x-hotmart-hottok") || 
+      url.searchParams.get("signature") || 
+      url.searchParams.get("secret");
+
+    // 1. Tentar segredo específico do ebook
+    const { data: ebookSecret } = await supabase
+      .from("ebook_webhook_secrets")
+      .select("webhook_secret")
+      .eq("ebook_id", ebook.id)
+      .maybeSingle();
+
+    let expectedSecret = ebookSecret?.webhook_secret || Deno.env.get(`${platform.toUpperCase()}_WEBHOOK_SECRET`);
+
+    if (expectedSecret) {
+      let isValid = false;
+      if (platform === "kiwify") {
+        const expectedSig = await hmacSha1Hex(expectedSecret, rawBody);
+        isValid = providedSecret?.toLowerCase() === expectedSig.toLowerCase();
+      } else {
+        isValid = providedSecret === expectedSecret;
+      }
+
+      if (!isValid) {
+        console.warn(`Webhook ${platform}: Assinatura inválida para ebook ${ebook.id}.`);
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    } else {
+      console.info(`Webhook ${platform}: Nenhum segredo configurado para ebook ${ebook.id} ou globalmente. Continuando...`);
+    }
+
+    // Verificar Idempotência (se a transação já foi processada)
+    const { data: existingPurchase } = await supabase
+      .from("purchases")
+      .select("id, status")
+      .eq("platform", platform)
+      .eq("platform_transaction_id", transactionId)
+      .maybeSingle();
+
+    if (existingPurchase && existingPurchase.status === "paid" && !isRefund) {
+      return new Response(JSON.stringify({ ok: true, message: "Transação já processada" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Buscar usuário pelo email para vincular à conta se existir
     let userId: string | null = null;
     const { data: userData } = await supabase.rpc('get_user_id_by_email', { email_param: email });
     if (userData) userId = userData;
@@ -144,6 +167,7 @@ Deno.serve(async (req) => {
         .eq("ebook_id", ebook.id)
         .eq("customer_email", email);
       
+      console.info(`Reembolso processado: ebook=${ebook.id}, email=${email}`);
       return new Response(JSON.stringify({ ok: true, action: "refunded" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -158,15 +182,18 @@ Deno.serve(async (req) => {
         customer_email: email,
         platform: platform,
         platform_transaction_id: transactionId,
-        status: "paid"
+        status: "paid",
+        amount_paid_cents: data?.amount_paid_cents || data?.amount_cents || data?.total_price_cents || 0,
+        currency: data?.currency || "BRL"
       }, { onConflict: 'ebook_id,customer_email' });
 
       if (purchaseError) {
         console.error("Erro ao registrar compra:", purchaseError);
       }
 
-      // Enviar e-mail
+      // Enviar e-mail de entrega automática
       if (ebook.pdf_url) {
+        console.info(`Enviando eBook por e-mail: ${email}`);
         await supabase.functions.invoke("send-ebook-email", {
           body: { 
             customerEmail: email, 
@@ -176,6 +203,7 @@ Deno.serve(async (req) => {
         });
       }
 
+      console.info(`Compra aprovada e eBook liberado: ebook=${ebook.id}, email=${email}`);
       return new Response(JSON.stringify({ ok: true, ebook_id: ebook.id, user_linked: !!userId }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
