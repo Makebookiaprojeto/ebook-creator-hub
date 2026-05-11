@@ -110,10 +110,18 @@ export default function EbookSalesPage() {
   const handleCheckout = async () => {
     if (!ebook) return;
 
-    const checkoutUrl = (ebook as any).cakto_checkout_url || (ebook as any).checkout_url;
+    let checkoutUrl = (ebook as any).cakto_checkout_url || (ebook as any).checkout_url;
     
     if (checkoutUrl) {
-      window.location.href = checkoutUrl;
+      try {
+        const url = new URL(checkoutUrl);
+        url.searchParams.set("ebook_id", ebook.id);
+        url.searchParams.set("seller_user_id", ebook.user_id);
+        window.location.href = url.toString();
+      } catch (e) {
+        // Fallback para o link original se a URL for inválida
+        window.location.href = checkoutUrl;
+      }
       return;
     }
 
