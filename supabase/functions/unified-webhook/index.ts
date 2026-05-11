@@ -165,7 +165,7 @@ Deno.serve(async (req) => {
         .from("purchases")
         .update({ status: "refunded" })
         .eq("ebook_id", ebook.id)
-        .eq("customer_email", email);
+        .eq("buyer_email", email);
       
       console.info(`Reembolso processado: ebook=${ebook.id}, email=${email}`);
       return new Response(JSON.stringify({ ok: true, action: "refunded" }), {
@@ -178,14 +178,14 @@ Deno.serve(async (req) => {
       const { error: purchaseError } = await supabase.from("purchases").upsert({
         ebook_id: ebook.id,
         user_id: userId,
-        ebook_owner_id: ebook.user_id,
-        customer_email: email,
+        seller_user_id: ebook.user_id,
+        buyer_email: email,
         platform: platform,
         platform_transaction_id: transactionId,
         status: "paid",
         amount_paid_cents: data?.amount_paid_cents || data?.amount_cents || data?.total_price_cents || 0,
         currency: data?.currency || "BRL"
-      }, { onConflict: 'ebook_id,customer_email' });
+      }, { onConflict: 'ebook_id,buyer_email' });
 
       if (purchaseError) {
         console.error("Erro ao registrar compra:", purchaseError);
