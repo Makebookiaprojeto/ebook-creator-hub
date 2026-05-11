@@ -112,12 +112,22 @@ export function DashboardView() {
 
     fetchDashboardData();
 
-    // Realtime: atualiza quando uma nova venda chegar
+    // Realtime: atualiza quando uma nova venda, visualização ou ebook chegar
     const channel = supabase
-      .channel(`dashboard-sales-${authUser.id}`)
+      .channel(`dashboard-updates-${authUser.id}`)
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "purchases" },
+        () => fetchDashboardData(),
+      )
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "ebook_views" },
+        () => fetchDashboardData(),
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "ebooks", filter: `user_id=eq.${authUser.id}` },
         () => fetchDashboardData(),
       )
       .subscribe();
