@@ -278,6 +278,8 @@ export type Database = {
           ebook_id: string
           id: string
           platform: string | null
+          platform_payment_intent: string | null
+          platform_session_id: string | null
           platform_transaction_id: string | null
           seller_user_id: string | null
           status: string
@@ -292,6 +294,8 @@ export type Database = {
           ebook_id: string
           id?: string
           platform?: string | null
+          platform_payment_intent?: string | null
+          platform_session_id?: string | null
           platform_transaction_id?: string | null
           seller_user_id?: string | null
           status?: string
@@ -306,6 +310,8 @@ export type Database = {
           ebook_id?: string
           id?: string
           platform?: string | null
+          platform_payment_intent?: string | null
+          platform_session_id?: string | null
           platform_transaction_id?: string | null
           seller_user_id?: string | null
           status?: string
