@@ -215,15 +215,16 @@ Deno.serve(async (req) => {
       if (ebook.pdf_url) {
         console.info(`Iniciando entrega automática para: ${email}`);
         
-        // Construir URL de download (usando a própria edge function de download que criaremos)
-        const projectUrl = Deno.env.get("SUPABASE_URL");
-        const downloadUrl = `${projectUrl}/functions/v1/download-ebook?token=${downloadToken}`;
+        // Construir URL de download (formato /download/TOKEN solicitado pelo usuário)
+        // Usamos a URL base do site (front-end) se disponível, ou fallback para a function
+        const siteUrl = Deno.env.get("SITE_URL") || "https://sua-plataforma.com";
+        const downloadUrl = `${siteUrl}/download/${downloadToken}`;
 
         await supabase.functions.invoke("send-ebook-email", {
           body: { 
             customerEmail: email, 
             ebookTitle: ebook.title, 
-            pdfUrl: downloadUrl // Substituímos o link direto pelo link seguro
+            pdfUrl: downloadUrl 
           },
         });
       }
