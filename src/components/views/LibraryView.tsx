@@ -504,6 +504,17 @@ export function LibraryView({ onCreateNew }: Props) {
                             <Check className="h-3.5 w-3.5" />
                           )}
                         </Button>
+                        {(eb as any).cakto_checkout_url && (
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            className="h-8 px-2"
+                            onClick={() => copyCheckoutLinkWithParams(eb)}
+                            title="Copiar link com parâmetros"
+                          >
+                            <Link2 className="h-3.5 w-3.5" />
+                          </Button>
+                        )}
                       </div>
                     </div>
 
