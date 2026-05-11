@@ -158,6 +158,45 @@ export type Database = {
         }
         Relationships: []
       }
+      ebook_views: {
+        Row: {
+          created_at: string | null
+          ebook_id: string
+          id: string
+          user_agent: string | null
+          viewer_ip: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          ebook_id: string
+          id?: string
+          user_agent?: string | null
+          viewer_ip?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          ebook_id?: string
+          id?: string
+          user_agent?: string | null
+          viewer_ip?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ebook_views_ebook_id_fkey"
+            columns: ["ebook_id"]
+            isOneToOne: false
+            referencedRelation: "ebooks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ebook_views_ebook_id_fkey"
+            columns: ["ebook_id"]
+            isOneToOne: false
+            referencedRelation: "public_ebooks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ebook_webhook_secrets: {
         Row: {
           created_at: string

@@ -194,6 +194,16 @@ export default function EbookSalesPage() {
       }
 
       setLoading(false);
+      
+      // Register view
+      if (ebookData && slug !== "preview") {
+        supabase
+          .from("ebook_views")
+          .insert({ ebook_id: ebookData.id })
+          .then(({ error }) => {
+            if (error) console.error("Error registering view:", error);
+          });
+      }
     })();
     return () => {
       active = false;
