@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { Sparkles, Loader2, Eye, EyeOff } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
 
-const HCAPTCHA_SITE_KEY = "594c5b80-3cf8-4ab4-aa78-11189a50f094";
+const HCAPTCHA_SITE_KEY = "c4e86844-69b6-4ff8-b60c-99e65db41426";
 
 const emailSchema = z.string().trim().email("Email inválido").max(255);
 const passwordSchema = z.string().min(6, "Senha deve ter no mínimo 6 caracteres").max(72);
