@@ -357,6 +357,7 @@ export type Database = {
           display_name: string | null
           ebooks_generated_this_month: number | null
           id: string
+          is_lifetime: boolean | null
           last_ebook_reset_at: string | null
           monthly_ebook_limit: number | null
           updated_at: string
@@ -368,6 +369,7 @@ export type Database = {
           display_name?: string | null
           ebooks_generated_this_month?: number | null
           id?: string
+          is_lifetime?: boolean | null
           last_ebook_reset_at?: string | null
           monthly_ebook_limit?: number | null
           updated_at?: string
@@ -379,6 +381,7 @@ export type Database = {
           display_name?: string | null
           ebooks_generated_this_month?: number | null
           id?: string
+          is_lifetime?: boolean | null
           last_ebook_reset_at?: string | null
           monthly_ebook_limit?: number | null
           updated_at?: string
@@ -674,6 +677,10 @@ export type Database = {
         Returns: undefined
       }
       is_admin: { Args: never; Returns: boolean }
+      set_lifetime_by_email: {
+        Args: { target_email: string }
+        Returns: undefined
+      }
       slugify: { Args: { input: string }; Returns: string }
     }
     Enums: {
