@@ -225,59 +225,6 @@ export function DashboardView() {
         </div>
       </div>
 
-      <div className="rounded-2xl border bg-card shadow-soft">
-        <div className="flex items-center justify-between border-b p-6">
-          <div>
-            <h2 className="font-display text-lg font-semibold">Últimos ebooks criados</h2>
-            <p className="text-sm text-muted-foreground">Gerencie seus produtos digitais</p>
-          </div>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-muted/30">
-              <tr className="text-left text-xs font-medium uppercase text-muted-foreground">
-                <th className="px-6 py-3">Título</th>
-                <th className="px-6 py-3">Categoria</th>
-                <th className="px-6 py-3">Criado em</th>
-                <th className="px-6 py-3">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y">
-              {loadingEbooks && (
-                <tr>
-                  <td colSpan={4} className="px-6 py-10 text-center text-muted-foreground">
-                    <Loader2 className="mx-auto h-5 w-5 animate-spin" />
-                  </td>
-                </tr>
-              )}
-              {!loadingEbooks && ebooks.length === 0 && (
-                <tr>
-                  <td colSpan={4} className="px-6 py-10 text-center text-sm text-muted-foreground">
-                    Nenhum ebook ainda. Crie seu primeiro na aba "Criar ebook".
-                  </td>
-                </tr>
-              )}
-              {!loadingEbooks && ebooks.map((e) => (
-                <tr key={e.id} className="text-sm transition hover:bg-muted/30">
-                  <td className="px-6 py-4 font-medium">{e.title}</td>
-                  <td className="px-6 py-4 text-muted-foreground">{e.category ?? "—"}</td>
-                  <td className="px-6 py-4 text-muted-foreground">
-                    {new Date(e.created_at).toLocaleDateString("pt-BR")}
-                  </td>
-                  <td className="px-6 py-4">
-                    <Badge
-                      variant={e.status === "published" ? "default" : "secondary"}
-                      className={e.status === "published" ? "bg-success hover:bg-success" : ""}
-                    >
-                      {statusLabel[e.status] ?? e.status}
-                    </Badge>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
   );
 }
