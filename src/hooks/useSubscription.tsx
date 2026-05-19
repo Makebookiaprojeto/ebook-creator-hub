@@ -32,7 +32,13 @@ export function useSubscription(): SubscriptionStatus {
       try {
         console.log("Checking subscription for:", user.email);
         
-        // 1. Verificar Admin
+        // 1. Verificar Admin ou Lifetime no Perfil
+        const { data: profileData, error: profileError } = await supabase
+          .from("profiles")
+          .select("is_lifetime")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
         const { data: isAdminData } = await supabase.rpc("has_role", {
           _user_id: user.id,
           _role: "admin",
@@ -40,14 +46,13 @@ export function useSubscription(): SubscriptionStatus {
         
         if (cancelled) return;
         
-        if (isAdminData === true) {
-          console.log("User is admin");
+        if (isAdminData === true || profileData?.is_lifetime === true) {
+          console.log("User has lifetime access (admin or lifetime flag)");
           setState({ loading: false, isActive: true, planType: "lifetime", expiresAt: null });
           return;
         }
 
         // 2. Buscar assinatura
-        // Nota: A política de RLS permite ver se (uid = user_id) OU (email = buyer_email)
         const { data, error } = await supabase
           .from("subscriptions")
           .select("plan_type, status, expires_at")
