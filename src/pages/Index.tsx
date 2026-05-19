@@ -24,6 +24,9 @@ const Index = () => {
   useEffect(() => {
     if (!user) return;
     const fetchProfile = async () => {
+      // 1. Garantir que o perfil existe (fallback)
+      await supabase.rpc('ensure_profile_exists', { p_user_id: user.id });
+
       const { data } = await supabase
         .from("profiles")
         .select("avatar_url, display_name")

@@ -2,26 +2,12 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-cakto-signature, x-hotmart-hottok, x-webhook-secret",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-cakto-signature",
 };
 
 const APPROVED_STATUSES = new Set([
-  "paid", "approved", "completed", "success", "succeeded", "purchase_approved", "payment_approved", "order_approved", "PURCHASE_APPROVED", "PURCHASE_COMPLETE"
+  "paid", "approved", "completed", "success", "succeeded"
 ]);
-
-const REFUND_STATUSES = new Set([
-  "refunded", "chargeback", "canceled", "cancelled", "refund", "purchase_refunded", "purchase_canceled", "purchase_chargeback", "PURCHASE_REFUNDED", "PURCHASE_CHARGEBACK"
-]);
-
-async function hmacSha1Hex(secret: string, body: string): Promise<string> {
-  const enc = new TextEncoder();
-  const key = await crypto.subtle.importKey(
-    "raw", enc.encode(secret),
-    { name: "HMAC", hash: "SHA-1" }, false, ["sign"],
-  );
-  const sig = await crypto.subtle.sign("HMAC", key, enc.encode(body));
-  return Array.from(new Uint8Array(sig)).map((b) => b.toString(16).padStart(2, "0")).join("");
-}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -32,216 +18,73 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    const url = new URL(req.url);
-    const platformParam = url.searchParams.get("platform");
     const rawBody = await req.text();
     let payload: any = {};
     try { payload = JSON.parse(rawBody); } catch { /* ignore */ }
 
-    // Determinar plataforma
-    let platform = platformParam;
-    if (!platform) {
-      if (req.headers.get("x-hotmart-hottok")) platform = "hotmart";
-      else if (req.headers.get("x-cakto-signature")) platform = "cakto";
-      else if (url.searchParams.get("signature")) platform = "kiwify";
-      else if (payload?.object === "event") platform = "stripe";
-    }
+    // Cakto uses x-cakto-signature or just sends the payload
+    const signature = req.headers.get("x-cakto-signature");
+    const expectedSecret = Deno.env.get("CAKTO_WEBHOOK_SECRET");
 
-    if (!platform) {
-      console.warn("Plataforma não identificada no webhook");
-      return new Response(JSON.stringify({ error: "Plataforma não identificada" }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    if (expectedSecret && signature && signature !== expectedSecret) {
+      console.warn("Cakto Webhook: Assinatura inválida");
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { 
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } 
       });
     }
 
-    // Extrair dados comuns
-    const data = payload?.data?.object || payload?.data || payload;
-    
-    const email = (
-      data?.customer_details?.email || data?.customer?.email || data?.customer_email || 
-      data?.buyer?.email || data?.buyer_email || data?.email || 
-      payload?.Customer?.email || payload?.email || ""
-    ).toLowerCase().trim();
+    // Common extraction for Cakto
+    const data = payload?.data || payload;
+    const email = (data?.customer?.email || data?.email || "").toLowerCase().trim();
+    const status = (data?.status || "").toLowerCase();
+    const planType = (data?.metadata?.plan_type || "monthly").toLowerCase(); // monthly or lifetime
+    const transactionId = String(data?.id || data?.transaction_id || "");
 
-    const productId = String(
-      data?.metadata?.ebook_id || data?.metadata?.product_id ||
-      data?.product_id || data?.product?.id || data?.offer_id || data?.offer?.id || 
-      payload?.Product?.product_id || payload?.product_id || ""
-    ).trim();
-
-    const transactionId = String(
-      data?.id || data?.transaction_id || data?.transaction?.id || 
-      payload?.order_id || payload?.id || ""
-    ).trim();
-
-    const status = String(
-      payload?.type || data?.status || data?.payment_status || data?.event || data?.order_status || ""
-    ).toLowerCase();
-
-    const isApproved = APPROVED_STATUSES.has(status) || 
-                      status.includes("approved") || 
-                      status.includes("paid") || 
-                      status.includes("completed") ||
-                      status === "checkout.session.completed";
-
-    const isRefund = REFUND_STATUSES.has(status) || status.includes("refund") || status.includes("canceled");
-
-    if (!email || !productId) {
-      console.warn(`Dados incompletos no webhook ${platform}: email=${email}, productId=${productId}`);
-      return new Response(JSON.stringify({ error: "Email ou Product ID ausente", email, productId }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    if (!email) {
+      return new Response(JSON.stringify({ error: "Email ausente" }), { 
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } 
       });
     }
 
-    // Buscar ebook pelo ID externo da plataforma
-    let ebookQuery = supabase
-      .from("ebooks")
-      .select("id, user_id, title, pdf_url")
-      .eq("payment_platform", platform);
+    // Find User
+    const { data: userList } = await supabase.auth.admin.listUsers();
+    const user = userList.users.find(u => u.email?.toLowerCase() === email);
 
-    if (platform === "cakto") {
-      ebookQuery = ebookQuery.or(`cakto_product_id.eq."${productId}",external_product_id.eq."${productId}"`);
-    } else {
-      ebookQuery = ebookQuery.eq("external_product_id", productId);
-    }
+    if (APPROVED_STATUSES.has(status)) {
+      if (user) {
+        // 1. Update Profile if Lifetime
+        if (planType === "lifetime") {
+          await supabase.from("profiles").update({ is_lifetime: true }).eq("user_id", user.id);
+        }
 
-    const { data: ebook, error: ebookError } = await ebookQuery.maybeSingle();
-
-    if (ebookError || !ebook) {
-      console.warn(`Ebook não encontrado para product_id ${productId} na plataforma ${platform}`);
-      return new Response(JSON.stringify({ error: "Ebook não encontrado" }), {
-        status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Validação de Assinatura (Segurança)
-    const providedSecret = 
-      req.headers.get("x-cakto-signature") || 
-      req.headers.get("x-hotmart-hottok") || 
-      url.searchParams.get("signature") || 
-      url.searchParams.get("secret");
-
-    // 1. Tentar segredo específico do ebook
-    const { data: ebookSecret } = await supabase
-      .from("ebook_webhook_secrets")
-      .select("webhook_secret")
-      .eq("ebook_id", ebook.id)
-      .maybeSingle();
-
-    let expectedSecret = ebookSecret?.webhook_secret || Deno.env.get(`${platform.toUpperCase()}_WEBHOOK_SECRET`);
-
-    if (expectedSecret) {
-      let isValid = false;
-      if (platform === "kiwify") {
-        const expectedSig = await hmacSha1Hex(expectedSecret, rawBody);
-        isValid = providedSecret?.toLowerCase() === expectedSig.toLowerCase();
-      } else {
-        isValid = providedSecret === expectedSecret;
-      }
-
-      if (!isValid) {
-        console.warn(`Webhook ${platform}: Assinatura inválida para ebook ${ebook.id}.`);
-        return new Response(JSON.stringify({ error: "Unauthorized" }), {
-          status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-    }
-
-    // Verificar Idempotência
-    const { data: existingPurchase } = await supabase
-      .from("purchases")
-      .select("id, status")
-      .eq("platform", platform)
-      .eq("platform_transaction_id", transactionId)
-      .maybeSingle();
-
-    if (existingPurchase && existingPurchase.status === "paid" && !isRefund) {
-      return new Response(JSON.stringify({ ok: true, message: "Transação já processada" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Vincular usuário interno se existir
-    let userId: string | null = null;
-    const { data: userData } = await supabase.rpc('get_user_id_by_email', { email_param: email });
-    if (userData) userId = userData;
-
-    if (isRefund) {
-      await supabase
-        .from("purchases")
-        .update({ status: "refunded" })
-        .eq("ebook_id", ebook.id)
-        .eq("buyer_email", email);
-      
-      console.info(`Reembolso processado: ebook=${ebook.id}, email=${email}`);
-      return new Response(JSON.stringify({ ok: true, action: "refunded" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    if (isApproved) {
-      // Registrar compra
-      const { error: purchaseError } = await supabase.from("purchases").upsert({
-        ebook_id: ebook.id,
-        user_id: userId,
-        seller_user_id: ebook.user_id,
-        buyer_email: email,
-        platform: platform,
-        platform_transaction_id: transactionId,
-        status: "paid",
-        amount_paid_cents: data?.amount_paid_cents || data?.amount_cents || data?.total_price_cents || 0,
-        currency: data?.currency || "BRL"
-      }, { onConflict: 'ebook_id,buyer_email' });
-
-      if (purchaseError) {
-        console.error("Erro ao registrar compra:", purchaseError);
-      }
-
-      // Gerar Token de Download Seguro
-      const downloadToken = crypto.randomUUID();
-      const { error: accessError } = await supabase
-        .from("download_access")
-        .insert({
-          token: downloadToken,
-          ebook_id: ebook.id,
-          buyer_email: email
-        });
-
-      if (accessError) {
-        console.error("Erro ao gerar token de acesso:", accessError);
-      }
-
-      // Entrega Automática (E-mail)
-      if (ebook.pdf_url) {
-        console.info(`Iniciando entrega automática para: ${email}`);
+        // 2. Insert/Update Subscription
+        const expiresAt = planType === "lifetime" ? null : new Date(Date.now() + 31 * 24 * 60 * 60 * 1000).toISOString();
         
-        // Construir URL de download (formato /download/TOKEN solicitado pelo usuário)
-        // Usamos a URL base do site (front-end) se disponível, ou fallback para a function
-        const siteUrl = Deno.env.get("SITE_URL") || "https://sua-plataforma.com";
-        const downloadUrl = `${siteUrl}/download/${downloadToken}`;
+        await supabase.from("subscriptions").upsert({
+          user_id: user.id,
+          buyer_email: email,
+          plan_type: planType,
+          status: "active",
+          cakto_transaction_id: transactionId,
+          expires_at: expiresAt
+        }, { onConflict: 'user_id' });
 
-        await supabase.functions.invoke("send-ebook-email", {
-          body: { 
-            customerEmail: email, 
-            ebookTitle: ebook.title, 
-            pdfUrl: downloadUrl 
-          },
-        });
+        console.info(`Assinatura ativada para ${email} (${planType})`);
+      } else {
+        console.warn(`Usuário não encontrado para o email ${email}. Acesso será ativado no primeiro login.`);
+        // Optional: Store in a 'pending_activations' table if needed, 
+        // but here we already have 'set_lifetime_by_email' or similar logic
       }
-
-      return new Response(JSON.stringify({ ok: true, message: "Pagamento processado e entrega iniciada" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
     }
 
-    return new Response(JSON.stringify({ ignored: true, status }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    return new Response(JSON.stringify({ ok: true }), { 
+      headers: { ...corsHeaders, "Content-Type": "application/json" } 
     });
 
   } catch (e) {
-    console.error("webhook-payment error:", e);
-    return new Response(JSON.stringify({ error: (e as Error).message }), {
-      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    console.error("Cakto Webhook Error:", e);
+    return new Response(JSON.stringify({ error: (e as Error).message }), { 
+      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } 
     });
   }
 });
