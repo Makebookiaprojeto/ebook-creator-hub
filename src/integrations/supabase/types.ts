@@ -646,9 +646,31 @@ export type Database = {
         }
         Relationships: []
       }
+      user_access_status: {
+        Row: {
+          current_plan: string | null
+          has_active_access: boolean | null
+          user_id: string | null
+        }
+        Insert: {
+          current_plan?: never
+          has_active_access?: never
+          user_id?: string | null
+        }
+        Update: {
+          current_plan?: never
+          has_active_access?: never
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       check_email_exists: { Args: { email_to_check: string }; Returns: boolean }
+      ensure_profile_exists: {
+        Args: { p_display_name?: string; p_user_id: string }
+        Returns: undefined
+      }
       find_active_template_by_niche: {
         Args: { _niche: string }
         Returns: {
