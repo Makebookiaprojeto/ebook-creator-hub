@@ -388,11 +388,11 @@ export function CreateEbookView() {
   const promoTemplates = (topic: string, link: string) => [
     {
       title: "🔥 Gancho de Curiosidade (Alto Engajamento)",
-      content: `Gente, eu tô sem acreditar no que acabei de descobrir sobre ${topic || "[ASSUNTO]"}. 😱\n\nSempre achei que era impossível ter resultados rápidos nessa área, mas esse material que encontrei mudou tudo. Não é curso, é um passo a passo prático que vai direto ao ponto.\n\nLiberei o acesso aqui pra quem também quer virar o jogo: ${link}\n\nAproveitem enquanto o link ainda tá ativo! 🚀`,
+      content: `Gente, eu tô sem acreditar no que acabei de descobrir sobre ${topic || "[ASSUNTO]"}. 😱\n\nSempre achei que era impossível ter resultados rápidos nessa área, mas esse material que encontrei mudou tudo. Não é curso, é um passo a passo prático que vai direto ao ponto.\n\nLiberei o acesso aqui pra quem também quer virar o jogo: ${link}\n\nAproveite agora! 🚀`,
     },
     {
       title: "✨ Autoridade e Prova Social",
-      content: `Você também sente que está estagnado em ${topic || "[ASSUNTO]"}? 😰\n\nDepois de testar de tudo, finalmente encontrei o método que as grandes autoridades usam (e não contam pra ninguém). Esse ebook é praticamente um mapa do tesouro pra quem busca resultados reais e profissionais.\n\nConfira os detalhes aqui 👉 ${link}\n\nPS: A garantia de 7 dias me deu a segurança que eu precisava pra começar. Vale cada centavo!`,
+      content: `Você também sente que está estagnado em ${topic || "[ASSUNTO]"}? 😰\n\nDepois de testar de tudo, finalmente encontrei o método que as grandes autoridades usam (e não contam pra ninguém). Esse ebook é praticamente um mapa do tesouro pra quem busca resultados reais e profissionais.\n\nConfira os detalhes aqui 👉 ${link}\n\nPS: A garantia de satisfação me deu a segurança que eu precisava pra começar. Vale cada centavo!`,
     },
     {
       title: "💡 Educativo e Resolutivo (Ideal para Grupos)",
@@ -400,7 +400,7 @@ export function CreateEbookView() {
     },
     {
       title: "🎯 Oferta Irresistível (Escassez)",
-      content: `ALERTA DE OPORTUNIDADE! ⚡\n\nConsegui um link exclusivo com desconto para o melhor ebook de ${topic || "[ASSUNTO]"} do mercado. O conteúdo é denso, prático e focado em gerar lucro/resultado rápido.\n\nNão sei por quanto tempo esse valor promocional vai durar, então corre lá: ${link}\n\nQuem chegar primeiro leva os bônus exclusivos! 🏃💨`,
+      content: `ALERTA DE OPORTUNIDADE! ⚡\n\nConsegui um link exclusivo com desconto para o melhor ebook de ${topic || "[ASSUNTO]"} do mercado. O conteúdo é denso, prático e focado em gerar lucro/resultado rápido.\n\nConfira os detalhes no link abaixo:\n\n${link}\n\nQuem chegar primeiro leva os bônus exclusivos! 🏃💨`,
     },
   ];
 
@@ -720,8 +720,8 @@ export function CreateEbookView() {
 
                 <div className="mt-6 overflow-hidden rounded-2xl border">
                   {/* Top urgency bar */}
-                  <div className="bg-destructive text-destructive-foreground py-2 px-4 text-center text-xs font-bold flex items-center justify-center gap-2">
-                    <Flame className="h-3.5 w-3.5" /> OFERTA RELÂMPAGO • 50% OFF • RESTAM POUCAS UNIDADES
+                  <div className="bg-primary/10 text-primary py-2 px-4 text-center text-xs font-bold flex items-center justify-center gap-2">
+                    <Zap className="h-3.5 w-3.5" /> APROVEITE O DESCONTO EXCLUSIVO
                   </div>
 
                   {/* Hero — high-conversion red/orange palette */}
@@ -785,9 +785,7 @@ export function CreateEbookView() {
                         🛒 QUERO COMPRAR AGORA
                       </Button>
                       <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1"><ShieldCheck className="h-3.5 w-3.5 text-success" /> Garantia 7 dias</span>
-                        <span className="flex items-center gap-1"><Zap className="h-3.5 w-3.5 text-warning" /> Acesso imediato</span>
-                        <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5 text-destructive" /> Oferta termina em 24h</span>
+                        <span className="flex items-center gap-1"><ShieldCheck className="h-3.5 w-3.5 text-success" /> Garantia de satisfação</span>
                       </div>
                     </div>
                   </div>
@@ -857,7 +855,7 @@ export function CreateEbookView() {
                     >
                       🔥 GARANTIR MINHA VAGA POR R$ {price.toFixed(2).replace(".", ",")}
                     </Button>
-                    <p className="mt-3 text-[11px] text-muted-foreground">🔒 Compra 100% segura • Garantia incondicional de 7 dias</p>
+                    <p className="mt-3 text-[11px] text-muted-foreground">🔒 Compra segura</p>
                   </div>
                 </div>
 
