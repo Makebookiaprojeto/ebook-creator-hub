@@ -1,19 +1,15 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { z } from "zod";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Sparkles, Loader2, Eye, EyeOff } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
-
-const HCAPTCHA_SITE_KEY = "c4e86844-69b6-4ff8-b60c-99e65db41426";
 
 const emailSchema = z.string().trim().email("Email inválido").max(255);
 const passwordSchema = z.string().min(6, "Senha deve ter no mínimo 6 caracteres").max(72);
@@ -31,13 +27,6 @@ const Auth = () => {
   const [resetMode, setResetMode] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [isValidatingEmail, setIsValidatingEmail] = useState(false);
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const captchaRef = useRef<HCaptcha>(null);
-
-  const resetCaptcha = () => {
-    setCaptchaToken(null);
-    captchaRef.current?.resetCaptcha();
-  };
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
@@ -45,7 +34,6 @@ const Auth = () => {
 
   useEffect(() => {
     if (!authLoading && user) {
-      // Pequeno delay para garantir que o redirecionamento ocorra após o estado carregar
       const timer = setTimeout(() => {
         navigate("/app", { replace: true });
       }, 50);
@@ -53,7 +41,6 @@ const Auth = () => {
     }
   }, [user, authLoading, navigate]);
 
-  // Validação em tempo real para e-mail duplicado
   useEffect(() => {
     const timer = setTimeout(async () => {
       if (tab === "signup" && email.trim() !== "" && emailSchema.safeParse(email).success) {
@@ -94,11 +81,6 @@ const Auth = () => {
         return;
       }
 
-      if (!captchaToken) {
-        toast.error("Por favor, complete a verificação de segurança.");
-        return;
-      }
-
       const emailParsed = emailSchema.safeParse(email);
       if (!emailParsed.success) {
         toast.error(emailParsed.error.issues[0].message);
@@ -106,21 +88,9 @@ const Auth = () => {
       }
 
       if (resetMode) {
-        // Verify captcha via edge function
-        const { data: verifyData, error: verifyError } = await supabase.functions.invoke("verify-captcha", {
-          body: { token: captchaToken }
-        });
-
-        if (verifyError || !verifyData?.success) {
-          toast.error("Erro na verificação do Captcha. Tente novamente.");
-          resetCaptcha();
-          return;
-        }
-
         const { error } = await supabase.auth.resetPasswordForEmail(emailParsed.data, {
           redirectTo: `${window.location.origin}/reset-password`,
         });
-        resetCaptcha();
         if (error) throw error;
         toast.success("Enviamos um link de recuperação para seu email.");
         setResetMode(false);
@@ -140,17 +110,6 @@ const Auth = () => {
           return;
         }
 
-        // Verify captcha via edge function
-        const { data: verifyData, error: verifyError } = await supabase.functions.invoke("verify-captcha", {
-          body: { token: captchaToken }
-        });
-
-        if (verifyError || !verifyData?.success) {
-          toast.error("Erro na verificação do Captcha. Tente novamente.");
-          resetCaptcha();
-          return;
-        }
-
         const { error } = await supabase.auth.signUp({
           email: emailParsed.data,
           password: passParsed.data,
@@ -159,7 +118,6 @@ const Auth = () => {
             data: { username: usernameParsed.data },
           },
         });
-        resetCaptcha();
 
         if (error) {
           const msg = error.message?.toLowerCase() ?? "";
@@ -183,22 +141,10 @@ const Auth = () => {
 
         toast.success("Cadastro solicitado! Verifique sua caixa de entrada para confirmar o e-mail.");
       } else {
-        // Verify captcha via edge function
-        const { data: verifyData, error: verifyError } = await supabase.functions.invoke("verify-captcha", {
-          body: { token: captchaToken }
-        });
-
-        if (verifyError || !verifyData?.success) {
-          toast.error("Erro na verificação do Captcha. Tente novamente.");
-          resetCaptcha();
-          return;
-        }
-
         const { error } = await supabase.auth.signInWithPassword({
           email: emailParsed.data,
           password: passParsed.data,
         });
-        resetCaptcha();
 
         if (error) {
           if (error.message.includes("Invalid login")) {
@@ -215,22 +161,8 @@ const Auth = () => {
         navigate("/app", { replace: true });
       }
     } catch (err: any) {
-      resetCaptcha();
       toast.error(err.message ?? "Ocorreu um erro inesperado.");
     } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleGoogleLogin = async () => {
-    setSubmitting(true);
-    try {
-      const { error } = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: `${window.location.origin}/app`,
-      });
-      if (error) throw error;
-    } catch (err: any) {
-      toast.error(err.message ?? "Erro ao entrar com Google");
       setSubmitting(false);
     }
   };
@@ -265,17 +197,7 @@ const Auth = () => {
                     className="mt-1.5"
                   />
                 </div>
-                <div className="flex justify-center">
-                  <HCaptcha
-                    ref={captchaRef}
-                    sitekey={HCAPTCHA_SITE_KEY}
-                    theme="dark"
-                    onVerify={(token) => setCaptchaToken(token)}
-                    onExpire={() => setCaptchaToken(null)}
-                    onError={() => setCaptchaToken(null)}
-                  />
-                </div>
-                <Button type="submit" disabled={submitting || !captchaToken} className="w-full">
+                <Button type="submit" disabled={submitting} className="w-full">
                   {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Enviar link
                 </Button>
@@ -373,25 +295,14 @@ const Auth = () => {
                   )}
                 </div>
 
-                <div className="flex justify-center">
-                  <HCaptcha
-                    ref={captchaRef}
-                    sitekey={HCAPTCHA_SITE_KEY}
-                    theme="dark"
-                    onVerify={(token) => setCaptchaToken(token)}
-                    onExpire={() => setCaptchaToken(null)}
-                    onError={() => setCaptchaToken(null)}
-                  />
-                </div>
-
                 <TabsContent value="login" className="m-0">
-                  <Button type="submit" disabled={submitting || !captchaToken} className="w-full">
+                  <Button type="submit" disabled={submitting} className="w-full">
                     {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Entrar
                   </Button>
                 </TabsContent>
                 <TabsContent value="signup" className="m-0">
-                  <Button type="submit" disabled={submitting || !!emailError || !captchaToken} className="w-full">
+                  <Button type="submit" disabled={submitting || !!emailError} className="w-full">
                     {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Criar minha conta
                   </Button>
@@ -400,32 +311,6 @@ const Auth = () => {
                   </p>
                 </TabsContent>
               </form>
-
-              <div className="relative my-6">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">Ou continue com</span>
-                </div>
-              </div>
-
-              <Button
-                variant="outline"
-                type="button"
-                className="w-full"
-                onClick={handleGoogleLogin}
-                disabled={submitting}
-              >
-                {submitting ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
-                    <path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"></path>
-                  </svg>
-                )}
-                Google
-              </Button>
             </Tabs>
           )}
         </div>

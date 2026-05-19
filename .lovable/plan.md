@@ -1,12 +1,35 @@
-1. Clean up redundant database tables by merging 'orders' and 'ebook_sales' into the 'purchases' table.
-2. Remove deprecated tables: 'orders', 'ebook_sales', 'public_ebook_checkout', and 'ebook_payment_config'.
-3. Refactor the 'unified-webhook' Edge Function to be more robust, idempotent, and support per-ebook webhook secrets.
-4. Update the frontend (LibraryView and Hooks) to standardize on the 'purchases' table for tracking sales.
-5. Ensure all payment configuration (Checkout URL, Product ID) is stored directly in the 'ebooks' table.
-6. Verify and fix RLS policies for the 'purchases' table to ensure owners can see their sales and buyers can see their purchases.
+Removerei completamente a funcionalidade de Login com Google e hCaptcha do projeto.
 
-Technical Details:
-- Migration script will handle data transfer from 'orders' to 'purchases'.
-- 'purchases' table will be the single source of truth for all external payment platforms (Cakto, Hotmart, Kiwify).
-- Webhook will check 'ebook_webhook_secrets' table for custom secrets before falling back to environment variables.
-- All frontend calls to old tables will be replaced with 'purchases'.
+### Análise de Dependências (O que será removido)
+*   **Componentes de UI:** Botão "Google" e componente `HCaptcha` em `src/pages/Auth.tsx`.
+*   **Lógica de Frontend:** Imports de `HCaptcha`, estados `captchaToken`, referências `captchaRef`, chamadas para `verify-captcha` e `handleGoogleLogin` no arquivo `src/pages/Auth.tsx`.
+*   **Integrações:** Método `signInWithOAuth` em `src/integrations/lovable/index.ts` (embora auto-gerado, vou remover a referência no Auth).
+*   **Dependências de Pacotes:** ` @hcaptcha/react-hcaptcha` do `package.json`.
+*   **Backend:** Edge Function `verify-captcha`.
+
+### Passos da Implementação
+
+1.  **Frontend (Auth.tsx):**
+    *   Remover import de `@hcaptcha/react-hcaptcha`.
+    *   Remover constante `HCAPTCHA_SITE_KEY`.
+    *   Remover estados e refs: `captchaToken`, `captchaRef`, `resetCaptcha`.
+    *   Remover validação de captcha no `handleSubmit` (removendo os blocos que chamam `verify-captcha`).
+    *   Remover função `handleGoogleLogin`.
+    *   Remover renderização do componente `HCaptcha`.
+    *   Remover separador "Ou continue com" e o botão do Google.
+
+2.  **Dependências:**
+    *   Remover `@hcaptcha/react-hcaptcha` do `package.json`.
+
+3.  **Backend:**
+    *   Remover diretório `supabase/functions/verify-captcha`.
+
+4.  **Limpeza:**
+    *   Sugerir a remoção das variáveis de ambiente `VITE_HCAPTCHA_SITE_KEY` e `HCAPTCHA_SECRET_KEY` (se existir no Supabase).
+
+### Validação
+*   Verificarei se o build continua funcionando.
+*   Confirmarei que o login por e-mail/senha permanece intacto.
+*   Confirmarei que não há erros de console relacionados a variáveis ausentes.
+
+**Impactos Possíveis:** A segurança contra bots no cadastro e login será reduzida sem o hCaptcha, mas a funcionalidade de autenticação por e-mail continuará operando normalmente.
