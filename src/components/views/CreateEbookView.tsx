@@ -388,11 +388,11 @@ export function CreateEbookView() {
   const promoTemplates = (topic: string, link: string) => [
     {
       title: "🔥 Gancho de Curiosidade (Alto Engajamento)",
-      content: `Gente, eu tô sem acreditar no que acabei de descobrir sobre ${topic || "[ASSUNTO]"}. 😱\n\nSempre achei que era impossível ter resultados rápidos nessa área, mas esse material que encontrei mudou tudo. Não é curso, é um passo a passo prático que vai direto ao ponto.\n\nLiberei o acesso aqui pra quem também quer virar o jogo: ${link}\n\nAproveitem enquanto o link ainda tá ativo! 🚀`,
+      content: `Gente, eu tô sem acreditar no que acabei de descobrir sobre ${topic || "[ASSUNTO]"}. 😱\n\nSempre achei que era impossível ter resultados rápidos nessa área, mas esse material que encontrei mudou tudo. Não é curso, é um passo a passo prático que vai direto ao ponto.\n\nLiberei o acesso aqui pra quem também quer virar o jogo: ${link}\n\nAproveite agora! 🚀`,
     },
     {
       title: "✨ Autoridade e Prova Social",
-      content: `Você também sente que está estagnado em ${topic || "[ASSUNTO]"}? 😰\n\nDepois de testar de tudo, finalmente encontrei o método que as grandes autoridades usam (e não contam pra ninguém). Esse ebook é praticamente um mapa do tesouro pra quem busca resultados reais e profissionais.\n\nConfira os detalhes aqui 👉 ${link}\n\nPS: A garantia de 7 dias me deu a segurança que eu precisava pra começar. Vale cada centavo!`,
+      content: `Você também sente que está estagnado em ${topic || "[ASSUNTO]"}? 😰\n\nDepois de testar de tudo, finalmente encontrei o método que as grandes autoridades usam (e não contam pra ninguém). Esse ebook é praticamente um mapa do tesouro pra quem busca resultados reais e profissionais.\n\nConfira os detalhes aqui 👉 ${link}\n\nPS: A garantia de satisfação me deu a segurança que eu precisava pra começar. Vale cada centavo!`,
     },
     {
       title: "💡 Educativo e Resolutivo (Ideal para Grupos)",
@@ -400,7 +400,7 @@ export function CreateEbookView() {
     },
     {
       title: "🎯 Oferta Irresistível (Escassez)",
-      content: `ALERTA DE OPORTUNIDADE! ⚡\n\nConsegui um link exclusivo com desconto para o melhor ebook de ${topic || "[ASSUNTO]"} do mercado. O conteúdo é denso, prático e focado em gerar lucro/resultado rápido.\n\nNão sei por quanto tempo esse valor promocional vai durar, então corre lá: ${link}\n\nQuem chegar primeiro leva os bônus exclusivos! 🏃💨`,
+      content: `ALERTA DE OPORTUNIDADE! ⚡\n\nConsegui um link exclusivo com desconto para o melhor ebook de ${topic || "[ASSUNTO]"} do mercado. O conteúdo é denso, prático e focado em gerar lucro/resultado rápido.\n\nConfira os detalhes no link abaixo:\n\n${link}\n\nQuem chegar primeiro leva os bônus exclusivos! 🏃💨`,
     },
   ];
 
