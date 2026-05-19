@@ -720,8 +720,8 @@ export function CreateEbookView() {
 
                 <div className="mt-6 overflow-hidden rounded-2xl border">
                   {/* Top urgency bar */}
-                  <div className="bg-destructive text-destructive-foreground py-2 px-4 text-center text-xs font-bold flex items-center justify-center gap-2">
-                    <Flame className="h-3.5 w-3.5" /> OFERTA RELÂMPAGO • 50% OFF • RESTAM POUCAS UNIDADES
+                  <div className="bg-primary/10 text-primary py-2 px-4 text-center text-xs font-bold flex items-center justify-center gap-2">
+                    <Zap className="h-3.5 w-3.5" /> APROVEITE O DESCONTO EXCLUSIVO
                   </div>
 
                   {/* Hero — high-conversion red/orange palette */}
@@ -785,9 +785,7 @@ export function CreateEbookView() {
                         🛒 QUERO COMPRAR AGORA
                       </Button>
                       <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1"><ShieldCheck className="h-3.5 w-3.5 text-success" /> Garantia 7 dias</span>
-                        <span className="flex items-center gap-1"><Zap className="h-3.5 w-3.5 text-warning" /> Acesso imediato</span>
-                        <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5 text-destructive" /> Oferta termina em 24h</span>
+                        <span className="flex items-center gap-1"><ShieldCheck className="h-3.5 w-3.5 text-success" /> Garantia de satisfação</span>
                       </div>
                     </div>
                   </div>
@@ -857,7 +855,7 @@ export function CreateEbookView() {
                     >
                       🔥 GARANTIR MINHA VAGA POR R$ {price.toFixed(2).replace(".", ",")}
                     </Button>
-                    <p className="mt-3 text-[11px] text-muted-foreground">🔒 Compra 100% segura • Garantia incondicional de 7 dias</p>
+                    <p className="mt-3 text-[11px] text-muted-foreground">🔒 Compra segura</p>
                   </div>
                 </div>
 
