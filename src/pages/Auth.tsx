@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -17,6 +17,7 @@ const usernameSchema = z.string().trim().min(2, "Nome deve ter no mínimo 2 cara
 
 const Auth = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, loading: authLoading } = useAuth();
   const [tab, setTab] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
@@ -27,6 +28,14 @@ const Auth = () => {
   const [resetMode, setResetMode] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [isValidatingEmail, setIsValidatingEmail] = useState(false);
+
+  useEffect(() => {
+    if (location.state?.message) {
+      toast.info(location.state.message);
+      // Limpa o estado para não repetir o toast
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
