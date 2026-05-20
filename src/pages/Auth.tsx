@@ -30,6 +30,14 @@ const Auth = () => {
   const [isValidatingEmail, setIsValidatingEmail] = useState(false);
 
   useEffect(() => {
+    if (location.state?.message) {
+      toast.info(location.state.message);
+      // Limpa o estado para não repetir o toast
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
     document.documentElement.classList.add("dark");
   }, []);
 
