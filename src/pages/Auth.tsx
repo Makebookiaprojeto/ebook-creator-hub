@@ -17,6 +17,7 @@ const usernameSchema = z.string().trim().min(2, "Nome deve ter no mínimo 2 cara
 
 const Auth = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, loading: authLoading } = useAuth();
   const [tab, setTab] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
