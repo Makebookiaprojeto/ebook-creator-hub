@@ -46,11 +46,24 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Find User
-    const { data: userList } = await supabase.auth.admin.listUsers();
-    const user = userList.users.find(u => u.email?.toLowerCase() === email);
+    // 1. Find User by Email (handling pagination if many users)
+    let user = null;
+    let page = 1;
+    while (true) {
+      const { data: { users }, error: listError } = await supabase.auth.admin.listUsers({
+        page: page,
+        perPage: 1000
+      });
+      if (listError || !users || users.length === 0) break;
+      user = users.find(u => u.email?.toLowerCase() === email);
+      if (user) break;
+      page++;
+      if (page > 10) break; // Safety limit
+    }
 
     if (APPROVED_STATUSES.has(status)) {
+      const expiresAt = planType === "lifetime" ? null : new Date(Date.now() + 31 * 24 * 60 * 60 * 1000).toISOString();
+      
       if (user) {
         // 1. Update Profile if Lifetime
         if (planType === "lifetime") {
@@ -58,8 +71,7 @@ Deno.serve(async (req) => {
         }
 
         // 2. Insert/Update Subscription
-        const expiresAt = planType === "lifetime" ? null : new Date(Date.now() + 31 * 24 * 60 * 60 * 1000).toISOString();
-        
+        // The unique constraint on user_id ensures upsert works
         await supabase.from("subscriptions").upsert({
           user_id: user.id,
           buyer_email: email,
@@ -69,11 +81,36 @@ Deno.serve(async (req) => {
           expires_at: expiresAt
         }, { onConflict: 'user_id' });
 
-        console.info(`Assinatura ativada para ${email} (${planType})`);
+        console.info(`Assinatura ativada para usuário existente: ${email} (${planType})`);
       } else {
-        console.warn(`Usuário não encontrado para o email ${email}. Acesso será ativado no primeiro login.`);
-        // Optional: Store in a 'pending_activations' table if needed, 
-        // but here we already have 'set_lifetime_by_email' or similar logic
+        // 3. User doesn't exist yet, save as pending subscription
+        // The trigger on profiles creation will link this later
+        const { data: existingPending } = await supabase
+          .from("subscriptions")
+          .select("id")
+          .eq("buyer_email", email)
+          .is("user_id", null)
+          .maybeSingle();
+
+        if (existingPending) {
+          await supabase.from("subscriptions").update({
+            plan_type: planType,
+            status: "active",
+            cakto_transaction_id: transactionId,
+            expires_at: expiresAt,
+            updated_at: new Date().toISOString()
+          }).eq("id", existingPending.id);
+          console.info(`Assinatura pendente atualizada para: ${email} (${planType})`);
+        } else {
+          await supabase.from("subscriptions").insert({
+            buyer_email: email,
+            plan_type: planType,
+            status: "active",
+            cakto_transaction_id: transactionId,
+            expires_at: expiresAt
+          });
+          console.info(`Assinatura pendente criada para: ${email} (${planType})`);
+        }
       }
     }
 
