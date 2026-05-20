@@ -59,12 +59,13 @@ Deno.serve(async (req) => {
       .eq("platform_session_id", session_id);
 
     // Disparar e-mail se estiver pago e tivermos as informações necessárias
-    if (paid && customerEmail && pdfUrl) {
-      console.log(`Disparando e-mail para ${customerEmail} do eBook ${ebookTitle}`);
+    if (paid && buyerEmail && pdfUrl) {
+      console.log(`Disparando e-mail para ${buyerEmail} do eBook ${ebookTitle}`);
       try {
         await supabase.functions.invoke("send-ebook-email", {
           body: { 
-            customerEmail, 
+            customerEmail: buyerEmail, 
+
             ebookTitle, 
             pdfUrl 
           },
