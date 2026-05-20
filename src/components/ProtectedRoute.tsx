@@ -25,7 +25,7 @@ export function ProtectedRoute({ children, allowWithoutSubscription = false }: P
   if (!user) return <Navigate to="/auth" replace />;
 
   // Verifica se o e-mail está confirmado (Requisito de segurança do fluxo de autenticação)
-  const isEmailConfirmed = !!user.email_confirmed_at || user.app_metadata?.provider === 'google';
+  const isEmailConfirmed = !!user.email_confirmed_at;
   if (!isEmailConfirmed && !allowWithoutSubscription) {
     return <Navigate to="/auth" replace state={{ message: "Por favor, confirme seu e-mail para acessar o sistema." }} />;
   }
