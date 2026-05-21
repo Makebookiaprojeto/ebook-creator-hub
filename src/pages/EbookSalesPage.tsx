@@ -76,7 +76,7 @@ export default function EbookSalesPage() {
   const countdown = useCountdown(deadline);
 
   useEffect(() => {
-    document.documentElement.classList.add("dark");
+    document.documentElement.classList.remove("dark");
   }, []);
 
   useEffect(() => {
@@ -323,15 +323,10 @@ export default function EbookSalesPage() {
       )}
 
       {/* URGENCY BAR */}
-      <div className="bg-gradient-to-r from-red-600 via-orange-500 to-red-600 text-white">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-4 gap-y-1 px-4 py-2 text-xs font-bold uppercase tracking-wider sm:text-sm">
-          <Flame className="h-4 w-4 animate-pulse" />
-          <span>Oferta relâmpago — {discountPct}% OFF acaba em</span>
-          <span className="flex items-center gap-1 font-mono">
-            <span className="rounded bg-black/30 px-1.5 py-0.5">{countdown.h}h</span>
-            <span className="rounded bg-black/30 px-1.5 py-0.5">{countdown.m}m</span>
-            <span className="rounded bg-black/30 px-1.5 py-0.5">{countdown.s}s</span>
-          </span>
+      <div className="bg-primary text-primary-foreground border-b border-primary/20">
+        <div className="mx-auto flex max-w-6xl items-center justify-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-wider sm:text-sm">
+          <Sparkles className="h-4 w-4" />
+          <span>Oferta Especial Ativa — {discountPct}% de desconto aplicado</span>
         </div>
       </div>
 
@@ -357,8 +352,8 @@ export default function EbookSalesPage() {
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div className="space-y-6 animate-fade-in">
             <div className="flex flex-wrap items-center gap-2">
-              <Badge className="bg-red-500/15 text-red-400 border-red-500/30 rounded-full px-3 py-1 text-xs font-bold uppercase">
-                🔥 Mais vendido
+              <Badge className="bg-primary/15 text-primary border-primary/30 rounded-full px-3 py-1 text-xs font-bold uppercase">
+                Recomendado
               </Badge>
               {ebook.category && (
                 <Badge variant="secondary" className="rounded-full px-3 py-1 text-xs uppercase tracking-wider">
@@ -412,15 +407,15 @@ export default function EbookSalesPage() {
             </div>
 
             {/* PRICE BOX */}
-            <div className="rounded-2xl border-2 border-primary/40 bg-card/80 p-5 backdrop-blur shadow-glow">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-red-400">
-                <Flame className="h-3.5 w-3.5" />
-                Promoção válida por 24h
+            <div className="rounded-2xl border-2 border-primary/20 bg-card/50 p-6 backdrop-blur shadow-sm">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary">
+                <Sparkles className="h-3.5 w-3.5" />
+                Valor promocional por tempo limitado
               </div>
               <div className="mt-2 flex items-end gap-3">
                 <span className="text-base text-muted-foreground line-through">{fromPrice}</span>
                 <span className="font-display text-4xl font-extrabold text-primary sm:text-5xl">{price}</span>
-                <span className="mb-1.5 rounded-md bg-red-500 px-2 py-0.5 text-xs font-bold text-white">
+                <span className="mb-1.5 rounded-md bg-primary px-2 py-0.5 text-xs font-bold text-primary-foreground">
                   -{discountPct}%
                 </span>
               </div>
@@ -450,7 +445,7 @@ export default function EbookSalesPage() {
           {/* Cover mockup */}
           <div className="relative mx-auto w-full max-w-md">
             <div className="absolute -inset-8 rounded-[2rem] bg-gradient-to-tr from-primary/40 via-accent/20 to-transparent blur-3xl" />
-            <div className="absolute -top-2 -right-2 z-10 rotate-12 rounded-full bg-red-500 px-4 py-2 text-sm font-extrabold text-white shadow-xl ring-4 ring-red-500/30">
+            <div className="absolute -top-2 -right-2 z-10 rotate-12 rounded-full bg-primary px-4 py-2 text-sm font-extrabold text-primary-foreground shadow-lg ring-4 ring-primary/20">
               -{discountPct}%
             </div>
             <div className="relative aspect-[2/3] rotate-[-3deg] transform-gpu rounded-2xl shadow-2xl ring-1 ring-border/40 transition hover:rotate-0">
@@ -478,7 +473,7 @@ export default function EbookSalesPage() {
           <div className="flex items-center gap-2"><Users className="h-4 w-4 text-primary" /> <strong>+2.847</strong> alunos</div>
           <div className="flex items-center gap-2"><Star className="h-4 w-4 fill-amber-400 text-amber-400" /> <strong>4.9/5</strong> avaliação média</div>
           <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-green-500" /> Garantia 7 dias</div>
-          <div className="flex items-center gap-2"><Clock className="h-4 w-4 text-orange-400" /> Acesso vitalício</div>
+          <div className="flex items-center gap-2"><Clock className="h-4 w-4 text-primary" /> Acesso vitalício</div>
         </div>
       </section>
 
@@ -518,7 +513,7 @@ export default function EbookSalesPage() {
       <section className="border-y border-border/40 bg-card/30 py-20">
         <div className="mx-auto max-w-6xl px-6">
           <div className="text-center">
-            <Badge className="mb-3 bg-amber-500/15 text-amber-400 border-amber-500/30">Depoimentos reais</Badge>
+            <Badge className="mb-3 bg-primary/15 text-primary border-primary/30">Depoimentos reais</Badge>
             <h2 className="font-display text-3xl font-bold sm:text-4xl">
               Quem leu, recomenda
             </h2>
@@ -653,32 +648,18 @@ export default function EbookSalesPage() {
 
       {/* CTA FINAL */}
       <section id="comprar" className="px-6 pb-24">
-        <div className="relative mx-auto max-w-4xl overflow-hidden rounded-3xl border-2 border-primary/40 bg-gradient-to-br from-primary/20 via-card to-accent/20 p-10 text-center shadow-glow sm:p-16">
-          <div className="absolute -top-24 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-primary/40 blur-3xl" />
+        <div className="relative mx-auto max-w-4xl overflow-hidden rounded-3xl border-2 border-primary/10 bg-gradient-to-br from-primary/5 via-card to-accent/5 p-10 text-center shadow-sm sm:p-16">
+          <div className="absolute -top-24 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
           <div className="relative">
-            <Badge className="bg-red-500 text-white border-0 font-bold uppercase">
-              <Flame className="mr-1 h-3 w-3" /> Última chamada
+            <Badge className="bg-primary text-primary-foreground border-0 font-bold uppercase">
+              <Sparkles className="mr-1 h-3 w-3" /> Oferta Especial
             </Badge>
             <h2 className="mt-4 font-display text-3xl font-extrabold sm:text-5xl">
-              Não deixe essa oferta passar
+              Aproveite esta oportunidade
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-              Quando o contador zerar, o preço volta de <strong>{fromPrice}</strong>. Garanta agora e economize {discountPct}%.
+              Garanta agora o seu exemplar com <strong>{discountPct}% de desconto</strong> e comece hoje mesmo.
             </p>
-
-            {/* Countdown big */}
-            <div className="mt-8 flex justify-center gap-3">
-              {[
-                { v: countdown.h, l: "Horas" },
-                { v: countdown.m, l: "Min" },
-                { v: countdown.s, l: "Seg" },
-              ].map((c, i) => (
-                <div key={i} className="rounded-xl border-2 border-primary/40 bg-background/60 px-4 py-3 backdrop-blur min-w-[72px]">
-                  <div className="font-mono text-3xl font-extrabold text-primary sm:text-4xl">{c.v}</div>
-                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{c.l}</div>
-                </div>
-              ))}
-            </div>
 
             <div className="mt-8 flex flex-col items-center gap-1">
               <span className="text-base text-muted-foreground line-through">{fromPrice}</span>
