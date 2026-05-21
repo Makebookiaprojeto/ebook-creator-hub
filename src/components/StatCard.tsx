@@ -20,7 +20,7 @@ export function StatCard({ label, value, delta, icon: Icon, tint = "from-violet-
           <Icon className="h-5 w-5" />
         </div>
       </div>
-      {delta && (
+      {false && delta && (
         <div className="mt-4 flex items-center gap-1.5 text-xs font-medium text-success">
           <TrendingUp className="h-3.5 w-3.5" />
           <span>{delta}</span>
