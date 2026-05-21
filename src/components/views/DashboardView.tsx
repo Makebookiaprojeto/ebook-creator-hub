@@ -32,6 +32,7 @@ export function DashboardView() {
   });
   const [salesHistory, setSalesHistory] = useState<any[]>([]);
   const [loadingStats, setLoadingStats] = useState(true);
+  const [paymentStats, setPaymentStats] = useState<any[]>([]);
 
   const quotes = [
     "Sua criatividade é a única fronteira para o seu sucesso.",
@@ -109,6 +110,40 @@ export function DashboardView() {
           });
 
           setSalesHistory(last6Months);
+
+          // Calculate payment methods stats
+          const methods = [
+            "Pix",
+            "Cartão de crédito",
+            "Boleto",
+            "Pix automático",
+            "PicPay",
+            "Google Pay",
+            "Apple Pay"
+          ];
+
+          const calculatedPaymentStats = methods.map(method => {
+            // No banco de dados, o campo de método de pagamento pode variar. 
+            // Como as vendas reais ainda não possuem essa distinção clara em alguns casos,
+            // inicializamos zerado conforme pedido, mas preparados para filtrar se existir o campo.
+            const methodSales = sales.filter(s => (s as any).payment_method === method);
+            const totalMethodRevenue = methodSales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
+            
+            // Taxa de conversão baseada em total de vendas (exemplo simples para visualização)
+            const conversionRate = sales.length > 0 ? (methodSales.length / sales.length) * 100 : 0;
+
+            return {
+              name: method,
+              conversion: `${conversionRate.toFixed(0)}%`,
+              value: `R$ ${totalMethodRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
+            };
+          });
+
+          setPaymentStats(calculatedPaymentStats);
+        } else {
+          // If no sales, set all to zero
+          const methods = ["Pix", "Cartão de crédito", "Boleto", "Pix automático", "PicPay", "Google Pay", "Apple Pay"];
+          setPaymentStats(methods.map(m => ({ name: m, conversion: "0%", value: "R$ 0,00" })));
         }
       } catch (error) {
         console.error("Error fetching dashboard stats:", error);
@@ -182,23 +217,10 @@ export function DashboardView() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {[
-                { name: "Pix", conversion: "12%", value: "R$ 2.450,00", icon: "https://cdn.brandfetch.io/pix.com.br/fallback/transparent/theme/dark/h/512/w/512/icon?c=1bfwsm9uY7-Tz55tM5C" },
-                { name: "Cartão de crédito", conversion: "8%", value: "R$ 840,00", icon: "https://img.icons8.com/color/96/visa.png" },
-                { name: "Boleto", conversion: "5%", value: "R$ 420,00", icon: "https://img.icons8.com/color/96/barcode.png" },
-                { name: "Pix automático", conversion: "15%", value: "R$ 3.120,00", icon: "https://cdn.brandfetch.io/pix.com.br/fallback/transparent/theme/dark/h/512/w/512/icon?c=1bfwsm9uY7-Tz55tM5C" },
-                { name: "PicPay", conversion: "3%", value: "R$ 150,00", icon: "https://img.icons8.com/color/96/picpay.png" },
-                { name: "Google Pay", conversion: "4%", value: "R$ 210,00", icon: "https://img.icons8.com/color/96/google-pay.png" },
-                { name: "Apple Pay", conversion: "4%", value: "R$ 190,00", icon: "https://img.icons8.com/color/96/apple-pay.png" }
-              ].map((method) => (
+              {paymentStats.map((method) => (
                 <TableRow key={method.name} className="hover:bg-muted/30">
                   <TableCell className="font-medium">
-                    <div className="flex items-center gap-3">
-                      <div className="h-8 w-8 flex items-center justify-center rounded-lg border bg-background p-1.5 shadow-sm">
-                        <img src={method.icon} alt={method.name} className="h-full w-full object-contain grayscale opacity-80" />
-                      </div>
-                      <span className="text-sm">{method.name}</span>
-                    </div>
+                    <span className="text-sm">{method.name}</span>
                   </TableCell>
                   <TableCell>
                     <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
