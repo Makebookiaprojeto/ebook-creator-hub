@@ -268,7 +268,7 @@ export function DashboardView() {
             <CreditCard className="h-5 w-5 text-primary" />
             Meios de pagamento
           </h2>
-          <p className="text-sm text-muted-foreground mt-1">Estatísticas de conversão e faturamento por método</p>
+          
         </div>
         
         <div className="overflow-hidden rounded-xl border">
