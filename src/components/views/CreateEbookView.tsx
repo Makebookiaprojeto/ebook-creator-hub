@@ -214,6 +214,7 @@ export function CreateEbookView() {
         setGenerated(true);
         setGenerating(false);
         setGenerationStage("");
+        setShowFullPreview(true);
 
         // Marcar ebook como publicado automaticamente ao terminar de gerar
         try {
@@ -347,6 +348,7 @@ export function CreateEbookView() {
       setGenerated(true);
       setGenerating(false);
       setGenerationStage("");
+      setShowFullPreview(true);
       toast.success("Ebook pronto!");
     } catch (e: any) {
       console.error(e);
@@ -619,30 +621,7 @@ export function CreateEbookView() {
 
                 {generated && (
                   <div className="mt-6 space-y-6">
-
-                    {/* Quick stats + actions */}
-                    <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-gradient-to-br from-accent/40 to-transparent p-4">
-                      <div className="flex items-center gap-3">
-                        {coverUrl ? (
-                          <img src={coverUrl} alt="capa" className="h-16 w-12 rounded-md object-cover shadow-md" />
-                        ) : (
-                          <div className="h-16 w-12 rounded-md bg-muted animate-pulse" />
-                        )}
-                        <div>
-                          <p className="font-display text-sm font-bold leading-tight line-clamp-2">{title}</p>
-                          <p className="text-xs text-muted-foreground">{chapters.length} capítulos</p>
-                        </div>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        <Button size="sm" variant="outline" onClick={() => setShowFullPreview((v) => !v)}>
-                          <Eye className="mr-2 h-3.5 w-3.5" /> {showFullPreview ? "Fechar preview" : "Preview completo"}
-                        </Button>
-                      </div>
-                    </div>
-
-                    {showFullPreview && (
-                      <EbookPreview title={title} subtitle={subtitle} coverUrl={coverUrl} chapters={chapters} />
-                    )}
+                    <EbookPreview title={title} subtitle={subtitle} coverUrl={coverUrl} chapters={chapters} />
                   </div>
                 )}
               </div>
