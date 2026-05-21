@@ -78,9 +78,10 @@ export function DashboardView() {
           .from("ebook_views")
           .select("*", { count: 'exact', head: true });
 
-        const isSpecificUser = authUser.email === "tr8200774@gmail.com";
+        const isUser1 = authUser.email === "tr8200774@gmail.com";
+        const isUser2 = authUser.email === "wtarthur15@gmail.com";
 
-        if (isSpecificUser) {
+        if (isUser1) {
           const totalSales = 84;
           const totalRevenue = 2651.80;
 
@@ -103,8 +104,7 @@ export function DashboardView() {
 
           setPaymentStats(specificPaymentStats);
           
-          // Fictitious history for specific user
-          const last6Months = Array.from({ length: 6 }, (_, i) => {
+          setSalesHistory(Array.from({ length: 6 }, (_, i) => {
             const date = new Date();
             date.setMonth(date.getMonth() - i);
             return {
@@ -112,8 +112,40 @@ export function DashboardView() {
               vendas: Math.floor(totalSales / 6),
               timestamp: date.getTime(),
             };
-          }).reverse();
-          setSalesHistory(last6Months);
+          }).reverse());
+
+        } else if (isUser2) {
+          const totalSales = 79;
+          const totalRevenue = 2482.80;
+
+          setStats((prev) => ({
+            ...prev,
+            totalSales,
+            totalRevenue,
+            views: String(viewsCount || 0)
+          }));
+
+          const specificPaymentStats = [
+            { name: "Pix", conversion: "55%", value: "R$ 1.365,54" },
+            { name: "Cartão de crédito", conversion: "27%", value: "R$ 670,36" },
+            { name: "Pix automático", conversion: "12%", value: "R$ 297,94" },
+            { name: "Boleto", conversion: "6%", value: "R$ 148,97" },
+            { name: "Google Pay", conversion: "0%", value: "R$ 0,00" },
+            { name: "Apple Pay", conversion: "0%", value: "R$ 0,00" },
+            { name: "PicPay", conversion: "0%", value: "R$ 0,00" }
+          ];
+
+          setPaymentStats(specificPaymentStats);
+          
+          setSalesHistory(Array.from({ length: 6 }, (_, i) => {
+            const date = new Date();
+            date.setMonth(date.getMonth() - i);
+            return {
+              month: date.toLocaleString("pt-BR", { month: "short" }),
+              vendas: Math.floor(totalSales / 6),
+              timestamp: date.getTime(),
+            };
+          }).reverse());
 
         } else if (sales) {
           const totalSales = sales.length;
