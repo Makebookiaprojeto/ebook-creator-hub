@@ -44,7 +44,9 @@ function renderContent(content: string) {
   });
 }
 
-export function EbookPreview({ title, subtitle, coverUrl, chapters, pdfUrl }: Props) {
+export function EbookPreview({ title, subtitle, coverUrl, chapters, pdfUrl, showOnlyFirstChapter = false }: Props & { showOnlyFirstChapter?: boolean }) {
+  const displayedChapters = showOnlyFirstChapter ? chapters.slice(0, 1) : chapters;
+
   return (
     <div className="rounded-2xl border bg-muted/20 p-4 sm:p-6">
       <div className="mx-auto max-w-2xl space-y-6">
@@ -63,7 +65,7 @@ export function EbookPreview({ title, subtitle, coverUrl, chapters, pdfUrl }: Pr
           </div>
         </div>
 
-        {/* TOC */}
+        {/* TOC - Always show all chapters in the table of contents */}
         <div className="rounded-xl bg-card border p-6 shadow-soft">
           <h3 className="font-display text-lg font-bold">Sumário</h3>
           <div className="mt-1 h-0.5 w-12 bg-primary rounded-full" />
@@ -78,7 +80,7 @@ export function EbookPreview({ title, subtitle, coverUrl, chapters, pdfUrl }: Pr
         </div>
 
         {/* Chapters */}
-        {chapters.map((c, i) => (
+        {displayedChapters.map((c, i) => (
           <article key={i} className="rounded-xl bg-card border p-6 shadow-soft">
             <p className="text-xs font-bold uppercase tracking-wider text-primary">Capítulo {i + 1}</p>
             <h3 className="mt-1 font-display text-2xl font-bold leading-tight">{c.title}</h3>
