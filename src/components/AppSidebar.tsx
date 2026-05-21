@@ -92,12 +92,6 @@ export function AppSidebar({ active, onChange }: Props) {
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl overflow-hidden shadow-glow">
             <img src={saasLogo} alt="EbookAI Builder" className="h-full w-full object-cover" />
           </div>
-          {!collapsed && (
-            <div className="flex flex-col leading-tight">
-              <span className="font-display text-sm font-bold text-sidebar-foreground">EbookAI</span>
-              <span className="text-[11px] text-muted-foreground">Builder</span>
-            </div>
-          )}
         </div>
       </SidebarHeader>
 
