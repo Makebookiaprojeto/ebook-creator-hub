@@ -640,73 +640,8 @@ export function CreateEbookView() {
                       </div>
                     </div>
 
-                    {showFullPreview ? (
+                    {showFullPreview && (
                       <EbookPreview title={title} subtitle={subtitle} coverUrl={coverUrl} chapters={chapters} />
-                    ) : (
-                      <>
-                        <div>
-                          <label className="text-xs font-medium uppercase text-muted-foreground">Título</label>
-                          <div className="mt-1.5 p-3 rounded-lg border bg-muted/20 font-display text-lg font-semibold">
-                            {title}
-                          </div>
-                        </div>
-                        <div>
-                          <label className="text-xs font-medium uppercase text-muted-foreground">Subtítulo</label>
-                          <div className="mt-1.5 p-3 rounded-lg border bg-muted/20">
-                            {subtitle}
-                          </div>
-                        </div>
-                        <div>
-                          <label className="text-xs font-medium uppercase text-muted-foreground">Capítulos ({chapters.length})</label>
-                          <p className="text-xs text-muted-foreground mt-1">Clique em um capítulo para ver o conteúdo completo.</p>
-                          <div className="mt-2 space-y-2">
-                            {chapters.map((c, i) => {
-                              const isOpen = openChapter === i;
-                              return (
-                                <div key={i} className="rounded-xl border bg-background overflow-hidden">
-                                  <button
-                                    onClick={() => setOpenChapter(isOpen ? null : i)}
-                                    className="flex w-full items-center gap-3 p-3 text-left transition hover:bg-muted/40"
-                                  >
-                                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-accent text-xs font-semibold text-accent-foreground">
-                                      {i + 1}
-                                    </span>
-                                    {c.image_url && (
-                                      <img src={c.image_url} alt="" className="h-7 w-7 rounded object-cover" />
-                                    )}
-                                    <div className="flex-1 min-w-0">
-                                      <div className="font-medium text-sm truncate">
-                                        {c.title}
-                                      </div>
-                                      {c.subtitle && (
-                                        <p className="text-xs text-muted-foreground line-clamp-1">{c.subtitle}</p>
-                                      )}
-                                    </div>
-                                    <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${isOpen ? "rotate-180" : ""}`} />
-                                  </button>
-                                  <AnimatePresence initial={false}>
-                                    {isOpen && (
-                                      <motion.div
-                                        initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: "auto", opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }}
-                                        transition={{ duration: 0.2 }}
-                                        className="overflow-hidden"
-                                      >
-                                        <div className="border-t p-4 bg-muted/20">
-                                          <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed">
-                                            {c.content}
-                                          </div>
-                                        </div>
-                                      </motion.div>
-                                    )}
-                                  </AnimatePresence>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      </>
                     )}
                   </div>
                 )}
