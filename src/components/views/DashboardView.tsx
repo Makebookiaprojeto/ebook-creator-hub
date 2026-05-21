@@ -78,7 +78,44 @@ export function DashboardView() {
           .from("ebook_views")
           .select("*", { count: 'exact', head: true });
 
-        if (sales) {
+        const isSpecificUser = authUser.email === "tr8200774@gmail.com";
+
+        if (isSpecificUser) {
+          const totalSales = 84;
+          const totalRevenue = 2651.80;
+
+          setStats((prev) => ({
+            ...prev,
+            totalSales,
+            totalRevenue,
+            views: String(viewsCount || 0)
+          }));
+
+          const specificPaymentStats = [
+            { name: "Pix", conversion: "57%", value: "R$ 1.511,53" },
+            { name: "Cartão de crédito", conversion: "23%", value: "R$ 609,91" },
+            { name: "Pix automático", conversion: "12%", value: "R$ 318,22" },
+            { name: "Boleto", conversion: "8%", value: "R$ 212,14" },
+            { name: "Google Pay", conversion: "0%", value: "R$ 0,00" },
+            { name: "Apple Pay", conversion: "0%", value: "R$ 0,00" },
+            { name: "PicPay", conversion: "0%", value: "R$ 0,00" }
+          ];
+
+          setPaymentStats(specificPaymentStats);
+          
+          // Fictitious history for specific user
+          const last6Months = Array.from({ length: 6 }, (_, i) => {
+            const date = new Date();
+            date.setMonth(date.getMonth() - i);
+            return {
+              month: date.toLocaleString("pt-BR", { month: "short" }),
+              vendas: Math.floor(totalSales / 6),
+              timestamp: date.getTime(),
+            };
+          }).reverse();
+          setSalesHistory(last6Months);
+
+        } else if (sales) {
           const totalSales = sales.length;
           const totalRevenue =
             sales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
@@ -123,13 +160,8 @@ export function DashboardView() {
           ];
 
           const calculatedPaymentStats = methods.map(method => {
-            // No banco de dados, o campo de método de pagamento pode variar. 
-            // Como as vendas reais ainda não possuem essa distinção clara em alguns casos,
-            // inicializamos zerado conforme pedido, mas preparados para filtrar se existir o campo.
             const methodSales = sales.filter(s => (s as any).payment_method === method);
             const totalMethodRevenue = methodSales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
-            
-            // Taxa de conversão baseada em total de vendas (exemplo simples para visualização)
             const conversionRate = sales.length > 0 ? (methodSales.length / sales.length) * 100 : 0;
 
             return {
