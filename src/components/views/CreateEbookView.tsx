@@ -621,7 +621,7 @@ export function CreateEbookView() {
 
                 {generated && (
                   <div className="mt-6 space-y-6">
-                    <EbookPreview title={title} subtitle={subtitle} coverUrl={coverUrl} chapters={chapters} />
+                    <EbookPreview title={title} subtitle={subtitle} coverUrl={coverUrl} chapters={chapters.slice(0, 1)} />
                   </div>
                 )}
               </div>
