@@ -24,7 +24,7 @@ export function StatCard({ label, value, delta, icon: Icon, tint = "from-violet-
         <div className="mt-4 flex items-center gap-1.5 text-xs font-medium text-success">
           <TrendingUp className="h-3.5 w-3.5" />
           <span>{delta}</span>
-          <span className="text-muted-foreground font-normal">vs mês anterior</span>
+          
         </div>
       )}
     </div>
