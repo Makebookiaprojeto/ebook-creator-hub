@@ -578,7 +578,6 @@ export function CreateEbookView() {
             {step === 2 && (
               <div>
                 <h2 className="font-display text-xl font-semibold">Gerar Ebook</h2>
-                <p className="mt-1 text-sm text-muted-foreground">O sistema criará um ebook pronto correspondente ao seu nicho.</p>
 
                 {!generated && !generating && (
                   <div className="mt-10 flex flex-col items-center justify-center rounded-2xl gradient-hero p-10 text-center">
