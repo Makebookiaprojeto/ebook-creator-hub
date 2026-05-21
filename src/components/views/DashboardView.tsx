@@ -4,6 +4,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { StatCard } from "@/components/StatCard";
 import { useEbooks } from "@/hooks/useEbooks";
 import { useAuth } from "@/hooks/useAuth";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 
 const statusLabel: Record<string, string> = {
   draft: "Rascunho",
@@ -160,28 +169,49 @@ export function DashboardView() {
             <CreditCard className="h-5 w-5 text-primary" />
             Meios de pagamento
           </h2>
-          <p className="text-sm text-muted-foreground mt-1">Opções disponíveis para processamento das suas vendas</p>
+          <p className="text-sm text-muted-foreground mt-1">Estatísticas de conversão e faturamento por método</p>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6">
-          {[
-            { name: "Pix", icon: "https://cdn.brandfetch.io/pix.com.br/fallback/transparent/theme/dark/h/512/w/512/icon?c=1bfwsm9uY7-Tz55tM5C" },
-            { name: "Cartão de crédito", icon: "https://img.icons8.com/color/96/visa.png" },
-            { name: "Boleto", icon: "https://img.icons8.com/color/96/barcode.png" },
-            { name: "Pix automático", icon: "https://cdn.brandfetch.io/pix.com.br/fallback/transparent/theme/dark/h/512/w/512/icon?c=1bfwsm9uY7-Tz55tM5C" },
-            { name: "PicPay", icon: "https://img.icons8.com/color/96/picpay.png" },
-            { name: "Google Pay", icon: "https://img.icons8.com/color/96/google-pay.png" },
-            { name: "Apple Pay", icon: "https://img.icons8.com/color/96/apple-pay.png" }
-          ].map((method) => (
-            <div key={method.name} className="flex flex-col items-center justify-center gap-3 p-4 rounded-xl border bg-muted/5 hover:bg-muted/10 transition-colors cursor-default group">
-              <div className="h-12 w-12 flex items-center justify-center grayscale group-hover:grayscale-0 transition-all opacity-70 group-hover:opacity-100">
-                <img src={method.icon} alt={method.name} className="max-h-10 max-w-10 object-contain" />
-              </div>
-              <span className="text-[11px] font-medium text-center text-muted-foreground group-hover:text-foreground transition-colors uppercase tracking-wider">
-                {method.name}
-              </span>
-            </div>
-          ))}
+        <div className="overflow-hidden rounded-xl border">
+          <Table>
+            <TableHeader className="bg-muted/50">
+              <TableRow>
+                <TableHead className="font-semibold">Método</TableHead>
+                <TableHead className="font-semibold">Conversão</TableHead>
+                <TableHead className="text-right font-semibold">Valor</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {[
+                { name: "Pix", conversion: "12%", value: "R$ 2.450,00", icon: "https://cdn.brandfetch.io/pix.com.br/fallback/transparent/theme/dark/h/512/w/512/icon?c=1bfwsm9uY7-Tz55tM5C" },
+                { name: "Cartão de crédito", conversion: "8%", value: "R$ 840,00", icon: "https://img.icons8.com/color/96/visa.png" },
+                { name: "Boleto", conversion: "5%", value: "R$ 420,00", icon: "https://img.icons8.com/color/96/barcode.png" },
+                { name: "Pix automático", conversion: "15%", value: "R$ 3.120,00", icon: "https://cdn.brandfetch.io/pix.com.br/fallback/transparent/theme/dark/h/512/w/512/icon?c=1bfwsm9uY7-Tz55tM5C" },
+                { name: "PicPay", conversion: "3%", value: "R$ 150,00", icon: "https://img.icons8.com/color/96/picpay.png" },
+                { name: "Google Pay", conversion: "4%", value: "R$ 210,00", icon: "https://img.icons8.com/color/96/google-pay.png" },
+                { name: "Apple Pay", conversion: "4%", value: "R$ 190,00", icon: "https://img.icons8.com/color/96/apple-pay.png" }
+              ].map((method) => (
+                <TableRow key={method.name} className="hover:bg-muted/30">
+                  <TableCell className="font-medium">
+                    <div className="flex items-center gap-3">
+                      <div className="h-8 w-8 flex items-center justify-center rounded-lg border bg-background p-1.5 shadow-sm">
+                        <img src={method.icon} alt={method.name} className="h-full w-full object-contain grayscale opacity-80" />
+                      </div>
+                      <span className="text-sm">{method.name}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                      {method.conversion}
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-right font-semibold text-foreground/80">
+                    {method.value}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </div>
       </div>
 
