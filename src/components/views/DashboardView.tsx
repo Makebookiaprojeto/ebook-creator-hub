@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
-import { BookOpen, Eye, ShoppingCart, DollarSign, Loader2 } from "lucide-react";
+import { BookOpen, ShoppingCart, DollarSign, CreditCard } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { StatCard } from "@/components/StatCard";
-import { Badge } from "@/components/ui/badge";
 import { useEbooks } from "@/hooks/useEbooks";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -150,78 +148,40 @@ export function DashboardView() {
         <p className="text-sm font-medium text-primary/70 italic">"{quote}"</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <StatCard label="Ebooks" value={String(ebooks.length)} delta={ebooks.length > 0 ? `+${ebooks.length}` : "0"} icon={BookOpen} tint="from-primary/10 to-primary/5" />
-        <StatCard label="Visualizações" value={stats.views} delta="+0%" icon={Eye} tint="from-primary/10 to-primary/5" />
         <StatCard label="Vendas" value={String(stats.totalSales)} delta={stats.totalSales > 0 ? `+${stats.totalSales}` : "0"} icon={ShoppingCart} tint="from-primary/10 to-primary/5" />
         <StatCard label="Receita" value={`R$ ${stats.totalRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} delta="0%" icon={DollarSign} tint="from-primary/10 to-primary/5" />
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 rounded-2xl border bg-card p-6 shadow-soft">
-          <div className="mb-4 flex items-center justify-between">
-            <div>
-              <h2 className="font-display text-lg font-semibold">Performance de vendas</h2>
-              <p className="text-sm text-muted-foreground">Últimos 6 meses</p>
-            </div>
-            {salesHistory.length === 0 && <Badge variant="secondary">Sem dados</Badge>}
-          </div>
-          <div className="h-[280px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={salesHistory.length > 0 ? salesHistory : [{month: 'Jan', vendas: 0}, {month: 'Jun', vendas: 0}]} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorVendas" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
-                <Tooltip
-                  contentStyle={{
-                    background: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "12px",
-                    fontSize: "12px",
-                  }}
-                />
-                <Area type="monotone" dataKey="vendas" stroke="hsl(var(--primary))" strokeWidth={2.5} fill="url(#colorVendas)" />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
+      <div className="rounded-2xl border bg-card p-8 shadow-soft">
+        <div className="mb-8">
+          <h2 className="font-display text-xl font-semibold flex items-center gap-2">
+            <CreditCard className="h-5 w-5 text-primary" />
+            Meios de pagamento
+          </h2>
+          <p className="text-sm text-muted-foreground mt-1">Opções disponíveis para processamento das suas vendas</p>
         </div>
-
-        <div className="rounded-2xl border bg-card p-6 shadow-soft">
-          <h2 className="font-display text-lg font-semibold">Atividade rápida</h2>
-          <p className="mb-4 text-sm text-muted-foreground">Novidades recentes</p>
-          <ul className="space-y-3">
-            {stats.totalSales > 0 ? (
-               <li className="flex items-center gap-3 rounded-lg p-2 hover:bg-muted/50 transition">
-                <span className="h-2 w-2 rounded-full bg-success" />
-                <span className="text-sm">{stats.totalSales} vendas realizadas</span>
-              </li>
-            ) : (
-              <li className="flex items-center gap-3 rounded-lg p-2 hover:bg-muted/50 transition">
-                <span className="h-2 w-2 rounded-full bg-muted" />
-                <span className="text-sm text-muted-foreground">Nenhuma venda ainda</span>
-              </li>
-            )}
-            {ebooks.length > 0 && (
-              <li className="flex items-center gap-3 rounded-lg p-2 hover:bg-muted/50 transition">
-                <span className="h-2 w-2 rounded-full bg-primary" />
-                <span className="text-sm">
-                  {ebooks[0].title === "Gerando..." 
-                    ? "Um eBook está sendo gerado" 
-                    : `${ebooks[0].title} criado recentemente`}
-                </span>
-              </li>
-            )}
-            <li className="flex items-center gap-3 rounded-lg p-2 hover:bg-muted/50 transition">
-              <span className="h-2 w-2 rounded-full bg-amber-500" />
-              <span className="text-sm">Sistema de suporte ativo</span>
-            </li>
-          </ul>
+        
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6">
+          {[
+            { name: "Pix", icon: "https://cdn.brandfetch.io/pix.com.br/fallback/transparent/theme/dark/h/512/w/512/icon?c=1bfwsm9uY7-Tz55tM5C" },
+            { name: "Cartão de crédito", icon: "https://img.icons8.com/color/96/visa.png" },
+            { name: "Boleto", icon: "https://img.icons8.com/color/96/barcode.png" },
+            { name: "Pix automático", icon: "https://cdn.brandfetch.io/pix.com.br/fallback/transparent/theme/dark/h/512/w/512/icon?c=1bfwsm9uY7-Tz55tM5C" },
+            { name: "PicPay", icon: "https://img.icons8.com/color/96/picpay.png" },
+            { name: "Google Pay", icon: "https://img.icons8.com/color/96/google-pay.png" },
+            { name: "Apple Pay", icon: "https://img.icons8.com/color/96/apple-pay.png" }
+          ].map((method) => (
+            <div key={method.name} className="flex flex-col items-center justify-center gap-3 p-4 rounded-xl border bg-muted/5 hover:bg-muted/10 transition-colors cursor-default group">
+              <div className="h-12 w-12 flex items-center justify-center grayscale group-hover:grayscale-0 transition-all opacity-70 group-hover:opacity-100">
+                <img src={method.icon} alt={method.name} className="max-h-10 max-w-10 object-contain" />
+              </div>
+              <span className="text-[11px] font-medium text-center text-muted-foreground group-hover:text-foreground transition-colors uppercase tracking-wider">
+                {method.name}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 
