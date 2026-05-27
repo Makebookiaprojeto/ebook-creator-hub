@@ -44,6 +44,8 @@ export function DashboardView() {
   const [salesHistory, setSalesHistory] = useState<any[]>([]);
   const [loadingStats, setLoadingStats] = useState(true);
   const [paymentStats, setPaymentStats] = useState<any[]>([]);
+  const [profitPeriod, setProfitPeriod] = useState<"today" | "7d" | "30d">("today");
+
 
   const quotes = [
     "Sua criatividade é a única fronteira para o seu sucesso.",
