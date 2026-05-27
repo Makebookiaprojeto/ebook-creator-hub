@@ -28,6 +28,9 @@ export function DashboardView() {
   const [stats, setStats] = useState({
     totalSales: 0,
     totalRevenue: 0,
+    revenueToday: 0,
+    revenue7d: 0,
+    revenue30d: 0,
     views: "0",
   });
   const [salesHistory, setSalesHistory] = useState<any[]>([]);
