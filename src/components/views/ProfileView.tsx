@@ -4,7 +4,6 @@ import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
-  Mail,
   User as UserIcon,
   Loader2,
   Camera,
@@ -189,7 +188,7 @@ export function ProfileView() {
     }
   };
 
-  const email = user?.email || "";
+  
 
   const projectRef = (import.meta as any).env?.VITE_SUPABASE_PROJECT_ID ?? "";
 
@@ -295,16 +294,6 @@ export function ProfileView() {
                 {savingName ? <Loader2 className="h-4 w-4 animate-spin" /> : "Salvar"}
               </Button>
             </div>
-          </div>
-          <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              <Mail className="h-3.5 w-3.5" /> Email
-            </Label>
-            <Input
-              value={email}
-              disabled
-              className="bg-muted/30 cursor-not-allowed h-10 border-dashed"
-            />
           </div>
         </div>
       </div>
