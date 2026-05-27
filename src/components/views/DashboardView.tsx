@@ -285,10 +285,11 @@ export function DashboardView() {
         <p className="text-sm font-medium text-primary/70 italic">"{quote}"</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <StatCard label="Ebooks" value={String(ebooks.length)} delta={ebooks.length > 0 ? `+${ebooks.length}` : "0"} icon={BookOpen} tint="from-primary/10 to-primary/5" />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Vendas" value={String(stats.totalSales)} delta={stats.totalSales > 0 ? `+${stats.totalSales}` : "0"} icon={ShoppingCart} tint="from-primary/10 to-primary/5" />
-        <StatCard label="Receita" value={`R$ ${stats.totalRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} delta="0%" icon={DollarSign} tint="from-primary/10 to-primary/5" />
+        <StatCard label="Lucro Hoje" value={`R$ ${stats.revenueToday.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} delta="0%" icon={DollarSign} tint="from-primary/10 to-primary/5" />
+        <StatCard label="Lucro Últimos 7 Dias" value={`R$ ${stats.revenue7d.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} delta="0%" icon={DollarSign} tint="from-primary/10 to-primary/5" />
+        <StatCard label="Lucro Últimos 30 Dias" value={`R$ ${stats.revenue30d.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} delta="0%" icon={DollarSign} tint="from-primary/10 to-primary/5" />
       </div>
 
       <div className="rounded-2xl border bg-card p-8 shadow-soft">
