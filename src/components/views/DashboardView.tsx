@@ -92,6 +92,9 @@ export function DashboardView() {
             ...prev,
             totalSales,
             totalRevenue,
+            revenueToday: 185.50,
+            revenue7d: 1240.20,
+            revenue30d: 2651.80,
             views: String(viewsCount || 0)
           }));
 
