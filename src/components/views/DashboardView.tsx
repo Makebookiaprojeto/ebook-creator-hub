@@ -161,10 +161,30 @@ export function DashboardView() {
           const totalRevenue =
             sales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
 
+          const now = new Date();
+          const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+          const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+          const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+
+          const revenueToday = sales
+            .filter(s => s.created_at && new Date(s.created_at).getTime() >= todayStart)
+            .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
+          
+          const revenue7d = sales
+            .filter(s => s.created_at && new Date(s.created_at).getTime() >= sevenDaysAgo)
+            .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
+
+          const revenue30d = sales
+            .filter(s => s.created_at && new Date(s.created_at).getTime() >= thirtyDaysAgo)
+            .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
+
           setStats((prev) => ({
             ...prev,
             totalSales,
             totalRevenue,
+            revenueToday,
+            revenue7d,
+            revenue30d,
             views: String(viewsCount || 0)
           }));
 
