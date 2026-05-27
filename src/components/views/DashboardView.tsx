@@ -295,11 +295,26 @@ export function DashboardView() {
         <p className="text-sm font-medium text-primary/70 italic">"{quote}"</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <StatCard label="Vendas" value={String(stats.totalSales)} delta={stats.totalSales > 0 ? `+${stats.totalSales}` : "0"} icon={ShoppingCart} tint="from-primary/10 to-primary/5" />
-        <StatCard label="Lucro Hoje" value={`R$ ${stats.revenueToday.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} delta="0%" icon={DollarSign} tint="from-primary/10 to-primary/5" />
-        <StatCard label="Lucro Últimos 7 Dias" value={`R$ ${stats.revenue7d.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} delta="0%" icon={DollarSign} tint="from-primary/10 to-primary/5" />
-        <StatCard label="Lucro Últimos 30 Dias" value={`R$ ${stats.revenue30d.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} delta="0%" icon={DollarSign} tint="from-primary/10 to-primary/5" />
+        <StatCard 
+          label="Lucro" 
+          value={`R$ ${(profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} 
+          icon={DollarSign} 
+          tint="from-primary/10 to-primary/5"
+          action={
+            <Select value={profitPeriod} onValueChange={(v: any) => setProfitPeriod(v)}>
+              <SelectTrigger className="h-8 w-[130px] text-xs">
+                <SelectValue placeholder="Período" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="today">Hoje</SelectItem>
+                <SelectItem value="7d">Últimos 7 dias</SelectItem>
+                <SelectItem value="30d">Últimos 30 dias</SelectItem>
+              </SelectContent>
+            </Select>
+          }
+        />
       </div>
 
       <div className="rounded-2xl border bg-card p-8 shadow-soft">
