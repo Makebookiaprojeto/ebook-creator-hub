@@ -189,7 +189,7 @@ export function ProfileView() {
     }
   };
 
-  const email = user?.email || "";
+  
 
   const projectRef = (import.meta as any).env?.VITE_SUPABASE_PROJECT_ID ?? "";
 
