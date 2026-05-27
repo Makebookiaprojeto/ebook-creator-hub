@@ -296,16 +296,6 @@ export function ProfileView() {
               </Button>
             </div>
           </div>
-          <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              <Mail className="h-3.5 w-3.5" /> Email
-            </Label>
-            <Input
-              value={email}
-              disabled
-              className="bg-muted/30 cursor-not-allowed h-10 border-dashed"
-            />
-          </div>
         </div>
       </div>
 
