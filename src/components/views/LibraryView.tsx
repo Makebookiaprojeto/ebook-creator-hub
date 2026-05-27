@@ -474,49 +474,6 @@ export function LibraryView({ onCreateNew }: Props) {
                       </div>
                     )}
 
-                    <div>
-                      <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
-                        <Link2 className="h-3 w-3" /> Link de Checkout
-                      </label>
-                      <div className="flex items-center gap-1.5">
-                        <Input
-                          placeholder="https://..."
-                          value={checkoutUrlDrafts[eb.id] ?? (eb as any).cakto_checkout_url ?? ""}
-                          onChange={(e) =>
-                            setCheckoutUrlDrafts((p) => ({
-                              ...p,
-                              [eb.id]: e.target.value,
-                            }))
-                          }
-                          className="h-8 text-xs"
-                        />
-                        <Button
-                          size="sm"
-                          variant="secondary"
-                          className="h-8 px-2"
-                          onClick={() => saveCheckoutUrl(eb)}
-                          disabled={savingCheckoutId === eb.id}
-                          title="Salvar checkout"
-                        >
-                          {savingCheckoutId === eb.id ? (
-                            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                          ) : (
-                            <Check className="h-3.5 w-3.5" />
-                          )}
-                        </Button>
-                        {(eb as any).cakto_checkout_url && (
-                          <Button
-                            size="sm"
-                            variant="secondary"
-                            className="h-8 px-2"
-                            onClick={() => copyCheckoutLinkWithParams(eb)}
-                            title="Copiar link com parâmetros"
-                          >
-                            <Link2 className="h-3.5 w-3.5" />
-                          </Button>
-                        )}
-                      </div>
-                    </div>
 
                     <div className="pt-2 border-t border-border/50">
                       <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
