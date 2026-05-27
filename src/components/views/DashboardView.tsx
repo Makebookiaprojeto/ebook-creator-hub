@@ -28,6 +28,9 @@ export function DashboardView() {
   const [stats, setStats] = useState({
     totalSales: 0,
     totalRevenue: 0,
+    revenueToday: 0,
+    revenue7d: 0,
+    revenue30d: 0,
     views: "0",
   });
   const [salesHistory, setSalesHistory] = useState<any[]>([]);
@@ -89,6 +92,9 @@ export function DashboardView() {
             ...prev,
             totalSales,
             totalRevenue,
+            revenueToday: 185.50,
+            revenue7d: 1240.20,
+            revenue30d: 2651.80,
             views: String(viewsCount || 0)
           }));
 
@@ -122,6 +128,9 @@ export function DashboardView() {
             ...prev,
             totalSales,
             totalRevenue,
+            revenueToday: 162.80,
+            revenue7d: 1150.40,
+            revenue30d: 2482.80,
             views: String(viewsCount || 0)
           }));
 
@@ -152,10 +161,30 @@ export function DashboardView() {
           const totalRevenue =
             sales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
 
+          const now = new Date();
+          const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+          const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+          const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+
+          const revenueToday = sales
+            .filter(s => s.created_at && new Date(s.created_at).getTime() >= todayStart)
+            .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
+          
+          const revenue7d = sales
+            .filter(s => s.created_at && new Date(s.created_at).getTime() >= sevenDaysAgo)
+            .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
+
+          const revenue30d = sales
+            .filter(s => s.created_at && new Date(s.created_at).getTime() >= thirtyDaysAgo)
+            .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
+
           setStats((prev) => ({
             ...prev,
             totalSales,
             totalRevenue,
+            revenueToday,
+            revenue7d,
+            revenue30d,
             views: String(viewsCount || 0)
           }));
 
@@ -256,10 +285,11 @@ export function DashboardView() {
         <p className="text-sm font-medium text-primary/70 italic">"{quote}"</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <StatCard label="Ebooks" value={String(ebooks.length)} delta={ebooks.length > 0 ? `+${ebooks.length}` : "0"} icon={BookOpen} tint="from-primary/10 to-primary/5" />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Vendas" value={String(stats.totalSales)} delta={stats.totalSales > 0 ? `+${stats.totalSales}` : "0"} icon={ShoppingCart} tint="from-primary/10 to-primary/5" />
-        <StatCard label="Receita" value={`R$ ${stats.totalRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} delta="0%" icon={DollarSign} tint="from-primary/10 to-primary/5" />
+        <StatCard label="Lucro Hoje" value={`R$ ${stats.revenueToday.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} delta="0%" icon={DollarSign} tint="from-primary/10 to-primary/5" />
+        <StatCard label="Lucro Últimos 7 Dias" value={`R$ ${stats.revenue7d.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} delta="0%" icon={DollarSign} tint="from-primary/10 to-primary/5" />
+        <StatCard label="Lucro Últimos 30 Dias" value={`R$ ${stats.revenue30d.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} delta="0%" icon={DollarSign} tint="from-primary/10 to-primary/5" />
       </div>
 
       <div className="rounded-2xl border bg-card p-8 shadow-soft">
