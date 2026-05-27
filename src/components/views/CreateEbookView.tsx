@@ -495,11 +495,8 @@ export function CreateEbookView() {
 
                 <div className="mt-8">
                   <label className="text-sm font-semibold">
-                    Quem é o público-alvo do seu ebook? <span className="text-muted-foreground font-normal">(opcional, mas recomendado)</span>
+                    Quem é o público-alvo do seu ebook?
                   </label>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    Descreva idade, interesses, dores e objetivos para personalizar seu ebook.
-                  </p>
                   <Textarea
                     className="mt-3 min-h-[110px]"
                     placeholder="Ex: Mulheres de 30-45 anos, mães, que querem perder peso após a gravidez sem dietas restritivas e com pouco tempo para se exercitar..."
