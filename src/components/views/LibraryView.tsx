@@ -311,7 +311,7 @@ export function LibraryView({ onCreateNew }: Props) {
         <div>
           <h1 className="font-display text-3xl font-bold">Biblioteca</h1>
           <p className="mt-1 text-muted-foreground">
-            Todos os seus eBooks gerados — visualize, baixe ou delete.
+            Todos os seus eBooks gerados.
           </p>
         </div>
         {onCreateNew && (
