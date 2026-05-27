@@ -497,7 +497,7 @@ export function LibraryView({ onCreateNew }: Props) {
 
                         <div className="flex items-center gap-1.5">
                           <Input
-                            placeholder="Cakto Product ID"
+                            placeholder="Product ID"
                             value={externalIdDrafts[eb.id] ?? (eb as any).cakto_product_id ?? (eb as any).external_product_id ?? ""}
                             onChange={(e) => setExternalIdDrafts(p => ({ ...p, [eb.id]: e.target.value }))}
                             className="h-8 text-xs"
