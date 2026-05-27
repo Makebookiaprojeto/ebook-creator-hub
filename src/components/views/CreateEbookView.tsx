@@ -489,7 +489,6 @@ export function CreateEbookView() {
                     >
                       <div className="text-2xl">{n.emoji}</div>
                       <p className="mt-2 font-semibold text-sm">{n.name}</p>
-                      <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{n.desc}</p>
                     </button>
                   ))}
                   {!showAllNiches && niches.length > 7 && (
