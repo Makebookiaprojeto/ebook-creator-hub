@@ -470,13 +470,7 @@ export function CreateEbookView() {
             {step === 0 && (
               <div>
                 <h2 className="font-display text-xl font-semibold">Escolha seu nicho</h2>
-                <p className="mt-1 text-sm text-muted-foreground">Selecione um nicho ou digite o seu próprio.</p>
-                <Input
-                  className="mt-4"
-                  placeholder="Ex: Yoga para iniciantes"
-                  value={niche}
-                  onChange={(e) => setNiche(e.target.value)}
-                />
+                <p className="mt-1 text-sm text-muted-foreground">Selecione um nicho.</p>
 
                 <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                   {niches.map((n) => (
