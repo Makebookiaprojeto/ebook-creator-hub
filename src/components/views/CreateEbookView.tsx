@@ -265,7 +265,7 @@ export function CreateEbookView() {
     }
     setGenerating(true);
     setGenerated(false);
-    setGenerationStage("Buscando ebook no banco de dados...");
+    setGenerationStage("Buscando e personalizando o melhor modelo...");
     setGenerationProgress(null);
     setTitle("");
     setSubtitle("");
@@ -273,22 +273,15 @@ export function CreateEbookView() {
     setChapters([]);
 
     try {
-      // Look for a template ebook for this niche
-      const { data: template, error: fetchErr } = await supabase
-        .from("ebooks")
-        .select("*")
-        .eq("niche", niche)
-        .eq("is_template", true)
-        .limit(1)
-        .maybeSingle();
+      const { data, error: funcError } = await supabase.functions.invoke("personalize-template", {
+        body: { niche, audience }
+      });
 
-      if (fetchErr) throw fetchErr;
-
-      if (!template) {
-        setGenerating(false);
-        toast.error("Ebook ainda não disponível para este nicho");
-        return;
+      if (funcError || !data?.template) {
+        throw new Error(data?.error || "Ebook ainda não disponível para este nicho");
       }
+
+      const template = data.template;
 
       // Small delay to simulate "finding" and "cloning" the best ebook
       await new Promise(resolve => setTimeout(resolve, 1500));
@@ -304,19 +297,16 @@ export function CreateEbookView() {
           user_id: user.id,
           title: template.title,
           subtitle: template.subtitle,
-          description: template.description,
-          category: template.category,
-          niche: template.niche,
+          niche: niche,
           audience: audience || template.audience,
           cover_url: template.cover_url,
           status: "published",
           is_public: true,
           is_template: false,
-          content_json: template.content_json,
-          pdf_url: template.pdf_url,
+          content_json: template.chapters,
           price: price || 29.9,
           price_cents: Math.round((price || 29.9) * 100),
-          slug: `${template.slug || 'ebook'}-${Math.random().toString(36).substring(2, 7)}`,
+          slug: `ebook-${Math.random().toString(36).substring(2, 7)}`,
           generation_status: "done",
           payment_platform: "cakto"
         })
@@ -331,7 +321,6 @@ export function CreateEbookView() {
       setCoverUrl(newEbook.cover_url);
       setPdfUrl(newEbook.pdf_url);
       
-      
       if (newEbook.slug) {
         setCreatedEbookSlug(newEbook.slug);
         setEbookLink(`${window.location.origin}/e/${newEbook.slug}`);
@@ -340,7 +329,7 @@ export function CreateEbookView() {
       const chs = (newEbook.content_json as any[]) || [];
       setChapters(chs.map(c => ({
         title: c.title,
-        subtitle: "",
+        subtitle: c.subtitle || "",
         content: c.content || "",
         image_url: c.image_url
       })));

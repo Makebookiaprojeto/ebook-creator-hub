@@ -23,7 +23,7 @@ function renderContent(content: string) {
     if (!trimmed) return null;
     if (trimmed.startsWith("## ")) {
       return (
-        <h3 key={i} className="font-display text-lg font-bold mt-5 mb-2 text-foreground">
+        <h3 key={i} className="font-display text-xl font-bold mt-8 mb-4 text-primary">
           {trimmed.replace(/^##\s+/, "")}
         </h3>
       );
@@ -31,13 +31,13 @@ function renderContent(content: string) {
     if (trimmed.split("\n").every((l) => /^\s*[-•]\s+/.test(l))) {
       const items = trimmed.split("\n").map((l) => l.replace(/^\s*[-•]\s+/, ""));
       return (
-        <ul key={i} className="my-3 ml-5 list-disc space-y-1.5 text-sm leading-relaxed">
+        <ul key={i} className="my-4 ml-6 list-disc space-y-2 text-base leading-relaxed text-slate-800">
           {items.map((it, j) => <li key={j}>{it}</li>)}
         </ul>
       );
     }
     return (
-      <p key={i} className="text-sm leading-relaxed text-foreground/90 mb-3">
+      <p key={i} className="text-base leading-relaxed text-slate-700 mb-4">
         {trimmed}
       </p>
     );
@@ -81,18 +81,33 @@ export function EbookPreview({ title, subtitle, coverUrl, chapters, pdfUrl, show
 
         {/* Chapters */}
         {displayedChapters.map((c, i) => (
-          <article key={i} className="rounded-xl bg-card border p-6 shadow-soft">
-            <p className="text-xs font-bold uppercase tracking-wider text-primary">Capítulo {i + 1}</p>
-            <h3 className="mt-1 font-display text-2xl font-bold leading-tight">{c.title}</h3>
-            {c.subtitle && <p className="mt-1 text-sm italic text-muted-foreground">{c.subtitle}</p>}
-            {c.image_url && (
-              <img
-                src={c.image_url}
-                alt={c.title}
-                className="mt-4 w-full h-48 object-cover rounded-lg"
-              />
-            )}
-            <div className="mt-4">{renderContent(c.content || "_(gerando…)_")}</div>
+          <article key={i} className="rounded-xl bg-white border p-8 sm:p-12 shadow-soft overflow-hidden">
+            <div className="flex flex-col md:flex-row gap-8">
+              <div className="flex-1">
+                <p className="text-xs font-bold uppercase tracking-widest text-primary/80">Capítulo {i + 1}</p>
+                <h3 className="mt-2 font-display text-3xl font-bold leading-tight text-slate-900">{c.title}</h3>
+                {c.subtitle && <p className="mt-2 text-md font-medium text-slate-500 italic">{c.subtitle}</p>}
+                
+                <div className="mt-8 prose prose-slate max-w-none">
+                  {renderContent(c.content || "_(gerando…)_")}
+                </div>
+              </div>
+              
+              {c.image_url && (
+                <div className="w-full md:w-1/3 shrink-0">
+                  <div className="sticky top-6">
+                    <img
+                      src={c.image_url}
+                      alt={c.title}
+                      className="w-full aspect-[3/4] object-cover rounded-xl shadow-lg border-4 border-white"
+                    />
+                    <div className="mt-2 h-1.5 w-full bg-primary/20 rounded-full overflow-hidden">
+                      <div className="h-full bg-primary w-1/3" />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </article>
         ))}
       </div>
