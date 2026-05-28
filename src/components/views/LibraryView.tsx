@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BookOpen, Check, Download, ExternalLink, Eye, Globe, Loader2, Lock, Tag, Trash2, Plus, Settings, Copy, Link2, Info, Layout } from "lucide-react";
+import { BookOpen, Check, Download, ExternalLink, Eye, Globe, Loader2, Lock, Tag, Trash2, Plus, Settings, Copy, Link2 } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -54,14 +54,11 @@ export function LibraryView({ onCreateNew }: Props) {
   const [confirmDelete, setConfirmDelete] = useState<Ebook | null>(null);
   const [priceDrafts, setPriceDrafts] = useState<Record<string, string>>({});
   const [savingPriceId, setSavingPriceId] = useState<string | null>(null);
-  const [externalIdDrafts, setExternalIdDrafts] = useState<Record<string, string>>({});
-  const [platformDrafts, setPlatformDrafts] = useState<Record<string, string>>({});
-  const [savingConfigId, setSavingConfigId] = useState<string | null>(null);
   const [savingCheckoutId, setSavingCheckoutId] = useState<string | null>(null);
   const [checkoutUrlDrafts, setCheckoutUrlDrafts] = useState<Record<string, string>>({});
 
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const webhookUrl = `${supabaseUrl}/functions/v1/webhook-payment`;
+  
 
   const copyPublicLink = (eb: Ebook) => {
     if (!eb.slug) return;
@@ -116,41 +113,6 @@ export function LibraryView({ onCreateNew }: Props) {
     }
   };
 
-  const saveExternalConfig = async (eb: Ebook) => {
-    const platform = platformDrafts[eb.id] ?? (eb as any).payment_platform ?? "";
-    const externalId = externalIdDrafts[eb.id] ?? (eb as any).cakto_product_id ?? (eb as any).external_product_id ?? "";
-
-    if (!platform || !externalId) {
-      toast.error("Selecione a plataforma e informe o ID do Produto.");
-      return;
-    }
-
-    setSavingConfigId(eb.id);
-    try {
-      const updateData: any = { 
-        payment_platform: platform,
-        external_product_id: externalId 
-      };
-
-      if (platform === "cakto") {
-        updateData.cakto_product_id = externalId;
-      }
-
-      const { error } = await supabase
-        .from("ebooks")
-        .update(updateData)
-        .eq("id", eb.id);
-
-      if (error) throw error;
-      toast.success("Configuração de pagamento salva!");
-      await refresh();
-    } catch (err) {
-      console.error(err);
-      toast.error("Não foi possível salvar.");
-    } finally {
-      setSavingConfigId(null);
-    }
-  };
 
   const formatPriceBR = (cents?: number | null) =>
     !cents || cents <= 0 ? "" : (cents / 100).toFixed(2).replace(".", ",");
