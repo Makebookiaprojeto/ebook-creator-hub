@@ -115,6 +115,7 @@ export type Database = {
           audience: string | null
           chapters: Json
           cover_prompt: string | null
+          cover_url: string | null
           created_at: string
           created_by: string | null
           id: string
@@ -130,6 +131,7 @@ export type Database = {
           audience?: string | null
           chapters?: Json
           cover_prompt?: string | null
+          cover_url?: string | null
           created_at?: string
           created_by?: string | null
           id?: string
@@ -145,6 +147,7 @@ export type Database = {
           audience?: string | null
           chapters?: Json
           cover_prompt?: string | null
+          cover_url?: string | null
           created_at?: string
           created_by?: string | null
           id?: string

@@ -1,0 +1,1 @@
+ALTER TABLE public.ebook_templates ADD COLUMN cover_url TEXT;
