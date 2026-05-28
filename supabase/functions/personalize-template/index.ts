@@ -144,18 +144,20 @@ Gere: novo título magnético adaptado ao público (≤60 chars), novo subtítul
       }
     }
 
-    // Busca imagens em paralelo (capa + 1 por capítulo)
-    const coverPromise = searchPexels(template.cover_prompt || template.title || niche, "portrait");
-    const chapterImagePromises = baseChapters.map((c) => searchPexels(c.title + " " + niche, "landscape"));
+    // Busca imagens: Prioriza as que estão no template (fixas/profissionais)
+    // Se não houver no template, faz o fallback para o searchPexels (manteve a lógica para flexibilidade futura)
+    const coverUrl = template.cover_url || await searchPexels(template.cover_prompt || template.title || niche, "portrait");
     
-    const [coverUrl, ...chapterImageUrls] = await Promise.all([coverPromise, ...chapterImagePromises]);
-
-    // Monta capítulos: intro personalizada + corpo do template + imagem
-    const finalChapters = baseChapters.map((c, i) => {
+    // Monta capítulos: intro personalizada + corpo do template + imagem do template (ou busca se faltar)
+    const finalChapters = await Promise.all(baseChapters.map(async (c, i) => {
       const intro = personalized.chapter_intros[i]?.trim();
       const content = intro ? `${intro}\n\n${c.content}` : c.content;
-      return { title: c.title, subtitle: c.subtitle, content, image_url: chapterImageUrls[i] };
-    });
+      
+      // Usa a imagem do template se disponível, senão busca
+      const imageUrl = c.image_url || await searchPexels(c.title + " " + niche, "landscape");
+      
+      return { title: c.title, subtitle: c.subtitle, content, image_url: imageUrl };
+    }));
 
     // Incrementa contador de uso (fire-and-forget)
     supabase.rpc("increment_template_use", { _template_id: template.id }).then(() => {});
