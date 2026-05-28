@@ -475,64 +475,6 @@ export function LibraryView({ onCreateNew }: Props) {
                     )}
 
 
-                    <div className="pt-2 border-t border-border/50">
-                      <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
-                        <Layout className="h-3 w-3" /> Automação de Entrega
-                      </label>
-                      <div className="space-y-2">
-                        <Select
-                          value={platformDrafts[eb.id] ?? (eb as any).payment_platform ?? ""}
-                          onValueChange={(val) => setPlatformDrafts(p => ({ ...p, [eb.id]: val }))}
-                        >
-                          <SelectTrigger className="h-8 text-xs">
-                            <SelectValue placeholder="Plataforma" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="cakto">Cakto</SelectItem>
-                            <SelectItem value="hotmart">Hotmart</SelectItem>
-                            <SelectItem value="kiwify">Kiwify</SelectItem>
-                            <SelectItem value="stripe">Stripe</SelectItem>
-                          </SelectContent>
-                        </Select>
-
-                        <div className="flex items-center gap-1.5">
-                          <Input
-                            placeholder="Product ID"
-                            value={externalIdDrafts[eb.id] ?? (eb as any).cakto_product_id ?? (eb as any).external_product_id ?? ""}
-                            onChange={(e) => setExternalIdDrafts(p => ({ ...p, [eb.id]: e.target.value }))}
-                            className="h-8 text-xs"
-                          />
-                          <Button
-                            size="sm"
-                            variant="secondary"
-                            className="h-8 px-2"
-                            onClick={() => saveExternalConfig(eb)}
-                            disabled={savingConfigId === eb.id}
-                            title="Salvar configuração"
-                          >
-                            {savingConfigId === eb.id ? (
-                              <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                            ) : (
-                              <Check className="h-3.5 w-3.5" />
-                            )}
-                          </Button>
-                        </div>
-
-                        {(eb as any).payment_platform && (eb as any).external_product_id && (
-                          <div className="p-2 rounded bg-muted/30 text-[10px] space-y-1">
-                            <p className="font-semibold flex items-center gap-1">
-                              <Info className="h-3 w-3" /> Configuração do Webhook:
-                            </p>
-                            <p className="text-muted-foreground break-all">
-                              URL: {webhookUrl}?platform={(eb as any).payment_platform}
-                            </p>
-                            <p className="text-muted-foreground">
-                              Aponte o webhook da sua plataforma para esta URL. A entrega será automática.
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
                 </div>
 
               </div>
