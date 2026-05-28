@@ -299,7 +299,7 @@ export function CreateEbookView() {
           subtitle: template.subtitle,
           niche: niche,
           audience: audience || template.audience,
-          cover_url: null, // We'll let the user choose or generate later if needed
+          cover_url: template.cover_url,
           status: "published",
           is_public: true,
           is_template: false,
