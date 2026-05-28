@@ -1,7 +1,7 @@
 // Personaliza um ebook gerado a partir de um template:
 // - Reescreve título e subtítulo para o público específico (1 chamada curta)
 // - Adapta a INTRODUÇÃO de cada capítulo (1 chamada curta no total, batch)
-// - Busca imagens no Pexels para cada capítulo
+// - Busca imagens no Pexels para capa e cada capítulo
 // O corpo principal dos capítulos vem do template (custo zero de IA).
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
@@ -144,15 +144,17 @@ Gere: novo título magnético adaptado ao público (≤60 chars), novo subtítul
       }
     }
 
-    // Busca imagens em paralelo (1 por capítulo)
-    const imagePromises = baseChapters.map((c) => searchPexels(c.title + " " + niche));
-    const imageUrls = await Promise.all(imagePromises);
+    // Busca imagens em paralelo (capa + 1 por capítulo)
+    const coverPromise = searchPexels(template.cover_prompt || template.title || niche, "portrait");
+    const chapterImagePromises = baseChapters.map((c) => searchPexels(c.title + " " + niche, "landscape"));
+    
+    const [coverUrl, ...chapterImageUrls] = await Promise.all([coverPromise, ...chapterImagePromises]);
 
     // Monta capítulos: intro personalizada + corpo do template + imagem
     const finalChapters = baseChapters.map((c, i) => {
       const intro = personalized.chapter_intros[i]?.trim();
       const content = intro ? `${intro}\n\n${c.content}` : c.content;
-      return { title: c.title, subtitle: c.subtitle, content, image_url: imageUrls[i] };
+      return { title: c.title, subtitle: c.subtitle, content, image_url: chapterImageUrls[i] };
     });
 
     // Incrementa contador de uso (fire-and-forget)
@@ -163,7 +165,7 @@ Gere: novo título magnético adaptado ao público (≤60 chars), novo subtítul
         id: template.id,
         title: personalized.title,
         subtitle: personalized.subtitle,
-        cover_prompt: template.cover_prompt,
+        cover_url: coverUrl,
         chapters: finalChapters,
       },
     });
