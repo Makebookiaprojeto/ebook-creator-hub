@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
 import { BookOpen, Check, Download, ExternalLink, Eye, Globe, Loader2, Lock, Tag, Trash2, Plus, Settings, Copy, Link2 } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useEbooks, type Ebook, type Chapter } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
