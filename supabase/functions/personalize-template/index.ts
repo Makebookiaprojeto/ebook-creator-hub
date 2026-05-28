@@ -1,6 +1,7 @@
 // Personaliza um ebook gerado a partir de um template:
 // - Reescreve título e subtítulo para o público específico (1 chamada curta)
 // - Adapta a INTRODUÇÃO de cada capítulo (1 chamada curta no total, batch)
+// - Busca imagens no Pexels para cada capítulo
 // O corpo principal dos capítulos vem do template (custo zero de IA).
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
@@ -11,6 +12,7 @@ const corsHeaders = {
 };
 
 const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+const PEXELS_API_KEY = Deno.env.get("PEXELS_API_KEY");
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
@@ -34,6 +36,26 @@ async function callAI(body: Record<string, unknown>) {
     return { error: { status: resp.status, text } };
   }
   return { data: await resp.json() };
+}
+
+async function searchPexels(query: string, orientation: "landscape" | "portrait" = "landscape"): Promise<string | null> {
+  if (!PEXELS_API_KEY) return null;
+  try {
+    const url = new URL("https://api.pexels.com/v1/search");
+    url.searchParams.set("query", query);
+    url.searchParams.set("per_page", "10");
+    url.searchParams.set("orientation", orientation);
+    const resp = await fetch(url.toString(), { headers: { Authorization: PEXELS_API_KEY } });
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    const photos = data.photos ?? [];
+    if (!photos.length) return null;
+    const pick = photos[Math.floor(Math.random() * photos.length)];
+    return pick.src?.large2x || pick.src?.large || pick.src?.original;
+  } catch (e) {
+    console.error("Pexels error:", e);
+    return null;
+  }
 }
 
 Deno.serve(async (req) => {
@@ -62,7 +84,7 @@ Deno.serve(async (req) => {
     const template = Array.isArray(tpls) && tpls.length > 0 ? tpls[0] : null;
     if (!template) return jsonResponse({ template: null });
 
-    const baseChapters: { title: string; subtitle: string; content: string }[] = template.chapters ?? [];
+    const baseChapters: { title: string; subtitle: string; content: string; image_url?: string }[] = template.chapters ?? [];
 
     // 1 chamada IA: reescreve título/subtítulo + intro de cada capítulo, adaptado ao público
     const personalizationRes = await callAI({
@@ -122,11 +144,15 @@ Gere: novo título magnético adaptado ao público (≤60 chars), novo subtítul
       }
     }
 
-    // Monta capítulos: intro personalizada + corpo do template
+    // Busca imagens em paralelo (1 por capítulo)
+    const imagePromises = baseChapters.map((c) => searchPexels(c.title + " " + niche));
+    const imageUrls = await Promise.all(imagePromises);
+
+    // Monta capítulos: intro personalizada + corpo do template + imagem
     const finalChapters = baseChapters.map((c, i) => {
       const intro = personalized.chapter_intros[i]?.trim();
       const content = intro ? `${intro}\n\n${c.content}` : c.content;
-      return { title: c.title, subtitle: c.subtitle, content };
+      return { title: c.title, subtitle: c.subtitle, content, image_url: imageUrls[i] };
     });
 
     // Incrementa contador de uso (fire-and-forget)
