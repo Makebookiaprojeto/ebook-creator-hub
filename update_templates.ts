@@ -1,16 +1,32 @@
 
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-
-const PEXELS_API_KEY = Deno.env.get("PEXELS_API_KEY");
-const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!PEXELS_API_KEY || !SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
   console.error("Missing env vars");
-  Deno.exit(1);
+  process.exit(1);
 }
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+async function supabaseFetch(path, options = {}) {
+  const url = `${SUPABASE_URL}/rest/v1/${path}`;
+  const resp = await fetch(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      "apikey": SUPABASE_SERVICE_ROLE_KEY,
+      "Authorization": `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+      "Content-Type": "application/json",
+      "Prefer": "return=minimal"
+    }
+  });
+  if (!resp.ok) {
+    const text = await resp.text();
+    throw new Error(`Supabase error: ${resp.status} - ${text}`);
+  }
+  return resp.json().catch(() => ({}));
+}
+
 
 async function searchPexels(query, orientation = "landscape") {
   const url = new URL("https://api.pexels.com/v1/search");
