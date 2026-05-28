@@ -680,6 +680,7 @@ export type Database = {
           audience: string
           chapters: Json
           cover_prompt: string
+          cover_url: string
           id: string
           niche: string
           subtitle: string
