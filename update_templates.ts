@@ -255,15 +255,8 @@ const SEARCH_TERMS = {
 }; 
 
 async function main() {
-  const { data: templates, error } = await supabase
-    .from('ebook_templates')
-    .select('id, niche, title, chapters');
+  const templates = await supabaseFetch('ebook_templates?select=id,niche,title,chapters');
     
-  if (error) {
-    console.error("Error fetching templates:", error);
-    return;
-  }
-
   for (const tpl of templates) {
     console.log(`Processing niche: ${tpl.niche}...`);
     
@@ -287,18 +280,17 @@ async function main() {
       });
     }
 
-    const { error: updateError } = await supabase
-      .from('ebook_templates')
-      .update({
-        cover_url: coverUrl,
-        chapters: updatedChapters
-      })
-      .eq('id', tpl.id);
-
-    if (updateError) {
-      console.error(`  Error updating ${tpl.niche}:`, updateError);
-    } else {
+    try {
+      await supabaseFetch(`ebook_templates?id=eq.${tpl.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          cover_url: coverUrl,
+          chapters: updatedChapters
+        })
+      });
       console.log(`  Successfully updated ${tpl.niche}`);
+    } catch (updateError) {
+      console.error(`  Error updating ${tpl.niche}:`, updateError);
     }
     
     // Sleep a bit to avoid rate limits
@@ -307,3 +299,4 @@ async function main() {
 }
 
 main();
+
