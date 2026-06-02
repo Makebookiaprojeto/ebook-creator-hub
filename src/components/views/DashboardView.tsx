@@ -278,6 +278,42 @@ export function DashboardView() {
             };
           }).reverse());
 
+        } else if (isUser6) {
+          const totalSales = 148;
+          const totalRevenue = 5432.80;
+
+          setStats((prev) => ({
+            ...prev,
+            totalSales,
+            totalRevenue,
+            revenueToday: 558.90,
+            revenue7d: 1751.80,
+            revenue30d: 5432.80,
+            views: String(viewsCount || 0)
+          }));
+
+          const specificPaymentStats = [
+            { name: "Pix", conversion: "61%", value: `R$ ${(5432.80 * 0.61).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
+            { name: "Cartão de crédito", conversion: "23%", value: `R$ ${(5432.80 * 0.23).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
+            { name: "Pix automático", conversion: "11%", value: `R$ ${(5432.80 * 0.11).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
+            { name: "Boleto", conversion: "5%", value: `R$ ${(5432.80 * 0.05).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
+            { name: "Google Pay", conversion: "0%", value: "R$ 0,00" },
+            { name: "Apple Pay", conversion: "0%", value: "R$ 0,00" },
+            { name: "PicPay", conversion: "0%", value: "R$ 0,00" }
+          ];
+
+          setPaymentStats(specificPaymentStats);
+          
+          setSalesHistory(Array.from({ length: 6 }, (_, i) => {
+            const date = new Date();
+            date.setMonth(date.getMonth() - i);
+            return {
+              month: date.toLocaleString("pt-BR", { month: "short" }),
+              vendas: Math.floor(totalSales / 6),
+              timestamp: date.getTime(),
+            };
+          }).reverse());
+
         } else if (sales) {
           const totalSales = sales.length;
           const totalRevenue =
