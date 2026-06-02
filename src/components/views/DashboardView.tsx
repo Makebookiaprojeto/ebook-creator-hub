@@ -20,8 +20,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-
-
 const BASE_STATS: Record<string, any> = {
   "tr8200774@gmail.com": {
     ebooks: 43,
@@ -79,6 +77,19 @@ const BASE_STATS: Record<string, any> = {
   }
 };
 
+const quotes = [
+  "Sua criatividade é a única fronteira para o seu sucesso.",
+  "Cada eBook é uma nova porta aberta para a sua liberdade digital.",
+  "O sucesso é a soma de pequenos esforços repetidos dia após dia.",
+  "Não espere pela inspiração, crie sua própria oportunidade.",
+  "Seu conhecimento tem valor. Transforme-o em lucro hoje.",
+  "A melhor forma de prever o futuro é criando-o.",
+  "Grandes impérios começam com uma simples ideia.",
+  "Foque no progresso, não na perfeição.",
+  "Você está a um passo de mudar sua realidade financeira.",
+  "A consistência é a chave que abre a porta da escala."
+];
+
 export function DashboardView() {
   const { user: authUser } = useAuth();
   const { ebooks, loading: loadingEbooks } = useEbooks();
@@ -97,11 +108,6 @@ export function DashboardView() {
   const [paymentStats, setPaymentStats] = useState<any[]>([]);
   const [profitPeriod, setProfitPeriod] = useState<"today" | "7d" | "30d">("today");
 
-
-  const quotes = [
-...
-  ];
-
   useEffect(() => {
     const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
     setQuote(randomQuote);
@@ -113,7 +119,6 @@ export function DashboardView() {
     const fetchDashboardData = async () => {
       setLoadingStats(true);
       try {
-        // Fetch profile
         const { data: profile } = await supabase
           .from("profiles")
           .select("display_name")
@@ -121,14 +126,11 @@ export function DashboardView() {
           .maybeSingle();
         if (profile) setDbDisplayName(profile.display_name);
 
-
-        // 1. Vendas confirmadas
         const { data: sales } = await supabase
           .from("purchases")
           .select("amount_paid_cents, created_at, status, payment_method")
           .eq("status", "paid");
 
-        // 2. Visualizações
         const { count: viewsCount } = await supabase
           .from("ebook_views")
           .select("*", { count: 'exact', head: true });
@@ -145,9 +147,9 @@ export function DashboardView() {
         };
 
         const realSales = sales || [];
-        const totalSales = realSales.length + base.totalSales;
+        const totalSalesCount = realSales.length + base.totalSales;
         const realTotalRevenue = realSales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
-        const totalRevenue = realTotalRevenue + base.totalRevenue;
+        const totalRevenueValue = realTotalRevenue + base.totalRevenue;
 
         const now = new Date();
         const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
@@ -166,23 +168,21 @@ export function DashboardView() {
           .filter(s => s.created_at && new Date(s.created_at).getTime() >= thirtyDaysAgo)
           .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
 
-        setStats((prev) => ({
-          ...prev,
-          totalSales,
-          totalRevenue,
+        setStats({
+          totalSales: totalSalesCount,
+          totalRevenue: totalRevenueValue,
           revenueToday: realRevenueToday + base.revenueToday,
           revenue7d: realRevenue7d + base.revenue7d,
           revenue30d: realRevenue30d + base.revenue30d,
-          views: String((viewsCount || 0))
-        }));
+          views: String(viewsCount || 0)
+        });
 
-        // Histórico de vendas
         const last6Months = Array.from({ length: 6 }, (_, i) => {
           const date = new Date();
           date.setMonth(date.getMonth() - i);
           return {
             month: date.toLocaleString("pt-BR", { month: "short" }),
-            vendas: Math.floor(base.totalSales / 6), // Base distribuída nos meses
+            vendas: Math.floor(base.totalSales / 6),
             timestamp: date.getTime(),
           };
         }).reverse();
@@ -197,16 +197,7 @@ export function DashboardView() {
 
         setSalesHistory(last6Months);
 
-        // Métodos de pagamento
-        const methods = [
-          "Pix",
-          "Cartão de crédito",
-          "Boleto",
-          "Pix automático",
-          "PicPay",
-          "Google Pay",
-          "Apple Pay"
-        ];
+        const methods = ["Pix", "Cartão de crédito", "Boleto", "Pix automático", "PicPay", "Google Pay", "Apple Pay"];
 
         const calculatedPaymentStats = methods.map(method => {
           const methodSales = realSales.filter(s => (s as any).payment_method === method);
@@ -214,7 +205,7 @@ export function DashboardView() {
           const baseMethodRevenue = base.payments[method] || 0;
           const totalMethodRevenue = realMethodRevenue + baseMethodRevenue;
           
-          const totalRevenueForConversion = totalRevenue || 1; // evitar divisão por zero
+          const totalRevenueForConversion = totalRevenueValue || 1;
           const conversionRate = (totalMethodRevenue / totalRevenueForConversion) * 100;
 
           return {
@@ -225,12 +216,6 @@ export function DashboardView() {
         });
 
         setPaymentStats(calculatedPaymentStats);
-
-        } else {
-          // If no sales, set all to zero
-          const methods = ["Pix", "Cartão de crédito", "Boleto", "Pix automático", "PicPay", "Google Pay", "Apple Pay"];
-          setPaymentStats(methods.map(m => ({ name: m, conversion: "0%", value: "R$ 0,00" })));
-        }
       } catch (error) {
         console.error("Error fetching dashboard stats:", error);
       } finally {
@@ -240,24 +225,11 @@ export function DashboardView() {
 
     fetchDashboardData();
 
-    // Realtime: atualiza quando uma nova venda, visualização ou ebook chegar
     const channel = supabase
       .channel(`dashboard-updates-${authUser.id}`)
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "purchases" },
-        () => fetchDashboardData(),
-      )
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "ebook_views" },
-        () => fetchDashboardData(),
-      )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "ebooks", filter: `user_id=eq.${authUser.id}` },
-        () => fetchDashboardData(),
-      )
+      .on("postgres_changes", { event: "*", schema: "public", table: "purchases" }, () => fetchDashboardData())
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "ebook_views" }, () => fetchDashboardData())
+      .on("postgres_changes", { event: "*", schema: "public", table: "ebooks", filter: `user_id=eq.${authUser.id}` }, () => fetchDashboardData())
       .subscribe();
 
     return () => {
@@ -265,11 +237,11 @@ export function DashboardView() {
     };
   }, [authUser]);
 
-  const displayName =
-    dbDisplayName ||
-    (authUser?.user_metadata?.display_name as string | undefined) ||
-    authUser?.email?.split("@")[0] ||
-    "Usuário";
+  const displayName = dbDisplayName || (authUser?.user_metadata?.display_name as string | undefined) || authUser?.email?.split("@")[0] || "Usuário";
+  
+  const userEmail = authUser?.email || "";
+  const baseEbooks = BASE_STATS[userEmail]?.ebooks || 0;
+  const totalEbooks = baseEbooks + (ebooks?.length || 0);
 
   return (
     <div className="space-y-10 animate-fade-in py-4">
@@ -281,7 +253,7 @@ export function DashboardView() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <StatCard 
           label="Ebooks" 
-          value={authUser.email === "tr8200774@gmail.com" ? "43" : authUser.email === "robertomacaci@gmail.com" ? "27" : authUser.email === "Mat.resende10@gmail.com" ? "34" : authUser.email === "paoplays80@gmail.com" ? "23" : authUser.email === "rodrigodalves331@gmail.com" ? "32" : String(ebooks.length)} 
+          value={String(totalEbooks)} 
           icon={BookOpen} 
           tint="from-primary/10 to-primary/5" 
         />
@@ -312,7 +284,6 @@ export function DashboardView() {
             <CreditCard className="h-5 w-5 text-primary" />
             Meios de pagamento
           </h2>
-          
         </div>
         
         <div className="overflow-hidden rounded-xl border">
@@ -344,7 +315,6 @@ export function DashboardView() {
           </Table>
         </div>
       </div>
-
     </div>
   );
 }
