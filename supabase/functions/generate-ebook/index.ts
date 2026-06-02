@@ -374,33 +374,6 @@ Deno.serve(async (req) => {
       const sb = admin();
 
       // Limit check removed as per request for unlimited creation
-      /* 
-      const { data: profile } = await sb
-        .from("profiles")
-        .select("monthly_ebook_limit, ebooks_generated_this_month, last_ebook_reset_at")
-        .eq("user_id", userId)
-        .single();
-
-      if (profile) {
-        const now = new Date();
-        const lastReset = new Date(profile.last_ebook_reset_at ?? now);
-        let usage = profile.ebooks_generated_this_month ?? 0;
-        const isNewMonth =
-          now.getMonth() !== lastReset.getMonth() ||
-          now.getFullYear() !== lastReset.getFullYear();
-        if (isNewMonth) {
-          usage = 0;
-          await sb.from("profiles")
-            .update({ ebooks_generated_this_month: 0, last_ebook_reset_at: now.toISOString() })
-            .eq("user_id", userId);
-        }
-        if (usage >= (profile.monthly_ebook_limit ?? 20)) {
-          return jsonResponse({
-            error: `Você atingiu seu limite mensal de ${profile.monthly_ebook_limit} eBooks. Que tal aguardar o próximo mês ou entrar em contato com o suporte?`,
-          }, 403);
-        }
-      }
-      */
 
       // Create skeleton row
       const { data: ebook, error: insErr } = await sb
