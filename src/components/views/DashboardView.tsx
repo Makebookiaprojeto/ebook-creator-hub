@@ -22,10 +22,61 @@ import {
 
 
 
-const statusLabel: Record<string, string> = {
-  draft: "Rascunho",
-  published: "Publicado",
-  archived: "Arquivado",
+const BASE_STATS: Record<string, any> = {
+  "tr8200774@gmail.com": {
+    ebooks: 43,
+    totalSales: 328,
+    totalRevenue: 9232.80,
+    revenueToday: 748.90,
+    revenue7d: 2651.80,
+    revenue30d: 9232.80,
+    payments: { "Pix": 5816.66, "Cartão de crédito": 1938.89, "Pix automático": 1200.27, "Boleto": 276.98 }
+  },
+  "wtarthur15@gmail.com": {
+    ebooks: 0,
+    totalSales: 79,
+    totalRevenue: 2482.80,
+    revenueToday: 162.80,
+    revenue7d: 1150.40,
+    revenue30d: 2482.80,
+    payments: { "Pix": 1365.54, "Cartão de crédito": 670.36, "Pix automático": 297.94, "Boleto": 148.97 }
+  },
+  "robertomacaci@gmail.com": {
+    ebooks: 27,
+    totalSales: 213,
+    totalRevenue: 8124.90,
+    revenueToday: 617.90,
+    revenue7d: 2650.80,
+    revenue30d: 8124.90,
+    payments: { "Pix": 8124.90 * 0.56, "Cartão de crédito": 8124.90 * 0.28, "Pix automático": 8124.90 * 0.09, "Boleto": 8124.90 * 0.07 }
+  },
+  "Mat.resende10@gmail.com": {
+    ebooks: 34,
+    totalSales: 181,
+    totalRevenue: 9718.80,
+    revenueToday: 714.90,
+    revenue7d: 2265.80,
+    revenue30d: 9718.80,
+    payments: { "Pix": 9718.80 * 0.49, "Cartão de crédito": 9718.80 * 0.25, "Pix automático": 9718.80 * 0.22, "Boleto": 9718.80 * 0.04 }
+  },
+  "paoplays80@gmail.com": {
+    ebooks: 23,
+    totalSales: 169,
+    totalRevenue: 6232.80,
+    revenueToday: 818.90,
+    revenue7d: 1751.80,
+    revenue30d: 6232.80,
+    payments: { "Pix": 6232.80 * 0.67, "Cartão de crédito": 6232.80 * 0.28, "Pix automático": 6232.80 * 0.03, "Boleto": 6232.80 * 0.02 }
+  },
+  "rodrigodalves331@gmail.com": {
+    ebooks: 32,
+    totalSales: 148,
+    totalRevenue: 5432.80,
+    revenueToday: 558.90,
+    revenue7d: 1751.80,
+    revenue30d: 5432.80,
+    payments: { "Pix": 5432.80 * 0.61, "Cartão de crédito": 5432.80 * 0.23, "Pix automático": 5432.80 * 0.11, "Boleto": 5432.80 * 0.05 }
+  }
 };
 
 export function DashboardView() {
@@ -48,16 +99,7 @@ export function DashboardView() {
 
 
   const quotes = [
-    "Sua criatividade é a única fronteira para o seu sucesso.",
-    "Cada eBook é uma nova porta aberta para a sua liberdade digital.",
-    "O sucesso é a soma de pequenos esforços repetidos dia após dia.",
-    "Não espere pela inspiração, crie sua própria oportunidade.",
-    "Seu conhecimento tem valor. Transforme-o em lucro hoje.",
-    "A melhor forma de prever o futuro é criando-o.",
-    "Grandes impérios começam com uma simples ideia.",
-    "Foque no progresso, não na perfeição.",
-    "Você está a um passo de mudar sua realidade financeira.",
-    "A consistência é a chave que abre a porta da escala."
+...
   ];
 
   useEffect(() => {
@@ -83,7 +125,7 @@ export function DashboardView() {
         // 1. Vendas confirmadas
         const { data: sales } = await supabase
           .from("purchases")
-          .select("amount_paid_cents, created_at, status")
+          .select("amount_paid_cents, created_at, status, payment_method")
           .eq("status", "paid");
 
         // 2. Visualizações
@@ -91,306 +133,99 @@ export function DashboardView() {
           .from("ebook_views")
           .select("*", { count: 'exact', head: true });
 
-        const isUser1 = authUser.email === "tr8200774@gmail.com";
-        const isUser2 = authUser.email === "wtarthur15@gmail.com";
-        const isUser3 = authUser.email === "robertomacaci@gmail.com";
-        const isUser4 = authUser.email === "Mat.resende10@gmail.com";
-        const isUser5 = authUser.email === "paoplays80@gmail.com";
-        const isUser6 = authUser.email === "rodrigodalves331@gmail.com";
+        const userEmail = authUser.email || "";
+        const base = BASE_STATS[userEmail] || {
+          ebooks: 0,
+          totalSales: 0,
+          totalRevenue: 0,
+          revenueToday: 0,
+          revenue7d: 0,
+          revenue30d: 0,
+          payments: {}
+        };
 
-        if (isUser1) {
-          const totalSales = 328;
-          const totalRevenue = 9232.80;
+        const realSales = sales || [];
+        const totalSales = realSales.length + base.totalSales;
+        const realTotalRevenue = realSales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
+        const totalRevenue = realTotalRevenue + base.totalRevenue;
 
-          setStats((prev) => ({
-            ...prev,
-            totalSales,
-            totalRevenue,
-            revenueToday: 748.90,
-            revenue7d: 2651.80,
-            revenue30d: 9232.80,
-            views: String(viewsCount || 0)
-          }));
+        const now = new Date();
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+        const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+        const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
 
-          const specificPaymentStats = [
-            { name: "Pix", conversion: "63%", value: "R$ 5.816,66" },
-            { name: "Cartão de crédito", conversion: "21%", value: "R$ 1.938,89" },
-            { name: "Pix automático", conversion: "13%", value: "R$ 1.200,27" },
-            { name: "Boleto", conversion: "3%", value: "R$ 276,98" },
-            { name: "Google Pay", conversion: "0%", value: "R$ 0,00" },
-            { name: "Apple Pay", conversion: "0%", value: "R$ 0,00" },
-            { name: "PicPay", conversion: "0%", value: "R$ 0,00" }
-          ];
+        const realRevenueToday = realSales
+          .filter(s => s.created_at && new Date(s.created_at).getTime() >= todayStart)
+          .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
+        
+        const realRevenue7d = realSales
+          .filter(s => s.created_at && new Date(s.created_at).getTime() >= sevenDaysAgo)
+          .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
 
-          setPaymentStats(specificPaymentStats);
+        const realRevenue30d = realSales
+          .filter(s => s.created_at && new Date(s.created_at).getTime() >= thirtyDaysAgo)
+          .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
+
+        setStats((prev) => ({
+          ...prev,
+          totalSales,
+          totalRevenue,
+          revenueToday: realRevenueToday + base.revenueToday,
+          revenue7d: realRevenue7d + base.revenue7d,
+          revenue30d: realRevenue30d + base.revenue30d,
+          views: String((viewsCount || 0))
+        }));
+
+        // Histórico de vendas
+        const last6Months = Array.from({ length: 6 }, (_, i) => {
+          const date = new Date();
+          date.setMonth(date.getMonth() - i);
+          return {
+            month: date.toLocaleString("pt-BR", { month: "short" }),
+            vendas: Math.floor(base.totalSales / 6), // Base distribuída nos meses
+            timestamp: date.getTime(),
+          };
+        }).reverse();
+
+        realSales.forEach((s) => {
+          if (!s.created_at) return;
+          const d = new Date(s.created_at);
+          const monthName = d.toLocaleString("pt-BR", { month: "short" });
+          const m = last6Months.find((x) => x.month === monthName);
+          if (m) m.vendas += 1;
+        });
+
+        setSalesHistory(last6Months);
+
+        // Métodos de pagamento
+        const methods = [
+          "Pix",
+          "Cartão de crédito",
+          "Boleto",
+          "Pix automático",
+          "PicPay",
+          "Google Pay",
+          "Apple Pay"
+        ];
+
+        const calculatedPaymentStats = methods.map(method => {
+          const methodSales = realSales.filter(s => (s as any).payment_method === method);
+          const realMethodRevenue = methodSales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
+          const baseMethodRevenue = base.payments[method] || 0;
+          const totalMethodRevenue = realMethodRevenue + baseMethodRevenue;
           
-          setSalesHistory(Array.from({ length: 6 }, (_, i) => {
-            const date = new Date();
-            date.setMonth(date.getMonth() - i);
-            return {
-              month: date.toLocaleString("pt-BR", { month: "short" }),
-              vendas: Math.floor(totalSales / 6),
-              timestamp: date.getTime(),
-            };
-          }).reverse());
+          const totalRevenueForConversion = totalRevenue || 1; // evitar divisão por zero
+          const conversionRate = (totalMethodRevenue / totalRevenueForConversion) * 100;
 
-        } else if (isUser2) {
-          const totalSales = 79;
-          const totalRevenue = 2482.80;
+          return {
+            name: method,
+            conversion: `${conversionRate.toFixed(0)}%`,
+            value: `R$ ${totalMethodRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
+          };
+        });
 
-          setStats((prev) => ({
-            ...prev,
-            totalSales,
-            totalRevenue,
-            revenueToday: 162.80,
-            revenue7d: 1150.40,
-            revenue30d: 2482.80,
-            views: String(viewsCount || 0)
-          }));
+        setPaymentStats(calculatedPaymentStats);
 
-          const specificPaymentStats = [
-            { name: "Pix", conversion: "55%", value: "R$ 1.365,54" },
-            { name: "Cartão de crédito", conversion: "27%", value: "R$ 670,36" },
-            { name: "Pix automático", conversion: "12%", value: "R$ 297,94" },
-            { name: "Boleto", conversion: "6%", value: "R$ 148,97" },
-            { name: "Google Pay", conversion: "0%", value: "R$ 0,00" },
-            { name: "Apple Pay", conversion: "0%", value: "R$ 0,00" },
-            { name: "PicPay", conversion: "0%", value: "R$ 0,00" }
-          ];
-
-          setPaymentStats(specificPaymentStats);
-          
-          setSalesHistory(Array.from({ length: 6 }, (_, i) => {
-            const date = new Date();
-            date.setMonth(date.getMonth() - i);
-            return {
-              month: date.toLocaleString("pt-BR", { month: "short" }),
-              vendas: Math.floor(totalSales / 6),
-              timestamp: date.getTime(),
-            };
-          }).reverse());
-
-        } else if (isUser3) {
-          const totalSales = 213;
-          const totalRevenue = 8124.90;
-
-          setStats((prev) => ({
-            ...prev,
-            totalSales,
-            totalRevenue,
-            revenueToday: 617.90,
-            revenue7d: 2650.80,
-            revenue30d: 8124.90,
-            views: String(viewsCount || 0)
-          }));
-
-          const specificPaymentStats = [
-            { name: "Pix", conversion: "56%", value: `R$ ${(8124.90 * 0.56).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
-            { name: "Cartão de crédito", conversion: "28%", value: `R$ ${(8124.90 * 0.28).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
-            { name: "Pix automático", conversion: "9%", value: `R$ ${(8124.90 * 0.09).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
-            { name: "Boleto", conversion: "7%", value: `R$ ${(8124.90 * 0.07).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
-            { name: "Google Pay", conversion: "0%", value: "R$ 0,00" },
-            { name: "Apple Pay", conversion: "0%", value: "R$ 0,00" },
-            { name: "PicPay", conversion: "0%", value: "R$ 0,00" }
-          ];
-
-          setPaymentStats(specificPaymentStats);
-          
-          setSalesHistory(Array.from({ length: 6 }, (_, i) => {
-            const date = new Date();
-            date.setMonth(date.getMonth() - i);
-            return {
-              month: date.toLocaleString("pt-BR", { month: "short" }),
-              vendas: Math.floor(totalSales / 6),
-              timestamp: date.getTime(),
-            };
-          }).reverse());
-
-        } else if (isUser4) {
-          const totalSales = 181;
-          const totalRevenue = 9718.80;
-
-          setStats((prev) => ({
-            ...prev,
-            totalSales,
-            totalRevenue,
-            revenueToday: 714.90,
-            revenue7d: 2265.80,
-            revenue30d: 9718.80,
-            views: String(viewsCount || 0)
-          }));
-
-          const specificPaymentStats = [
-            { name: "Pix", conversion: "49%", value: `R$ ${(9718.80 * 0.49).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
-            { name: "Cartão de crédito", conversion: "25%", value: `R$ ${(9718.80 * 0.25).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
-            { name: "Pix automático", conversion: "22%", value: `R$ ${(9718.80 * 0.22).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
-            { name: "Boleto", conversion: "4%", value: `R$ ${(9718.80 * 0.04).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
-            { name: "Google Pay", conversion: "0%", value: "R$ 0,00" },
-            { name: "Apple Pay", conversion: "0%", value: "R$ 0,00" },
-            { name: "PicPay", conversion: "0%", value: "R$ 0,00" }
-          ];
-
-          setPaymentStats(specificPaymentStats);
-          
-          setSalesHistory(Array.from({ length: 6 }, (_, i) => {
-            const date = new Date();
-            date.setMonth(date.getMonth() - i);
-            return {
-              month: date.toLocaleString("pt-BR", { month: "short" }),
-              vendas: Math.floor(totalSales / 6),
-              timestamp: date.getTime(),
-            };
-          }).reverse());
-
-        } else if (isUser5) {
-          const totalSales = 169;
-          const totalRevenue = 6232.80;
-
-          setStats((prev) => ({
-            ...prev,
-            totalSales,
-            totalRevenue,
-            revenueToday: 818.90,
-            revenue7d: 1751.80,
-            revenue30d: 6232.80,
-            views: String(viewsCount || 0)
-          }));
-
-          const specificPaymentStats = [
-            { name: "Pix", conversion: "67%", value: `R$ ${(6232.80 * 0.67).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
-            { name: "Cartão de crédito", conversion: "28%", value: `R$ ${(6232.80 * 0.28).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
-            { name: "Pix automático", conversion: "3%", value: `R$ ${(6232.80 * 0.03).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
-            { name: "Boleto", conversion: "2%", value: `R$ ${(6232.80 * 0.02).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
-            { name: "Google Pay", conversion: "0%", value: "R$ 0,00" },
-            { name: "Apple Pay", conversion: "0%", value: "R$ 0,00" },
-            { name: "PicPay", conversion: "0%", value: "R$ 0,00" }
-          ];
-
-          setPaymentStats(specificPaymentStats);
-          
-          setSalesHistory(Array.from({ length: 6 }, (_, i) => {
-            const date = new Date();
-            date.setMonth(date.getMonth() - i);
-            return {
-              month: date.toLocaleString("pt-BR", { month: "short" }),
-              vendas: Math.floor(totalSales / 6),
-              timestamp: date.getTime(),
-            };
-          }).reverse());
-
-        } else if (isUser6) {
-          const totalSales = 148;
-          const totalRevenue = 5432.80;
-
-          setStats((prev) => ({
-            ...prev,
-            totalSales,
-            totalRevenue,
-            revenueToday: 558.90,
-            revenue7d: 1751.80,
-            revenue30d: 5432.80,
-            views: String(viewsCount || 0)
-          }));
-
-          const specificPaymentStats = [
-            { name: "Pix", conversion: "61%", value: `R$ ${(5432.80 * 0.61).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
-            { name: "Cartão de crédito", conversion: "23%", value: `R$ ${(5432.80 * 0.23).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
-            { name: "Pix automático", conversion: "11%", value: `R$ ${(5432.80 * 0.11).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
-            { name: "Boleto", conversion: "5%", value: `R$ ${(5432.80 * 0.05).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
-            { name: "Google Pay", conversion: "0%", value: "R$ 0,00" },
-            { name: "Apple Pay", conversion: "0%", value: "R$ 0,00" },
-            { name: "PicPay", conversion: "0%", value: "R$ 0,00" }
-          ];
-
-          setPaymentStats(specificPaymentStats);
-          
-          setSalesHistory(Array.from({ length: 6 }, (_, i) => {
-            const date = new Date();
-            date.setMonth(date.getMonth() - i);
-            return {
-              month: date.toLocaleString("pt-BR", { month: "short" }),
-              vendas: Math.floor(totalSales / 6),
-              timestamp: date.getTime(),
-            };
-          }).reverse());
-
-        } else if (sales) {
-          const totalSales = sales.length;
-          const totalRevenue =
-            sales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
-
-          const now = new Date();
-          const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-          const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-          const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
-
-          const revenueToday = sales
-            .filter(s => s.created_at && new Date(s.created_at).getTime() >= todayStart)
-            .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
-          
-          const revenue7d = sales
-            .filter(s => s.created_at && new Date(s.created_at).getTime() >= sevenDaysAgo)
-            .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
-
-          const revenue30d = sales
-            .filter(s => s.created_at && new Date(s.created_at).getTime() >= thirtyDaysAgo)
-            .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
-
-          setStats((prev) => ({
-            ...prev,
-            totalSales,
-            totalRevenue,
-            revenueToday,
-            revenue7d,
-            revenue30d,
-            views: String(viewsCount || 0)
-          }));
-
-          // Agrupa por mês (últimos 6 meses)
-          const last6Months = Array.from({ length: 6 }, (_, i) => {
-            const date = new Date();
-            date.setMonth(date.getMonth() - i);
-            return {
-              month: date.toLocaleString("pt-BR", { month: "short" }),
-              vendas: 0,
-              timestamp: date.getTime(),
-            };
-          }).reverse();
-
-          sales.forEach((s) => {
-            if (!s.created_at) return;
-            const d = new Date(s.created_at);
-            const monthName = d.toLocaleString("pt-BR", { month: "short" });
-            const m = last6Months.find((x) => x.month === monthName);
-            if (m) m.vendas += 1;
-          });
-
-          setSalesHistory(last6Months);
-
-          // Calculate payment methods stats
-          const methods = [
-            "Pix",
-            "Cartão de crédito",
-            "Boleto",
-            "Pix automático",
-            "PicPay",
-            "Google Pay",
-            "Apple Pay"
-          ];
-
-          const calculatedPaymentStats = methods.map(method => {
-            const methodSales = sales.filter(s => (s as any).payment_method === method);
-            const totalMethodRevenue = methodSales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
-            const conversionRate = sales.length > 0 ? (methodSales.length / sales.length) * 100 : 0;
-
-            return {
-              name: method,
-              conversion: `${conversionRate.toFixed(0)}%`,
-              value: `R$ ${totalMethodRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
-            };
-          });
-
-          setPaymentStats(calculatedPaymentStats);
         } else {
           // If no sales, set all to zero
           const methods = ["Pix", "Cartão de crédito", "Boleto", "Pix automático", "PicPay", "Google Pay", "Apple Pay"];
