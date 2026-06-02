@@ -251,6 +251,7 @@ export function CreateEbookView() {
 
   const handleAIError = (status?: number, fallback = "Falha ao gerar com IA", errorText?: string) => {
     if (status === 403 && errorText?.includes("limite mensal")) {
+      // Logic for legacy limit handling, though it should not be triggered anymore
       return toast.error(errorText);
     }
     if (status === 429) return toast.error("Muitas requisições. Aguarde alguns segundos e tente novamente.");
@@ -341,13 +342,7 @@ export function CreateEbookView() {
       toast.success("Ebook pronto!");
     } catch (e: any) {
       console.error(e);
-      if (e?.message?.includes("Limite mensal")) {
-        toast.error("Você atingiu seu limite mensal de 20 eBooks. Seu limite será zerado no próximo mês!", {
-          duration: 6000,
-        });
-      } else {
-        toast.error(e?.message ?? "Erro ao buscar ebook");
-      }
+      toast.error(e?.message ?? "Erro ao buscar ebook");
       setGenerating(false);
     }
   };

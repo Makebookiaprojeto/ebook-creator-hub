@@ -362,7 +362,6 @@ export type Database = {
           id: string
           is_lifetime: boolean | null
           last_ebook_reset_at: string | null
-          monthly_ebook_limit: number | null
           updated_at: string
           user_id: string
         }
@@ -374,7 +373,6 @@ export type Database = {
           id?: string
           is_lifetime?: boolean | null
           last_ebook_reset_at?: string | null
-          monthly_ebook_limit?: number | null
           updated_at?: string
           user_id: string
         }
@@ -386,7 +384,6 @@ export type Database = {
           id?: string
           is_lifetime?: boolean | null
           last_ebook_reset_at?: string | null
-          monthly_ebook_limit?: number | null
           updated_at?: string
           user_id?: string
         }
