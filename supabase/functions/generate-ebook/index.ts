@@ -373,7 +373,8 @@ Deno.serve(async (req) => {
 
       const sb = admin();
 
-      // Limit check
+      // Limit check removed as per request for unlimited creation
+      /* 
       const { data: profile } = await sb
         .from("profiles")
         .select("monthly_ebook_limit, ebooks_generated_this_month, last_ebook_reset_at")
@@ -399,6 +400,7 @@ Deno.serve(async (req) => {
           }, 403);
         }
       }
+      */
 
       // Create skeleton row
       const { data: ebook, error: insErr } = await sb

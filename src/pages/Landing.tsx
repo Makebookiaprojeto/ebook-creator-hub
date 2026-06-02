@@ -152,7 +152,7 @@ const Landing = () => {
               { icon: TrendingUp, title: "Divulgação smart", desc: "Saiba exatamente onde divulgar com nossas ferramentas de busca de grupos." },
               { icon: ShieldCheck, title: "Segurança Total", desc: "Seus dados e seus ebooks estão protegidos com tecnologia de ponta." },
               { icon: Timer, title: "Velocidade Recorde", desc: "O que levava 30 dias agora leva 30 minutos. Multiplique sua produção." },
-              { icon: Rocket, title: "Escala Infinita", desc: "Crie até 20 produtos diferentes por mês e domine múltiplos nichos." },
+              { icon: Rocket, title: "Escala Infinita", desc: "Crie ebooks de forma ilimitada e domine múltiplos nichos." },
             ].map((f, i) => (
               <div key={f.title} className="p-8 rounded-2xl border bg-card/50 hover:bg-card hover:-translate-y-2 transition-all duration-300">
                 <div className="h-12 w-12 rounded-xl gradient-primary flex items-center justify-center mb-6 shadow-glow">
@@ -189,7 +189,7 @@ const Landing = () => {
                 { 
                   name: "Juliana Santos", 
                   role: "Ex-CLT", 
-                  text: "Sempre quis ter meu negócio digital. Com os limites de 20 ebooks por mês, eu consigo testar vários nichos até achar o campeão. Já pedi demissão!",
+                  text: "Sempre quis ter meu negócio digital. Com a criação ilimitada de ebooks, eu consigo testar vários nichos até achar o campeão. Já pedi demissão!",
                   rating: 5
                 }
               ].map((t, i) => (
@@ -229,7 +229,7 @@ const Landing = () => {
                 <span className="text-muted-foreground font-medium">/mês</span>
               </div>
               <ul className="space-y-4 mb-10 flex-1">
-                {["Até 20 ebooks/mês", "IA premium (Cérebro Criativo)", "Página de vendas de alta conversão", "Checkout integrado", "Suporte prioritário"].map(item => (
+                {["Criação de ebooks ilimitada", "IA premium (Cérebro Criativo)", "Página de vendas de alta conversão", "Checkout integrado", "Suporte prioritário"].map(item => (
                   <li key={item} className="flex items-center gap-3 text-sm">
                     <Check className="h-4 w-4 text-primary shrink-0" /> {item}
                   </li>

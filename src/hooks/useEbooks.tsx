@@ -86,9 +86,6 @@ export function useEbooks() {
       .single();
 
     if (ebookError || !newEbook) {
-      if (ebookError?.message?.includes("Limite mensal")) {
-        throw new Error("Você atingiu seu limite mensal de 20 eBooks. Seu limite será zerado no próximo mês!");
-      }
       throw ebookError ?? new Error("Falha ao criar ebook");
     }
 
