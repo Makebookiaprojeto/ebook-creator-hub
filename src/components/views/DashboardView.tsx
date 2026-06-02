@@ -128,7 +128,7 @@ export function DashboardView() {
 
         const { data: sales } = await supabase
           .from("purchases")
-          .select("amount_paid_cents, created_at, status, payment_method")
+          .select("amount_paid_cents, created_at, status, platform")
           .eq("status", "paid");
 
         const { count: viewsCount } = await supabase
@@ -200,7 +200,8 @@ export function DashboardView() {
         const methods = ["Pix", "Cartão de crédito", "Boleto", "Pix automático", "PicPay", "Google Pay", "Apple Pay"];
 
         const calculatedPaymentStats = methods.map(method => {
-          const methodSales = realSales.filter(s => (s as any).payment_method === method);
+          // Since payment_method doesn't exist, we check platform or assume 0 for real data if not matched
+          const methodSales = realSales.filter(s => (s as any).payment_method === method || s.platform === method);
           const realMethodRevenue = methodSales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
           const baseMethodRevenue = base.payments[method] || 0;
           const totalMethodRevenue = realMethodRevenue + baseMethodRevenue;
