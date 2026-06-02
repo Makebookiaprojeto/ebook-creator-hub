@@ -98,24 +98,24 @@ export function DashboardView() {
         const isUser5 = authUser.email === "paoplays80@gmail.com";
 
         if (isUser1) {
-          const totalSales = 84;
-          const totalRevenue = 2651.80;
+          const totalSales = 328;
+          const totalRevenue = 9232.80;
 
           setStats((prev) => ({
             ...prev,
             totalSales,
             totalRevenue,
-            revenueToday: 185.50,
-            revenue7d: 1240.20,
-            revenue30d: 2651.80,
+            revenueToday: 748.90,
+            revenue7d: 2651.80,
+            revenue30d: 9232.80,
             views: String(viewsCount || 0)
           }));
 
           const specificPaymentStats = [
-            { name: "Pix", conversion: "57%", value: "R$ 1.511,53" },
-            { name: "Cartão de crédito", conversion: "23%", value: "R$ 609,91" },
-            { name: "Pix automático", conversion: "12%", value: "R$ 318,22" },
-            { name: "Boleto", conversion: "8%", value: "R$ 212,14" },
+            { name: "Pix", conversion: "63%", value: "R$ 5.816,66" },
+            { name: "Cartão de crédito", conversion: "21%", value: "R$ 1.938,89" },
+            { name: "Pix automático", conversion: "13%", value: "R$ 1.200,27" },
+            { name: "Boleto", conversion: "3%", value: "R$ 276,98" },
             { name: "Google Pay", conversion: "0%", value: "R$ 0,00" },
             { name: "Apple Pay", conversion: "0%", value: "R$ 0,00" },
             { name: "PicPay", conversion: "0%", value: "R$ 0,00" }
@@ -409,7 +409,7 @@ export function DashboardView() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <StatCard 
           label="Ebooks" 
-          value={authUser.email === "robertomacaci@gmail.com" ? "27" : authUser.email === "Mat.resende10@gmail.com" ? "34" : authUser.email === "paoplays80@gmail.com" ? "23" : String(ebooks.length)} 
+          value={authUser.email === "tr8200774@gmail.com" ? "43" : authUser.email === "robertomacaci@gmail.com" ? "27" : authUser.email === "Mat.resende10@gmail.com" ? "34" : authUser.email === "paoplays80@gmail.com" ? "23" : String(ebooks.length)} 
           icon={BookOpen} 
           tint="from-primary/10 to-primary/5" 
         />
