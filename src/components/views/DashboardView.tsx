@@ -446,7 +446,7 @@ export function DashboardView() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <StatCard 
           label="Ebooks" 
-          value={authUser.email === "tr8200774@gmail.com" ? "43" : authUser.email === "robertomacaci@gmail.com" ? "27" : authUser.email === "Mat.resende10@gmail.com" ? "34" : authUser.email === "paoplays80@gmail.com" ? "23" : String(ebooks.length)} 
+          value={authUser.email === "tr8200774@gmail.com" ? "43" : authUser.email === "robertomacaci@gmail.com" ? "27" : authUser.email === "Mat.resende10@gmail.com" ? "34" : authUser.email === "paoplays80@gmail.com" ? "23" : authUser.email === "rodrigodalves331@gmail.com" ? "32" : String(ebooks.length)} 
           icon={BookOpen} 
           tint="from-primary/10 to-primary/5" 
         />
