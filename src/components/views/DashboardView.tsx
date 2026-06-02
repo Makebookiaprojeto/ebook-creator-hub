@@ -96,6 +96,7 @@ export function DashboardView() {
         const isUser3 = authUser.email === "robertomacaci@gmail.com";
         const isUser4 = authUser.email === "Mat.resende10@gmail.com";
         const isUser5 = authUser.email === "paoplays80@gmail.com";
+        const isUser6 = authUser.email === "rodrigodalves331@gmail.com";
 
         if (isUser1) {
           const totalSales = 328;
