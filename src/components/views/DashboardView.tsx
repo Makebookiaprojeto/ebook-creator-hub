@@ -95,6 +95,7 @@ export function DashboardView() {
         const isUser2 = authUser.email === "wtarthur15@gmail.com";
         const isUser3 = authUser.email === "robertomacaci@gmail.com";
         const isUser4 = authUser.email === "Mat.resende10@gmail.com";
+        const isUser5 = authUser.email === "paoplays80@gmail.com";
 
         if (isUser1) {
           const totalSales = 84;
@@ -223,6 +224,42 @@ export function DashboardView() {
             { name: "Cartão de crédito", conversion: "25%", value: `R$ ${(9718.80 * 0.25).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
             { name: "Pix automático", conversion: "22%", value: `R$ ${(9718.80 * 0.22).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
             { name: "Boleto", conversion: "4%", value: `R$ ${(9718.80 * 0.04).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
+            { name: "Google Pay", conversion: "0%", value: "R$ 0,00" },
+            { name: "Apple Pay", conversion: "0%", value: "R$ 0,00" },
+            { name: "PicPay", conversion: "0%", value: "R$ 0,00" }
+          ];
+
+          setPaymentStats(specificPaymentStats);
+          
+          setSalesHistory(Array.from({ length: 6 }, (_, i) => {
+            const date = new Date();
+            date.setMonth(date.getMonth() - i);
+            return {
+              month: date.toLocaleString("pt-BR", { month: "short" }),
+              vendas: Math.floor(totalSales / 6),
+              timestamp: date.getTime(),
+            };
+          }).reverse());
+
+        } else if (isUser5) {
+          const totalSales = 169;
+          const totalRevenue = 6232.80;
+
+          setStats((prev) => ({
+            ...prev,
+            totalSales,
+            totalRevenue,
+            revenueToday: 818.90,
+            revenue7d: 1751.80,
+            revenue30d: 6232.80,
+            views: String(viewsCount || 0)
+          }));
+
+          const specificPaymentStats = [
+            { name: "Pix", conversion: "67%", value: `R$ ${(6232.80 * 0.67).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
+            { name: "Cartão de crédito", conversion: "28%", value: `R$ ${(6232.80 * 0.28).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
+            { name: "Pix automático", conversion: "3%", value: `R$ ${(6232.80 * 0.03).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
+            { name: "Boleto", conversion: "2%", value: `R$ ${(6232.80 * 0.02).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` },
             { name: "Google Pay", conversion: "0%", value: "R$ 0,00" },
             { name: "Apple Pay", conversion: "0%", value: "R$ 0,00" },
             { name: "PicPay", conversion: "0%", value: "R$ 0,00" }
@@ -372,7 +409,7 @@ export function DashboardView() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <StatCard 
           label="Ebooks" 
-          value={authUser.email === "robertomacaci@gmail.com" ? "27" : authUser.email === "Mat.resende10@gmail.com" ? "34" : String(ebooks.length)} 
+          value={authUser.email === "robertomacaci@gmail.com" ? "27" : authUser.email === "Mat.resende10@gmail.com" ? "34" : authUser.email === "paoplays80@gmail.com" ? "23" : String(ebooks.length)} 
           icon={BookOpen} 
           tint="from-primary/10 to-primary/5" 
         />
