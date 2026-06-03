@@ -49,6 +49,7 @@ export function LibraryView({ onCreateNew }: Props) {
   const [savingPriceId, setSavingPriceId] = useState<string | null>(null);
   const [savingCheckoutId, setSavingCheckoutId] = useState<string | null>(null);
   const [checkoutUrlDrafts, setCheckoutUrlDrafts] = useState<Record<string, string>>({});
+  const [productIdDrafts, setProductIdDrafts] = useState<Record<string, string>>({});
 
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   
@@ -78,29 +79,49 @@ export function LibraryView({ onCreateNew }: Props) {
     }
   };
 
-  const saveCheckoutUrl = async (eb: Ebook) => {
+  const saveCaktoSettings = async (eb: Ebook) => {
     const url = (checkoutUrlDrafts[eb.id] ?? (eb as any).cakto_checkout_url ?? "").trim();
+    const productId = (productIdDrafts[eb.id] ?? (eb as any).cakto_product_id ?? "").trim();
+
     if (url && !/^https?:\/\//i.test(url)) {
-      toast.error("Use um link válido (começando com https://).");
+      toast.error("Use um link de checkout válido (começando com https://).");
       return;
     }
+
+    if (!productId) {
+      toast.error("O Product ID da Cakto é obrigatório para processar vendas.");
+      return;
+    }
+
     setSavingCheckoutId(eb.id);
     try {
       const { error } = await supabase
         .from("ebooks")
-        .update({ cakto_checkout_url: url || null } as any)
+        .update({ 
+          cakto_checkout_url: url || null,
+          cakto_product_id: productId
+        } as any)
         .eq("id", eb.id);
+      
       if (error) throw error;
-      toast.success("Link de checkout salvo!");
+      
+      toast.success("Configurações da Cakto salvas!");
+      
       setCheckoutUrlDrafts((p) => {
         const n = { ...p };
         delete n[eb.id];
         return n;
       });
+      setProductIdDrafts((p) => {
+        const n = { ...p };
+        delete n[eb.id];
+        return n;
+      });
+      
       await refresh();
     } catch (err) {
       console.error(err);
-      toast.error("Não foi possível salvar.");
+      toast.error("Não foi possível salvar as configurações.");
     } finally {
       setSavingCheckoutId(null);
     }
@@ -403,23 +424,74 @@ export function LibraryView({ onCreateNew }: Props) {
                   )}
                 </div>
 
-                 {/* Links e Configurações */}
-                 <div className="mt-3 space-y-2">
+                 {/* Integração Cakto */}
+                 <div className="mt-4 pt-4 border-t space-y-3">
+                   <div className="flex items-center gap-2 mb-1">
+                     <div className="p-1 rounded bg-primary/10">
+                       <Link2 className="h-3.5 w-3.5 text-primary" />
+                     </div>
+                     <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Configurações Cakto</span>
+                   </div>
+
+                   <div>
+                     <label className="mb-1 flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground uppercase">
+                       URL de Checkout
+                     </label>
+                     <Input
+                       placeholder="https://pay.cakto.com.br/..."
+                       value={checkoutUrlDrafts[eb.id] ?? (eb as any).cakto_checkout_url ?? ""}
+                       onChange={(e) =>
+                         setCheckoutUrlDrafts((p) => ({ ...p, [eb.id]: e.target.value }))
+                       }
+                       className="h-8 text-xs"
+                     />
+                   </div>
+
+                   <div>
+                     <label className="mb-1 flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground uppercase">
+                       Cakto Product ID
+                     </label>
+                     <Input
+                       placeholder="UUID do Produto no painel Cakto"
+                       value={productIdDrafts[eb.id] ?? (eb as any).cakto_product_id ?? ""}
+                       onChange={(e) =>
+                         setProductIdDrafts((p) => ({ ...p, [eb.id]: e.target.value }))
+                       }
+                       className="h-8 text-xs font-mono"
+                     />
+                     <p className="mt-1 text-[9px] text-muted-foreground leading-tight">
+                       Obrigatório para que o sistema identifique a venda via Webhook.
+                     </p>
+                   </div>
+
+                   <Button
+                     size="sm"
+                     className="w-full h-8 text-xs font-semibold"
+                     onClick={() => saveCaktoSettings(eb)}
+                     disabled={savingCheckoutId === eb.id}
+                   >
+                     {savingCheckoutId === eb.id ? (
+                       <><Loader2 className="mr-2 h-3 w-3 animate-spin" /> Salvando...</>
+                     ) : (
+                       "Salvar Integração"
+                     )}
+                   </Button>
+
                    {eb.slug && (
-                     <div>
-                       <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
-                         <Globe className="h-3 w-3" /> Página de Vendas
+                     <div className="pt-2">
+                       <label className="mb-1 flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground uppercase">
+                         <Globe className="h-3 w-3" /> Link da Página de Vendas
                        </label>
                         <div className="flex items-center gap-1.5">
                           <Input
                             readOnly
                             value={`${window.location.origin}/e/${eb.slug}`}
-                            className="h-8 text-xs bg-muted/30"
+                            className="h-8 text-xs bg-muted/30 select-all"
                           />
                           <Button
                             size="sm"
                             variant="secondary"
-                            className="h-8 px-2"
+                            className="h-8 px-2 shrink-0"
                             onClick={() => copyPublicLink(eb)}
                             title="Copiar link"
                           >
@@ -428,9 +500,7 @@ export function LibraryView({ onCreateNew }: Props) {
                         </div>
                       </div>
                     )}
-
-
-                </div>
+                 </div>
 
               </div>
             </div>
