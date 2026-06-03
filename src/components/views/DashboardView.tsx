@@ -253,17 +253,11 @@ export function DashboardView() {
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <StatCard 
-          label="Ebooks" 
-          value={String(totalEbooks)} 
-          icon={BookOpen} 
-          tint="from-primary/10 to-primary/5" 
-        />
-        <StatCard label="Vendas" value={String(stats.totalSales)} delta={stats.totalSales > 0 ? `+${stats.totalSales}` : "0"} icon={ShoppingCart} tint="from-primary/10 to-primary/5" />
-        <StatCard 
           label="Lucro" 
           value={`R$ ${(profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} 
           icon={DollarSign} 
           tint="from-primary/10 to-primary/5"
+          large
           action={
             <Select value={profitPeriod} onValueChange={(v: any) => setProfitPeriod(v)}>
               <SelectTrigger className="h-8 w-[130px] text-xs">
@@ -276,6 +270,21 @@ export function DashboardView() {
               </SelectContent>
             </Select>
           }
+        />
+        <StatCard 
+          label="Ebooks" 
+          value={String(totalEbooks)} 
+          icon={BookOpen} 
+          tint="from-primary/10 to-primary/5" 
+          large
+        />
+        <StatCard 
+          label="Vendas" 
+          value={String(stats.totalSales)} 
+          delta={stats.totalSales > 0 ? `+${stats.totalSales}` : "0"} 
+          icon={ShoppingCart} 
+          tint="from-primary/10 to-primary/5" 
+          large
         />
       </div>
 
