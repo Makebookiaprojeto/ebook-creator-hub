@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BookOpen, Check, Download, ExternalLink, Eye, Globe, Loader2, Lock, Tag, Trash2, Plus, Settings, Copy, Link2 } from "lucide-react";
+import { BookOpen, Check, Download, ExternalLink, Eye, Globe, Loader2, Lock, Tag, Trash2, Plus, Settings, Copy, Link2, Webhook } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useEbooks, type Ebook, type Chapter } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
@@ -497,7 +497,31 @@ export function LibraryView({ onCreateNew }: Props) {
                         </div>
                       </div>
                     )}
-                 </div>
+                     <div className="pt-2">
+                       <label className="mb-1 flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground uppercase">
+                         <Webhook className="h-3 w-3" /> Configure o webhook
+                       </label>
+                       <div className="flex items-center gap-1.5">
+                         <Input
+                           readOnly
+                           value="https://qbksltxsnpkeaijfihug.supabase.co/functions/v1/webhook-payment"
+                           className="h-8 text-[10px] bg-muted/30 select-all font-mono"
+                         />
+                         <Button
+                           size="sm"
+                           variant="secondary"
+                           className="h-8 px-2 shrink-0"
+                           onClick={() => {
+                             navigator.clipboard.writeText("https://qbksltxsnpkeaijfihug.supabase.co/functions/v1/webhook-payment");
+                             toast.success("URL do webhook copiada!");
+                           }}
+                           title="Copiar webhook"
+                         >
+                           <Copy className="h-3.5 w-3.5" />
+                         </Button>
+                       </div>
+                     </div>
+                  </div>
 
               </div>
             </div>
