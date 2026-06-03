@@ -135,7 +135,7 @@ export function DashboardView() {
           .from("ebook_views")
           .select("*", { count: 'exact', head: true });
 
-        const userEmail = authUser.email || "";
+        const userEmail = (authUser.email || "").toLowerCase();
         const base = BASE_STATS[userEmail] || {
           ebooks: 0,
           totalSales: 0,
@@ -197,7 +197,7 @@ export function DashboardView() {
 
         setSalesHistory(last6Months);
 
-        const methods = ["Pix", "Cartão de crédito", "Boleto", "Pix automático", "PicPay", "Google Pay", "Apple Pay"];
+        const methods = ["Pix", "Cartão de Crédito", "Boleto", "Pix Automático", "PicPay", "Google Pay", "Apple Pay"];
 
         const calculatedPaymentStats = methods.map(method => {
           // Since payment_method doesn't exist, we check platform or assume 0 for real data if not matched
@@ -240,7 +240,7 @@ export function DashboardView() {
 
   const displayName = dbDisplayName || (authUser?.user_metadata?.display_name as string | undefined) || authUser?.email?.split("@")[0] || "Usuário";
   
-  const userEmail = authUser?.email || "";
+  const userEmail = (authUser?.email || "").toLowerCase();
   const baseEbooks = BASE_STATS[userEmail]?.ebooks || 0;
   const totalEbooks = baseEbooks + (ebooks?.length || 0);
 
