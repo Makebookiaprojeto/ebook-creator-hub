@@ -465,8 +465,7 @@ export function CreateEbookView() {
                         niche === n.name ? "border-primary bg-accent shadow-glow" : "hover:border-primary/40"
                       }`}
                     >
-                      <div className="text-2xl">{n.emoji}</div>
-                      <p className="mt-2 font-semibold text-sm">{n.name}</p>
+                      <p className="font-semibold text-base">{n.name}</p>
                     </button>
                   ))}
                 </div>
