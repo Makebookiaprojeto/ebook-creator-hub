@@ -430,7 +430,7 @@ export function LibraryView({ onCreateNew }: Props) {
                      <div className="p-1 rounded bg-primary/10">
                        <Link2 className="h-3.5 w-3.5 text-primary" />
                      </div>
-                     <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Configurações Cakto</span>
+                     <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Configurações</span>
                    </div>
 
                    <div>
@@ -449,7 +449,7 @@ export function LibraryView({ onCreateNew }: Props) {
 
                    <div>
                      <label className="mb-1 flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground uppercase">
-                       Cakto Product ID
+                       ID do Produto
                      </label>
                      <Input
                        placeholder="UUID do Produto no painel Cakto"
@@ -459,9 +459,6 @@ export function LibraryView({ onCreateNew }: Props) {
                        }
                        className="h-8 text-xs font-mono"
                      />
-                     <p className="mt-1 text-[9px] text-muted-foreground leading-tight">
-                       Obrigatório para que o sistema identifique a venda via Webhook.
-                     </p>
                    </div>
 
                    <Button
