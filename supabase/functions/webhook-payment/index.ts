@@ -45,7 +45,16 @@ Deno.serve(async (req) => {
     const status = (data?.status || "").toLowerCase();
     const planType = (data?.metadata?.plan_type || "monthly").toLowerCase(); // monthly or lifetime
     const transactionId = String(data?.id || data?.transaction_id || "");
-    const productId = data?.product_id;
+    
+    // Support multiple product ID formats for better compatibility
+    const productId = data?.product_id || data?.product?.id || payload?.product_id || payload?.product?.id;
+    
+    if (productId) {
+      console.log(`Product ID identified: ${productId}`);
+    } else {
+      console.log("No product_id found in payload. Proceeding as possible subscription.");
+    }
+
     const amountCents = data?.amount_cents || data?.value || data?.amount || 0;
 
     if (!email) {
