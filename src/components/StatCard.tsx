@@ -7,6 +7,7 @@ interface Props {
   icon: LucideIcon;
   tint?: string;
   action?: React.ReactNode;
+  large?: boolean;
 }
 
 export function StatCard({ 
@@ -15,20 +16,21 @@ export function StatCard({
   delta, 
   icon: Icon, 
   tint = "from-violet-500 to-purple-500",
-  action 
+  action,
+  large
 }: Props) {
   return (
-    <div className="group rounded-2xl border bg-card p-5 shadow-soft transition hover:shadow-elevated hover:-translate-y-0.5">
+    <div className={`group rounded-2xl border bg-card ${large ? 'p-7' : 'p-5'} shadow-soft transition hover:shadow-elevated hover:-translate-y-0.5`}>
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center justify-between gap-2">
-            <p className="text-sm text-muted-foreground">{label}</p>
+            <p className={`${large ? 'text-base' : 'text-sm'} text-muted-foreground`}>{label}</p>
             {action}
           </div>
-          <p className="mt-2 font-display text-3xl font-bold tracking-tight text-foreground">{value}</p>
+          <p className={`mt-2 font-display ${large ? 'text-4xl' : 'text-3xl'} font-bold tracking-tight text-foreground`}>{value}</p>
         </div>
-        <div className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${tint} text-white shadow-md ml-4`}>
-          <Icon className="h-5 w-5" />
+        <div className={`flex ${large ? 'h-12 w-12' : 'h-10 w-10'} flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${tint} text-white shadow-md ml-4`}>
+          <Icon className={`${large ? 'h-6 w-6' : 'h-5 w-5'}`} />
         </div>
       </div>
       {false && delta && (
