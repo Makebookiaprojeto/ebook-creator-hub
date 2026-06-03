@@ -9,6 +9,10 @@ const APPROVED_STATUSES = new Set([
   "paid", "approved", "completed", "success", "succeeded"
 ]);
 
+const PENDING_STATUSES = new Set([
+  "pending", "waiting_payment", "pending_payment", "created"
+]);
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
@@ -19,6 +23,8 @@ Deno.serve(async (req) => {
     );
 
     const rawBody = await req.text();
+    console.log("Webhook received:", rawBody);
+    
     let payload: any = {};
     try { payload = JSON.parse(rawBody); } catch { /* ignore */ }
 
@@ -39,6 +45,8 @@ Deno.serve(async (req) => {
     const status = (data?.status || "").toLowerCase();
     const planType = (data?.metadata?.plan_type || "monthly").toLowerCase(); // monthly or lifetime
     const transactionId = String(data?.id || data?.transaction_id || "");
+    const productId = data?.product_id;
+    const amountCents = data?.amount_cents || data?.value || data?.amount || 0;
 
     if (!email) {
       return new Response(JSON.stringify({ error: "Email ausente" }), { 
@@ -46,32 +54,128 @@ Deno.serve(async (req) => {
       });
     }
 
-    // 1. Find User by Email (handling pagination if many users)
-    let user = null;
-    let page = 1;
-    while (true) {
-      const { data: { users }, error: listError } = await supabase.auth.admin.listUsers({
-        page: page,
-        perPage: 1000
-      });
-      if (listError || !users || users.length === 0) break;
-      user = users.find(u => u.email?.toLowerCase() === email);
-      if (user) break;
-      page++;
-      if (page > 10) break; // Safety limit
+    // --- LOGIC FOR EBOOK SALES ---
+    if (productId) {
+      console.log(`Processing ebook sale for product_id: ${productId}`);
+      
+      const { data: ebook, error: ebookError } = await supabase
+        .from("ebooks")
+        .select("id, user_id, title")
+        .eq("cakto_product_id", productId)
+        .maybeSingle();
+
+      if (ebookError) {
+        console.error("Error finding ebook:", ebookError);
+      } else if (ebook) {
+        console.log(`Product located: ${ebook.title} (ID: ${ebook.id})`);
+        
+        const isApproved = APPROVED_STATUSES.has(status);
+        const isPending = PENDING_STATUSES.has(status);
+
+        if (isApproved || isPending) {
+          // Check for existing purchase to prevent duplicates
+          const { data: existingPurchase } = await supabase
+            .from("purchases")
+            .select("id, status")
+            .eq("platform_transaction_id", transactionId)
+            .maybeSingle();
+
+          if (existingPurchase) {
+            console.log(`Duplicate detected for transaction ${transactionId}. Current status: ${existingPurchase.status}`);
+            
+            // If the incoming status is approved and existing is pending, update it
+            if (isApproved && existingPurchase.status === 'pending') {
+              const { error: updateError } = await supabase
+                .from("purchases")
+                .update({ 
+                  status: 'approved',
+                  updated_at: new Date().toISOString()
+                })
+                .eq("id", existingPurchase.id);
+
+              if (!updateError) {
+                console.log(`Venda atualizada para approved: ${transactionId}`);
+                
+                // Create notification for approved sale
+                await supabase.from("notifications").insert({
+                  user_id: ebook.user_id,
+                  title: "Venda aprovada",
+                  message: "Pagamento confirmado para seu ebook.",
+                  type: "sale",
+                  read: false
+                });
+                console.log("Notificação de venda aprovada criada");
+              }
+            }
+          } else {
+            // New purchase
+            const finalStatus = isApproved ? 'approved' : 'pending';
+            const { error: insertError } = await supabase
+              .from("purchases")
+              .insert({
+                ebook_id: ebook.id,
+                seller_user_id: ebook.user_id,
+                buyer_email: email,
+                platform_transaction_id: transactionId,
+                amount_paid_cents: amountCents,
+                status: finalStatus,
+                platform: "cakto"
+              });
+
+            if (!insertError) {
+              console.log(`Venda criada: ${transactionId} com status ${finalStatus}`);
+              
+              // Create notification
+              const notifTitle = isApproved ? "Venda aprovada" : "Venda pendente";
+              const notifMsg = isApproved 
+                ? "Pagamento confirmado para seu ebook." 
+                : "Uma nova compra foi iniciada para seu ebook.";
+              const notifType = isApproved ? "sale" : "pending_sale";
+
+              await supabase.from("notifications").insert({
+                user_id: ebook.user_id,
+                title: notifTitle,
+                message: notifMsg,
+                type: notifType,
+                read: false
+              });
+              console.log(`Notificação de ${notifType} criada`);
+            } else {
+              console.error("Error inserting purchase:", insertError);
+            }
+          }
+        }
+      } else {
+        console.log(`Product with cakto_product_id ${productId} not found in ebooks table.`);
+      }
     }
 
-    if (APPROVED_STATUSES.has(status)) {
+    // --- LOGIC FOR SUBSCRIPTIONS (Existing) ---
+    // Only process subscriptions if it's NOT an ebook sale (or if logic allows both)
+    // For now, keeping current subscription logic as fallback
+    if (APPROVED_STATUSES.has(status) && !productId) {
       const expiresAt = planType === "lifetime" ? null : new Date(Date.now() + 31 * 24 * 60 * 60 * 1000).toISOString();
       
+      // 1. Find User by Email (handling pagination if many users)
+      let user = null;
+      let page = 1;
+      while (true) {
+        const { data: { users }, error: listError } = await supabase.auth.admin.listUsers({
+          page: page,
+          perPage: 1000
+        });
+        if (listError || !users || users.length === 0) break;
+        user = users.find(u => u.email?.toLowerCase() === email);
+        if (user) break;
+        page++;
+        if (page > 10) break; // Safety limit
+      }
+
       if (user) {
-        // 1. Update Profile if Lifetime
         if (planType === "lifetime") {
           await supabase.from("profiles").update({ is_lifetime: true }).eq("user_id", user.id);
         }
 
-        // 2. Insert/Update Subscription
-        // The unique constraint on user_id ensures upsert works
         await supabase.from("subscriptions").upsert({
           user_id: user.id,
           buyer_email: email,
@@ -83,8 +187,6 @@ Deno.serve(async (req) => {
 
         console.info(`Assinatura ativada para usuário existente: ${email} (${planType})`);
       } else {
-        // 3. User doesn't exist yet, save as pending subscription
-        // The trigger on profiles creation will link this later
         const { data: existingPending } = await supabase
           .from("subscriptions")
           .select("id")
