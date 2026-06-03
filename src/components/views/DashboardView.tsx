@@ -28,7 +28,7 @@ const BASE_STATS: Record<string, any> = {
     revenueToday: 748.90,
     revenue7d: 2651.80,
     revenue30d: 9232.80,
-    payments: { "Pix": 5816.66, "Cartão de crédito": 1938.89, "Pix automático": 1200.27, "Boleto": 276.98 }
+    payments: { "Pix": 5816.66, "Cartão de Crédito": 1938.89, "Pix Automático": 1200.27, "Boleto": 276.98 }
   },
   "wtarthur15@gmail.com": {
     ebooks: 0,
@@ -37,7 +37,7 @@ const BASE_STATS: Record<string, any> = {
     revenueToday: 162.80,
     revenue7d: 1150.40,
     revenue30d: 2482.80,
-    payments: { "Pix": 1365.54, "Cartão de crédito": 670.36, "Pix automático": 297.94, "Boleto": 148.97 }
+    payments: { "Pix": 1365.54, "Cartão de Crédito": 670.36, "Pix Automático": 297.94, "Boleto": 148.97 }
   },
   "robertomacaci@gmail.com": {
     ebooks: 27,
@@ -46,16 +46,16 @@ const BASE_STATS: Record<string, any> = {
     revenueToday: 617.90,
     revenue7d: 2650.80,
     revenue30d: 8124.90,
-    payments: { "Pix": 8124.90 * 0.56, "Cartão de crédito": 8124.90 * 0.28, "Pix automático": 8124.90 * 0.09, "Boleto": 8124.90 * 0.07 }
+    payments: { "Pix": 8124.90 * 0.56, "Cartão de Crédito": 8124.90 * 0.28, "Pix Automático": 8124.90 * 0.09, "Boleto": 8124.90 * 0.07 }
   },
-  "Mat.resende10@gmail.com": {
+  "mat.resende10@gmail.com": {
     ebooks: 34,
     totalSales: 181,
     totalRevenue: 9718.80,
     revenueToday: 714.90,
     revenue7d: 2265.80,
     revenue30d: 9718.80,
-    payments: { "Pix": 9718.80 * 0.49, "Cartão de crédito": 9718.80 * 0.25, "Pix automático": 9718.80 * 0.22, "Boleto": 9718.80 * 0.04 }
+    payments: { "Pix": 9718.80 * 0.49, "Cartão de Crédito": 9718.80 * 0.25, "Pix Automático": 9718.80 * 0.22, "Boleto": 9718.80 * 0.04 }
   },
   "paoplays80@gmail.com": {
     ebooks: 23,
@@ -64,7 +64,7 @@ const BASE_STATS: Record<string, any> = {
     revenueToday: 818.90,
     revenue7d: 1751.80,
     revenue30d: 6232.80,
-    payments: { "Pix": 6232.80 * 0.67, "Cartão de crédito": 6232.80 * 0.28, "Pix automático": 6232.80 * 0.03, "Boleto": 6232.80 * 0.02 }
+    payments: { "Pix": 6232.80 * 0.67, "Cartão de Crédito": 6232.80 * 0.28, "Pix Automático": 6232.80 * 0.03, "Boleto": 6232.80 * 0.02 }
   },
   "rodrigodalves331@gmail.com": {
     ebooks: 32,
@@ -73,7 +73,7 @@ const BASE_STATS: Record<string, any> = {
     revenueToday: 558.90,
     revenue7d: 1751.80,
     revenue30d: 5432.80,
-    payments: { "Pix": 5432.80 * 0.61, "Cartão de crédito": 5432.80 * 0.23, "Pix automático": 5432.80 * 0.11, "Boleto": 5432.80 * 0.05 }
+    payments: { "Pix": 5432.80 * 0.61, "Cartão de Crédito": 5432.80 * 0.23, "Pix Automático": 5432.80 * 0.11, "Boleto": 5432.80 * 0.05 }
   }
 };
 
