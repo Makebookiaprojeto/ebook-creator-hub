@@ -129,7 +129,7 @@ export function DashboardView() {
         const { data: sales } = await supabase
           .from("purchases")
           .select("amount_paid_cents, created_at, status, platform")
-          .eq("status", "paid");
+          .in("status", ["paid", "approved", "pending"]);
 
         const { count: viewsCount } = await supabase
           .from("ebook_views")
