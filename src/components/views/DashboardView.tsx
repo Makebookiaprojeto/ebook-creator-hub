@@ -251,41 +251,45 @@ export function DashboardView() {
         <p className="text-sm font-medium text-primary/70 italic">"{quote}"</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <StatCard 
-          label="Lucro" 
-          value={`R$ ${(profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} 
-          icon={DollarSign} 
-          tint="from-primary/10 to-primary/5"
-          large
-          action={
-            <Select value={profitPeriod} onValueChange={(v: any) => setProfitPeriod(v)}>
-              <SelectTrigger className="h-8 w-[130px] text-xs">
-                <SelectValue placeholder="Período" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="today">Hoje</SelectItem>
-                <SelectItem value="7d">Últimos 7 dias</SelectItem>
-                <SelectItem value="30d">Últimos 30 dias</SelectItem>
-              </SelectContent>
-            </Select>
-          }
-        />
-        <StatCard 
-          label="Ebooks" 
-          value={String(totalEbooks)} 
-          icon={BookOpen} 
-          tint="from-primary/10 to-primary/5" 
-          large
-        />
-        <StatCard 
-          label="Vendas" 
-          value={String(stats.totalSales)} 
-          delta={stats.totalSales > 0 ? `+${stats.totalSales}` : "0"} 
-          icon={ShoppingCart} 
-          tint="from-primary/10 to-primary/5" 
-          large
-        />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
+        <div className="md:col-span-5">
+          <StatCard 
+            label="Lucro" 
+            value={`R$ ${(profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} 
+            icon={DollarSign} 
+            tint="from-primary/10 to-primary/5"
+            large
+            action={
+              <Select value={profitPeriod} onValueChange={(v: any) => setProfitPeriod(v)}>
+                <SelectTrigger className="h-8 w-[130px] text-xs">
+                  <SelectValue placeholder="Período" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="today">Hoje</SelectItem>
+                  <SelectItem value="7d">Últimos 7 dias</SelectItem>
+                  <SelectItem value="30d">Últimos 30 dias</SelectItem>
+                </SelectContent>
+              </Select>
+            }
+          />
+        </div>
+        <div className="md:col-span-3.5 flex flex-col gap-4 md:col-span-3">
+          <StatCard 
+            label="Ebooks" 
+            value={String(totalEbooks)} 
+            icon={BookOpen} 
+            tint="from-primary/10 to-primary/5" 
+          />
+        </div>
+        <div className="md:col-span-3.5 flex flex-col gap-4 md:col-span-4">
+          <StatCard 
+            label="Vendas" 
+            value={String(stats.totalSales)} 
+            delta={stats.totalSales > 0 ? `+${stats.totalSales}` : "0"} 
+            icon={ShoppingCart} 
+            tint="from-primary/10 to-primary/5" 
+          />
+        </div>
       </div>
 
       <div className="rounded-2xl border bg-card p-8 shadow-soft">
