@@ -7,6 +7,7 @@ interface Props {
   icon: LucideIcon;
   tint?: string;
   action?: React.ReactNode;
+  large?: boolean;
 }
 
 export function StatCard({ 
@@ -15,10 +16,11 @@ export function StatCard({
   delta, 
   icon: Icon, 
   tint = "from-violet-500 to-purple-500",
-  action 
+  action,
+  large
 }: Props) {
   return (
-    <div className="group rounded-2xl border bg-card p-5 shadow-soft transition hover:shadow-elevated hover:-translate-y-0.5">
+    <div className={`group rounded-2xl border bg-card ${large ? 'p-7' : 'p-5'} shadow-soft transition hover:shadow-elevated hover:-translate-y-0.5`}>
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center justify-between gap-2">
