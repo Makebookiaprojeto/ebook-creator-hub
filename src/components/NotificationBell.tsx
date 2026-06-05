@@ -136,7 +136,7 @@ export function NotificationBell() {
     <div className="relative">
       <audio 
         ref={audioRef} 
-        src="/sounds/sale.mp3" 
+        src="/sounds/sale.mp3?v=3" 
         preload="auto"
       />
       <DropdownMenu onOpenChange={(open) => open && markAsRead()}>
