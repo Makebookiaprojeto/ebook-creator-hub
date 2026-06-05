@@ -110,7 +110,7 @@ export function NotificationBell() {
   const playSaleSound = () => {
     if (audioRef.current) {
       audioRef.current.currentTime = 0;
-      audioRef.current.volume = 0.5; // Volume agradável
+      audioRef.current.volume = 0.4; // Volume ajustado para um nível confortável
       audioRef.current.play().catch(err => {
         console.warn("Som de venda bloqueado pelo navegador. Interaja com a página primeiro.", err);
       });
