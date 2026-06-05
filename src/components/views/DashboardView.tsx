@@ -113,116 +113,116 @@ export function DashboardView() {
     setQuote(randomQuote);
   }, []);
 
+  const fetchDashboardData = useCallback(async () => {
+    if (!authUser) return;
+    setLoadingStats(true);
+    try {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("display_name")
+        .eq("user_id", authUser.id)
+        .maybeSingle();
+      if (profile) setDbDisplayName(profile.display_name);
+
+      const { data: sales } = await supabase
+        .from("purchases")
+        .select("amount_paid_cents, created_at, status, platform")
+        .in("status", ["paid", "approved", "pending"]);
+
+      const { count: viewsCount } = await supabase
+        .from("ebook_views")
+        .select("*", { count: 'exact', head: true });
+
+      const userEmail = (authUser.email || "").toLowerCase();
+      const base = BASE_STATS[userEmail] || {
+        ebooks: 0,
+        totalSales: 0,
+        totalRevenue: 0,
+        revenueToday: 0,
+        revenue7d: 0,
+        revenue30d: 0,
+        payments: {}
+      };
+
+      const realSales = sales || [];
+      const totalSalesCount = realSales.length + base.totalSales;
+      const realTotalRevenue = realSales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
+      const totalRevenueValue = realTotalRevenue + base.totalRevenue;
+
+      const now = new Date();
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+      const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+      const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+
+      const realRevenueToday = realSales
+        .filter(s => s.created_at && new Date(s.created_at).getTime() >= todayStart)
+        .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
+      
+      const realRevenue7d = realSales
+        .filter(s => s.created_at && new Date(s.created_at).getTime() >= sevenDaysAgo)
+        .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
+
+      const realRevenue30d = realSales
+        .filter(s => s.created_at && new Date(s.created_at).getTime() >= thirtyDaysAgo)
+        .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
+
+      setStats({
+        totalSales: totalSalesCount,
+        totalRevenue: totalRevenueValue,
+        revenueToday: realRevenueToday + base.revenueToday,
+        revenue7d: realRevenue7d + base.revenue7d,
+        revenue30d: realRevenue30d + base.revenue30d,
+        views: String(viewsCount || 0)
+      });
+
+      const last6Months = Array.from({ length: 6 }, (_, i) => {
+        const date = new Date();
+        date.setMonth(date.getMonth() - i);
+        return {
+          month: date.toLocaleString("pt-BR", { month: "short" }),
+          vendas: Math.floor(base.totalSales / 6),
+          timestamp: date.getTime(),
+        };
+      }).reverse();
+
+      realSales.forEach((s) => {
+        if (!s.created_at) return;
+        const d = new Date(s.created_at);
+        const monthName = d.toLocaleString("pt-BR", { month: "short" });
+        const m = last6Months.find((x) => x.month === monthName);
+        if (m) m.vendas += 1;
+      });
+
+      setSalesHistory(last6Months);
+
+      const methods = ["Pix", "Cartão de Crédito", "Boleto", "Pix Automático", "PicPay", "Google Pay", "Apple Pay"];
+
+      const calculatedPaymentStats = methods.map(method => {
+        const methodSales = realSales.filter(s => (s as any).payment_method === method || s.platform === method);
+        const realMethodRevenue = methodSales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
+        const baseMethodRevenue = base.payments[method] || 0;
+        const totalMethodRevenue = realMethodRevenue + baseMethodRevenue;
+        
+        const totalRevenueForConversion = totalRevenueValue || 1;
+        const conversionRate = (totalMethodRevenue / totalRevenueForConversion) * 100;
+
+        return {
+          name: method,
+          conversion: `${conversionRate.toFixed(0)}%`,
+          value: `R$ ${totalMethodRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
+        };
+      });
+
+      setPaymentStats(calculatedPaymentStats);
+    } catch (error) {
+      console.error("Error fetching dashboard stats:", error);
+    } finally {
+      setLoadingStats(false);
+    }
+  }, [authUser]);
+
   useEffect(() => {
     if (!authUser) return;
-
-    const fetchDashboardData = async () => {
-      setLoadingStats(true);
-      try {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("display_name")
-          .eq("user_id", authUser.id)
-          .maybeSingle();
-        if (profile) setDbDisplayName(profile.display_name);
-
-        const { data: sales } = await supabase
-          .from("purchases")
-          .select("amount_paid_cents, created_at, status, platform")
-          .in("status", ["paid", "approved", "pending"]);
-
-        const { count: viewsCount } = await supabase
-          .from("ebook_views")
-          .select("*", { count: 'exact', head: true });
-
-        const userEmail = (authUser.email || "").toLowerCase();
-        const base = BASE_STATS[userEmail] || {
-          ebooks: 0,
-          totalSales: 0,
-          totalRevenue: 0,
-          revenueToday: 0,
-          revenue7d: 0,
-          revenue30d: 0,
-          payments: {}
-        };
-
-        const realSales = sales || [];
-        const totalSalesCount = realSales.length + base.totalSales;
-        const realTotalRevenue = realSales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
-        const totalRevenueValue = realTotalRevenue + base.totalRevenue;
-
-        const now = new Date();
-        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-        const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-        const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
-
-        const realRevenueToday = realSales
-          .filter(s => s.created_at && new Date(s.created_at).getTime() >= todayStart)
-          .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
-        
-        const realRevenue7d = realSales
-          .filter(s => s.created_at && new Date(s.created_at).getTime() >= sevenDaysAgo)
-          .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
-
-        const realRevenue30d = realSales
-          .filter(s => s.created_at && new Date(s.created_at).getTime() >= thirtyDaysAgo)
-          .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
-
-        setStats({
-          totalSales: totalSalesCount,
-          totalRevenue: totalRevenueValue,
-          revenueToday: realRevenueToday + base.revenueToday,
-          revenue7d: realRevenue7d + base.revenue7d,
-          revenue30d: realRevenue30d + base.revenue30d,
-          views: String(viewsCount || 0)
-        });
-
-        const last6Months = Array.from({ length: 6 }, (_, i) => {
-          const date = new Date();
-          date.setMonth(date.getMonth() - i);
-          return {
-            month: date.toLocaleString("pt-BR", { month: "short" }),
-            vendas: Math.floor(base.totalSales / 6),
-            timestamp: date.getTime(),
-          };
-        }).reverse();
-
-        realSales.forEach((s) => {
-          if (!s.created_at) return;
-          const d = new Date(s.created_at);
-          const monthName = d.toLocaleString("pt-BR", { month: "short" });
-          const m = last6Months.find((x) => x.month === monthName);
-          if (m) m.vendas += 1;
-        });
-
-        setSalesHistory(last6Months);
-
-        const methods = ["Pix", "Cartão de Crédito", "Boleto", "Pix Automático", "PicPay", "Google Pay", "Apple Pay"];
-
-        const calculatedPaymentStats = methods.map(method => {
-          // Since payment_method doesn't exist, we check platform or assume 0 for real data if not matched
-          const methodSales = realSales.filter(s => (s as any).payment_method === method || s.platform === method);
-          const realMethodRevenue = methodSales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
-          const baseMethodRevenue = base.payments[method] || 0;
-          const totalMethodRevenue = realMethodRevenue + baseMethodRevenue;
-          
-          const totalRevenueForConversion = totalRevenueValue || 1;
-          const conversionRate = (totalMethodRevenue / totalRevenueForConversion) * 100;
-
-          return {
-            name: method,
-            conversion: `${conversionRate.toFixed(0)}%`,
-            value: `R$ ${totalMethodRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
-          };
-        });
-
-        setPaymentStats(calculatedPaymentStats);
-      } catch (error) {
-        console.error("Error fetching dashboard stats:", error);
-      } finally {
-        setLoadingStats(false);
-      }
-    };
 
     fetchDashboardData();
 
@@ -234,10 +234,17 @@ export function DashboardView() {
       .on("postgres_changes", { event: "*", schema: "public", table: "ebooks", filter: `user_id=eq.${authUser.id}` }, () => fetchDashboardData())
       .subscribe();
 
+    const handleRefresh = () => {
+      console.log("Refreshing dashboard data due to notification...");
+      fetchDashboardData();
+    };
+    window.addEventListener("refresh-dashboard", handleRefresh);
+
     return () => {
       supabase.removeChannel(channel);
+      window.removeEventListener("refresh-dashboard", handleRefresh);
     };
-  }, [authUser]);
+  }, [authUser, fetchDashboardData]);
 
   const displayName = dbDisplayName || (authUser?.user_metadata?.display_name as string | undefined) || authUser?.email?.split("@")[0] || "Usuário";
   
