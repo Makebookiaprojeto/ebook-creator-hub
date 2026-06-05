@@ -72,7 +72,7 @@ Deno.serve(async (req) => {
     }
 
     // Common extraction for Cakto
-    const data = payload?.data || payload;
+    // Reuse 'data' defined in the audit section above
     const email = (data?.customer?.email || data?.email || "").toLowerCase().trim();
     const status = (data?.status || "").toLowerCase();
     const planType = (data?.metadata?.plan_type || "monthly").toLowerCase(); // monthly or lifetime
