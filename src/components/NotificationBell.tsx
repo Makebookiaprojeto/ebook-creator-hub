@@ -75,7 +75,7 @@ export function NotificationBell() {
               });
             }
 
-            toast.success("Venda realizada", {
+            toast.success("Venda realizada !!!", {
               description: displayAmount || newNotif.message,
               duration: 5000,
               position: "top-right",
