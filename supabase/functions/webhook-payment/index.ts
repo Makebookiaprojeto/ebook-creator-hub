@@ -92,24 +92,29 @@ Deno.serve(async (req) => {
     let amountCents = 0;
     
     if (typeof rawAmount === 'number') {
-      // If it looks like cents (large integer) and isn't a small decimal
+      // If it's a decimal (like 20.89), convert to cents. 
+      // If it's a large integer (like 2089), assume it's already cents.
       if (Number.isInteger(rawAmount) && rawAmount > 500) {
         amountCents = rawAmount;
       } else {
-        // Convert decimal to cents with rounding
         amountCents = Math.round(rawAmount * 100);
       }
     } else if (typeof rawAmount === 'string') {
-      const parsedAmount = parseFloat(rawAmount.replace(',', '.'));
+      // Handle strings like "20.89" or "20,89"
+      const normalizedAmount = rawAmount.replace(',', '.');
+      const parsedAmount = parseFloat(normalizedAmount);
       if (!isNaN(parsedAmount)) {
         // If the string represents a large integer without decimals, assume cents
-        if (Number.isInteger(parsedAmount) && !rawAmount.includes('.') && !rawAmount.includes(',') && parsedAmount > 500) {
+        if (!normalizedAmount.includes('.') && parsedAmount > 500) {
           amountCents = Math.floor(parsedAmount);
         } else {
           amountCents = Math.round(parsedAmount * 100);
         }
       }
     }
+    
+    // Ensure we have a valid integer for Postgres
+    amountCents = Math.floor(amountCents);
 
     if (!email) {
       return new Response(JSON.stringify({ error: "Email ausente" }), { 
