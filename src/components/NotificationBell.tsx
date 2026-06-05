@@ -75,8 +75,8 @@ export function NotificationBell() {
               });
             }
 
-            toast.success("Venda realizada !!!", {
-              description: displayAmount || newNotif.message,
+            toast.success("VENDA REALIZADA !!!", {
+              description: displayAmount,
               duration: 5000,
               position: "top-right",
               icon: <ShoppingCart className="h-4 w-4 text-green-500" />,
