@@ -23,10 +23,42 @@ Deno.serve(async (req) => {
     );
 
     const rawBody = await req.text();
-    console.log("Webhook received:", rawBody);
+    const contentType = req.headers.get("content-type") || "not specified";
+    const method = req.method;
+    const headersObj: Record<string, string> = {};
+    req.headers.forEach((value, key) => {
+      headersObj[key] = key.toLowerCase().includes("authorization") || key.toLowerCase().includes("key") ? "[REDACTED]" : value;
+    });
+
+    console.log("--- WEBHOOK AUDIT START ---");
+    console.log(`Method: ${method}`);
+    console.log(`Content-Type: ${contentType}`);
+    console.log(`Headers: ${JSON.stringify(headersObj)}`);
+    console.log(`Body Size: ${rawBody.length} bytes`);
+    console.log(`Raw Body: ${rawBody}`);
     
     let payload: any = {};
-    try { payload = JSON.parse(rawBody); } catch { /* ignore */ }
+    let parseError = null;
+    try { 
+      payload = JSON.parse(rawBody);
+      console.log("Parse JSON: Success");
+    } catch (e) { 
+      parseError = (e as Error).message;
+      console.log(`Parse JSON: Failed (${parseError})`);
+    }
+
+    const data = payload?.data || payload;
+    console.log("Fields Found:", {
+      product_id: data?.product_id,
+      "product.id": data?.product?.id,
+      offer_id: data?.offer_id,
+      "offer.id": data?.offer?.id,
+      status: data?.status,
+      amount: data?.amount || data?.value || data?.amount_cents,
+      "customer.email": data?.customer?.email || data?.email,
+      transaction_id: data?.id || data?.transaction_id
+    });
+    console.log("--- WEBHOOK AUDIT END ---");
 
     // Cakto uses x-cakto-signature or just sends the payload
     const signature = req.headers.get("x-cakto-signature");
