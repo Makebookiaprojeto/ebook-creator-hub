@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { BookOpen, ShoppingCart, DollarSign, CreditCard } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { StatCard } from "@/components/StatCard";
