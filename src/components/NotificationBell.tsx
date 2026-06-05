@@ -85,6 +85,8 @@ export function NotificationBell() {
               position: "top-right",
               icon: <ShoppingCart className="h-4 w-4 text-green-500" />,
             });
+            // Disparar evento para atualizar a dashboard
+            window.dispatchEvent(new CustomEvent("refresh-dashboard"));
           }
         }
       )
