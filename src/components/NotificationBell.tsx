@@ -1,4 +1,4 @@
-import { Bell } from "lucide-react";
+import { Bell, ShoppingCart } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -50,16 +50,36 @@ export function NotificationBell() {
           table: "notifications",
           filter: `user_id=eq.${user.id}`,
         },
-        (payload) => {
+        async (payload) => {
           const newNotif = payload.new;
           setNotifications((prev) => [newNotif, ...prev].slice(0, 10));
           setUnreadCount((prev) => prev + 1);
           
-          if (newNotif.type === "sale") {
+          if (newNotif.type === "sale" || newNotif.type === "pending_sale") {
             playSaleSound();
-            toast.success(newNotif.title, {
-              description: newNotif.message,
-              duration: 8000,
+            
+            // Obter o valor da venda mais recente para este vendedor
+            const { data: purchaseData } = await supabase
+              .from("purchases")
+              .select("amount_paid_cents")
+              .eq("seller_user_id", user.id)
+              .order("created_at", { ascending: false })
+              .limit(1);
+
+            let displayAmount = "";
+            if (purchaseData && purchaseData[0]) {
+              const amount = purchaseData[0].amount_paid_cents / 100;
+              displayAmount = amount.toLocaleString('pt-BR', { 
+                style: 'currency', 
+                currency: 'BRL' 
+              });
+            }
+
+            toast.success("Venda realizada", {
+              description: displayAmount || newNotif.message,
+              duration: 5000,
+              position: "top-right",
+              icon: <ShoppingCart className="h-4 w-4 text-green-500" />,
             });
           }
         }
@@ -90,6 +110,7 @@ export function NotificationBell() {
   const playSaleSound = () => {
     if (audioRef.current) {
       audioRef.current.currentTime = 0;
+      audioRef.current.volume = 0.5; // Volume agradável
       audioRef.current.play().catch(err => {
         console.warn("Som de venda bloqueado pelo navegador. Interaja com a página primeiro.", err);
       });
