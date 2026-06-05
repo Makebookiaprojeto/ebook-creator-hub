@@ -58,25 +58,29 @@ export function NotificationBell() {
           if (newNotif.type === "sale" || newNotif.type === "pending_sale") {
             playSaleSound();
             
-            // Obter o valor da venda mais recente para este vendedor
+            // Obter os dados da venda mais recente para este vendedor
             const { data: purchaseData } = await supabase
               .from("purchases")
-              .select("amount_paid_cents")
+              .select("amount_paid_cents, ebooks(title)")
               .eq("seller_user_id", user.id)
               .order("created_at", { ascending: false })
-              .limit(1);
+              .limit(1)
+              .maybeSingle();
 
-            let displayAmount = "";
-            if (purchaseData && purchaseData[0]) {
-              const amount = purchaseData[0].amount_paid_cents / 100;
-              displayAmount = amount.toLocaleString('pt-BR', { 
+            let displayDescription = "";
+            if (purchaseData) {
+              const amount = purchaseData.amount_paid_cents / 100;
+              const formattedAmount = amount.toLocaleString('pt-BR', { 
                 style: 'currency', 
                 currency: 'BRL' 
               });
+              
+              const ebookTitle = (purchaseData.ebooks as any)?.title || "Ebook";
+              displayDescription = `${ebookTitle} - ${formattedAmount}`;
             }
 
             toast.success("VENDA REALIZADA !!!", {
-              description: displayAmount,
+              description: displayDescription,
               duration: 5000,
               position: "top-right",
               icon: <ShoppingCart className="h-4 w-4 text-green-500" />,
