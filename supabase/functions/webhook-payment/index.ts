@@ -87,7 +87,29 @@ Deno.serve(async (req) => {
       console.log("No product_id found in payload. Proceeding as possible subscription.");
     }
 
-    const amountCents = data?.amount_cents || data?.value || data?.amount || 0;
+    // Robust amount to cents conversion
+    const rawAmount = data?.amount || data?.value || data?.amount_cents || data?.total || data?.total_cents || 0;
+    let amountCents = 0;
+    
+    if (typeof rawAmount === 'number') {
+      // If it looks like cents (large integer) and isn't a small decimal
+      if (Number.isInteger(rawAmount) && rawAmount > 500) {
+        amountCents = rawAmount;
+      } else {
+        // Convert decimal to cents with rounding
+        amountCents = Math.round(rawAmount * 100);
+      }
+    } else if (typeof rawAmount === 'string') {
+      const parsedAmount = parseFloat(rawAmount.replace(',', '.'));
+      if (!isNaN(parsedAmount)) {
+        // If the string represents a large integer without decimals, assume cents
+        if (Number.isInteger(parsedAmount) && !rawAmount.includes('.') && !rawAmount.includes(',') && parsedAmount > 500) {
+          amountCents = Math.floor(parsedAmount);
+        } else {
+          amountCents = Math.round(parsedAmount * 100);
+        }
+      }
+    }
 
     if (!email) {
       return new Response(JSON.stringify({ error: "Email ausente" }), { 
