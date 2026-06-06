@@ -392,7 +392,7 @@ export function CreateEbookView() {
     <div className="space-y-6 animate-fade-in">
       <div>
         <h1 className="font-display text-3xl font-bold">Criar novo ebook</h1>
-        <p className="mt-1 text-muted-foreground">Siga as etapas e publique seu ebook em minutos.</p>
+        <p className="mt-1 text-muted-foreground">Siga as etapas e crie seu produto em minutos.</p>
       </div>
 
       {/* Progress */}
@@ -766,11 +766,11 @@ export function CreateEbookView() {
             {step === 4 && (
               <div>
                 <h2 className="font-display text-xl font-semibold">Divulgação</h2>
-                <p className="mt-1 text-sm text-muted-foreground">Encontre grupos relevantes e gere mensagens prontas.</p>
+                <p className="mt-1 text-sm text-muted-foreground">Encontre os melhores grupos para divulgar seu produto.</p>
 
                 {/* Search box */}
                 <div className="mt-6 rounded-2xl border bg-muted/30 p-5">
-                  <label className="text-sm font-semibold">Qual o assunto do seu ebook?</label>
+                  <label className="text-sm font-semibold">Qual o nicho do seu ebook?</label>
                   <div className="mt-3 flex flex-col sm:flex-row gap-2">
                     <div className="relative flex-1">
                       <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
