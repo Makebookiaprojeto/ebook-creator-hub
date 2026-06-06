@@ -137,26 +137,26 @@ export default function EbookSalesPage() {
               <div className="lg:col-span-2 relative">
                 <div className="grid grid-cols-2 gap-8">
                    <div className="space-y-8">
-                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[-3deg] hover:rotate-0 transition-transform duration-500">
-                        <img src={ebook.cover_url || ""} className="w-full h-full object-cover opacity-80" />
+                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[-3deg] hover:rotate-0 transition-transform duration-500 flex items-center justify-center">
+                        <BookOpen size={48} className="text-[#1E3A5F] opacity-10" />
                       </div>
-                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[2deg] hover:rotate-0 transition-transform duration-500 translate-x-10">
-                         {chapters[0]?.image_url ? <img src={chapters[0].image_url} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><BookOpen size={48} className="text-gray-100" /></div>}
+                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[2deg] hover:rotate-0 transition-transform duration-500 translate-x-10 flex items-center justify-center">
+                        <Layout size={48} className="text-[#1E3A5F] opacity-10" />
                       </div>
                    </div>
                    <div className="space-y-8 pt-20">
-                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[4deg] hover:rotate-0 transition-transform duration-500 -translate-x-10">
-                        {chapters[1]?.image_url ? <img src={chapters[1].image_url} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><Layout size={48} className="text-gray-100" /></div>}
+                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[4deg] hover:rotate-0 transition-transform duration-500 -translate-x-10 flex items-center justify-center">
+                        <Target size={48} className="text-[#1E3A5F] opacity-10" />
                       </div>
-                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[-2deg] hover:rotate-0 transition-transform duration-500">
-                         {chapters[2]?.image_url ? <img src={chapters[2].image_url} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><Target size={48} className="text-gray-100" /></div>}
+                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[-2deg] hover:rotate-0 transition-transform duration-500 flex items-center justify-center">
+                        <Award size={48} className="text-[#1E3A5F] opacity-10" />
                       </div>
                    </div>
                 </div>
               </div>
               <div className="space-y-8">
                 <h2 className="text-4xl font-black leading-tight">Um produto desenhado para encantar.</h2>
-                <p className="text-xl text-gray-500 leading-relaxed font-medium">Cada página foi estruturada para garantir a melhor experiência de aprendizado, com visual moderno e conteúdo de fácil absorção.</p>
+                <p className="text-xl text-[#1E3A5F] leading-relaxed font-medium">Cada página foi estruturada para garantir a melhor experiência de aprendizado, com visual moderno e conteúdo de fácil absorção.</p>
                 <ul className="space-y-4">
                   {["Design Ultra-Moderno", "Diagramação Profissional", "Visualização em Qualquer Dispositivo"].map((item, i) => (
                     <li key={i} className="flex items-center gap-4 text-lg font-bold">
@@ -175,7 +175,7 @@ export default function EbookSalesPage() {
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
             <h2 className="text-5xl font-black tracking-tight">Vantagens Exclusivas</h2>
-            <p className="text-xl text-gray-500 font-medium">O que você ganha ao garantir este guia profissional hoje.</p>
+            <p className="text-xl text-[#1E3A5F] font-medium">O que você ganha ao garantir este guia profissional hoje.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
@@ -197,7 +197,7 @@ export default function EbookSalesPage() {
                   <benefit.icon className="h-8 w-8 text-orange-500" />
                 </div>
                 <h3 className="text-xl font-bold mb-4">{benefit.title}</h3>
-                <p className="text-gray-500 leading-relaxed">{benefit.desc}</p>
+                <p className="text-[#1E3A5F] leading-relaxed">{benefit.desc}</p>
               </motion.div>
             ))}
           </div>
