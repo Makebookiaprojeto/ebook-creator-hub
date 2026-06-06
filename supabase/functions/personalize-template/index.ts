@@ -125,8 +125,22 @@ Além disso, gere exatamente 6 tópicos curtos de aprendizado para a seção "O 
                 minItems: baseChapters.length,
                 maxItems: baseChapters.length,
               },
+              learning_topics: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    title: { type: "string" },
+                    description: { type: "string" },
+                  },
+                  required: ["title", "description"],
+                  additionalProperties: false,
+                },
+                minItems: 6,
+                maxItems: 6,
+              },
             },
-            required: ["title", "subtitle", "chapter_intros"],
+            required: ["title", "subtitle", "chapter_intros", "learning_topics"],
             additionalProperties: false,
           },
         },
