@@ -86,8 +86,8 @@ export default function EbookSalesPage() {
       <section className="relative pt-32 pb-40 overflow-hidden">
         <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[800px] h-[800px] bg-orange-100/40 rounded-full blur-[120px] -z-10" />
         <div className="container mx-auto px-6 max-w-7xl">
-          <div className="grid lg:grid-cols-2 gap-20 items-center">
-            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="space-y-10">
+          <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-center">
+            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="flex-1 space-y-10 relative z-10">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-50 text-orange-600 font-bold text-xs uppercase tracking-[0.2em] border border-orange-100">
                 <Sparkles size={14} /> Lançamento 2026
               </div>
@@ -117,10 +117,10 @@ export default function EbookSalesPage() {
               </div>
             </motion.div>
             
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="relative">
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="flex-1 w-full max-w-[500px] relative z-10">
               <div className="absolute -inset-4 bg-orange-500/5 blur-2xl rounded-[3rem] -z-10" />
               <div className="relative group perspective-1000">
-                <div className="relative transform-gpu transition-all duration-700 hover:rotate-y-12 hover:rotate-x-6 hover:-translate-y-4 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] rounded-[2.5rem] overflow-hidden aspect-[3/4.2]">
+                <div className="relative transform-gpu transition-all duration-700 lg:hover:rotate-y-12 lg:hover:rotate-x-6 hover:-translate-y-4 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] rounded-[2.5rem] overflow-hidden aspect-[3/4.2]">
                   <img src={ebook.cover_url || ""} alt={ebook.title} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-tr from-black/20 via-transparent to-white/10" />
                 </div>
@@ -130,43 +130,21 @@ export default function EbookSalesPage() {
         </div>
       </section>
 
-      {/* 2. APRESENTAÇÃO VISUAL */}
+      {/* 2. APRESENTAÇÃO */}
       <section className="py-24 bg-gray-50/50 border-y border-gray-100">
-        <div className="container mx-auto px-6 max-w-7xl">
-           <div className="grid lg:grid-cols-3 gap-12 items-center">
-              <div className="lg:col-span-2 relative">
-                <div className="grid grid-cols-2 gap-8">
-                   <div className="space-y-8">
-                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[-3deg] hover:rotate-0 transition-transform duration-500 flex items-center justify-center">
-                        <BookOpen size={48} className="text-[#1E3A5F] opacity-10" />
-                      </div>
-                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[2deg] hover:rotate-0 transition-transform duration-500 translate-x-10 flex items-center justify-center">
-                        <Layout size={48} className="text-[#1E3A5F] opacity-10" />
-                      </div>
-                   </div>
-                   <div className="space-y-8 pt-20">
-                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[4deg] hover:rotate-0 transition-transform duration-500 -translate-x-10 flex items-center justify-center">
-                        <Target size={48} className="text-[#1E3A5F] opacity-10" />
-                      </div>
-                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[-2deg] hover:rotate-0 transition-transform duration-500 flex items-center justify-center">
-                        <Award size={48} className="text-[#1E3A5F] opacity-10" />
-                      </div>
-                   </div>
+        <div className="container mx-auto px-6 max-w-4xl">
+          <div className="text-center space-y-8">
+            <h2 className="text-4xl lg:text-5xl font-black leading-tight">Um produto desenhado para encantar.</h2>
+            <p className="text-xl text-[#1E3A5F] leading-relaxed font-medium mx-auto max-w-2xl">Cada página foi estruturada para garantir a melhor experiência de aprendizado, com visual moderno e conteúdo de fácil absorção.</p>
+            <div className="flex flex-wrap justify-center gap-8 pt-4">
+              {["Design Ultra-Moderno", "Diagramação Profissional", "Visualização em Qualquer Dispositivo"].map((item, i) => (
+                <div key={i} className="flex items-center gap-3 text-lg font-bold">
+                   <div className="h-6 w-6 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0"><Check size={14} className="text-white" /></div>
+                   {item}
                 </div>
-              </div>
-              <div className="space-y-8">
-                <h2 className="text-4xl font-black leading-tight">Um produto desenhado para encantar.</h2>
-                <p className="text-xl text-[#1E3A5F] leading-relaxed font-medium">Cada página foi estruturada para garantir a melhor experiência de aprendizado, com visual moderno e conteúdo de fácil absorção.</p>
-                <ul className="space-y-4">
-                  {["Design Ultra-Moderno", "Diagramação Profissional", "Visualização em Qualquer Dispositivo"].map((item, i) => (
-                    <li key={i} className="flex items-center gap-4 text-lg font-bold">
-                       <div className="h-6 w-6 bg-orange-500 rounded-full flex items-center justify-center"><Check size={14} className="text-white" /></div>
-                       {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-           </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -191,7 +169,7 @@ export default function EbookSalesPage() {
               <motion.div 
                 key={i} 
                 whileHover={{ y: -10 }} 
-                className="p-8 bg-white rounded-3xl border border-gray-100 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.06)] transition-all"
+                className="p-8 bg-[#FFF7ED] rounded-3xl border border-orange-100/50 shadow-[0_10px_30px_-15px_rgba(249,115,22,0.1)] hover:shadow-[0_20px_40px_-15px_rgba(249,115,22,0.2)] transition-all"
               >
                 <div className="h-16 w-16 bg-orange-50 rounded-2xl flex items-center justify-center mb-8">
                   <benefit.icon className="h-8 w-8 text-orange-500" />
