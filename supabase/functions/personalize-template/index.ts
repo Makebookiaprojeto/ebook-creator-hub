@@ -104,7 +104,9 @@ Subtítulo atual: ${template.subtitle ?? ""}
 Capítulos:
 ${baseChapters.map((c, i) => `${i + 1}. ${c.title} — ${c.subtitle}`).join("\n")}
 
-Gere: novo título magnético adaptado ao público (≤60 chars), novo subtítulo (≤120 chars), e para cada capítulo um parágrafo de ABERTURA (80-120 palavras) que conecta o tema do capítulo ao público "${audience || "geral"}". Não reescreva o capítulo inteiro, só a abertura.`,
+Gere: novo título magnético adaptado ao público (≤60 chars), novo subtítulo (≤120 chars), e para cada capítulo um parágrafo de ABERTURA (80-120 palavras) que conecta o tema do capítulo ao público "${audience || "geral"}". Não reescreva o capítulo inteiro, só a abertura.
+
+Além disso, gere exatamente 6 tópicos curtos de aprendizado para a seção "O que você vai aprender" da página de vendas. Cada tópico deve ter um título curto e impactante (até 40 caracteres) e uma descrição curta e persuasiva (até 120 caracteres) destacando benefícios reais do ebook para este público.`,
         },
       ],
       tools: [{
@@ -123,8 +125,22 @@ Gere: novo título magnético adaptado ao público (≤60 chars), novo subtítul
                 minItems: baseChapters.length,
                 maxItems: baseChapters.length,
               },
+              learning_topics: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    title: { type: "string" },
+                    description: { type: "string" },
+                  },
+                  required: ["title", "description"],
+                  additionalProperties: false,
+                },
+                minItems: 6,
+                maxItems: 6,
+              },
             },
-            required: ["title", "subtitle", "chapter_intros"],
+            required: ["title", "subtitle", "chapter_intros", "learning_topics"],
             additionalProperties: false,
           },
         },
@@ -136,6 +152,7 @@ Gere: novo título magnético adaptado ao público (≤60 chars), novo subtítul
       title: template.title,
       subtitle: template.subtitle,
       chapter_intros: baseChapters.map(() => ""),
+      learning_topics: [] as { title: string; description: string }[],
     };
     if (!("error" in personalizationRes) || !personalizationRes.error) {
       const args = personalizationRes.data?.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
@@ -169,6 +186,7 @@ Gere: novo título magnético adaptado ao público (≤60 chars), novo subtítul
         subtitle: personalized.subtitle,
         cover_url: coverUrl,
         chapters: finalChapters,
+        learning_topics: personalized.learning_topics,
       },
     });
   } catch (e) {

@@ -140,9 +140,10 @@ export function CreateEbookView() {
           setSubtitle(eb.subtitle || "");
           setCoverUrl(eb.cover_url);
           
-          const chs = (eb.content_json as any[]) || [];
+          const content = eb.content_json as any;
+          const chs = Array.isArray(content) ? content : (content?.chapters || []);
           if (chs.length > 0) {
-            setChapters(chs.map(c => ({
+            setChapters(chs.map((c: any) => ({
               title: c.title,
               subtitle: "",
               content: c.content || "",
@@ -195,10 +196,11 @@ export function CreateEbookView() {
       const prog: any = eb.generation_progress ?? {};
       if (prog.message) setGenerationStage(prog.message);
       
-      const chs = (eb.content_json as any[]) || [];
+      const content = eb.content_json as any;
+      const chs = Array.isArray(content) ? content : (content?.chapters || []);
       if (chs.length > 0) {
         setChapters(
-          chs.map((c) => ({
+          chs.map((c: any) => ({
             title: c.title,
             subtitle: "",
             content: c.content ?? "",
@@ -305,7 +307,10 @@ export function CreateEbookView() {
           status: "published",
           is_public: true,
           is_template: false,
-          content_json: template.chapters,
+          content_json: {
+            chapters: template.chapters,
+            learning_topics: template.learning_topics
+          },
           price: price || 29.9,
           price_cents: Math.round((price || 29.9) * 100),
           slug: `ebook-${Math.random().toString(36).substring(2, 7)}`,
@@ -328,8 +333,9 @@ export function CreateEbookView() {
         setEbookLink(`${window.location.origin}/e/${newEbook.slug}`);
       }
 
-      const chs = (newEbook.content_json as any[]) || [];
-      setChapters(chs.map(c => ({
+      const content = newEbook.content_json as any;
+      const chs = Array.isArray(content) ? content : (content?.chapters || []);
+      setChapters(chs.map((c: any) => ({
         title: c.title,
         subtitle: c.subtitle || "",
         content: c.content || "",
