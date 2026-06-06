@@ -594,7 +594,7 @@ export function CreateEbookView() {
                 <p className="mt-1 text-sm text-muted-foreground">Preview da landing page de alta conversão.</p>
 
                 <div 
-                  className="mt-6 overflow-hidden rounded-2xl border bg-white text-slate-950"
+                  className="mt-6 rounded-3xl border border-gray-100 bg-white overflow-hidden shadow-2xl relative"
                   style={{ 
                     '--background': '0 0% 100%', 
                     '--foreground': '240 10% 3.9%',
@@ -603,151 +603,111 @@ export function CreateEbookView() {
                     '--muted': '240 4.8% 95.9%',
                     '--muted-foreground': '240 3.8% 46.1%',
                     '--border': '240 5.9% 90%',
-                    '--primary': '142 70% 45%',
+                    '--primary': '221 83% 53%',
                     '--secondary': '240 4.8% 95.9%',
                     '--secondary-foreground': '240 5.9% 10%',
                     '--accent': '240 4.8% 95.9%',
                     '--accent-foreground': '240 5.9% 10%',
-                    '--gradient-conversion-soft': 'radial-gradient(circle at 30% 20%, hsl(4 90% 58% / 0.12), transparent 55%), radial-gradient(circle at 80% 80%, hsl(28 95% 58% / 0.1), transparent 55%), hsl(0 0% 100%)'
                   } as any}
                 >
-                  {/* Top urgency bar */}
-                  <div className="bg-primary/10 text-primary py-2 px-4 text-center text-xs font-bold flex items-center justify-center gap-2">
-                    <Zap className="h-3.5 w-3.5" /> APROVEITE O DESCONTO EXCLUSIVO
-                  </div>
-
-                  {/* Hero — high-conversion red/orange palette */}
-                  <div className="gradient-conversion-soft p-8 sm:p-12 text-center relative overflow-hidden">
-                    <Badge className="bg-destructive text-destructive-foreground hover:bg-destructive shadow-conversion">
-                      <Zap className="mr-1 h-3 w-3" /> PROMOÇÃO ATIVA
+                  {/* HERO SECTION */}
+                  <div className="pt-16 pb-12 px-8 text-center bg-white relative">
+                    <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-blue-50 rounded-full blur-3xl opacity-50" />
+                    
+                    <Badge className="bg-blue-50 text-blue-600 hover:bg-blue-50 border-blue-100 mb-6">
+                      PRÉVIA DA PÁGINA DE VENDAS
                     </Badge>
-                    <h1 className="mx-auto mt-4 max-w-2xl font-display text-3xl sm:text-5xl font-bold leading-tight">
-                      {title || "Seu título aparecerá aqui"}
+                    
+                    <h1 className="text-3xl sm:text-4xl font-black text-gray-900 leading-tight tracking-tight max-w-2xl mx-auto">
+                      {title || "Seu Título Aparecerá Aqui"}
                     </h1>
-                    <p className="mx-auto mt-4 max-w-xl text-base text-muted-foreground">
-                      {subtitle || "Seu subtítulo persuasivo vai aqui"}
+                    
+                    <p className="mt-4 text-base text-gray-500 max-w-lg mx-auto leading-relaxed">
+                      {subtitle || "Sua descrição persuasiva aparecerá aqui para convencer seus clientes."}
                     </p>
 
-                    {chapters.length > 0 && (
-                      <div className="mx-auto mt-6 max-w-lg">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-left">
-                          {chapters.map((c, i) => (
-                            <div key={i} className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-                              <Check className="h-3 w-3 text-success" />
-                              <span className="line-clamp-1">{c.title}</span>
+                    <div className="mt-8 flex justify-center">
+                      <div className="relative group">
+                        <div className="absolute -inset-4 bg-blue-50 rounded-2xl blur-xl" />
+                        <div className="relative w-40 h-56 rounded-xl bg-gray-100 shadow-xl overflow-hidden ring-1 ring-gray-200 rotate-[-2deg]">
+                          {coverUrl ? (
+                            <img src={coverUrl} alt="Capa" className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-blue-600">
+                              <BookOpen className="h-10 w-10 text-white/50" />
                             </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Mock cover */}
-                    <div className="mt-6 flex justify-center">
-                      <div className="relative w-44 h-60 rounded-lg gradient-conversion shadow-conversion flex items-center justify-center text-white p-4 rotate-[-4deg]">
-                        <div className="text-center">
-                          <Sparkles className="h-6 w-6 mx-auto opacity-90" />
-                          <p className="mt-2 font-display font-bold text-sm leading-tight line-clamp-4">{title || "Ebook"}</p>
-                          <p className="mt-2 text-[10px] opacity-90">EBOOK DIGITAL</p>
+                          )}
                         </div>
                       </div>
                     </div>
 
-                    {/* Price */}
-                    <div className="mt-8">
-                      <p className="text-xs text-muted-foreground line-through">De R$ {(price * 2).toFixed(2).replace(".", ",")}</p>
-                      <p className="mt-1 text-sm text-muted-foreground">Por apenas</p>
-                      <p className="mt-1 font-display text-5xl font-bold text-gradient-conversion">
+                    <div className="mt-10">
+                      <p className="text-xs text-gray-400 line-through">De R$ {(price * 2.5).toFixed(2).replace(".", ",")}</p>
+                      <div className="text-4xl font-black text-blue-600 mt-1">
                         R$ {price.toFixed(2).replace(".", ",")}
-                      </p>
-                      <p className="mt-1 text-xs text-muted-foreground">ou 12x sem juros no cartão</p>
+                      </div>
+                      <Button 
+                        className="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold h-14 px-8 rounded-2xl shadow-lg shadow-blue-100"
+                        onClick={() => toast.info("Esta é apenas uma prévia.")}
+                      >
+                        <MousePointer2 className="mr-2 h-5 w-5" /> QUERO COMEÇAR AGORA
+                      </Button>
                     </div>
+                  </div>
 
-                    <div className="mt-6 flex flex-col items-center gap-3">
+                  {/* BENEFITS */}
+                  <div className="bg-gray-50/50 py-12 px-8 border-y border-gray-100">
+                    <h3 className="text-xl font-bold text-gray-900 text-center mb-8">Por que este material é para você?</h3>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      {[
+                        { icon: Target, t: "Resultados Reais" },
+                        { icon: Zap, t: "Aplicação Prática" },
+                        { icon: Layout, t: "Conteúdo Organizado" },
+                        { icon: ShieldCheck, t: "Qualidade Premium" },
+                      ].map((item, i) => (
+                        <div key={i} className="bg-white p-4 rounded-2xl border border-gray-100 flex items-center gap-3">
+                          <div className="bg-blue-50 p-2 rounded-lg">
+                            <item.icon className="h-4 w-4 text-blue-600" />
+                          </div>
+                          <span className="font-bold text-sm text-gray-900">{item.t}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* MODULES PREVIEW */}
+                  {chapters.length > 0 && (
+                    <div className="py-12 px-8 bg-white">
+                      <h3 className="text-xl font-bold text-gray-900 text-center mb-8">O que você vai aprender</h3>
+                      <div className="space-y-3">
+                        {chapters.slice(0, 3).map((c, i) => (
+                          <div key={i} className="flex items-center gap-4 p-4 rounded-xl border border-gray-50 bg-gray-50/30">
+                            <div className="h-8 w-8 rounded-lg bg-white flex items-center justify-center text-xs font-black text-gray-400 border border-gray-100">
+                              {String(i+1).padStart(2, '0')}
+                            </div>
+                            <span className="text-sm font-bold text-gray-700">{c.title}</span>
+                          </div>
+                        ))}
+                        {chapters.length > 3 && (
+                          <p className="text-center text-xs text-gray-400 mt-4">E muito mais...</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* FINAL CTA */}
+                  <div className="py-12 px-8 bg-gray-50 border-t border-gray-100 text-center">
+                    <div className="bg-blue-600 p-10 rounded-[2rem] text-white space-y-6">
+                      <h3 className="text-2xl font-black leading-tight">Pronto para transformar seus resultados?</h3>
                       <Button 
                         size="lg" 
-                        className="gradient-conversion text-white shadow-conversion text-base px-8 py-6 hover:opacity-95 animate-pulse"
-                        onClick={() => {
-                          if (isPublished && ebookLink) {
-                            window.open(ebookLink, '_blank');
-                          } else {
-                            toast.info("Esta é apenas uma prévia. Clique em 'Publicar página' para ativar as vendas.");
-                          }
-                        }}
+                        className="bg-white text-blue-600 hover:bg-gray-50 font-black h-14 w-full rounded-xl shadow-xl"
+                        onClick={() => toast.info("Esta é apenas uma prévia.")}
                       >
-                        🛒 QUERO COMPRAR AGORA
+                        GARANTIR MEU ACESSO
                       </Button>
-                      <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1"><ShieldCheck className="h-3.5 w-3.5 text-success" /> Garantia de satisfação</span>
-                      </div>
+                      <p className="text-xs text-white/60">Garantia incondicional de 7 dias</p>
                     </div>
-                  </div>
-
-                  {/* Benefits */}
-                  <div className="border-t bg-card p-8">
-                    <h3 className="font-display text-2xl font-bold text-center">O que você vai aprender</h3>
-                    <ul className="mt-6 grid gap-3 sm:grid-cols-2">
-                      {(chapters.length ? chapters.map(c => c.title) : ["Benefício 1", "Benefício 2", "Benefício 3", "Benefício 4", "Benefício 5", "Benefício 6", "Benefício 7"]).slice(0, 7).map((b, i) => (
-                        <li key={i} className="flex items-start gap-3 rounded-xl border bg-background p-3 text-sm">
-                          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-success/10">
-                            <Check className="h-4 w-4 text-success" />
-                          </div>
-                          <span className="font-medium">{b}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Testimonials */}
-                  <div className="border-t bg-muted/30 p-8">
-                    <div className="text-center">
-                      <Badge className="bg-warning/20 text-warning border-warning/30 hover:bg-warning/20">⭐ AVALIAÇÃO 4.9/5</Badge>
-                      <h3 className="mt-3 font-display text-2xl font-bold">+2.847 alunos transformados</h3>
-                      <p className="mt-1 text-sm text-muted-foreground">Veja o que dizem quem já comprou</p>
-                    </div>
-                    <div className="mt-6 grid gap-4 md:grid-cols-3">
-                      {testimonials.map((t) => (
-                        <div key={t.name} className="rounded-xl border bg-card p-5 shadow-soft">
-                          <Quote className="h-5 w-5 text-primary opacity-40" />
-                          <p className="mt-2 text-sm leading-relaxed">"{t.text}"</p>
-                          <div className="mt-3 flex gap-0.5">
-                            {Array.from({ length: t.rating }).map((_, i) => (
-                              <Star key={i} className="h-3.5 w-3.5 fill-warning text-warning" />
-                            ))}
-                          </div>
-                          <div className="mt-3 flex items-center gap-2.5 border-t pt-3">
-                            <div className="flex h-9 w-9 items-center justify-center rounded-full gradient-primary text-xs font-bold text-primary-foreground">
-                              {t.avatar}
-                            </div>
-                            <div>
-                              <p className="text-xs font-semibold">{t.name}</p>
-                              <p className="text-[11px] text-muted-foreground">{t.role}</p>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Final CTA */}
-                  <div className="border-t gradient-conversion-soft p-8 text-center">
-                    <h3 className="font-display text-2xl font-bold">Não perca essa oportunidade</h3>
-                    <p className="mt-2 text-sm text-muted-foreground max-w-md mx-auto">
-                      Garante seu acesso agora com desconto exclusivo + bônus surpresa.
-                    </p>
-                    <Button 
-                      size="lg" 
-                      className="mt-5 gradient-conversion text-white shadow-conversion text-base px-8 py-6 hover:opacity-95"
-                      onClick={() => {
-                        if (isPublished && ebookLink) {
-                          window.open(ebookLink, '_blank');
-                        } else {
-                          toast.info("Esta é apenas uma prévia. Clique em 'Publicar página' para ativar as vendas.");
-                        }
-                      }}
-                    >
-                      🔥 GARANTIR MINHA VAGA POR R$ {price.toFixed(2).replace(".", ",")}
-                    </Button>
-                    <p className="mt-3 text-[11px] text-muted-foreground">🔒 Compra segura</p>
                   </div>
                 </div>
 
