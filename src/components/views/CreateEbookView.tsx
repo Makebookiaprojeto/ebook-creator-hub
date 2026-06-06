@@ -868,34 +868,35 @@ export function CreateEbookView() {
 
                 {/* Promo messages */}
                 <div className="mt-8">
-                  <h3 className="font-display text-base font-semibold">Mensagens prontas para divulgação</h3>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {searchTopic ? `Personalizadas para "${searchTopic}"` : "Digite o assunto acima para personalizar as mensagens"}.
-                  </p>
-                  <div className="mt-3 space-y-3">
-                    {promoTemplates(searchTopic, ebookLink).map((m, i) => (
-                      <div key={i} className="rounded-xl border bg-card p-5 space-y-3 transition hover:border-primary/40 hover:shadow-soft">
-                        <div className="flex items-center justify-between border-b pb-2">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-primary">{m.title}</span>
-                          <Badge variant="outline" className="text-[9px] font-bold">RECOMENDADO</Badge>
-                        </div>
-                        <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap italic">"{m.content}"</p>
-                        <div className="flex justify-end">
-                          <Button
-                            size="sm"
-                            className="h-8 gradient-primary text-primary-foreground shadow-glow"
-                            onClick={() => {
-                              navigator.clipboard.writeText(m.content);
-                              toast.success("Mensagem profissional copiada!");
-                            }}
-                          >
-                            <Copy className="mr-2 h-3.5 w-3.5" /> Copiar Mensagem
-                          </Button>
-                        </div>
+                  <h3 className="font-display text-base font-semibold">Mensagem pronta para divulgação</h3>
+                  <div className="mt-4">
+                    <div className="rounded-xl border bg-card p-5 space-y-3 transition hover:border-primary/40 hover:shadow-soft">
+                      <div className="flex items-center justify-between border-b pb-2">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-primary">RECOMENDADO</span>
+                        <Badge variant="outline" className="text-[9px] font-bold">PRONTO PARA USO</Badge>
                       </div>
-                    ))}
+                      <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap italic">
+                        "Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação.
+
+                        Link: {ebookLink}"
+                      </p>
+                      <div className="flex justify-end">
+                        <Button
+                          size="sm"
+                          className="h-8 gradient-primary text-primary-foreground shadow-glow"
+                          onClick={() => {
+                            const fullMessage = `Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação.\n\nLink: ${ebookLink}`;
+                            navigator.clipboard.writeText(fullMessage);
+                            toast.success("Mensagem pronta copiada!");
+                          }}
+                        >
+                          <Copy className="mr-2 h-3.5 w-3.5" /> Copiar Mensagem
+                        </Button>
+                      </div>
+                    </div>
                   </div>
                 </div>
+
 
               </div>
             )}
