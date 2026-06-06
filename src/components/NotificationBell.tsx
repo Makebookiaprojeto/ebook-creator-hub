@@ -21,48 +21,64 @@ export function NotificationBell() {
 
   useEffect(() => {
     if (!user) return;
+    console.log("NotificationBell montado para o usuário:", user.id);
 
-    // Fetch initial notifications
     const fetchNotifications = async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("notifications")
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(10);
       
+      if (error) console.error("Erro ao buscar notificações iniciais:", error);
       if (data) {
         setNotifications(data);
         setUnreadCount(data.filter((n) => !n.read).length);
+        console.log("Notificações iniciais carregadas:", data.length);
       }
     };
 
     fetchNotifications();
 
-    // Subscribe to new notifications
+    console.log("Criando canal Realtime...");
     const channel = supabase
-      .channel('schema-db-changes')
+      .channel(`db-changes-${user.id}`)
       .on(
         "postgres_changes",
         {
           event: "INSERT",
           schema: "public",
           table: "notifications",
+          filter: `user_id=eq.${user.id}`,
         },
         async (payload) => {
-          console.log("Realtime payload received:", payload);
+          console.log("EVENTO RECEBIDO NO FRONTEND:", payload);
           const newNotif = payload.new;
           
-          if (newNotif.user_id !== user.id) return;
+          console.log("Comparando user_id - Notificação:", newNotif.user_id, "Usuário Logado:", user.id);
           
-          setNotifications((prev) => [newNotif, ...prev].slice(0, 10));
-          setUnreadCount((prev) => prev + 1);
+          if (newNotif.user_id !== user.id) {
+            console.warn("Payload recebido para outro usuário, ignorando.");
+            return;
+          }
+          
+          console.log("Atualizando estado React...");
+          setNotifications((prev) => {
+            const updated = [newNotif, ...prev].slice(0, 10);
+            console.log("Estado notifications atualizado. Novo tamanho:", updated.length);
+            return updated;
+          });
+          
+          setUnreadCount((prev) => {
+            console.log("unreadCount atualizado:", prev + 1);
+            return prev + 1;
+          });
           
           if (newNotif.type === "sale" || newNotif.type === "pending_sale") {
-            console.log("Sale notification detected, playing sound...");
+            console.log("Notificação de venda detectada. Disparando Toast e Som.");
             playSaleSound();
             
-            // Obter os dados da venda mais recente para este vendedor
             const { data: purchaseData } = await supabase
               .from("purchases")
               .select("amount_paid_cents, ebooks(title)")
@@ -78,33 +94,36 @@ export function NotificationBell() {
                 style: 'currency', 
                 currency: 'BRL' 
               });
-              
               const ebookTitle = (purchaseData.ebooks as any)?.title || "Ebook";
               displayDescription = `${ebookTitle} - ${formattedAmount}`;
             }
 
+            console.log("Disparando toast.success...");
             toast.success("VENDA REALIZADA !!!", {
               description: displayDescription,
               duration: 5000,
               position: "top-right",
               icon: <ShoppingCart className="h-4 w-4 text-green-500" />,
             });
-            // Disparar evento para atualizar a dashboard
+            console.log("Toast disparado com sucesso.");
             window.dispatchEvent(new CustomEvent("refresh-dashboard"));
           }
         }
       )
       .subscribe((status) => {
-        console.log("Realtime subscription status:", status);
+        console.log("Realtime status:", status);
+        if (status === 'CHANNEL_ERROR') {
+          console.error("ERRO NO CANAL REALTIME: Verifique se a tabela tem Realtime habilitado e se o filtro está correto.");
+        }
       });
 
-    // User interaction listener to "unlock" audio (browser policy)
     const unlockAudio = () => {
       if (audioRef.current) {
         audioRef.current.play().then(() => {
           audioRef.current?.pause();
           audioRef.current!.currentTime = 0;
-        }).catch(() => {});
+          console.log("Áudio desbloqueado com sucesso.");
+        }).catch((err) => console.warn("Falha ao desbloquear áudio:", err));
         window.removeEventListener('click', unlockAudio);
         window.removeEventListener('touchstart', unlockAudio);
       }
@@ -113,6 +132,7 @@ export function NotificationBell() {
     window.addEventListener('touchstart', unlockAudio);
     
     return () => {
+      console.log("Desmontando NotificationBell, removendo canal.");
       supabase.removeChannel(channel);
       window.removeEventListener('click', unlockAudio);
       window.removeEventListener('touchstart', unlockAudio);
