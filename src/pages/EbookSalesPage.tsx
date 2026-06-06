@@ -13,6 +13,13 @@ import {
   Award,
   Sparkles,
   Zap,
+  Target,
+  MousePointer2,
+  Clock,
+  Layout,
+  Star,
+  Flame,
+  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
@@ -66,79 +73,250 @@ export default function EbookSalesPage() {
     })();
   }, [slug]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="animate-spin h-10 w-10 text-orange-500" /></div>;
-  if (!ebook) return <div className="min-h-screen flex items-center justify-center">eBook não encontrado.</div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin h-10 w-10 text-orange-500" /></div>;
+  if (!ebook) return <div className="min-h-screen flex items-center justify-center bg-white">eBook não encontrado.</div>;
 
   const price = formatPrice(ebook.price_cents);
 
   return (
-    <div className="min-h-screen bg-[#FFFFFF] text-[#111111] font-sans">
-      <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pt-24 pb-32">
+    <div className="min-h-screen bg-[#FFFFFF] text-[#111111] font-sans overflow-x-hidden selection:bg-orange-500 selection:text-white">
+      {/* 1. HERO PREMIUM */}
+      <section className="relative pt-32 pb-40 overflow-hidden">
+        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[800px] h-[800px] bg-orange-100/40 rounded-full blur-[120px] -z-10" />
         <div className="container mx-auto px-6 max-w-7xl">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-orange-100 text-orange-600 font-bold text-sm uppercase tracking-wider">Conteúdo Premium</span>
-              <h1 className="text-6xl lg:text-7xl font-black tracking-tighter leading-[0.95]">{ebook.title}</h1>
-              <p className="text-xl text-gray-600 leading-relaxed max-w-lg">{ebook.subtitle}</p>
-              <div className="flex items-center gap-6 pt-4">
-                <Button size="lg" onClick={handleCheckout} className="h-16 px-10 text-xl font-bold bg-[#F97316] hover:bg-[#EA580C] rounded-full shadow-lg transition-all hover:scale-105">GARANTIR ACESSO IMEDIATO</Button>
-                <div>
-                  <p className="text-xs text-gray-500 font-bold uppercase">Investimento</p>
-                  <p className="text-3xl font-black">{price}</p>
+          <div className="grid lg:grid-cols-2 gap-20 items-center">
+            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="space-y-10">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-50 text-orange-600 font-bold text-xs uppercase tracking-[0.2em] border border-orange-100">
+                <Sparkles size={14} /> Lançamento 2026
+              </div>
+              <h1 className="text-6xl lg:text-8xl font-black tracking-tight leading-[0.9] text-[#111111]">
+                {ebook.title}
+              </h1>
+              <p className="text-2xl text-gray-500 leading-relaxed max-w-xl font-medium">
+                {ebook.subtitle || "Aprenda de forma prática e rápida com este guia definitivo desenvolvido por especialistas."}
+              </p>
+              <div className="flex flex-wrap items-center gap-8 pt-4">
+                <Button 
+                  size="lg" 
+                  onClick={handleCheckout} 
+                  disabled={checkoutLoading}
+                  className="h-20 px-12 text-xl font-black bg-[#F97316] hover:bg-[#EA580C] text-white rounded-full shadow-[0_20px_40px_-10px_rgba(249,115,22,0.3)] transition-all hover:scale-105 active:scale-95 flex items-center gap-3"
+                >
+                  {checkoutLoading ? <Loader2 className="animate-spin" /> : <>OBTER ACESSO AGORA <ArrowRight /></>}
+                </Button>
+                <div className="text-left">
+                  <p className="text-sm text-gray-400 font-bold uppercase tracking-widest">Oferta Exclusiva</p>
+                  <p className="text-4xl font-black text-[#111111]">{price}</p>
                 </div>
               </div>
-            </div>
-            <motion.div whileHover={{ scale: 1.02 }} className="relative aspect-[3/4] shadow-2xl rounded-2xl overflow-hidden">
-              <img src={ebook.cover_url || ""} alt="Capa" className="w-full h-full object-cover" />
+              <div className="flex items-center gap-6 pt-4 text-gray-400 font-bold text-sm">
+                <span className="flex items-center gap-2 uppercase tracking-tighter"><ShieldCheck size={18} className="text-green-500"/> Compra 100% Segura</span>
+                <span className="flex items-center gap-2 uppercase tracking-tighter"><Zap size={18} className="text-orange-500"/> Acesso Vitalício</span>
+              </div>
+            </motion.div>
+            
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="relative">
+              <div className="absolute -inset-4 bg-orange-500/5 blur-2xl rounded-[3rem] -z-10" />
+              <div className="relative group perspective-1000">
+                <div className="relative transform-gpu transition-all duration-700 hover:rotate-y-12 hover:rotate-x-6 hover:-translate-y-4 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] rounded-[2.5rem] overflow-hidden aspect-[3/4.2]">
+                  <img src={ebook.cover_url || ""} alt={ebook.title} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-black/20 via-transparent to-white/10" />
+                </div>
+              </div>
             </motion.div>
           </div>
         </div>
-      </motion.section>
+      </section>
 
-      <section className="py-24 bg-gray-50">
+      {/* 2. APRESENTAÇÃO VISUAL */}
+      <section className="py-24 bg-gray-50/50 border-y border-gray-100">
         <div className="container mx-auto px-6 max-w-7xl">
-          <h2 className="text-4xl font-black text-center mb-16">Por que este material é indispensável?</h2>
-          <div className="grid md:grid-cols-4 gap-6">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
-                <Zap className="h-8 w-8 text-[#F97316] mb-4"/>
-                <h3 className="font-bold text-lg mb-2">Diferencial {i + 1}</h3>
-                <p className="text-sm text-gray-600">Descrição de impacto sobre este benefício profissional.</p>
+           <div className="grid lg:grid-cols-3 gap-12 items-center">
+              <div className="lg:col-span-2 relative">
+                <div className="grid grid-cols-2 gap-8">
+                   <div className="space-y-8">
+                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[-3deg] hover:rotate-0 transition-transform duration-500">
+                        <img src={ebook.cover_url || ""} className="w-full h-full object-cover opacity-80" />
+                      </div>
+                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[2deg] hover:rotate-0 transition-transform duration-500 translate-x-10">
+                         {chapters[0]?.image_url ? <img src={chapters[0].image_url} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><BookOpen size={48} className="text-gray-100" /></div>}
+                      </div>
+                   </div>
+                   <div className="space-y-8 pt-20">
+                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[4deg] hover:rotate-0 transition-transform duration-500 -translate-x-10">
+                        {chapters[1]?.image_url ? <img src={chapters[1].image_url} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><Layout size={48} className="text-gray-100" /></div>}
+                      </div>
+                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[-2deg] hover:rotate-0 transition-transform duration-500">
+                         {chapters[2]?.image_url ? <img src={chapters[2].image_url} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><Target size={48} className="text-gray-100" /></div>}
+                      </div>
+                   </div>
+                </div>
+              </div>
+              <div className="space-y-8">
+                <h2 className="text-4xl font-black leading-tight">Um produto desenhado para encantar.</h2>
+                <p className="text-xl text-gray-500 leading-relaxed font-medium">Cada página foi estruturada para garantir a melhor experiência de aprendizado, com visual moderno e conteúdo de fácil absorção.</p>
+                <ul className="space-y-4">
+                  {["Design Ultra-Moderno", "Diagramação Profissional", "Visualização em Qualquer Dispositivo"].map((item, i) => (
+                    <li key={i} className="flex items-center gap-4 text-lg font-bold">
+                       <div className="h-6 w-6 bg-orange-500 rounded-full flex items-center justify-center"><Check size={14} className="text-white" /></div>
+                       {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+           </div>
+        </div>
+      </section>
+
+      {/* 4. BENEFÍCIOS (8-12 CARDS) */}
+      <section className="py-32 bg-white">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
+            <h2 className="text-5xl font-black tracking-tight">Vantagens Exclusivas</h2>
+            <p className="text-xl text-gray-500 font-medium">O que você ganha ao garantir este guia profissional hoje.</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { icon: Rocket, title: "Aceleração Real", desc: "Resultados que aparecem já nas primeiras semanas de aplicação." },
+              { icon: Target, title: "Foco no Resultado", desc: "Direto ao ponto, sem enrolação. Conteúdo 100% prático." },
+              { icon: TrendingUp, title: "Escalabilidade", desc: "Aprenda métodos que podem ser replicados em larga escala." },
+              { icon: Award, title: "Certificado de Valor", desc: "Conhecimento que se traduz em autoridade no mercado." },
+              { icon: MousePointer2, title: "Implementação", desc: "Passo a passo visual para você não se perder no caminho." },
+              { icon: Clock, title: "Economia de Tempo", desc: "Meses de estudo resumidos em poucas horas de leitura." },
+              { icon: Layout, title: "Estrutura Sólida", desc: "Uma base robusta para você construir seu futuro profissional." },
+              { icon: Star, title: "Suporte VIP", desc: "Acesso a atualizações e materiais complementares exclusivos." }
+            ].map((benefit, i) => (
+              <motion.div 
+                key={i} 
+                whileHover={{ y: -10 }} 
+                className="p-8 bg-white rounded-3xl border border-gray-100 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.06)] transition-all"
+              >
+                <div className="h-16 w-16 bg-orange-50 rounded-2xl flex items-center justify-center mb-8">
+                  <benefit.icon className="h-8 w-8 text-orange-500" />
+                </div>
+                <h3 className="text-xl font-bold mb-4">{benefit.title}</h3>
+                <p className="text-gray-500 leading-relaxed">{benefit.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. O QUE VOCÊ VAI APRENDER */}
+      <section className="py-32 bg-gray-50/50">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <h2 className="text-5xl font-black text-center mb-20 tracking-tight">O que você vai aprender</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {chapters.length > 0 ? chapters.map((chapter, i) => (
+              <div key={chapter.id} className="group p-8 bg-white rounded-[2rem] border border-gray-100 shadow-sm hover:border-orange-500/20 transition-all">
+                <div className="flex items-start justify-between mb-8">
+                   <div className="h-12 w-12 bg-gray-50 rounded-full flex items-center justify-center font-black text-gray-300 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                     {String(i + 1).padStart(2, '0')}
+                   </div>
+                   <div className="px-3 py-1 bg-gray-50 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-400">Capítulo</div>
+                </div>
+                <h3 className="text-xl font-black mb-4 group-hover:text-orange-500 transition-colors">{chapter.title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed line-clamp-3">Conteúdo detalhado sobre este tópico essencial para sua evolução.</p>
+              </div>
+            )) : [...Array(6)].map((_, i) => (
+              <div key={i} className="p-8 bg-white rounded-[2rem] border border-gray-100 shadow-sm">
+                <div className="h-12 w-12 bg-gray-50 rounded-full flex items-center justify-center font-black text-gray-300 mb-8">
+                  {String(i + 1).padStart(2, '0')}
+                </div>
+                <h3 className="text-xl font-black mb-4">Tópico de Aprendizado {i + 1}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">Estrutura completa e detalhada sobre os fundamentos deste ebook.</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-24">
+      {/* 7. TRANSFORMAÇÃO */}
+      <section className="py-32 bg-white">
         <div className="container mx-auto px-6 max-w-5xl">
-          <h2 className="text-4xl font-black text-center mb-16">Resultados e Transformação</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="p-10 bg-gray-100 rounded-3xl">
-              <h3 className="text-xl font-bold mb-4 text-gray-600">ANTES</h3>
-              <p>Processos manuais, falta de clareza e resultados abaixo do esperado.</p>
-            </div>
-            <div className="p-10 bg-[#111111] text-white rounded-3xl">
-              <h3 className="text-xl font-bold mb-4 text-orange-500">DEPOIS</h3>
-              <p>Autonomia, processos estruturados e escala de resultados.</p>
-            </div>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-black tracking-tight mb-4">A Sua Transformação</h2>
+            <p className="text-xl text-gray-500 font-medium">O caminho exato que você vai percorrer.</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-px bg-gray-100 rounded-[3rem] overflow-hidden shadow-2xl border border-gray-100">
+             <div className="bg-gray-50 p-16 space-y-8">
+                <div className="inline-block px-4 py-1 bg-red-50 text-red-500 font-black text-[10px] uppercase tracking-[0.2em] rounded-full">Situação Atual</div>
+                <h3 className="text-3xl font-black text-gray-400 italic">Antes do eBook</h3>
+                <ul className="space-y-6">
+                   {["Insegurança nos processos", "Perda de tempo e energia", "Resultados estagnados", "Falta de metodologia"].map((item, i) => (
+                     <li key={i} className="flex items-center gap-4 text-gray-400 font-medium">
+                        <div className="h-5 w-5 bg-gray-200 rounded-full flex items-center justify-center text-[10px]">✕</div> {item}
+                     </li>
+                   ))}
+                </ul>
+             </div>
+             <div className="bg-[#111111] p-16 space-y-8">
+                <div className="inline-block px-4 py-1 bg-orange-500/20 text-orange-500 font-black text-[10px] uppercase tracking-[0.2em] rounded-full">Nova Realidade</div>
+                <h3 className="text-3xl font-black text-white">Depois do eBook</h3>
+                <ul className="space-y-6">
+                   {["Domínio total das ferramentas", "Alta performance constante", "Crescimento acelerado", "Estratégia comprovada"].map((item, i) => (
+                     <li key={i} className="flex items-center gap-4 text-white font-medium">
+                        <div className="h-5 w-5 bg-orange-500 rounded-full flex items-center justify-center"><Check size={10} className="text-white"/></div> {item}
+                     </li>
+                   ))}
+                </ul>
+             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-24 bg-[#111111] text-white">
+      {/* 9. OFERTA & CTA FINAL */}
+      <section className="py-40 relative">
+        <div className="absolute inset-0 bg-gray-50/50 -z-10" />
         <div className="container mx-auto px-6 max-w-4xl text-center">
-          <h2 className="text-5xl font-black mb-12">Garanta seu acesso hoje</h2>
-          <div className="p-10 bg-white text-[#111111] rounded-[2rem] shadow-2xl">
-            <p className="text-7xl font-black text-[#F97316] mb-8">{price}</p>
-            <Button size="lg" onClick={handleCheckout} className="h-16 w-full text-xl font-bold bg-[#F97316] hover:bg-[#EA580C] rounded-full">GARANTIR MEU ACESSO</Button>
-            <div className="mt-8 flex justify-center gap-8 text-sm text-gray-500">
-              <span className="flex items-center gap-2"><ShieldCheck size={16}/> Compra Segura</span>
-              <span className="flex items-center gap-2"><LockIcon size={16}/> Pagamento Protegido</span>
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="space-y-12">
+            <h2 className="text-6xl lg:text-8xl font-black tracking-tight leading-none">Pronto para a sua nova fase?</h2>
+            <div className="relative p-12 lg:p-20 bg-white rounded-[4rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] border border-gray-50">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-8 py-3 bg-[#111111] text-white rounded-full text-xs font-black uppercase tracking-[0.3em]">Acesso Imediato</div>
+              <p className="text-2xl font-bold mb-8">Invista no seu futuro profissional hoje</p>
+              <div className="flex flex-col items-center gap-2 mb-12">
+                <span className="text-gray-300 line-through text-2xl font-black opacity-50">R$ {ebook.price_cents ? (ebook.price_cents * 2.5 / 100).toFixed(2) : "0,00"}</span>
+                <p className="text-8xl lg:text-9xl font-black text-[#F97316] tracking-tighter leading-none">{price}</p>
+                <span className="text-gray-400 font-bold uppercase tracking-widest text-sm">Preço único • Sem mensalidade</span>
+              </div>
+              <Button 
+                size="lg" 
+                onClick={handleCheckout} 
+                disabled={checkoutLoading}
+                className="h-24 w-full max-w-2xl text-2xl lg:text-3xl font-black bg-[#F97316] hover:bg-[#EA580C] text-white rounded-full shadow-[0_25px_50px_-12px_rgba(249,115,22,0.4)] transition-all hover:scale-105"
+              >
+                {checkoutLoading ? <Loader2 className="animate-spin" /> : "QUERO GARANTIR MINHA VAGA"}
+              </Button>
+              <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
+                 {[
+                   { icon: ShieldCheck, text: "Seguro" },
+                   { icon: LockIcon, text: "Protegido" },
+                   { icon: Flame, text: "Vitalício" },
+                   { icon: Star, text: "Exclusivo" }
+                 ].map((badge, i) => (
+                   <div key={i} className="flex flex-col items-center gap-2">
+                      <div className="h-10 w-10 bg-gray-50 rounded-full flex items-center justify-center"><badge.icon size={18} className="text-gray-400" /></div>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">{badge.text}</span>
+                   </div>
+                 ))}
+              </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
+
+      <footer className="py-20 bg-white border-t border-gray-50">
+        <div className="container mx-auto px-6 text-center space-y-8">
+           <div className="flex items-center justify-center gap-2 text-xl font-black tracking-tighter">
+             <div className="h-8 w-8 bg-orange-500 rounded-lg flex items-center justify-center"><BookOpen size={16} className="text-white" /></div>
+             PREMIUM EBOOKS
+           </div>
+           <p className="text-gray-400 text-sm max-w-md mx-auto">Desenvolvido para impulsionar sua carreira com o melhor conteúdo digital do mercado.</p>
+           <div className="pt-8 text-[10px] font-bold text-gray-300 uppercase tracking-[0.3em]">
+             © {new Date().getFullYear()} • Todos os direitos reservados
+           </div>
+        </div>
+      </footer>
     </div>
   );
 }
