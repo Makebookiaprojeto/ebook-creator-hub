@@ -152,6 +152,7 @@ Além disso, gere exatamente 6 tópicos curtos de aprendizado para a seção "O 
       title: template.title,
       subtitle: template.subtitle,
       chapter_intros: baseChapters.map(() => ""),
+      learning_topics: [] as { title: string; description: string }[],
     };
     if (!("error" in personalizationRes) || !personalizationRes.error) {
       const args = personalizationRes.data?.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
