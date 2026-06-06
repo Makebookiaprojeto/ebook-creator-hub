@@ -333,8 +333,9 @@ export function CreateEbookView() {
         setEbookLink(`${window.location.origin}/e/${newEbook.slug}`);
       }
 
-      const chs = (newEbook.content_json as any[]) || [];
-      setChapters(chs.map(c => ({
+      const content = newEbook.content_json as any;
+      const chs = Array.isArray(content) ? content : (content?.chapters || []);
+      setChapters(chs.map((c: any) => ({
         title: c.title,
         subtitle: c.subtitle || "",
         content: c.content || "",
