@@ -573,7 +573,7 @@ export function CreateEbookView() {
 
             {step === 3 && (
               <div>
-                <h2 className="font-display text-xl font-semibold">Página de vendas</h2>
+                <h2 className="font-display text-xl font-semibold">Página</h2>
                 <p className="mt-1 text-sm text-muted-foreground">Preview da landing page de alta conversão.</p>
 
                 <div 
