@@ -1,35 +1,30 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Tables } from "@/integrations/supabase/types";
 import {
+  Rocket,
+  ShieldCheck,
+  Lock as LockIcon,
+  CheckCircle2,
+  Loader2,
+  TrendingUp,
+  Award,
+  Sparkles,
+  Zap,
+  Target,
+  MousePointer2,
+  Clock,
+  Layout,
+  Star,
+  Flame,
+  Check,
   ArrowRight,
   BookOpen,
-  Check,
-  Clock,
-  Download,
-  Flame,
-  Loader2,
-  Lock,
-  ShieldCheck,
-  Sparkles,
-  Star,
-  Users,
-  Zap,
-  CheckCircle2,
-  Layout,
-  Award,
-  CreditCard,
-  Target,
-  Rocket,
-  MousePointer2,
-  ChevronRight,
-  TrendingUp,
-  CheckSquare
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
 
 type Ebook = Tables<"ebooks">;
 type Chapter = Tables<"chapters">;
@@ -44,54 +39,15 @@ function formatPrice(cents?: number | null) {
 
 export default function EbookSalesPage() {
   const { slug } = useParams<{ slug: string }>();
-  const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [ebook, setEbook] = useState<Ebook | null>(null);
   const [chapters, setChapters] = useState<Chapter[]>([]);
-  
-  const [error, setError] = useState<string | null>(null);
-  const [isPaid, setIsPaid] = useState(false);
-  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    document.documentElement.classList.remove("dark");
-  }, []);
-
-  useEffect(() => {
-    const sessionId = searchParams.get("session_id");
-    const paid = searchParams.get("paid");
-    const canceled = searchParams.get("canceled");
-    if (canceled) {
-      toast.error("Pagamento cancelado.");
-      setSearchParams({}, { replace: true });
-      return;
-    }
-    if (paid && sessionId) {
-      (async () => {
-        const { data, error } = await supabase.functions.invoke("verify-payment", {
-          body: { session_id: sessionId },
-        });
-        if (error || !data?.paid) {
-          toast.error("Não foi possível confirmar o pagamento.");
-        } else {
-          setIsPaid(true);
-          toast.success("Pagamento confirmado! Obrigado pela compra 🎉");
-          if (data?.pdf_url) {
-            setDownloadUrl(data.pdf_url);
-          }
-        }
-        setSearchParams({}, { replace: true });
-      })();
-    }
-  }, [searchParams, setSearchParams]);
 
   const handleCheckout = async () => {
     if (!ebook) return;
     setCheckoutLoading(true);
-
     let checkoutUrl = (ebook as any).cakto_checkout_url || (ebook as any).checkout_url;
-    
     if (checkoutUrl) {
       try {
         const url = new URL(checkoutUrl);
@@ -103,314 +59,265 @@ export default function EbookSalesPage() {
       }
       return;
     }
-
     setCheckoutLoading(false);
-    toast.error("Este eBook ainda não tem link de pagamento configurado.");
+    toast.error("Link de pagamento não configurado.");
   };
 
   useEffect(() => {
-    let active = true;
     (async () => {
       if (!slug) return;
-      setLoading(true);
-      
-      if (slug === "preview") {
-        const storedData = sessionStorage.getItem('ebook_preview_data');
-        if (storedData) {
-          try {
-            const data = JSON.parse(storedData);
-            setEbook({
-              title: data.title,
-              subtitle: data.subtitle,
-              price_cents: data.price ? data.price * 100 : 0,
-              id: 'preview',
-              user_id: '',
-              slug: 'preview',
-              status: 'published'
-            } as any);
-            setChapters(data.chapters || []);
-            setLoading(false);
-            return;
-          } catch (e) {
-            console.error("Error parsing preview data", e);
-          }
-        }
-      }
-
-      const { data: ebookData, error: ebookErr } = await (supabase
-        .from("public_ebooks" as any)
-        .select("*")
-        .eq("slug", slug)
-        .maybeSingle() as any);
-
-      if (!active) return;
-      if (ebookErr || !ebookData) {
-        setError("Este eBook não está disponível.");
-        setLoading(false);
-        return;
-      }
-
-      const { data: chData } = await supabase
-        .from("chapters")
-        .select("*")
-        .eq("ebook_id", ebookData.id)
-        .order("order_index", { ascending: true });
-
-      if (!active) return;
+      const { data: ebookData } = await (supabase.from("public_ebooks" as any).select("*").eq("slug", slug).maybeSingle() as any);
+      if (!ebookData) { setLoading(false); return; }
+      const { data: chData } = await supabase.from("chapters").select("*").eq("ebook_id", ebookData.id).order("order_index", { ascending: true });
       setEbook(ebookData);
-      
-      if (chData && chData.length > 0) {
-        setChapters(chData);
-      } else if (ebookData.content_json && Array.isArray(ebookData.content_json)) {
-        setChapters(ebookData.content_json.map((c: any, index: number) => ({
-          ...c,
-          order_index: c.order_index ?? index,
-          id: c.id ?? `json-${index}`
-        })));
-      } else {
-        setChapters([]);
-      }
-
+      setChapters(chData || []);
       setLoading(false);
-      
-      if (ebookData && slug !== "preview") {
-        supabase
-          .from("ebook_views")
-          .insert({ ebook_id: ebookData.id })
-          .then(({ error }) => {
-            if (error) console.error("Error registering view:", error);
-          });
-      }
     })();
-    return () => {
-      active = false;
-    };
   }, [slug]);
 
-  useEffect(() => {
-    if (!ebook) return;
-    document.title = `${ebook.title} — ACESSO IMEDIATO`;
-  }, [ebook]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <Loader2 className="h-7 w-7 animate-spin text-blue-600" />
-      </div>
-    );
-  }
-
-  if (error || !ebook) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-white p-6 text-center">
-        <BookOpen className="h-12 w-12 text-blue-600/30" />
-        <h1 className="text-2xl font-bold text-gray-900">eBook não encontrado</h1>
-        <p className="text-gray-500">{error ?? "Verifique o link e tente novamente."}</p>
-        <Link to="/">
-          <Button variant="outline">Voltar à página inicial</Button>
-        </Link>
-      </div>
-    );
-  }
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin h-10 w-10 text-orange-500" /></div>;
+  if (!ebook) return <div className="min-h-screen flex items-center justify-center bg-white">eBook não encontrado.</div>;
 
   const price = formatPrice(ebook.price_cents);
-  const fromPrice = formatPrice(ebook.price_cents ? Math.round(ebook.price_cents * 2.5) : 0);
 
   return (
-    <div className="min-h-screen bg-white text-[#111111] selection:bg-blue-600 selection:text-white font-sans antialiased">
-      {/* SUCCESS MESSAGE */}
-      {isPaid && (
-        <div className="bg-green-50 py-12 px-6 border-b border-green-100">
-          <div className="mx-auto max-w-3xl text-center space-y-6">
-            <CheckCircle2 className="h-20 w-20 text-green-500 mx-auto" />
-            <h2 className="text-4xl font-black">Pagamento Confirmado!</h2>
-            <p className="text-xl text-gray-700">Seu acesso ao <strong>{ebook.title}</strong> foi liberado.</p>
-            {downloadUrl ? (
-              <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white font-bold h-16 px-10 text-lg rounded-full" asChild>
-                <a href={downloadUrl} download target="_blank" rel="noopener noreferrer">
-                  <Download className="mr-2 h-6 w-6" /> BAIXAR EBOOK AGORA
-                </a>
-              </Button>
-            ) : (
-              <p className="text-gray-500">O link de download foi enviado para seu e-mail.</p>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* SECTION 1 — HERO PREMIUM */}
-      <section className="relative pt-24 pb-32">
-        <div className="container mx-auto max-w-7xl px-6">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8">
-              <Badge className="bg-blue-100/50 text-[#1E3A5F] hover:bg-blue-100 px-6 py-2 rounded-full text-sm font-bold uppercase tracking-widest border border-blue-200">
-                Conteúdo Premium
-              </Badge>
-              <h1 className="text-5xl lg:text-7xl font-black leading-[1.1] tracking-tight">
+    <div className="min-h-screen bg-[#FFFFFF] text-[#111111] font-sans overflow-x-hidden selection:bg-orange-500 selection:text-white">
+      {/* 1. HERO PREMIUM */}
+      <section className="relative pt-32 pb-40 overflow-hidden">
+        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[800px] h-[800px] bg-orange-100/40 rounded-full blur-[120px] -z-10" />
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="grid lg:grid-cols-2 gap-20 items-center">
+            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="space-y-10">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-50 text-orange-600 font-bold text-xs uppercase tracking-[0.2em] border border-orange-100">
+                <Sparkles size={14} /> Lançamento 2026
+              </div>
+              <h1 className="text-6xl lg:text-8xl font-black tracking-tight leading-[0.9] text-[#111111]">
                 {ebook.title}
               </h1>
-              {ebook.subtitle && (
-                <p className="text-xl lg:text-2xl text-[#234B75] leading-relaxed max-w-2xl font-medium">
-                  {ebook.subtitle}
-                </p>
-              )}
-              <div className="flex flex-col sm:flex-row gap-6 items-center lg:justify-start">
+              <p className="text-2xl text-gray-500 leading-relaxed max-w-xl font-medium">
+                {ebook.subtitle || "Aprenda de forma prática e rápida com este guia definitivo desenvolvido por especialistas."}
+              </p>
+              <div className="flex flex-wrap items-center gap-8 pt-4">
                 <Button 
                   size="lg" 
                   onClick={handleCheckout} 
                   disabled={checkoutLoading}
-                  className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold h-20 px-12 text-xl rounded-full shadow-lg shadow-blue-600/20 transition-all hover:scale-105"
+                  className="h-20 px-12 text-xl font-black bg-[#F97316] hover:bg-[#EA580C] text-white rounded-full shadow-[0_20px_40px_-10px_rgba(249,115,22,0.3)] transition-all hover:scale-105 active:scale-95 flex items-center gap-3"
                 >
-                  {checkoutLoading ? <Loader2 className="mr-3 h-6 w-6 animate-spin" /> : "COMPRAR AGORA"}
+                  {checkoutLoading ? <Loader2 className="animate-spin" /> : <>OBTER ACESSO AGORA <ArrowRight /></>}
                 </Button>
-                <div className="text-center sm:text-left">
-                  <p className="text-gray-400 line-through text-lg">{fromPrice}</p>
-                  <p className="text-4xl font-black text-[#2563EB]">{price}</p>
+                <div className="text-left">
+                  <p className="text-sm text-gray-400 font-bold uppercase tracking-widest">Oferta Exclusiva</p>
+                  <p className="text-4xl font-black text-[#111111]">{price}</p>
                 </div>
               </div>
-              <div className="flex gap-8 text-[#1E3A5F] font-bold">
-                <span className="flex items-center gap-2"><ShieldCheck className="h-6 w-6" /> Compra Segura</span>
-                <span className="flex items-center gap-2"><Zap className="h-6 w-6" /> Acesso Imediato</span>
+              <div className="flex items-center gap-6 pt-4 text-gray-400 font-bold text-sm">
+                <span className="flex items-center gap-2 uppercase tracking-tighter"><ShieldCheck size={18} className="text-green-500"/> Compra 100% Segura</span>
+                <span className="flex items-center gap-2 uppercase tracking-tighter"><Zap size={18} className="text-orange-500"/> Acesso Vitalício</span>
               </div>
-            </div>
-            <div className="relative">
-              <div className="absolute -inset-10 bg-gradient-to-tr from-blue-500/10 to-transparent blur-3xl" />
-              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl ring-1 ring-black/5">
-                {ebook.cover_url ? (
-                  <img src={ebook.cover_url} alt={ebook.title} className="h-full w-full object-cover" />
-                ) : (
-                  <div className="h-full w-full flex items-center justify-center bg-gray-50">
-                    <BookOpen className="h-24 w-24 text-gray-300" />
-                  </div>
-                )}
+            </motion.div>
+            
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="relative">
+              <div className="absolute -inset-4 bg-orange-500/5 blur-2xl rounded-[3rem] -z-10" />
+              <div className="relative group perspective-1000">
+                <div className="relative transform-gpu transition-all duration-700 hover:rotate-y-12 hover:rotate-x-6 hover:-translate-y-4 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] rounded-[2.5rem] overflow-hidden aspect-[3/4.2]">
+                  <img src={ebook.cover_url || ""} alt={ebook.title} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-black/20 via-transparent to-white/10" />
+                </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* SECTION 2 — O QUE VOCÊ VAI APRENDER */}
-      <section className="py-24">
-        <div className="container mx-auto max-w-7xl px-6">
-          <h2 className="text-4xl font-black mb-16 text-center">O que você vai aprender</h2>
+      {/* 2. APRESENTAÇÃO VISUAL */}
+      <section className="py-24 bg-gray-50/50 border-y border-gray-100">
+        <div className="container mx-auto px-6 max-w-7xl">
+           <div className="grid lg:grid-cols-3 gap-12 items-center">
+              <div className="lg:col-span-2 relative">
+                <div className="grid grid-cols-2 gap-8">
+                   <div className="space-y-8">
+                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[-3deg] hover:rotate-0 transition-transform duration-500">
+                        <img src={ebook.cover_url || ""} className="w-full h-full object-cover opacity-80" />
+                      </div>
+                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[2deg] hover:rotate-0 transition-transform duration-500 translate-x-10">
+                         {chapters[0]?.image_url ? <img src={chapters[0].image_url} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><BookOpen size={48} className="text-gray-100" /></div>}
+                      </div>
+                   </div>
+                   <div className="space-y-8 pt-20">
+                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[4deg] hover:rotate-0 transition-transform duration-500 -translate-x-10">
+                        {chapters[1]?.image_url ? <img src={chapters[1].image_url} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><Layout size={48} className="text-gray-100" /></div>}
+                      </div>
+                      <div className="aspect-[4/5] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform rotate-[-2deg] hover:rotate-0 transition-transform duration-500">
+                         {chapters[2]?.image_url ? <img src={chapters[2].image_url} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><Target size={48} className="text-gray-100" /></div>}
+                      </div>
+                   </div>
+                </div>
+              </div>
+              <div className="space-y-8">
+                <h2 className="text-4xl font-black leading-tight">Um produto desenhado para encantar.</h2>
+                <p className="text-xl text-gray-500 leading-relaxed font-medium">Cada página foi estruturada para garantir a melhor experiência de aprendizado, com visual moderno e conteúdo de fácil absorção.</p>
+                <ul className="space-y-4">
+                  {["Design Ultra-Moderno", "Diagramação Profissional", "Visualização em Qualquer Dispositivo"].map((item, i) => (
+                    <li key={i} className="flex items-center gap-4 text-lg font-bold">
+                       <div className="h-6 w-6 bg-orange-500 rounded-full flex items-center justify-center"><Check size={14} className="text-white" /></div>
+                       {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+           </div>
+        </div>
+      </section>
+
+      {/* 4. BENEFÍCIOS (8-12 CARDS) */}
+      <section className="py-32 bg-white">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
+            <h2 className="text-5xl font-black tracking-tight">Vantagens Exclusivas</h2>
+            <p className="text-xl text-gray-500 font-medium">O que você ganha ao garantir este guia profissional hoje.</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { icon: Rocket, title: "Aceleração Real", desc: "Resultados que aparecem já nas primeiras semanas de aplicação." },
+              { icon: Target, title: "Foco no Resultado", desc: "Direto ao ponto, sem enrolação. Conteúdo 100% prático." },
+              { icon: TrendingUp, title: "Escalabilidade", desc: "Aprenda métodos que podem ser replicados em larga escala." },
+              { icon: Award, title: "Certificado de Valor", desc: "Conhecimento que se traduz em autoridade no mercado." },
+              { icon: MousePointer2, title: "Implementação", desc: "Passo a passo visual para você não se perder no caminho." },
+              { icon: Clock, title: "Economia de Tempo", desc: "Meses de estudo resumidos em poucas horas de leitura." },
+              { icon: Layout, title: "Estrutura Sólida", desc: "Uma base robusta para você construir seu futuro profissional." },
+              { icon: Star, title: "Suporte VIP", desc: "Acesso a atualizações e materiais complementares exclusivos." }
+            ].map((benefit, i) => (
+              <motion.div 
+                key={i} 
+                whileHover={{ y: -10 }} 
+                className="p-8 bg-white rounded-3xl border border-gray-100 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.06)] transition-all"
+              >
+                <div className="h-16 w-16 bg-orange-50 rounded-2xl flex items-center justify-center mb-8">
+                  <benefit.icon className="h-8 w-8 text-orange-500" />
+                </div>
+                <h3 className="text-xl font-bold mb-4">{benefit.title}</h3>
+                <p className="text-gray-500 leading-relaxed">{benefit.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. O QUE VOCÊ VAI APRENDER */}
+      <section className="py-32 bg-gray-50/50">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <h2 className="text-5xl font-black text-center mb-20 tracking-tight">O que você vai aprender</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="p-8 bg-white border border-gray-100 rounded-3xl shadow-sm hover:shadow-xl transition-all">
-                <CheckSquare className="h-10 w-10 text-[#2563EB] mb-6" />
-                <h3 className="text-xl font-bold mb-3">Tópico de Aprendizado {i}</h3>
-                <p className="text-[#315F91]">Descrição detalhada sobre o que será abordado neste tópico essencial do seu eBook.</p>
+            {chapters.length > 0 ? chapters.map((chapter, i) => (
+              <div key={chapter.id} className="group p-8 bg-white rounded-[2rem] border border-gray-100 shadow-sm hover:border-orange-500/20 transition-all">
+                <div className="flex items-start justify-between mb-8">
+                   <div className="h-12 w-12 bg-gray-50 rounded-full flex items-center justify-center font-black text-gray-300 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                     {String(i + 1).padStart(2, '0')}
+                   </div>
+                   <div className="px-3 py-1 bg-gray-50 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-400">Capítulo</div>
+                </div>
+                <h3 className="text-xl font-black mb-4 group-hover:text-orange-500 transition-colors">{chapter.title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed line-clamp-3">Conteúdo detalhado sobre este tópico essencial para sua evolução.</p>
+              </div>
+            )) : [...Array(6)].map((_, i) => (
+              <div key={i} className="p-8 bg-white rounded-[2rem] border border-gray-100 shadow-sm">
+                <div className="h-12 w-12 bg-gray-50 rounded-full flex items-center justify-center font-black text-gray-300 mb-8">
+                  {String(i + 1).padStart(2, '0')}
+                </div>
+                <h3 className="text-xl font-black mb-4">Tópico de Aprendizado {i + 1}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">Estrutura completa e detalhada sobre os fundamentos deste ebook.</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SECTION 3 — VISUALIZAÇÃO DO CONTEÚDO */}
-      <section className="py-24 bg-gray-50">
-        <div className="container mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-16 items-center">
-          <div className="space-y-6">
-            <h2 className="text-4xl font-black">Visualização do conteúdo</h2>
-            <p className="text-xl text-[#315F91]">Entenda a profundidade do material com prévias visuais que demonstram a qualidade da diagramação.</p>
+      {/* 7. TRANSFORMAÇÃO */}
+      <section className="py-32 bg-white">
+        <div className="container mx-auto px-6 max-w-5xl">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-black tracking-tight mb-4">A Sua Transformação</h2>
+            <p className="text-xl text-gray-500 font-medium">O caminho exato que você vai percorrer.</p>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-             <div className="aspect-[3/4] bg-white rounded-2xl shadow-lg border border-gray-100" />
-             <div className="aspect-[3/4] bg-white rounded-2xl shadow-lg border border-gray-100 mt-12" />
+          <div className="grid md:grid-cols-2 gap-px bg-gray-100 rounded-[3rem] overflow-hidden shadow-2xl border border-gray-100">
+             <div className="bg-gray-50 p-16 space-y-8">
+                <div className="inline-block px-4 py-1 bg-red-50 text-red-500 font-black text-[10px] uppercase tracking-[0.2em] rounded-full">Situação Atual</div>
+                <h3 className="text-3xl font-black text-gray-400 italic">Antes do eBook</h3>
+                <ul className="space-y-6">
+                   {["Insegurança nos processos", "Perda de tempo e energia", "Resultados estagnados", "Falta de metodologia"].map((item, i) => (
+                     <li key={i} className="flex items-center gap-4 text-gray-400 font-medium">
+                        <div className="h-5 w-5 bg-gray-200 rounded-full flex items-center justify-center text-[10px]">✕</div> {item}
+                     </li>
+                   ))}
+                </ul>
+             </div>
+             <div className="bg-[#111111] p-16 space-y-8">
+                <div className="inline-block px-4 py-1 bg-orange-500/20 text-orange-500 font-black text-[10px] uppercase tracking-[0.2em] rounded-full">Nova Realidade</div>
+                <h3 className="text-3xl font-black text-white">Depois do eBook</h3>
+                <ul className="space-y-6">
+                   {["Domínio total das ferramentas", "Alta performance constante", "Crescimento acelerado", "Estratégia comprovada"].map((item, i) => (
+                     <li key={i} className="flex items-center gap-4 text-white font-medium">
+                        <div className="h-5 w-5 bg-orange-500 rounded-full flex items-center justify-center"><Check size={10} className="text-white"/></div> {item}
+                     </li>
+                   ))}
+                </ul>
+             </div>
           </div>
         </div>
       </section>
 
-      {/* SECTION 4 — BENEFÍCIOS */}
-      <section className="py-24">
-        <div className="container mx-auto max-w-7xl px-6">
-          <h2 className="text-4xl font-black mb-16 text-center">Benefícios do material</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="flex gap-4">
-                <div className="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
-                  <Star className="h-6 w-6 text-[#2563EB]" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-lg">Benefício {i}</h4>
-                  <p className="text-[#315F91]">Uma descrição curta de como este benefício ajuda no seu resultado.</p>
-                </div>
+      {/* 9. OFERTA & CTA FINAL */}
+      <section className="py-40 relative">
+        <div className="absolute inset-0 bg-gray-50/50 -z-10" />
+        <div className="container mx-auto px-6 max-w-4xl text-center">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="space-y-12">
+            <h2 className="text-6xl lg:text-8xl font-black tracking-tight leading-none">Pronto para a sua nova fase?</h2>
+            <div className="relative p-12 lg:p-20 bg-white rounded-[4rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] border border-gray-50">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-8 py-3 bg-[#111111] text-white rounded-full text-xs font-black uppercase tracking-[0.3em]">Acesso Imediato</div>
+              <p className="text-2xl font-bold mb-8">Invista no seu futuro profissional hoje</p>
+              <div className="flex flex-col items-center gap-2 mb-12">
+                <span className="text-gray-300 line-through text-2xl font-black opacity-50">R$ {ebook.price_cents ? (ebook.price_cents * 2.5 / 100).toFixed(2) : "0,00"}</span>
+                <p className="text-8xl lg:text-9xl font-black text-[#F97316] tracking-tighter leading-none">{price}</p>
+                <span className="text-gray-400 font-bold uppercase tracking-widest text-sm">Preço único • Sem mensalidade</span>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 5 — POR QUE DIFERENTE */}
-      <section className="py-24 bg-[#111111] text-white">
-        <div className="container mx-auto max-w-5xl px-6">
-          <h2 className="text-4xl font-black mb-16 text-center">Por que este eBook é diferente?</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-[#1E1E1E] p-10 rounded-3xl">
-              <h3 className="font-bold text-xl mb-6">Outros materiais</h3>
-              <ul className="space-y-4 text-gray-400">
-                <li className="flex items-center gap-3">❌ Conteúdo superficial</li>
-                <li className="flex items-center gap-3">❌ Informações desorganizadas</li>
-                <li className="flex items-center gap-3">❌ Difícil aplicação</li>
-              </ul>
+              <Button 
+                size="lg" 
+                onClick={handleCheckout} 
+                disabled={checkoutLoading}
+                className="h-24 w-full max-w-2xl text-2xl lg:text-3xl font-black bg-[#F97316] hover:bg-[#EA580C] text-white rounded-full shadow-[0_25px_50px_-12px_rgba(249,115,22,0.4)] transition-all hover:scale-105"
+              >
+                {checkoutLoading ? <Loader2 className="animate-spin" /> : "QUERO GARANTIR MINHA VAGA"}
+              </Button>
+              <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
+                 {[
+                   { icon: ShieldCheck, text: "Seguro" },
+                   { icon: LockIcon, text: "Protegido" },
+                   { icon: Flame, text: "Vitalício" },
+                   { icon: Star, text: "Exclusivo" }
+                 ].map((badge, i) => (
+                   <div key={i} className="flex flex-col items-center gap-2">
+                      <div className="h-10 w-10 bg-gray-50 rounded-full flex items-center justify-center"><badge.icon size={18} className="text-gray-400" /></div>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">{badge.text}</span>
+                   </div>
+                 ))}
+              </div>
             </div>
-            <div className="bg-[#2563EB] p-10 rounded-3xl">
-              <h3 className="font-bold text-xl mb-6">Este eBook</h3>
-              <ul className="space-y-4 text-white font-medium">
-                <li className="flex items-center gap-3">✅ Conteúdo estruturado</li>
-                <li className="flex items-center gap-3">✅ Aplicação prática</li>
-                <li className="flex items-center gap-3">✅ Fácil implementação</li>
-              </ul>
-            </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* SECTION 6 — RESULTADOS E TRANSFORMAÇÃO */}
-      <section className="py-24">
-        <div className="container mx-auto max-w-7xl px-6 text-center">
-          <h2 className="text-4xl font-black mb-16">Resultados e Transformação</h2>
-          <div className="grid md:grid-cols-2 gap-12">
-            <div className="p-10 rounded-3xl border-2 border-dashed border-gray-200">
-              <h3 className="text-2xl font-black mb-6">ANTES</h3>
-              <p className="text-[#315F91]">Dificuldades, desorganização e falta de clareza nos processos.</p>
-            </div>
-            <div className="p-10 rounded-3xl bg-[#2563EB] text-white">
-              <h3 className="text-2xl font-black mb-6">DEPOIS</h3>
-              <p>Clareza total, processos otimizados e resultados mensuráveis rapidamente.</p>
-            </div>
-          </div>
+      <footer className="py-20 bg-white border-t border-gray-50">
+        <div className="container mx-auto px-6 text-center space-y-8">
+           <div className="flex items-center justify-center gap-2 text-xl font-black tracking-tighter">
+             <div className="h-8 w-8 bg-orange-500 rounded-lg flex items-center justify-center"><BookOpen size={16} className="text-white" /></div>
+             PREMIUM EBOOKS
+           </div>
+           <p className="text-gray-400 text-sm max-w-md mx-auto">Desenvolvido para impulsionar sua carreira com o melhor conteúdo digital do mercado.</p>
+           <div className="pt-8 text-[10px] font-bold text-gray-300 uppercase tracking-[0.3em]">
+             © {new Date().getFullYear()} • Todos os direitos reservados
+           </div>
         </div>
-      </section>
-
-      {/* SECTION 7 — GARANTIA E SEGURANÇA */}
-      <section className="py-24 bg-gray-50">
-        <div className="container mx-auto max-w-4xl px-6 text-center space-y-8">
-          <ShieldCheck className="h-20 w-20 text-[#2563EB] mx-auto" />
-          <h2 className="text-4xl font-black">7 Dias de Garantia</h2>
-          <p className="text-xl text-[#315F91] max-w-2xl mx-auto">Se não ficar satisfeito, devolvemos 100% do seu dinheiro. Sem perguntas, sem burocracia.</p>
-        </div>
-      </section>
-
-      {/* SECTION 8 & 9 — OFERTA E CTA FINAL */}
-      <section className="py-32">
-        <div className="container mx-auto max-w-4xl px-6 text-center space-y-12">
-          <h2 className="text-5xl font-black tracking-tight">Pronto para começar?</h2>
-          <div className="p-12 bg-white border-2 border-blue-100 rounded-[3rem] shadow-2xl">
-            <p className="text-2xl font-bold mb-6">Tenha acesso a todo este conteúdo agora mesmo</p>
-            <p className="text-6xl font-black text-[#2563EB] mb-10">{price}</p>
-            <Button 
-              size="lg" 
-              onClick={handleCheckout}
-              disabled={checkoutLoading}
-              className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold h-20 w-full max-w-lg text-xl rounded-full shadow-lg"
-            >
-              {checkoutLoading ? <Loader2 className="mr-3 h-6 w-6 animate-spin" /> : "GARANTIR MEU ACESSO"}
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      <footer className="py-12 border-t text-center text-gray-500">
-        © {new Date().getFullYear()} Ebook Premium. Todos os direitos reservados.
       </footer>
     </div>
   );
