@@ -104,7 +104,9 @@ Subtítulo atual: ${template.subtitle ?? ""}
 Capítulos:
 ${baseChapters.map((c, i) => `${i + 1}. ${c.title} — ${c.subtitle}`).join("\n")}
 
-Gere: novo título magnético adaptado ao público (≤60 chars), novo subtítulo (≤120 chars), e para cada capítulo um parágrafo de ABERTURA (80-120 palavras) que conecta o tema do capítulo ao público "${audience || "geral"}". Não reescreva o capítulo inteiro, só a abertura.`,
+Gere: novo título magnético adaptado ao público (≤60 chars), novo subtítulo (≤120 chars), e para cada capítulo um parágrafo de ABERTURA (80-120 palavras) que conecta o tema do capítulo ao público "${audience || "geral"}". Não reescreva o capítulo inteiro, só a abertura.
+
+Além disso, gere exatamente 6 tópicos curtos de aprendizado para a seção "O que você vai aprender" da página de vendas. Cada tópico deve ter um título curto e impactante (até 40 caracteres) e uma descrição curta e persuasiva (até 120 caracteres) destacando benefícios reais do ebook para este público.`,
         },
       ],
       tools: [{
