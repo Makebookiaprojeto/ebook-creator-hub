@@ -207,7 +207,7 @@ export default function EbookSalesPage() {
             </Button>
             <div className="mt-8 flex justify-center gap-6 text-sm text-gray-500">
               <span className="flex items-center gap-2"><ShieldCheck size={16}/> Compra segura</span>
-              <span className="flex items-center gap-2"><Lock size={16}/> Pagamento protegido</span>
+              <span className="flex items-center gap-2"><LockIcon size={16}/> Pagamento protegido</span>
             </div>
           </div>
         </div>
