@@ -593,7 +593,24 @@ export function CreateEbookView() {
                 <h2 className="font-display text-xl font-semibold">Página de vendas</h2>
                 <p className="mt-1 text-sm text-muted-foreground">Preview da landing page de alta conversão.</p>
 
-                <div className="mt-6 overflow-hidden rounded-2xl border">
+                <div 
+                  className="mt-6 overflow-hidden rounded-2xl border bg-white text-slate-950"
+                  style={{ 
+                    '--background': '0 0% 100%', 
+                    '--foreground': '240 10% 3.9%',
+                    '--card': '0 0% 100%',
+                    '--card-foreground': '240 10% 3.9%',
+                    '--muted': '240 4.8% 95.9%',
+                    '--muted-foreground': '240 3.8% 46.1%',
+                    '--border': '240 5.9% 90%',
+                    '--primary': '142 70% 45%',
+                    '--secondary': '240 4.8% 95.9%',
+                    '--secondary-foreground': '240 5.9% 10%',
+                    '--accent': '240 4.8% 95.9%',
+                    '--accent-foreground': '240 5.9% 10%',
+                    '--gradient-conversion-soft': 'radial-gradient(circle at 30% 20%, hsl(4 90% 58% / 0.12), transparent 55%), radial-gradient(circle at 80% 80%, hsl(28 95% 58% / 0.1), transparent 55%), hsl(0 0% 100%)'
+                  } as any}
+                >
                   {/* Top urgency bar */}
                   <div className="bg-primary/10 text-primary py-2 px-4 text-center text-xs font-bold flex items-center justify-center gap-2">
                     <Zap className="h-3.5 w-3.5" /> APROVEITE O DESCONTO EXCLUSIVO
