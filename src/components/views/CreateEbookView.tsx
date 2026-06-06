@@ -831,7 +831,7 @@ export function CreateEbookView() {
                     </Button>
                   </div>
                 )}
-                </div>
+
 
                 {/* Manual Search Links */}
                 {searchedGroups.length > 0 && (
