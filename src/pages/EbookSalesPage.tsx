@@ -94,7 +94,7 @@ export default function EbookSalesPage() {
               <h1 className="text-6xl lg:text-8xl font-black tracking-tight leading-[0.9] text-[#111111]">
                 {ebook.title}
               </h1>
-              <p className="text-2xl text-gray-500 leading-relaxed max-w-xl font-medium">
+              <p className="text-2xl text-[#1E3A5F] leading-relaxed max-w-xl font-medium">
                 {ebook.subtitle || "Aprenda de forma prática e rápida com este guia definitivo desenvolvido por especialistas."}
               </p>
               <div className="flex flex-wrap items-center gap-8 pt-4">
@@ -107,11 +107,11 @@ export default function EbookSalesPage() {
                   {checkoutLoading ? <Loader2 className="animate-spin" /> : <>OBTER ACESSO AGORA <ArrowRight /></>}
                 </Button>
                 <div className="text-left">
-                  <p className="text-sm text-gray-400 font-bold uppercase tracking-widest">Oferta Exclusiva</p>
+                  <p className="text-sm text-[#1E3A5F] font-bold uppercase tracking-widest opacity-70">Oferta Exclusiva</p>
                   <p className="text-4xl font-black text-[#111111]">{price}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-6 pt-4 text-gray-400 font-bold text-sm">
+              <div className="flex items-center gap-6 pt-4 text-[#1E3A5F] font-bold text-sm">
                 <span className="flex items-center gap-2 uppercase tracking-tighter"><ShieldCheck size={18} className="text-green-500"/> Compra 100% Segura</span>
                 <span className="flex items-center gap-2 uppercase tracking-tighter"><Zap size={18} className="text-orange-500"/> Acesso Vitalício</span>
               </div>
