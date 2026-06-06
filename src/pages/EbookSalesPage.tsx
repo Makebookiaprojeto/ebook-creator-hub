@@ -187,26 +187,52 @@ export default function EbookSalesPage() {
         <div className="container mx-auto px-6 max-w-7xl">
           <h2 className="text-5xl font-black text-center mb-20 tracking-tight">O que você vai aprender</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {chapters.length > 0 ? chapters.map((chapter, i) => (
-              <div key={chapter.id} className="group p-8 bg-white rounded-[2rem] border border-gray-100 shadow-sm hover:border-orange-500/20 transition-all">
-                <div className="flex items-start justify-between mb-8">
-                   <div className="h-12 w-12 bg-gray-50 rounded-full flex items-center justify-center font-black text-[#1E3A5F] opacity-40 group-hover:bg-orange-500 group-hover:text-white transition-colors">
-                     {String(i + 1).padStart(2, '0')}
-                   </div>
-                   <div className="px-3 py-1 bg-gray-50 rounded-full text-[10px] font-black uppercase tracking-widest text-[#1E3A5F]">Capítulo</div>
+            {(() => {
+              const content = ebook?.content_json as any;
+              const learningTopics = content?.learning_topics || [];
+              
+              if (learningTopics.length > 0) {
+                return learningTopics.map((topic: any, i: number) => (
+                  <div key={i} className="group p-8 bg-white rounded-[2rem] border border-gray-100 shadow-sm hover:border-orange-500/20 transition-all">
+                    <div className="flex items-start justify-between mb-8">
+                       <div className="h-12 w-12 bg-gray-50 rounded-full flex items-center justify-center font-black text-[#1E3A5F] opacity-40 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                         {String(i + 1).padStart(2, '0')}
+                       </div>
+                       <div className="px-3 py-1 bg-gray-50 rounded-full text-[10px] font-black uppercase tracking-widest text-[#1E3A5F]">Aprendizado</div>
+                    </div>
+                    <h3 className="text-xl font-black mb-4 group-hover:text-orange-500 transition-colors">{topic.title}</h3>
+                    <p className="text-[#1E3A5F] text-sm leading-relaxed line-clamp-3">{topic.description}</p>
+                  </div>
+                ));
+              }
+
+              // Fallback to chapters if no explicit learning topics
+              if (chapters.length > 0) {
+                return chapters.map((chapter, i) => (
+                  <div key={chapter.id} className="group p-8 bg-white rounded-[2rem] border border-gray-100 shadow-sm hover:border-orange-500/20 transition-all">
+                    <div className="flex items-start justify-between mb-8">
+                       <div className="h-12 w-12 bg-gray-50 rounded-full flex items-center justify-center font-black text-[#1E3A5F] opacity-40 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                         {String(i + 1).padStart(2, '0')}
+                       </div>
+                       <div className="px-3 py-1 bg-gray-50 rounded-full text-[10px] font-black uppercase tracking-widest text-[#1E3A5F]">Capítulo</div>
+                    </div>
+                    <h3 className="text-xl font-black mb-4 group-hover:text-orange-500 transition-colors">{chapter.title}</h3>
+                    <p className="text-[#1E3A5F] text-sm leading-relaxed line-clamp-3">Conteúdo detalhado sobre este tópico essencial para sua evolução.</p>
+                  </div>
+                ));
+              }
+
+              // Fallback to placeholders
+              return [...Array(6)].map((_, i) => (
+                <div key={i} className="p-8 bg-white rounded-[2rem] border border-gray-100 shadow-sm">
+                  <div className="h-12 w-12 bg-gray-50 rounded-full flex items-center justify-center font-black text-[#1E3A5F] opacity-40 mb-8">
+                    {String(i + 1).padStart(2, '0')}
+                  </div>
+                  <h3 className="text-xl font-black mb-4">Tópico de Aprendizado {i + 1}</h3>
+                  <p className="text-[#1E3A5F] text-sm leading-relaxed">Estrutura completa e detalhada sobre os fundamentos deste ebook.</p>
                 </div>
-                <h3 className="text-xl font-black mb-4 group-hover:text-orange-500 transition-colors">{chapter.title}</h3>
-                <p className="text-[#1E3A5F] text-sm leading-relaxed line-clamp-3">Conteúdo detalhado sobre este tópico essencial para sua evolução.</p>
-              </div>
-            )) : [...Array(6)].map((_, i) => (
-              <div key={i} className="p-8 bg-white rounded-[2rem] border border-gray-100 shadow-sm">
-                <div className="h-12 w-12 bg-gray-50 rounded-full flex items-center justify-center font-black text-[#1E3A5F] opacity-40 mb-8">
-                  {String(i + 1).padStart(2, '0')}
-                </div>
-                <h3 className="text-xl font-black mb-4">Tópico de Aprendizado {i + 1}</h3>
-                <p className="text-[#1E3A5F] text-sm leading-relaxed">Estrutura completa e detalhada sobre os fundamentos deste ebook.</p>
-              </div>
-            ))}
+              ));
+            })()}
           </div>
         </div>
       </section>
