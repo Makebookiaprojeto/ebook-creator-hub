@@ -21,6 +21,7 @@ import {
   Rocket,
   MousePointer2,
   TrendingUp,
+  Lock as LockIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
