@@ -41,7 +41,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { EbookPreview } from "@/components/EbookPreview";
 
 
-const steps = ["Nicho", "Preço", "Gerar", "Vendas", "Divulgação"];
+const steps = ["Nicho", "Preço", "Ebook", "Página", "Divulgação"];
 const pricePresets = [19.9, 29.9, 39.9, 49.9, 97.0];
 
 type FbGroup = { name: string; members: number; engagement: string };
