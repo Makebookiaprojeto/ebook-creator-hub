@@ -186,6 +186,7 @@ Além disso, gere exatamente 6 tópicos curtos de aprendizado para a seção "O 
         subtitle: personalized.subtitle,
         cover_url: coverUrl,
         chapters: finalChapters,
+        learning_topics: personalized.learning_topics,
       },
     });
   } catch (e) {
