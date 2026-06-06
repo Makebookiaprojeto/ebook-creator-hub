@@ -812,36 +812,6 @@ export function CreateEbookView() {
                   </div>
                 </div>
 
-                {/* Sales Link Section */}
-                <div className="mt-6 rounded-2xl border bg-primary/5 p-5 border-primary/20">
-                  <div className="flex items-center gap-2 text-primary">
-                    <Globe className="h-5 w-5" />
-                    <h3 className="font-display font-bold">Seu link de vendas</h3>
-                  </div>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {ebookLink 
-                      ? "Este é o link da página que seus clientes usarão para comprar o ebook."
-                      : "O link está sendo gerado. Ele aparecerá aqui automaticamente assim que a criação for concluída."}
-                  </p>
-                  <div className="mt-3 flex items-center gap-2">
-                    <Input 
-                      readOnly 
-                      value={ebookLink || "Aguardando conclusão..."}
-                      className="bg-background text-xs h-10"
-                    />
-                    <Button 
-                      disabled={!ebookLink}
-                      className="gradient-primary text-primary-foreground shadow-glow h-10"
-                      onClick={() => {
-                        if (ebookLink) {
-                          navigator.clipboard.writeText(ebookLink);
-                          toast.success("Link de vendas copiado!");
-                        }
-                      }}
-                    >
-                      <Copy className="mr-2 h-4 w-4" /> Copiar Link
-                    </Button>
-                </div>
 
                 {/* PDF Download Section */}
                 {pdfUrl && (
