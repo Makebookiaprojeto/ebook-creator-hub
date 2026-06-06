@@ -30,7 +30,7 @@ interface Props {
 
 const items: { id: View; title: string; icon: typeof LayoutDashboard }[] = [
   { id: "dashboard", title: "Dashboard", icon: LayoutDashboard },
-  { id: "create", title: "Criar Ebook", icon: Plus },
+  { id: "create", title: "Nova Estrutura", icon: Plus },
   { id: "library", title: "Biblioteca", icon: Library },
   { id: "support", title: "Suporte", icon: LifeBuoy },
   { id: "profile", title: "Perfil", icon: User },
