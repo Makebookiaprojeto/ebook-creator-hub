@@ -140,9 +140,10 @@ export function CreateEbookView() {
           setSubtitle(eb.subtitle || "");
           setCoverUrl(eb.cover_url);
           
-          const chs = (eb.content_json as any[]) || [];
+          const content = eb.content_json as any;
+          const chs = Array.isArray(content) ? content : (content?.chapters || []);
           if (chs.length > 0) {
-            setChapters(chs.map(c => ({
+            setChapters(chs.map((c: any) => ({
               title: c.title,
               subtitle: "",
               content: c.content || "",
