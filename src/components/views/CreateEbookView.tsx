@@ -41,7 +41,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { EbookPreview } from "@/components/EbookPreview";
 
 
-const steps = ["Nicho", "Preço", "Gerar", "Vendas", "Divulgação"];
+const steps = ["Nicho", "Preço", "Ebook", "Página", "Divulgação"];
 const pricePresets = [19.9, 29.9, 39.9, 49.9, 97.0];
 
 type FbGroup = { name: string; members: number; engagement: string };
@@ -522,7 +522,7 @@ export function CreateEbookView() {
 
             {step === 2 && (
               <div>
-                <h2 className="font-display text-xl font-semibold">Gerar Ebook</h2>
+                <h2 className="font-display text-xl font-semibold">Ebook</h2>
 
                 {!generated && !generating && (
                   <div className="mt-10 flex flex-col items-center justify-center rounded-2xl gradient-hero p-10 text-center">
@@ -573,7 +573,7 @@ export function CreateEbookView() {
 
             {step === 3 && (
               <div>
-                <h2 className="font-display text-xl font-semibold">Página de vendas</h2>
+                <h2 className="font-display text-xl font-semibold">Página</h2>
                 <p className="mt-1 text-sm text-muted-foreground">Preview da landing page de alta conversão.</p>
 
                 <div 
