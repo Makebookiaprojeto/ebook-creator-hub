@@ -10,7 +10,6 @@ import {
   Clock,
   Download,
   Flame,
-  
   Loader2,
   Lock,
   ShieldCheck,
@@ -18,6 +17,13 @@ import {
   Star,
   Users,
   Zap,
+  CheckCircle2,
+  Layout,
+  Award,
+  CreditCard,
+  Target,
+  Rocket,
+  MousePointer2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -33,24 +39,6 @@ function formatPrice(cents?: number | null) {
   }).format(cents / 100);
 }
 
-function useCountdown(targetMs: number) {
-  const [now, setNow] = useState(Date.now());
-  useEffect(() => {
-    const t = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(t);
-  }, []);
-  const diff = Math.max(0, targetMs - now);
-  const h = Math.floor(diff / 3600000);
-  const m = Math.floor((diff % 3600000) / 60000);
-  const s = Math.floor((diff % 60000) / 1000);
-  return {
-    h: String(h).padStart(2, "0"),
-    m: String(m).padStart(2, "0"),
-    s: String(s).padStart(2, "0"),
-    done: diff === 0,
-  };
-}
-
 export default function EbookSalesPage() {
   const { slug } = useParams<{ slug: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -62,18 +50,6 @@ export default function EbookSalesPage() {
   const [error, setError] = useState<string | null>(null);
   const [isPaid, setIsPaid] = useState(false);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-
-  // Countdown: 24h a partir do primeiro acesso (persistido por slug)
-  const deadline = useMemo(() => {
-    if (!slug) return Date.now() + 24 * 3600 * 1000;
-    const key = `ebook_deadline_${slug}`;
-    const stored = localStorage.getItem(key);
-    if (stored) return Number(stored);
-    const target = Date.now() + 24 * 3600 * 1000;
-    localStorage.setItem(key, String(target));
-    return target;
-  }, [slug]);
-  const countdown = useCountdown(deadline);
 
   useEffect(() => {
     document.documentElement.classList.remove("dark");
@@ -109,6 +85,7 @@ export default function EbookSalesPage() {
 
   const handleCheckout = async () => {
     if (!ebook) return;
+    setCheckoutLoading(true);
 
     let checkoutUrl = (ebook as any).cakto_checkout_url || (ebook as any).checkout_url;
     
@@ -119,12 +96,12 @@ export default function EbookSalesPage() {
         url.searchParams.set("seller_user_id", ebook.user_id);
         window.location.href = url.toString();
       } catch (e) {
-        // Fallback para o link original se a URL for inválida
         window.location.href = checkoutUrl;
       }
       return;
     }
 
+    setCheckoutLoading(false);
     toast.error("Este eBook ainda não tem link de pagamento configurado.");
   };
 
@@ -134,7 +111,6 @@ export default function EbookSalesPage() {
       if (!slug) return;
       setLoading(true);
       
-      // Se for um preview, tentamos pegar os dados do sessionStorage
       if (slug === "preview") {
         const storedData = sessionStorage.getItem('ebook_preview_data');
         if (storedData) {
@@ -180,7 +156,6 @@ export default function EbookSalesPage() {
       if (!active) return;
       setEbook(ebookData);
       
-      // Se houver chapters na tabela, usamos eles. Caso contrário, usamos content_json do ebook.
       if (chData && chData.length > 0) {
         setChapters(chData);
       } else if (ebookData.content_json && Array.isArray(ebookData.content_json)) {
@@ -195,7 +170,6 @@ export default function EbookSalesPage() {
 
       setLoading(false);
       
-      // Register view
       if (ebookData && slug !== "preview") {
         supabase
           .from("ebook_views")
@@ -212,501 +186,301 @@ export default function EbookSalesPage() {
 
   useEffect(() => {
     if (!ebook) return;
-    document.title = `${ebook.title} — OFERTA POR TEMPO LIMITADO`;
-    const desc =
-      ebook.sales_pitch?.slice(0, 155) ??
-      ebook.description?.slice(0, 155) ??
-      `Adquira o eBook ${ebook.title} com desconto especial.`;
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement("meta");
-      metaDesc.setAttribute("name", "description");
-      document.head.appendChild(metaDesc);
-    }
-    metaDesc.setAttribute("content", desc);
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement("link");
-      canonical.setAttribute("rel", "canonical");
-      document.head.appendChild(canonical);
-    }
-    canonical.setAttribute("href", window.location.href);
+    document.title = `${ebook.title} — ACESSO IMEDIATO`;
   }, [ebook]);
-
-  const benefits = useMemo(
-    () => [
-      { icon: Zap, t: "Resultado em dias", d: "Aplicação prática que destrava ganhos imediatos." },
-      { icon: BookOpen, t: "Conteúdo direto ao ponto", d: "Sem enrolação. Só o que funciona de verdade." },
-      { icon: Download, t: "Acesso imediato", d: "Receba o PDF na hora. Leia em qualquer dispositivo." },
-      { icon: ShieldCheck, t: "Garantia de 7 dias", d: "Não gostou? Devolvemos 100% do seu dinheiro." },
-    ],
-    []
-  );
-
-  const testimonials = useMemo(
-    () => [
-      { n: "Mariana S.", r: "Esse material mudou minha forma de pensar. Vale 10x o preço.", s: 5 },
-      { n: "Ricardo P.", r: "Comprei meio na dúvida e me surpreendi. Conteúdo de altíssimo nível.", s: 5 },
-      { n: "Juliana A.", r: "Rápido, prático e direto. Já estou aplicando e vendo resultado.", s: 5 },
-    ],
-    []
-  );
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loader2 className="h-7 w-7 animate-spin text-muted-foreground" />
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <Loader2 className="h-7 w-7 animate-spin text-primary" />
       </div>
     );
   }
 
   if (error || !ebook) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-background p-6 text-center">
-        <BookOpen className="h-12 w-12 text-muted-foreground/50" />
-        <h1 className="font-display text-2xl font-bold">eBook não encontrado</h1>
-        <p className="text-muted-foreground">{error ?? "Verifique o link e tente novamente."}</p>
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-white p-6 text-center">
+        <BookOpen className="h-12 w-12 text-muted-foreground/30" />
+        <h1 className="text-2xl font-bold text-gray-900">eBook não encontrado</h1>
+        <p className="text-gray-500">{error ?? "Verifique o link e tente novamente."}</p>
         <Link to="/">
-          <Button variant="secondary">Voltar à página inicial</Button>
+          <Button variant="outline">Voltar à página inicial</Button>
         </Link>
       </div>
     );
   }
 
   const price = formatPrice(ebook.price_cents);
-  // Preço "de" simulado (2.5x o atual) para criar âncora de desconto
-  const fromCents = ebook.price_cents ? Math.round(ebook.price_cents * 2.5) : 0;
-  const fromPrice = formatPrice(fromCents);
-  const discountPct = ebook.price_cents && fromCents
-    ? Math.round((1 - ebook.price_cents / fromCents) * 100)
-    : 60;
-  const installments = ebook.price_cents ? (ebook.price_cents / 100 / 12) : 0;
-  const installmentsLabel = installments
-    ? new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(installments)
-    : "";
+  const fromPrice = formatPrice(ebook.price_cents ? Math.round(ebook.price_cents * 2.5) : 0);
 
   return (
-    <div 
-      className="min-h-screen bg-white"
-      style={{ 
-        '--background': '0 0% 100%', 
-        '--foreground': '240 10% 3.9%',
-        '--card': '0 0% 100%',
-        '--card-foreground': '240 10% 3.9%',
-        '--muted': '240 4.8% 95.9%',
-        '--muted-foreground': '240 3.8% 46.1%',
-        '--border': '240 5.9% 90%',
-        '--primary': '142 70% 45%',
-        '--secondary': '240 4.8% 95.9%',
-        '--secondary-foreground': '240 5.9% 10%',
-        '--accent': '240 4.8% 95.9%',
-        '--accent-foreground': '240 5.9% 10%',
-      } as any}
-    >
-      {/* Decorative gradient backdrop - Adjusted for white background */}
-      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-white">
-        <div className="absolute -top-40 left-1/2 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-primary/10 blur-[160px]" />
-        <div className="absolute bottom-0 right-0 h-[500px] w-[600px] rounded-full bg-accent/10 blur-[140px]" />
-      </div>
-
+    <div className="min-h-screen bg-white text-gray-900 selection:bg-primary selection:text-white font-sans">
       {/* SUCCESS MESSAGE AFTER PURCHASE */}
       {isPaid && (
-        <div className="bg-success text-success-foreground py-6 px-4 border-b">
-          <div className="mx-auto max-w-4xl text-center space-y-4">
-            <div className="flex justify-center">
-              <div className="bg-white rounded-full p-3 shadow-glow">
-                <Check className="h-8 w-8 text-success" />
-              </div>
-            </div>
-            <h2 className="text-3xl font-bold font-display">Pagamento Confirmado!</h2>
-            <p className="text-lg opacity-90">Obrigado por adquirir <strong>{ebook?.title}</strong>. Seu acesso está liberado.</p>
-            <div className="flex justify-center gap-4">
-              {downloadUrl ? (
-                <Button size="lg" className="bg-white text-success hover:bg-gray-100 font-bold" asChild>
-                  <a href={downloadUrl} download target="_blank" rel="noopener noreferrer">
-                    <Download className="mr-2 h-5 w-5" /> BAIXAR EBOOK AGORA
-                  </a>
-                </Button>
-              ) : (
-                <div className="bg-white/20 p-4 rounded-xl text-sm italic">
-                  O link de download será enviado para seu e-mail em instantes.
-                </div>
-              )}
-            </div>
+        <div className="bg-green-50 py-8 px-4 border-b border-green-100">
+          <div className="mx-auto max-w-3xl text-center space-y-4">
+            <CheckCircle2 className="h-12 w-12 text-green-500 mx-auto" />
+            <h2 className="text-3xl font-bold text-gray-900">Pagamento Confirmado!</h2>
+            <p className="text-gray-600">Seu acesso ao <strong>{ebook.title}</strong> foi liberado com sucesso.</p>
+            {downloadUrl ? (
+              <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white font-bold px-8" asChild>
+                <a href={downloadUrl} download target="_blank" rel="noopener noreferrer">
+                  <Download className="mr-2 h-5 w-5" /> BAIXAR EBOOK AGORA
+                </a>
+              </Button>
+            ) : (
+              <p className="text-sm italic text-gray-500">O link de download também foi enviado para seu e-mail.</p>
+            )}
           </div>
         </div>
       )}
 
-      {/* URGENCY BAR */}
-      <div className="bg-primary text-primary-foreground border-b border-primary/20">
-        <div className="mx-auto flex max-w-6xl items-center justify-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-wider sm:text-sm">
-          <Sparkles className="h-4 w-4" />
-          <span>Oferta Especial Ativa — {discountPct}% de desconto aplicado</span>
-        </div>
-      </div>
-
-      {/* Top bar */}
-      <header className="sticky top-0 z-20 border-b border-border/40 bg-background/70 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
-          <div className="flex items-center gap-2">
-            {/* Branding elements removed at user request */}
-          </div>
-          <Button
-            size="sm"
-            className="gradient-primary text-primary-foreground"
-            onClick={handleCheckout}
-            disabled={checkoutLoading}
-          >
-            {checkoutLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <>QUERO AGORA <ArrowRight className="h-3.5 w-3.5" /></>}
-          </Button>
-        </div>
-      </header>
-
-      {/* HERO */}
-      <section className="mx-auto max-w-6xl px-6 pt-10 pb-16 lg:pt-16 lg:pb-24">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
-          <div className="space-y-6 animate-fade-in">
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge className="bg-primary/15 text-primary border-primary/30 rounded-full px-3 py-1 text-xs font-bold uppercase">
-                Recomendado
-              </Badge>
-              {ebook.category && (
-                <Badge variant="secondary" className="rounded-full px-3 py-1 text-xs uppercase tracking-wider">
-                  {ebook.category}
+      {/* SECTION 1 — HERO */}
+      <section className="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-32">
+        <div className="container mx-auto max-w-6xl px-6 relative z-10">
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            <div className="order-2 lg:order-1 space-y-8 text-center lg:text-left">
+              <div className="space-y-4">
+                <Badge className="bg-blue-50 text-blue-600 hover:bg-blue-50 border-blue-100 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
+                  Conteúdo Exclusivo e Digital
                 </Badge>
-              )}
-            </div>
+                <h1 className="text-4xl font-black leading-tight tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+                  {ebook.title}
+                </h1>
+                {ebook.subtitle && (
+                  <p className="text-xl text-gray-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                    {ebook.subtitle}
+                  </p>
+                )}
+              </div>
 
-            <h1 className="font-display text-4xl font-extrabold leading-[1.05] sm:text-5xl lg:text-6xl">
-              <span className="bg-gradient-to-br from-foreground via-foreground to-foreground/60 bg-clip-text text-transparent">
-                {ebook.title}
-              </span>
-            </h1>
-            {ebook.subtitle && (
-              <p className="text-lg text-muted-foreground sm:text-xl">{ebook.subtitle}</p>
-            )}
-
-            {chapters.length > 0 && (
-              <div className="flex flex-col gap-2 py-4">
-                <p className="text-xs font-bold uppercase tracking-widest text-primary/80">O que você vai encontrar:</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
-                  {chapters.map((c, i) => (
-                    <div key={c.id} className="flex items-center gap-2 text-sm font-medium text-foreground/90">
-                      <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
-                        {i + 1}
-                      </div>
-                      <span className="line-clamp-1">{c.title}</span>
-                    </div>
-                  ))}
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                <div className="flex flex-col">
+                  <span className="text-gray-400 line-through text-sm">{fromPrice}</span>
+                  <span className="text-4xl font-black text-blue-600">{price}</span>
                 </div>
-              </div>
-            )}
-
-            {ebook.sales_pitch && (
-              <p className="text-base text-foreground/80 leading-relaxed">{ebook.sales_pitch}</p>
-            )}
-
-            <div className="flex flex-wrap items-center gap-4 pt-2">
-              <div className="flex items-center gap-1.5">
-                <div className="flex">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-                <span className="text-sm font-bold">4.9/5</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Users className="h-4 w-4" />
-                <span><strong className="text-foreground">+2.847</strong> leitores satisfeitos</span>
-              </div>
-            </div>
-
-            {/* PRICE BOX */}
-            <div className="rounded-2xl border-2 border-primary/20 bg-card/50 p-6 backdrop-blur shadow-sm">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary">
-                <Sparkles className="h-3.5 w-3.5" />
-                Valor promocional por tempo limitado
-              </div>
-              <div className="mt-2 flex items-end gap-3">
-                <span className="text-base text-muted-foreground line-through">{fromPrice}</span>
-                <span className="font-display text-4xl font-extrabold text-primary sm:text-5xl">{price}</span>
-                <span className="mb-1.5 rounded-md bg-primary px-2 py-0.5 text-xs font-bold text-primary-foreground">
-                  -{discountPct}%
-                </span>
-              </div>
-              {installmentsLabel && (
-                <p className="mt-1 text-sm text-muted-foreground">
-                  ou <strong className="text-foreground">12x de {installmentsLabel}</strong> no cartão
-                </p>
-              )}
-
-              <Button
-                size="lg"
-                className="mt-4 w-full gradient-primary text-primary-foreground shadow-glow text-base font-bold h-14"
-                onClick={handleCheckout}
-                disabled={checkoutLoading}
-              >
-                {checkoutLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <>QUERO GARANTIR MEU DESCONTO <ArrowRight className="h-5 w-5" /></>}
-              </Button>
-
-              <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-                <span className="flex items-center gap-1"><Lock className="h-3 w-3" /> Pagamento 100% seguro</span>
-                <span className="flex items-center gap-1"><ShieldCheck className="h-3 w-3" /> 7 dias de garantia</span>
-                <span className="flex items-center gap-1"><Zap className="h-3 w-3" /> Acesso imediato</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Cover mockup */}
-          <div className="relative mx-auto w-full max-w-md">
-            <div className="absolute -inset-8 rounded-[2rem] bg-gradient-to-tr from-primary/40 via-accent/20 to-transparent blur-3xl" />
-            <div className="absolute -top-2 -right-2 z-10 rotate-12 rounded-full bg-primary px-4 py-2 text-sm font-extrabold text-primary-foreground shadow-lg ring-4 ring-primary/20">
-              -{discountPct}%
-            </div>
-            <div className="relative aspect-[2/3] rotate-[-3deg] transform-gpu rounded-2xl shadow-2xl ring-1 ring-border/40 transition hover:rotate-0">
-              {ebook.cover_url ? (
-                <img
-                  src={ebook.cover_url}
-                  alt={`Capa do eBook ${ebook.title}`}
-                  className="h-full w-full rounded-2xl object-cover"
-                  loading="eager"
-                />
-              ) : (
-                <div className="flex h-full items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-accent">
-                  <BookOpen className="h-20 w-20 text-primary-foreground/50" />
-                </div>
-              )}
-              <div className="pointer-events-none absolute inset-y-0 left-0 w-3 rounded-l-2xl bg-gradient-to-r from-black/40 to-transparent" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SOCIAL PROOF STRIP */}
-      <section className="border-y border-border/40 bg-card/40 py-6">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-10 gap-y-3 px-6 text-sm">
-          <div className="flex items-center gap-2"><Users className="h-4 w-4 text-primary" /> <strong>+2.847</strong> alunos</div>
-          <div className="flex items-center gap-2"><Star className="h-4 w-4 fill-amber-400 text-amber-400" /> <strong>4.9/5</strong> avaliação média</div>
-          <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-green-500" /> Garantia 7 dias</div>
-          <div className="flex items-center gap-2"><Clock className="h-4 w-4 text-primary" /> Acesso vitalício</div>
-        </div>
-      </section>
-
-      {/* BENEFITS */}
-      <section className="py-20">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="mx-auto max-w-2xl text-center">
-            <Badge className="mb-3 bg-primary/15 text-primary border-primary/30">Por que comprar</Badge>
-            <h2 className="font-display text-3xl font-bold sm:text-4xl">
-              Tudo que você precisa em um só lugar
-            </h2>
-            <p className="mt-3 text-muted-foreground">
-              Material denso, construído para gerar resultado real — não mais um PDF perdido.
-            </p>
-          </div>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {benefits.map((b, i) => {
-              const Icon = b.icon;
-              return (
-                <div
-                  key={i}
-                  className="rounded-2xl border bg-card p-6 shadow-soft transition hover:shadow-glow hover:-translate-y-1"
+                <Button 
+                  size="lg" 
+                  onClick={handleCheckout} 
+                  disabled={checkoutLoading}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold h-16 px-10 text-lg rounded-2xl shadow-xl shadow-blue-200 transition-all hover:scale-105 active:scale-95"
                 >
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl gradient-primary text-primary-foreground shadow-glow">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <p className="mt-4 font-display text-base font-bold leading-snug">{b.t}</p>
-                  <p className="mt-1.5 text-sm text-muted-foreground">{b.d}</p>
+                  {checkoutLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <><MousePointer2 className="mr-2 h-5 w-5" /> QUERO COMEÇAR AGORA</>}
+                </Button>
+              </div>
+
+              <div className="flex items-center justify-center lg:justify-start gap-6 text-xs font-medium text-gray-400">
+                <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-green-500" /> COMPRA 100% SEGURA</span>
+                <span className="flex items-center gap-1.5"><Zap className="h-4 w-4 text-yellow-500" /> ACESSO IMEDIATO</span>
+              </div>
+            </div>
+
+            <div className="order-1 lg:order-2 flex justify-center">
+              <div className="relative group">
+                <div className="absolute -inset-4 bg-blue-100/50 rounded-3xl blur-2xl group-hover:bg-blue-200/50 transition-colors" />
+                <div className="relative aspect-[3/4] w-72 sm:w-80 lg:w-96 rounded-2xl shadow-2xl overflow-hidden bg-gray-100 ring-1 ring-gray-200 transition-transform hover:scale-[1.02] duration-500">
+                  {ebook.cover_url ? (
+                    <img 
+                      src={ebook.cover_url} 
+                      alt={ebook.title} 
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-200">
+                      <BookOpen className="h-20 w-20 text-gray-300" />
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                 </div>
-              );
-            })}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
-      <section className="border-y border-border/40 bg-card/30 py-20">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="text-center">
-            <Badge className="mb-3 bg-primary/15 text-primary border-primary/30">Depoimentos reais</Badge>
-            <h2 className="font-display text-3xl font-bold sm:text-4xl">
-              Quem leu, recomenda
-            </h2>
+      {/* SECTION 2 — BENEFÍCIOS */}
+      <section className="py-24 bg-gray-50 border-y border-gray-100">
+        <div className="container mx-auto max-w-6xl px-6">
+          <div className="text-center space-y-4 mb-16">
+            <h2 className="text-3xl font-black text-gray-900 tracking-tight sm:text-4xl">Por que este material é para você?</h2>
+            <p className="text-gray-500 max-w-2xl mx-auto">Desenvolvido com foco absoluto em clareza e resultados práticos.</p>
           </div>
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {testimonials.map((t, i) => (
-              <div key={i} className="rounded-2xl border bg-card p-6 shadow-soft">
-                <div className="flex">
-                  {Array.from({ length: t.s }).map((_, k) => (
-                    <Star key={k} className="h-4 w-4 fill-amber-400 text-amber-400" />
-                  ))}
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { icon: Target, t: "Resultados Reais", d: "Método testado e validado para você aplicar hoje mesmo." },
+              { icon: Layout, t: "Conteúdo Organizado", d: "Estrutura lógica que facilita o aprendizado do início ao fim." },
+              { icon: Zap, t: "Aplicação Prática", d: "Sem enrolação. Focado no que realmente traz transformação." },
+              { icon: Award, t: "Qualidade Premium", d: "Material de alto nível, diagramado para uma leitura agradável." },
+            ].map((item, idx) => (
+              <div key={idx} className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group">
+                <div className="bg-blue-50 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-600 transition-colors">
+                  <item.icon className="h-6 w-6 text-blue-600 group-hover:text-white" />
                 </div>
-                <p className="mt-3 text-sm leading-relaxed text-foreground/90">"{t.r}"</p>
-                <div className="mt-4 flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full gradient-primary text-sm font-bold text-primary-foreground">
-                    {t.n[0]}
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold">{t.n}</p>
-                    <p className="text-xs text-muted-foreground">Leitor verificado</p>
-                  </div>
-                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{item.t}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{item.d}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CHAPTERS */}
+      {/* SECTION 3 — O QUE VOCÊ VAI APRENDER */}
       {chapters.length > 0 && (
-        <section className="mx-auto max-w-4xl px-6 py-20">
-          <div className="text-center">
-            <Badge className="mb-3 bg-primary/15 text-primary border-primary/30">O que você vai aprender</Badge>
-            <h2 className="font-display text-3xl font-bold sm:text-4xl">
-              Sumário completo
-            </h2>
-            <p className="mt-3 text-muted-foreground">
-              {chapters.length} capítulos pensados para te levar do zero ao resultado.
-            </p>
+        <section className="py-24 bg-white">
+          <div className="container mx-auto max-w-4xl px-6">
+            <div className="text-center space-y-4 mb-16">
+              <h2 className="text-3xl font-black text-gray-900 tracking-tight sm:text-4xl">O que você vai encontrar lá dentro</h2>
+              <p className="text-gray-500">Um guia completo dividido em capítulos estratégicos.</p>
+            </div>
+            <div className="grid gap-4">
+              {chapters.map((chapter, i) => (
+                <div key={chapter.id} className="flex items-center gap-6 p-6 rounded-2xl border border-gray-100 hover:border-blue-100 hover:bg-blue-50/30 transition-all group">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-lg font-black text-gray-400 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                    {String(i + 1).padStart(2, '0')}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-gray-900">{chapter.title}</h3>
+                    {chapter.content && (
+                      <p className="text-sm text-gray-500 line-clamp-1 mt-1">
+                        {chapter.content.replace(/[#*]/g, '').slice(0, 100)}...
+                      </p>
+                    )}
+                  </div>
+                  <CheckCircle2 className="h-5 w-5 text-green-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+              ))}
+            </div>
           </div>
+        </section>
+      )}
 
-          <ol className="mt-10 space-y-3">
-            {chapters.map((c, i) => (
-              <li
-                key={c.id}
-                className="group flex items-start gap-4 rounded-2xl border bg-card p-5 transition hover:border-primary/40 hover:shadow-glow"
-              >
-                <span className="font-display text-2xl font-bold text-primary tabular-nums">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <div className="flex-1">
-                  <h3 className="font-display text-lg font-bold leading-snug">{c.title}</h3>
-                  {c.content && (
-                    <p className="mt-1.5 line-clamp-2 text-sm text-muted-foreground">
-                      {c.content.replace(/##\s+/g, "").slice(0, 220)}…
-                    </p>
+      {/* SECTION 4 — SOBRE O MATERIAL */}
+      <section className="py-24 bg-gray-900 text-white overflow-hidden relative">
+        <div className="absolute top-0 right-0 -mr-24 -mt-24 w-96 h-96 bg-blue-600/10 blur-3xl rounded-full" />
+        <div className="container mx-auto max-w-6xl px-6 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="flex justify-center">
+              <div className="relative">
+                <div className="absolute -inset-10 bg-blue-600/20 blur-3xl rounded-full" />
+                <div className="relative w-64 sm:w-72 aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/10 rotate-[-2deg]">
+                  {ebook.cover_url ? (
+                    <img src={ebook.cover_url} alt={ebook.title} className="h-full w-full object-cover" />
+                  ) : (
+                    <div className="h-full w-full bg-blue-600 flex items-center justify-center">
+                      <BookOpen className="h-16 w-16 text-white/50" />
+                    </div>
                   )}
                 </div>
-                <Check className="h-5 w-5 shrink-0 text-green-500" />
-              </li>
-            ))}
-          </ol>
-        </section>
-      )}
-
-      {/* GUARANTEE */}
-      <section className="mx-auto max-w-4xl px-6 py-20">
-        <div className="rounded-3xl border-2 border-green-500/30 bg-gradient-to-br from-green-500/5 to-transparent p-8 sm:p-12">
-          <div className="grid items-center gap-8 sm:grid-cols-[auto_1fr]">
-            <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-emerald-600 shadow-glow">
-              <ShieldCheck className="h-14 w-14 text-white" />
+              </div>
             </div>
-            <div>
-              <Badge className="bg-green-500/15 text-green-400 border-green-500/30">Garantia incondicional</Badge>
-              <h3 className="mt-3 font-display text-2xl font-bold sm:text-3xl">7 dias de garantia. Risco zero.</h3>
-              <p className="mt-3 text-sm text-foreground/80 leading-relaxed">
-                Leia, aplique e teste à vontade por 7 dias. Se por qualquer motivo você não gostar, basta enviar um e-mail e devolvemos <strong>100% do seu dinheiro</strong> — sem perguntas, sem burocracia.
-              </p>
+            <div className="space-y-10">
+              <div className="space-y-4">
+                <h2 className="text-3xl font-black sm:text-4xl">Especificações Técnicas</h2>
+                <p className="text-gray-400">Tudo o que você precisa saber sobre o formato e entrega do conteúdo.</p>
+              </div>
+              <div className="grid gap-6 sm:grid-cols-2">
+                {[
+                  { icon: Download, t: "Acesso Imediato", d: "Download liberado após confirmação." },
+                  { icon: Layout, t: "Formato PDF", d: "Leitura perfeita em qualquer tela." },
+                  { icon: Rocket, t: "Multi-dispositivo", d: "Leia no PC, Tablet ou Celular." },
+                  { icon: Lock, t: "Acesso Vitalício", d: "O conteúdo é seu para sempre." },
+                ].map((item, idx) => (
+                  <div key={idx} className="flex gap-4">
+                    <div className="bg-white/10 w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
+                      <item.icon className="h-5 w-5 text-blue-400" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white">{item.t}</h4>
+                      <p className="text-gray-400 text-sm">{item.d}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* AUTHOR / DESCRIPTION */}
-      {(ebook.description || ebook.author_name) && (
-        <section className="border-t border-border/40 bg-card/30 py-20">
-          <div className="mx-auto max-w-3xl px-6 text-center">
-            {ebook.author_name && (
-              <>
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full gradient-primary text-2xl font-bold text-primary-foreground shadow-glow">
-                  {ebook.author_name[0]?.toUpperCase()}
+      {/* SECTION 5 — MOTIVOS PARA COMPRAR AGORA */}
+      <section className="py-24 bg-white">
+        <div className="container mx-auto max-w-6xl px-6">
+          <div className="grid gap-12 lg:grid-cols-3">
+            {[
+              { t: "Pagamento 100% Seguro", d: "Utilizamos as tecnologias mais avançadas de segurança para proteger seus dados.", icon: CreditCard },
+              { t: "Satisfação Garantida", d: "Se por qualquer motivo você não gostar, tem 7 dias para solicitar reembolso.", icon: ShieldCheck },
+              { t: "Suporte Dedicado", d: "Dúvidas sobre o material? Nossa equipe está pronta para te auxiliar.", icon: Users },
+            ].map((item, idx) => (
+              <div key={idx} className="text-center space-y-4 p-8 rounded-3xl border border-gray-100 hover:border-blue-100 transition-colors">
+                <div className="mx-auto bg-blue-50 w-16 h-16 rounded-2xl flex items-center justify-center">
+                  <item.icon className="h-8 w-8 text-blue-600" />
                 </div>
-                <h3 className="mt-4 font-display text-xl font-bold">{ebook.author_name}</h3>
-                <p className="text-sm text-muted-foreground">Autor</p>
-              </>
-            )}
-            {ebook.description && (
-              <p className="mt-6 text-lg leading-relaxed text-foreground/80">
-                {ebook.description}
-              </p>
-            )}
+                <h3 className="text-xl font-bold text-gray-900">{item.t}</h3>
+                <p className="text-gray-500 leading-relaxed text-sm">{item.d}</p>
+              </div>
+            ))}
           </div>
-        </section>
-      )}
-
-      {/* FAQ */}
-      <section className="mx-auto max-w-3xl px-6 py-20">
-        <h2 className="text-center font-display text-3xl font-bold sm:text-4xl">
-          Perguntas frequentes
-        </h2>
-        <div className="mt-10 space-y-4">
-          {[
-            { q: "Como recebo o eBook?", a: "Logo após a confirmação do pagamento, você recebe o link de download em PDF por e-mail e também direto na tela. Acessa de qualquer dispositivo." },
-            { q: "Por quanto tempo tenho acesso?", a: "Acesso vitalício. O arquivo é seu para sempre — leia quando e onde quiser, sem mensalidades." },
-            { q: "Posso pedir reembolso?", a: "Sim! Você tem 7 dias de garantia incondicional. Não gostou? Devolvemos 100% do seu dinheiro, sem perguntas." },
-            { q: "Quais formas de pagamento são aceitas?", a: "Cartão de crédito (até 12x), PIX e boleto — pelo checkout 100% seguro." },
-            { q: "A promoção volta depois?", a: "Não. Esse desconto é exclusivo desta janela. Quando o contador zerar, o preço volta ao normal." },
-          ].map((f, i) => (
-            <details
-              key={i}
-              className="group rounded-2xl border bg-card p-5 transition hover:border-primary/40"
-            >
-              <summary className="flex cursor-pointer items-center justify-between font-medium">
-                {f.q}
-                <ArrowRight className="h-4 w-4 transition group-open:rotate-90" />
-              </summary>
-              <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{f.a}</p>
-            </details>
-          ))}
         </div>
       </section>
 
-      {/* CTA FINAL */}
-      <section id="comprar" className="px-6 pb-24">
-        <div className="relative mx-auto max-w-4xl overflow-hidden rounded-3xl border-2 border-primary/10 bg-gradient-to-br from-primary/5 via-card to-accent/5 p-10 text-center shadow-sm sm:p-16">
-          <div className="absolute -top-24 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
-          <div className="relative">
-            <Badge className="bg-primary text-primary-foreground border-0 font-bold uppercase">
-              <Sparkles className="mr-1 h-3 w-3" /> Oferta Especial
-            </Badge>
-            <h2 className="mt-4 font-display text-3xl font-extrabold sm:text-5xl">
-              Aproveite esta oportunidade
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-              Garanta agora o seu exemplar com <strong>{discountPct}% de desconto</strong> e comece hoje mesmo.
-            </p>
-
-            <div className="mt-8 flex flex-col items-center gap-1">
-              <span className="text-base text-muted-foreground line-through">{fromPrice}</span>
-              <span className="font-display text-5xl font-extrabold text-primary sm:text-6xl">{price}</span>
-              {installmentsLabel && (
-                <span className="text-sm text-muted-foreground">ou 12x de <strong className="text-foreground">{installmentsLabel}</strong></span>
-              )}
+      {/* SECTION 6 — GARANTIA E SEGURANÇA */}
+      <section className="py-24 bg-gray-50">
+        <div className="container mx-auto max-w-4xl px-6">
+          <div className="bg-white rounded-[3rem] p-10 sm:p-16 border border-gray-100 shadow-xl shadow-gray-200/50 flex flex-col md:flex-row items-center gap-12 text-center md:text-left">
+            <div className="w-40 h-40 shrink-0 bg-blue-600 rounded-full flex items-center justify-center shadow-2xl shadow-blue-200">
+              <ShieldCheck className="h-20 w-20 text-white" />
             </div>
+            <div className="space-y-6">
+              <h2 className="text-3xl font-black text-gray-900">7 Dias de Garantia Incondicional</h2>
+              <p className="text-gray-600 leading-relaxed">
+                Você tem 7 dias inteiros para analisar o material. Se por qualquer motivo sentir que o conteúdo não é para você, basta solicitar o reembolso e devolveremos 100% do seu investimento. Sem perguntas, sem burocracia.
+              </p>
+              <div className="flex flex-wrap justify-center md:justify-start gap-4">
+                <Badge variant="outline" className="border-gray-200 text-gray-500 py-1.5 px-4 rounded-full font-medium">Selo de Qualidade</Badge>
+                <Badge variant="outline" className="border-gray-200 text-gray-500 py-1.5 px-4 rounded-full font-medium">Compra Protegida</Badge>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-            <Button
-              size="lg"
-              className="mt-8 h-14 px-8 gradient-primary text-primary-foreground shadow-glow text-base font-bold"
+      {/* SECTION 7 — CTA FINAL */}
+      <section className="py-32 bg-white relative">
+        <div className="container mx-auto max-w-4xl px-6 relative z-10 text-center space-y-12">
+          <div className="space-y-4">
+            <h2 className="text-4xl font-black text-gray-900 tracking-tight sm:text-5xl">Tudo o que você precisa está a um clique de distância.</h2>
+            <p className="text-xl text-gray-500">Aproveite o preço promocional antes que ele saia do ar.</p>
+          </div>
+          
+          <div className="inline-flex flex-col items-center bg-blue-50/50 p-10 rounded-[3rem] border border-blue-100 space-y-8 w-full max-w-md">
+            <div className="text-center">
+              <span className="text-gray-400 line-through text-lg">{fromPrice}</span>
+              <div className="text-6xl font-black text-blue-600">{price}</div>
+              <p className="text-sm text-gray-500 mt-2">Pagamento único · Acesso imediato</p>
+            </div>
+            <Button 
+              size="lg" 
               onClick={handleCheckout}
               disabled={checkoutLoading}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold h-20 w-full text-xl rounded-2xl shadow-2xl shadow-blue-200 transition-all hover:scale-[1.03]"
             >
-              {checkoutLoading ? (
-                <Loader2 className="h-5 w-5 animate-spin" />
-              ) : (
-                <><Download className="h-5 w-5" /> COMPRAR COM {discountPct}% DE DESCONTO</>
-              )}
+              {checkoutLoading ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : <><Rocket className="mr-2 h-6 w-6" /> GARANTIR MEU ACESSO</>}
             </Button>
-            <p className="mt-3 text-xs text-muted-foreground">
-              ✓ Garantia de 7 dias · ✓ Acesso imediato · ✓ Pagamento seguro
-            </p>
+            <div className="flex items-center gap-4 text-xs font-bold text-gray-400 grayscale opacity-50">
+              <span>MASTERCARD</span>
+              <span>VISA</span>
+              <span>PIX</span>
+              <span>BOLETO</span>
+            </div>
           </div>
         </div>
       </section>
 
-      <footer className="border-t border-border/40 py-8 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} EbookAI Builder · Todos os direitos reservados
+      <footer className="py-12 bg-white border-t border-gray-100 text-center">
+        <div className="container mx-auto px-6">
+          <p className="text-gray-400 text-sm">© {new Date().getFullYear()} EbookAI. Todos os direitos reservados.</p>
+        </div>
       </footer>
     </div>
   );
 }
+
