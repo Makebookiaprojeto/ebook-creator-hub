@@ -307,7 +307,10 @@ export function CreateEbookView() {
           status: "published",
           is_public: true,
           is_template: false,
-          content_json: template.chapters,
+          content_json: {
+            chapters: template.chapters,
+            learning_topics: template.learning_topics
+          },
           price: price || 29.9,
           price_cents: Math.round((price || 29.9) * 100),
           slug: `ebook-${Math.random().toString(36).substring(2, 7)}`,
