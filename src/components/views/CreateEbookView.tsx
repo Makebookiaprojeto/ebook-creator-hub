@@ -196,10 +196,11 @@ export function CreateEbookView() {
       const prog: any = eb.generation_progress ?? {};
       if (prog.message) setGenerationStage(prog.message);
       
-      const chs = (eb.content_json as any[]) || [];
+      const content = eb.content_json as any;
+      const chs = Array.isArray(content) ? content : (content?.chapters || []);
       if (chs.length > 0) {
         setChapters(
-          chs.map((c) => ({
+          chs.map((c: any) => ({
             title: c.title,
             subtitle: "",
             content: c.content ?? "",
