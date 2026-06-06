@@ -127,6 +127,7 @@ export function DashboardView() {
       const { data: sales } = await supabase
         .from("purchases")
         .select("amount_paid_cents, created_at, status, platform")
+        .eq("seller_user_id", authUser.id)
         .in("status", ["paid", "approved", "pending"]);
 
       const { count: viewsCount } = await supabase
@@ -228,10 +229,25 @@ export function DashboardView() {
 
     const channel = supabase
       .channel(`dashboard-updates-${authUser.id}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "purchases" }, () => fetchDashboardData())
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "notifications", filter: `user_id=eq.${authUser.id}` }, () => fetchDashboardData())
+      .on("postgres_changes", { 
+        event: "*", 
+        schema: "public", 
+        table: "purchases",
+        filter: `seller_user_id=eq.${authUser.id}`
+      }, () => fetchDashboardData())
+      .on("postgres_changes", { 
+        event: "INSERT", 
+        schema: "public", 
+        table: "notifications", 
+        filter: `user_id=eq.${authUser.id}` 
+      }, () => fetchDashboardData())
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "ebook_views" }, () => fetchDashboardData())
-      .on("postgres_changes", { event: "*", schema: "public", table: "ebooks", filter: `user_id=eq.${authUser.id}` }, () => fetchDashboardData())
+      .on("postgres_changes", { 
+        event: "*", 
+        schema: "public", 
+        table: "ebooks", 
+        filter: `user_id=eq.${authUser.id}` 
+      }, () => fetchDashboardData())
       .subscribe();
 
     const handleRefresh = () => {
