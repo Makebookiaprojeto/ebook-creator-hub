@@ -94,7 +94,9 @@ export function NotificationBell() {
           }
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log("Realtime subscription status:", status);
+      });
 
     // User interaction listener to "unlock" audio (browser policy)
     const unlockAudio = () => {
