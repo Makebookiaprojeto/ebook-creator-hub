@@ -41,17 +41,18 @@ export function NotificationBell() {
 
     // Subscribe to new notifications
     const channel = supabase
-      .channel(`public:notifications:user_id=eq.${user.id}`)
+      .channel(`user-notifications-${user.id}`) // Revertendo para um nome simples e único
       .on(
         "postgres_changes",
         {
           event: "INSERT",
           schema: "public",
           table: "notifications",
-          filter: `user_id=eq.${user.id}`,
-        },
+        }, // Removendo o filtro no JS para teste de recepção bruta (o RLS cuidará da segurança)
         async (payload) => {
           const newNotif = payload.new;
+          if (newNotif.user_id !== user.id) return; // Filtro manual caso o Realtime envie mais do que o esperado
+          
           setNotifications((prev) => [newNotif, ...prev].slice(0, 10));
           setUnreadCount((prev) => prev + 1);
           
