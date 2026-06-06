@@ -287,11 +287,27 @@ export default function EbookSalesPage() {
     : "";
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Decorative gradient backdrop */}
-      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-40 left-1/2 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-primary/30 blur-[160px]" />
-        <div className="absolute bottom-0 right-0 h-[500px] w-[600px] rounded-full bg-accent/20 blur-[140px]" />
+    <div 
+      className="min-h-screen bg-white"
+      style={{ 
+        '--background': '0 0% 100%', 
+        '--foreground': '240 10% 3.9%',
+        '--card': '0 0% 100%',
+        '--card-foreground': '240 10% 3.9%',
+        '--muted': '240 4.8% 95.9%',
+        '--muted-foreground': '240 3.8% 46.1%',
+        '--border': '240 5.9% 90%',
+        '--primary': '142 70% 45%',
+        '--secondary': '240 4.8% 95.9%',
+        '--secondary-foreground': '240 5.9% 10%',
+        '--accent': '240 4.8% 95.9%',
+        '--accent-foreground': '240 5.9% 10%',
+      } as any}
+    >
+      {/* Decorative gradient backdrop - Adjusted for white background */}
+      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-white">
+        <div className="absolute -top-40 left-1/2 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-primary/10 blur-[160px]" />
+        <div className="absolute bottom-0 right-0 h-[500px] w-[600px] rounded-full bg-accent/10 blur-[140px]" />
       </div>
 
       {/* SUCCESS MESSAGE AFTER PURCHASE */}
