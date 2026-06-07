@@ -606,12 +606,14 @@ export function CreateEbookView() {
             )}
 
             {step === 3 && (
-              <div>
+              <div key="step3">
+
                 <h2 className="font-display text-xl font-semibold">Página</h2>
                 <p className="mt-1 text-sm text-muted-foreground">Preview da landing page de alta conversão.</p>
 
                 {!salesPageGenerated && !generatingSalesPage && (
-                  <div className="mt-10 flex flex-col items-center justify-center rounded-2xl gradient-hero p-10 text-center border-2 border-dashed border-primary/20 bg-primary/5">
+                  <div key="cta-sales" className="mt-10 flex flex-col items-center justify-center rounded-2xl gradient-hero p-10 text-center border-2 border-dashed border-primary/20 bg-primary/5">
+
                     <div className="flex h-16 w-16 items-center justify-center rounded-2xl gradient-primary shadow-glow">
                       <Layout className="h-8 w-8 text-primary-foreground" />
                     </div>
@@ -627,7 +629,8 @@ export function CreateEbookView() {
                 )}
 
                 {generatingSalesPage && !salesPageGenerated && (
-                  <div className="mt-10 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-center">
+                  <div key="generating-sales" className="mt-10 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-center">
+
                     <Loader2 className="h-10 w-10 animate-spin text-primary" />
                     <p className="mt-4 font-medium">Gerando sua página de vendas...</p>
                     <p className="mt-1 text-sm text-muted-foreground">{salesPageStage || "Trabalhando..."}</p>
