@@ -476,7 +476,7 @@ export function CreateEbookView() {
 
             {step === 2 && (
               <div>
-                <h2 className="font-display text-xl font-semibold">Ebook</h2>
+                <h2 className="font-display text-xl font-semibold">Gere seu Ebook</h2>
                 {!generated && !generating && (
                   <div className="mt-10 flex flex-col items-center justify-center rounded-2xl gradient-hero p-10 text-center">
                     <div className="flex h-16 w-16 items-center justify-center rounded-2xl gradient-primary shadow-glow">
