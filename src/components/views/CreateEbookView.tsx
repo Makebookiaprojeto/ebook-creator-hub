@@ -80,6 +80,9 @@ export function CreateEbookView() {
   const [searchedGroups, setSearchedGroups] = useState<FbGroup[]>([]);
   const [searchingGroups, setSearchingGroups] = useState(false);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [generatingSalesPage, setGeneratingSalesPage] = useState(false);
+  const [salesPageGenerated, setSalesPageGenerated] = useState(false);
+  const [salesPageStage, setSalesPageStage] = useState("");
 
   const resetForm = () => {
     setStep(0);
@@ -104,6 +107,9 @@ export function CreateEbookView() {
     setCreatedEbookSlug(null);
     setSearchedGroups([]);
     setPdfUrl(null);
+    setGeneratingSalesPage(false);
+    setSalesPageGenerated(false);
+    setSalesPageStage("");
   };
 
   // Recovery effect: check for ongoing generations on mount
@@ -380,6 +386,28 @@ export function CreateEbookView() {
 
 
 
+  const generateSalesPage = async () => {
+    setGeneratingSalesPage(true);
+    setSalesPageGenerated(false);
+    
+    const stages = [
+      "Analisando a estrutura do ebook...",
+      "Extraindo gatilhos mentais...",
+      "Redigindo copy de alta conversão...",
+      "Otimizando layout para mobile...",
+      "Finalizando estrutura da página..."
+    ];
+
+    for (const stage of stages) {
+      setSalesPageStage(stage);
+      await new Promise(resolve => setTimeout(resolve, 1200));
+    }
+
+    setGeneratingSalesPage(false);
+    setSalesPageGenerated(true);
+    toast.success("Página de vendas gerada com sucesso!");
+  };
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -582,8 +610,47 @@ export function CreateEbookView() {
                 <h2 className="font-display text-xl font-semibold">Página</h2>
                 <p className="mt-1 text-sm text-muted-foreground">Preview da landing page de alta conversão.</p>
 
-                <div 
-                  className="mt-6 rounded-3xl border border-gray-100 bg-white overflow-hidden shadow-2xl relative"
+                {!salesPageGenerated && !generatingSalesPage && (
+                  <div className="mt-10 flex flex-col items-center justify-center rounded-2xl gradient-hero p-10 text-center border-2 border-dashed border-primary/20 bg-primary/5">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl gradient-primary shadow-glow">
+                      <Layout className="h-8 w-8 text-primary-foreground" />
+                    </div>
+                    <p className="mt-4 font-display text-lg font-semibold">Sua página está quase pronta!</p>
+                    <p className="mt-1 text-sm text-muted-foreground">Clique no botão abaixo para gerar a estrutura de vendas.</p>
+                    
+                    <div className="mt-6 flex flex-col items-center gap-4 w-full max-w-xs">
+                      <Button onClick={generateSalesPage} size="lg" className="w-full gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
+                        <Zap className="mr-2 h-4 w-4" /> Gerar Página de Vendas
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {generatingSalesPage && !salesPageGenerated && (
+                  <div className="mt-10 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-center">
+                    <Loader2 className="h-10 w-10 animate-spin text-primary" />
+                    <p className="mt-4 font-medium">Gerando sua página de vendas...</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{salesPageStage || "Trabalhando..."}</p>
+                    <div className="mt-6 w-full max-w-xs">
+                      <div className="h-2 rounded-full bg-muted overflow-hidden">
+                        <motion.div
+                          className="h-full gradient-primary"
+                          initial={{ width: "0%" }}
+                          animate={{ width: "100%" }}
+                          transition={{ duration: 6, ease: "linear" }}
+                        />
+                      </div>
+                    </div>
+                    <p className="mt-3 text-xs text-muted-foreground">Estamos estruturando sua landing page com gatilhos mentais e copy persuasiva.</p>
+                  </div>
+                )}
+
+                {salesPageGenerated && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="mt-6 rounded-3xl border border-gray-100 bg-white overflow-hidden shadow-2xl relative"
                   style={{ 
                     '--background': '0 0% 100%', 
                     '--foreground': '240 10% 3.9%',
@@ -698,9 +765,11 @@ export function CreateEbookView() {
                       <p className="text-xs text-white/60">Garantia incondicional de 7 dias</p>
                     </div>
                   </div>
-                </div>
+                </motion.div>
+                )}
 
-                <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                {salesPageGenerated && (
+                  <div className="mt-6 flex flex-col sm:flex-row gap-3">
                   <Button
                     className="flex-1 gradient-primary text-primary-foreground shadow-glow"
                     onClick={async () => {
