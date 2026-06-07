@@ -733,62 +733,59 @@ export function CreateEbookView() {
                   </div>
                 </div>
 
-                {searchedGroups.length > 0 && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-6 space-y-4"
-                  >
-                    <div className="rounded-2xl border bg-card p-5 shadow-sm">
-                      <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
-                        <Users className="h-5 w-5 text-primary" />
-                        Onde divulgar seu ebook
-                      </h3>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Clique no botão abaixo para encontrar grupos ativos no Facebook relacionados ao seu nicho:
-                      </p>
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-6 space-y-4"
+                >
+                  <div className="rounded-2xl border bg-card p-5 shadow-sm">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
+                      <Users className="h-5 w-5 text-primary" />
+                      Onde divulgar seu Ebook
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Clique no botão abaixo para encontrar grupos ativos no Facebook relacionados ao seu nicho:
+                    </p>
+                    <Button 
+                      variant="outline"
+                      className="w-full justify-between hover:bg-primary/5 border-primary/20"
+                      onClick={() => window.open(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`, '_blank')}
+                    >
+                      <span className="flex items-center gap-2">
+                        <Search className="h-4 w-4" />
+                        Buscar melhores grupos relacionados a "{searchTopic}" no Facebook
+                      </span>
+                      <ExternalLink className="h-4 w-4" />
+                    </Button>
+                  </div>
+
+                  <div className="rounded-2xl border bg-card p-5 shadow-sm">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
+                      <Quote className="h-5 w-5 text-primary" />
+                      Mensagem pronta para Divulgação
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Use esta copy persuasiva para gerar interesse nos grupos:
+                    </p>
+                    <div className="relative">
+                      <pre className="whitespace-pre-wrap font-sans text-sm bg-muted/50 p-4 pb-14 rounded-xl border border-dashed border-primary/20 leading-relaxed">
+                        {`Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação !!!\n\nLink: ${ebookLink}`}
+                      </pre>
                       <Button 
-                        variant="outline"
-                        className="w-full justify-between hover:bg-primary/5 border-primary/20"
-                        onClick={() => window.open(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`, '_blank')}
+                        size="sm"
+                        className="absolute bottom-3 right-3 bg-green-600 hover:bg-green-700 text-white shadow-sm gap-2"
+                        onClick={() => {
+                          const text = `Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação !!!\n\nLink: ${ebookLink}`;
+                          navigator.clipboard.writeText(text);
+                          toast.success("Mensagem copiada!");
+                        }}
                       >
-                        <span className="flex items-center gap-2">
-                          <Search className="h-4 w-4" />
-                          Buscar grupos de "{searchTopic}" no Facebook
-                        </span>
-                        <ExternalLink className="h-4 w-4" />
+                        <Copy className="h-3.5 w-3.5" />
+                        Copiar Mensagem
                       </Button>
                     </div>
-
-                    <div className="rounded-2xl border bg-card p-5 shadow-sm">
-                      <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
-                        <Quote className="h-5 w-5 text-primary" />
-                        Mensagem pronta para Divulgação
-                      </h3>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Use esta copy persuasiva para gerar interesse nos grupos:
-                      </p>
-                      <div className="relative group">
-                        <pre className="whitespace-pre-wrap font-sans text-sm bg-muted/50 p-4 rounded-xl border border-dashed border-primary/20 leading-relaxed">
-                          {`Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação.\n\nLink: ${ebookLink}`}
-                        </pre>
-                        <Button 
-                          size="sm"
-                          variant="secondary"
-                          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                          onClick={() => {
-                            const text = `Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação.\n\nLink: ${ebookLink}`;
-                            navigator.clipboard.writeText(text);
-                            toast.success("Mensagem copiada!");
-                          }}
-                        >
-                          <Copy className="h-3.5 w-3.5 mr-2" />
-                          Copiar
-                        </Button>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
+                  </div>
+                </motion.div>
 
                 {pdfUrl && (
                   <div className="mt-4 rounded-2xl border bg-secondary/10 p-5 border-secondary/20">
