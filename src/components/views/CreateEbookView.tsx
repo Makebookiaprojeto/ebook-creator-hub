@@ -548,19 +548,137 @@ export function CreateEbookView() {
 
                 {salesPageGenerated && (
                   <motion.div key="sales-page-preview" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="mt-6 rounded-3xl border border-gray-100 bg-white overflow-hidden shadow-2xl relative">
-                    <div className="pt-16 pb-12 px-8 text-center bg-white relative">
-                      <Badge className="bg-blue-50 text-blue-600 hover:bg-blue-50 border-blue-100 mb-6">PRÉVIA DA PÁGINA DE VENDAS</Badge>
-                      <h1 className="text-3xl sm:text-4xl font-black text-gray-900 leading-tight tracking-tight max-w-2xl mx-auto">{title || "Seu Título"}</h1>
-                      <p className="mt-4 text-base text-gray-500 max-w-lg mx-auto leading-relaxed">{subtitle}</p>
-                      <div className="mt-8 flex justify-center">
-                        <div className="relative w-40 h-56 rounded-xl bg-gray-100 shadow-xl overflow-hidden ring-1 ring-gray-200">
-                          {coverUrl ? <img src={coverUrl} alt="Capa" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center bg-blue-600"><BookOpen className="h-10 w-10 text-white/50" /></div>}
+                    <div className="min-h-screen bg-[#FFFFFF] text-[#111111] font-sans overflow-x-hidden selection:bg-orange-500 selection:text-white">
+                      {/* 1. HERO PREMIUM */}
+                      <section className="relative pt-16 pb-20 overflow-hidden">
+                        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[400px] h-[400px] bg-orange-100/40 rounded-full blur-[80px] -z-10" />
+                        <div className="container mx-auto px-6 max-w-7xl">
+                          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
+                            <div className="flex-1 space-y-6 relative z-10 text-left">
+                              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-50 text-orange-600 font-bold text-xs uppercase tracking-[0.2em] border border-orange-100">
+                                <Sparkles size={14} /> Lançamento 2026
+                              </div>
+                              <h1 className="text-4xl lg:text-6xl font-black tracking-tight leading-[0.9] text-[#111111]">
+                                {title || "Seu Título"}
+                              </h1>
+                              <p className="text-xl text-[#1E3A5F] leading-relaxed max-w-xl font-medium">
+                                {subtitle || "Aprenda de forma prática e rápida com este guia definitivo desenvolvido por especialistas."}
+                              </p>
+                              <div className="flex flex-wrap items-center gap-6 pt-4">
+                                <Button 
+                                  size="lg" 
+                                  className="h-16 px-8 text-lg font-black bg-[#F97316] hover:bg-[#EA580C] text-white rounded-full shadow-[0_20px_40px_-10px_rgba(249,115,22,0.3)] transition-all flex items-center gap-3"
+                                  onClick={() => toast.info("Esta é apenas uma prévia.")}
+                                >
+                                  OBTER ACESSO AGORA <ArrowRightIcon size={20} />
+                                </Button>
+                                <div className="text-left">
+                                  <p className="text-sm text-[#1E3A5F] font-bold uppercase tracking-widest opacity-70">Oferta Exclusiva</p>
+                                  <p className="text-3xl font-black text-[#111111]">R$ {price.toFixed(2).replace(".", ",")}</p>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div className="flex-1 w-full max-w-[400px] relative z-10">
+                              <div className="relative transform-gpu shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] rounded-[2rem] overflow-hidden aspect-[3/4.2]">
+                                {coverUrl ? <img src={coverUrl} alt="Capa" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center bg-orange-600"><BookOpen className="h-10 w-10 text-white/50" /></div>}
+                                <div className="absolute inset-0 bg-gradient-to-tr from-black/20 via-transparent to-white/10" />
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      <div className="mt-10">
-                        <div className="text-4xl font-black text-blue-600">R$ {price.toFixed(2).replace(".", ",")}</div>
-                        <Button className="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold h-14 px-8 rounded-2xl shadow-lg" onClick={() => toast.info("Esta é apenas uma prévia.")}>QUERO COMEÇAR AGORA</Button>
-                      </div>
+                      </section>
+
+                      {/* 2. APRESENTAÇÃO */}
+                      <section className="py-12 bg-gray-50/50 border-y border-gray-100">
+                        <div className="container mx-auto px-6 max-w-4xl">
+                          <div className="text-center space-y-6">
+                            <h2 className="text-3xl lg:text-4xl font-black leading-tight">Um produto desenhado para encantar.</h2>
+                            <p className="text-lg text-[#1E3A5F] leading-relaxed font-medium mx-auto max-w-2xl">Cada página foi estruturada para garantir a melhor experiência de aprendizado, com visual moderno e conteúdo de fácil absorção.</p>
+                          </div>
+                        </div>
+                      </section>
+
+                      {/* 4. BENEFÍCIOS */}
+                      <section className="py-16 bg-white">
+                        <div className="container mx-auto px-6 max-w-7xl">
+                          <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
+                            <h2 className="text-4xl font-black tracking-tight">Vantagens Exclusivas</h2>
+                          </div>
+                          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {[
+                              { icon: Rocket, title: "Aceleração Real", desc: "Resultados que aparecem já nas primeiras semanas de aplicação." },
+                              { icon: Target, title: "Foco no Resultado", desc: "Direto ao ponto, sem enrolação. Conteúdo 100% prático." },
+                              { icon: TrendingUp, title: "Escalabilidade", desc: "Aprenda métodos que podem ser replicados em larga escala." },
+                              { icon: Award, title: "Certificado de Valor", desc: "Conhecimento que se traduz em autoridade no mercado." }
+                            ].map((benefit, i) => (
+                              <div key={i} className="p-6 bg-[#FFF7ED] rounded-3xl border border-orange-100/50 text-left">
+                                <div className="h-12 w-12 bg-orange-50 rounded-2xl flex items-center justify-center mb-6">
+                                  <benefit.icon className="h-6 w-6 text-orange-500" />
+                                </div>
+                                <h3 className="text-lg font-bold mb-2">{benefit.title}</h3>
+                                <p className="text-[#1E3A5F] text-sm leading-relaxed">{benefit.desc}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </section>
+
+                      {/* 5. O QUE VOCÊ VAI APRENDER */}
+                      <section className="py-16 bg-gray-50/50">
+                        <div className="container mx-auto px-6 max-w-7xl">
+                          <h2 className="text-4xl font-black text-center mb-12 tracking-tight">O que você vai aprender</h2>
+                          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {(chapters.length > 0 ? chapters.slice(0, 6) : [...Array(6)]).map((ch, i) => (
+                              <div key={i} className="group p-6 bg-white rounded-[2rem] border border-gray-100 shadow-sm text-left">
+                                <div className="flex items-start justify-between mb-6">
+                                   <div className="h-10 w-10 bg-gray-50 rounded-full flex items-center justify-center font-black text-[#1E3A5F] opacity-40">
+                                     {String(i + 1).padStart(2, '0')}
+                                   </div>
+                                </div>
+                                <h3 className="text-lg font-black mb-2">{ch?.title || `Capítulo ${i + 1}`}</h3>
+                                <p className="text-[#1E3A5F] text-xs leading-relaxed line-clamp-3">Conteúdo detalhado sobre este tópico essencial para sua evolução.</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </section>
+
+                      {/* 9. OFERTA & CTA FINAL */}
+                      <section className="py-20 relative">
+                        <div className="container mx-auto px-6 max-w-4xl text-center">
+                          <div className="space-y-8">
+                            <h2 className="text-4xl lg:text-6xl font-black tracking-tight leading-none">Pronto para a sua nova fase?</h2>
+                            <div className="relative p-8 lg:p-12 bg-white rounded-[3rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] border border-gray-50">
+                              <p className="text-xl font-bold mb-6 text-[#1E3A5F]">Invista no seu futuro profissional hoje</p>
+                              <div className="flex flex-col items-center gap-2 mb-8">
+                                <span className="text-[#1E3A5F] line-through text-xl font-black opacity-30">R$ {(price * 2.5).toFixed(2).replace(".", ",")}</span>
+                                <p className="text-6xl lg:text-7xl font-black text-[#F97316] tracking-tighter leading-none">R$ {price.toFixed(2).replace(".", ",")}</p>
+                              </div>
+                              <Button 
+                                size="lg" 
+                                className="h-20 w-full max-w-2xl text-xl font-black bg-[#F97316] hover:bg-[#EA580C] text-white rounded-full shadow-[0_25px_50px_-12px_rgba(249,115,22,0.4)] transition-all"
+                                onClick={() => toast.info("Esta é apenas uma prévia.")}
+                              >
+                                QUERO GARANTIR MINHA VAGA
+                              </Button>
+                              <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+                                 {[
+                                   { icon: ShieldCheck, text: "Seguro" },
+                                   { icon: LockIcon, text: "Protegido" },
+                                   { icon: Flame, text: "Vitalício" },
+                                   { icon: Star, text: "Exclusivo" }
+                                 ].map((badge, i) => (
+                                    <div key={i} className="flex flex-col items-center gap-2">
+                                       <div className="h-8 w-8 bg-gray-50 rounded-full flex items-center justify-center"><badge.icon size={16} className="text-[#1E3A5F]" /></div>
+                                       <span className="text-[8px] font-black uppercase tracking-widest text-[#1E3A5F] opacity-70">{badge.text}</span>
+                                    </div>
+                                  ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </section>
                     </div>
                   </motion.div>
                 )}
