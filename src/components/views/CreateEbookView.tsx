@@ -562,7 +562,7 @@ export function CreateEbookView() {
                               <h1 className="text-4xl lg:text-6xl font-black tracking-tight leading-[0.9] text-[#111111]">
                                 {title || "Seu Título"}
                               </h1>
-                              <p className="text-xl text-[#1E3A5F] leading-relaxed max-w-xl font-medium">
+                              <p className="text-xl text-orange-900/80 leading-relaxed max-w-xl font-medium">
                                 {subtitle || "Aprenda de forma prática e rápida com este guia definitivo desenvolvido por especialistas."}
                               </p>
                               <div className="flex flex-wrap items-center gap-6 pt-4">
@@ -574,7 +574,7 @@ export function CreateEbookView() {
                                   OBTER ACESSO AGORA <ArrowRightIcon size={20} />
                                 </Button>
                                 <div className="text-left">
-                                  <p className="text-sm text-[#1E3A5F] font-bold uppercase tracking-widest opacity-70">Oferta Exclusiva</p>
+                                  <p className="text-sm text-orange-900/60 font-bold uppercase tracking-widest">Oferta Exclusiva</p>
                                   <p className="text-3xl font-black text-[#111111]">R$ {price.toFixed(2).replace(".", ",")}</p>
                                 </div>
                               </div>
@@ -591,11 +591,11 @@ export function CreateEbookView() {
                       </section>
 
                       {/* 2. APRESENTAÇÃO */}
-                      <section className="py-12 bg-gray-50/50 border-y border-gray-100">
+                      <section className="py-12 bg-orange-50/30 border-y border-orange-100/50">
                         <div className="container mx-auto px-6 max-w-4xl">
                           <div className="text-center space-y-6">
-                            <h2 className="text-3xl lg:text-4xl font-black leading-tight">Um produto desenhado para encantar.</h2>
-                            <p className="text-lg text-[#1E3A5F] leading-relaxed font-medium mx-auto max-w-2xl">Cada página foi estruturada para garantir a melhor experiência de aprendizado, com visual moderno e conteúdo de fácil absorção.</p>
+                            <h2 className="text-3xl lg:text-4xl font-black leading-tight text-orange-950">Um produto desenhado para encantar.</h2>
+                            <p className="text-lg text-orange-900/80 leading-relaxed font-medium mx-auto max-w-2xl">Cada página foi estruturada para garantir a melhor experiência de aprendizado, com visual moderno e conteúdo de fácil absorção.</p>
                           </div>
                         </div>
                       </section>
@@ -604,7 +604,7 @@ export function CreateEbookView() {
                       <section className="py-16 bg-white">
                         <div className="container mx-auto px-6 max-w-7xl">
                           <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-                            <h2 className="text-4xl font-black tracking-tight">Vantagens Exclusivas</h2>
+                            <h2 className="text-4xl font-black tracking-tight text-orange-950">Vantagens Exclusivas</h2>
                           </div>
                           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                             {[
@@ -617,8 +617,8 @@ export function CreateEbookView() {
                                 <div className="h-12 w-12 bg-orange-50 rounded-2xl flex items-center justify-center mb-6">
                                   <benefit.icon className="h-6 w-6 text-orange-500" />
                                 </div>
-                                <h3 className="text-lg font-bold mb-2">{benefit.title}</h3>
-                                <p className="text-[#1E3A5F] text-sm leading-relaxed">{benefit.desc}</p>
+                                <h3 className="text-lg font-bold mb-2 text-orange-950">{benefit.title}</h3>
+                                <p className="text-orange-900/70 text-sm leading-relaxed">{benefit.desc}</p>
                               </div>
                             ))}
                           </div>
@@ -626,19 +626,19 @@ export function CreateEbookView() {
                       </section>
 
                       {/* 5. O QUE VOCÊ VAI APRENDER */}
-                      <section className="py-16 bg-gray-50/50">
+                      <section className="py-16 bg-orange-50/20">
                         <div className="container mx-auto px-6 max-w-7xl">
-                          <h2 className="text-4xl font-black text-center mb-12 tracking-tight">O que você vai aprender</h2>
+                          <h2 className="text-4xl font-black text-center mb-12 tracking-tight text-orange-950">O que você vai aprender</h2>
                           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {(chapters.length > 0 ? chapters.slice(0, 6) : [...Array(6)]).map((ch, i) => (
-                              <div key={i} className="group p-6 bg-white rounded-[2rem] border border-gray-100 shadow-sm text-left">
+                              <div key={i} className="group p-6 bg-white rounded-[2rem] border border-orange-100 shadow-sm text-left">
                                 <div className="flex items-start justify-between mb-6">
-                                   <div className="h-10 w-10 bg-gray-50 rounded-full flex items-center justify-center font-black text-[#1E3A5F] opacity-40">
+                                   <div className="h-10 w-10 bg-orange-50 rounded-full flex items-center justify-center font-black text-orange-600">
                                      {String(i + 1).padStart(2, '0')}
                                    </div>
                                 </div>
-                                <h3 className="text-lg font-black mb-2">{ch?.title || `Capítulo ${i + 1}`}</h3>
-                                <p className="text-[#1E3A5F] text-xs leading-relaxed line-clamp-3">Conteúdo detalhado sobre este tópico essencial para sua evolução.</p>
+                                <h3 className="text-lg font-black mb-2 text-orange-950">{ch?.title || `Capítulo ${i + 1}`}</h3>
+                                <p className="text-orange-900/60 text-xs leading-relaxed line-clamp-3">Conteúdo detalhado sobre este tópico essencial para sua evolução.</p>
                               </div>
                             ))}
                           </div>
@@ -649,11 +649,11 @@ export function CreateEbookView() {
                       <section className="py-20 relative">
                         <div className="container mx-auto px-6 max-w-4xl text-center">
                           <div className="space-y-8">
-                            <h2 className="text-4xl lg:text-6xl font-black tracking-tight leading-none">Pronto para a sua nova fase?</h2>
-                            <div className="relative p-8 lg:p-12 bg-white rounded-[3rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] border border-gray-50">
-                              <p className="text-xl font-bold mb-6 text-[#1E3A5F]">Invista no seu futuro profissional hoje</p>
+                            <h2 className="text-4xl lg:text-6xl font-black tracking-tight leading-none text-orange-950">Pronto para a sua nova fase?</h2>
+                            <div className="relative p-8 lg:p-12 bg-white rounded-[3rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] border border-orange-50">
+                              <p className="text-xl font-bold mb-6 text-orange-900">Invista no seu futuro profissional hoje</p>
                               <div className="flex flex-col items-center gap-2 mb-8">
-                                <span className="text-[#1E3A5F] line-through text-xl font-black opacity-30">R$ {(price * 2.5).toFixed(2).replace(".", ",")}</span>
+                                <span className="text-orange-900/30 line-through text-xl font-black">R$ {(price * 2.5).toFixed(2).replace(".", ",")}</span>
                                 <p className="text-6xl lg:text-7xl font-black text-[#F97316] tracking-tighter leading-none">R$ {price.toFixed(2).replace(".", ",")}</p>
                               </div>
                               <Button 
@@ -671,8 +671,8 @@ export function CreateEbookView() {
                                    { icon: Star, text: "Exclusivo" }
                                  ].map((badge, i) => (
                                     <div key={i} className="flex flex-col items-center gap-2">
-                                       <div className="h-8 w-8 bg-gray-50 rounded-full flex items-center justify-center"><badge.icon size={16} className="text-[#1E3A5F]" /></div>
-                                       <span className="text-[8px] font-black uppercase tracking-widest text-[#1E3A5F] opacity-70">{badge.text}</span>
+                                       <div className="h-8 w-8 bg-orange-50 rounded-full flex items-center justify-center"><badge.icon size={16} className="text-orange-600" /></div>
+                                       <span className="text-[8px] font-black uppercase tracking-widest text-orange-900/70">{badge.text}</span>
                                     </div>
                                   ))}
                               </div>
