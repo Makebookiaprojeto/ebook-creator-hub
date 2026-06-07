@@ -476,7 +476,7 @@ export function CreateEbookView() {
 
             {step === 2 && (
               <div>
-                <h2 className="font-display text-xl font-semibold">Ebook</h2>
+                <h2 className="font-display text-xl font-semibold">Gere seu Ebook</h2>
                 {!generated && !generating && (
                   <div className="mt-10 flex flex-col items-center justify-center rounded-2xl gradient-hero p-10 text-center">
                     <div className="flex h-16 w-16 items-center justify-center rounded-2xl gradient-primary shadow-glow">
@@ -516,8 +516,7 @@ export function CreateEbookView() {
 
             {step === 3 && (
               <div key="step3-container">
-                <h2 className="font-display text-xl font-semibold">Página</h2>
-                <p className="mt-1 text-sm text-muted-foreground">Preview da landing page de alta conversão.</p>
+                <h2 className="font-display text-xl font-semibold">Gere sua Página de Vendas</h2>
 
                 {!salesPageGenerated && !generatingSalesPage && (
                   <div key="cta-sales" className="mt-10 flex flex-col items-center justify-center rounded-2xl gradient-hero p-10 text-center border-2 border-dashed border-primary/20 bg-primary/5">
