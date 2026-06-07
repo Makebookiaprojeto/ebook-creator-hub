@@ -728,7 +728,7 @@ export function CreateEbookView() {
                 <p className="mt-1 text-sm text-muted-foreground">Encontre os melhores grupos para divulgar seu produto.</p>
                 <div className="mt-6 rounded-2xl border bg-muted/30 p-5">
                   <div className="flex flex-col sm:flex-row gap-2">
-                    <Input placeholder="Qual o nicho?" value={searchTopic} onChange={(e) => setSearchTopic(e.target.value)} />
+                    <Input placeholder="Digite o nicho do seu Ebook" value={searchTopic} onChange={(e) => setSearchTopic(e.target.value)} />
                     <Button onClick={() => { if (!searchTopic.trim()) return toast.error("Digite o assunto"); setSearchedGroups([{ name: "Ready", members: 0, engagement: "" }]); toast.success("Links gerados!"); }} className="gradient-primary text-primary-foreground shadow-glow"><Zap className="mr-2 h-4 w-4" /> Gerar Links</Button>
                   </div>
                 </div>
@@ -763,21 +763,21 @@ export function CreateEbookView() {
                     <div className="rounded-2xl border bg-card p-5 shadow-sm">
                       <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
                         <Quote className="h-5 w-5 text-primary" />
-                        Mensagem de divulgação
+                        Mensagem pronta para Divulgação
                       </h3>
                       <p className="text-sm text-muted-foreground mb-4">
                         Use esta copy persuasiva para gerar interesse nos grupos:
                       </p>
                       <div className="relative group">
                         <pre className="whitespace-pre-wrap font-sans text-sm bg-muted/50 p-4 rounded-xl border border-dashed border-primary/20 leading-relaxed">
-                          {`Olá pessoal! Acabei de lançar um eBook completo sobre ${searchTopic}. 🚀\n\nEstá incrível e ajudando muita gente. Quem quiser dar uma olhada, comenta 'EU QUERO' aqui embaixo que eu mando o link no direct! 👇`}
+                          {`Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação.\n\nLink: ${ebookLink}`}
                         </pre>
                         <Button 
                           size="sm"
                           variant="secondary"
                           className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
                           onClick={() => {
-                            const text = `Olá pessoal! Acabei de lançar um eBook completo sobre ${searchTopic}. 🚀\n\nEstá incrível e ajudando muita gente. Quem quiser dar uma olhada, comenta 'EU QUERO' aqui embaixo que eu mando o link no direct! 👇`;
+                            const text = `Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação.\n\nLink: ${ebookLink}`;
                             navigator.clipboard.writeText(text);
                             toast.success("Mensagem copiada!");
                           }}
