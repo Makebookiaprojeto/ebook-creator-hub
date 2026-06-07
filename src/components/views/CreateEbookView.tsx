@@ -731,7 +731,6 @@ export function CreateEbookView() {
                     <Input placeholder="Qual o nicho?" value={searchTopic} onChange={(e) => setSearchTopic(e.target.value)} />
                     <Button onClick={() => { if (!searchTopic.trim()) return toast.error("Digite o assunto"); setSearchedGroups([{ name: "Ready", members: 0, engagement: "" }]); toast.success("Links gerados!"); }} className="gradient-primary text-primary-foreground shadow-glow"><Zap className="mr-2 h-4 w-4" /> Gerar Links</Button>
                   </div>
-                  </div>
                 </div>
 
                 {searchedGroups.length > 0 && (
