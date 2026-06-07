@@ -788,6 +788,7 @@ export function CreateEbookView() {
 
 
 
+
                 {salesPageGenerated && (
                   <div className="mt-6 flex flex-col sm:flex-row gap-3">
                   <Button
