@@ -4,7 +4,7 @@ import {
   ArrowLeft, ArrowRight, Check, Sparkles, Loader2, Copy, Users, Rocket,
   Search, ChevronDown, Star, Flame, ShieldCheck, Clock, Zap, Quote, Download, FileText, Eye,
   BookOpen, MousePointer2, Target, Layout, Award, Lock as LockIcon, ArrowRight as ArrowRightIcon,
-  TrendingUp
+  TrendingUp, ExternalLink
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -731,7 +731,66 @@ export function CreateEbookView() {
                     <Input placeholder="Qual o nicho?" value={searchTopic} onChange={(e) => setSearchTopic(e.target.value)} />
                     <Button onClick={() => { if (!searchTopic.trim()) return toast.error("Digite o assunto"); setSearchedGroups([{ name: "Ready", members: 0, engagement: "" }]); toast.success("Links gerados!"); }} className="gradient-primary text-primary-foreground shadow-glow"><Zap className="mr-2 h-4 w-4" /> Gerar Links</Button>
                   </div>
+                  </div>
                 </div>
+
+                {searchedGroups.length > 0 && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-6 space-y-4"
+                  >
+                    <div className="rounded-2xl border bg-card p-5 shadow-sm">
+                      <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
+                        <Users className="h-5 w-5 text-primary" />
+                        Onde divulgar seu ebook
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Clique no botão abaixo para encontrar grupos ativos no Facebook relacionados ao seu nicho:
+                      </p>
+                      <Button 
+                        variant="outline"
+                        className="w-full justify-between hover:bg-primary/5 border-primary/20"
+                        onClick={() => window.open(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`, '_blank')}
+                      >
+                        <span className="flex items-center gap-2">
+                          <Search className="h-4 w-4" />
+                          Buscar grupos de "{searchTopic}" no Facebook
+                        </span>
+                        <ExternalLink className="h-4 w-4" />
+                      </Button>
+                    </div>
+
+                    <div className="rounded-2xl border bg-card p-5 shadow-sm">
+                      <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
+                        <Quote className="h-5 w-5 text-primary" />
+                        Mensagem de divulgação
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Use esta copy persuasiva para gerar interesse nos grupos:
+                      </p>
+                      <div className="relative group">
+                        <pre className="whitespace-pre-wrap font-sans text-sm bg-muted/50 p-4 rounded-xl border border-dashed border-primary/20 leading-relaxed">
+                          {`Olá pessoal! Acabei de lançar um eBook completo sobre ${searchTopic}. 🚀\n\nEstá incrível e ajudando muita gente. Quem quiser dar uma olhada, comenta 'EU QUERO' aqui embaixo que eu mando o link no direct! 👇`}
+                        </pre>
+                        <Button 
+                          size="sm"
+                          variant="secondary"
+                          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => {
+                            const text = `Olá pessoal! Acabei de lançar um eBook completo sobre ${searchTopic}. 🚀\n\nEstá incrível e ajudando muita gente. Quem quiser dar uma olhada, comenta 'EU QUERO' aqui embaixo que eu mando o link no direct! 👇`;
+                            navigator.clipboard.writeText(text);
+                            toast.success("Mensagem copiada!");
+                          }}
+                        >
+                          <Copy className="h-3.5 w-3.5 mr-2" />
+                          Copiar
+                        </Button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
                 {pdfUrl && (
                   <div className="mt-4 rounded-2xl border bg-secondary/10 p-5 border-secondary/20">
                     <Button className="mt-3 w-full sm:w-auto variant-secondary gap-2" onClick={() => window.open(pdfUrl, '_blank')}><Download className="h-4 w-4" /> Baixar PDF</Button>
