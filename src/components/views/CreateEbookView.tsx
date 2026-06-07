@@ -42,8 +42,8 @@ import { useEbooks } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
 import { EbookPreview } from "@/components/EbookPreview";
 
-const steps = ["Nicho", "Preço", "Ebook", "Página", "Divulgação"];
-const pricePresets = [19.9, 29.9, 39.9, 49.9, 97.0];
+const steps = ["Nicho", "Preço", "Ebook", "Página de Vendas", "Divulgação"];
+const pricePresets = [19.9, 29.9, 39.9, 49.9];
 
 type FbGroup = { name: string; members: number; engagement: string };
 type ChapterDraft = {
