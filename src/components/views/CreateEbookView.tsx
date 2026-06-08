@@ -42,7 +42,7 @@ import { toast } from "sonner";
 import { useEbooks } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
 import { EbookPreview } from "@/components/EbookPreview";
-import videoDivulgacao from "@/assets/video-divulgacao.mp4.asset.json";
+import videoDivulgacao from "@/assets/video-divulgacao-v2.mp4.asset.json";
 
 const steps = ["Nicho", "Preço", "Ebook", "Página de Vendas", "Divulgação"];
 const pricePresets = [19.9, 29.9, 39.9, 49.9];
@@ -798,7 +798,7 @@ export function CreateEbookView() {
                       Vídeo pronto para divulgação
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Baixe o vídeo promocional para usar em seus anúncios e posts:
+                      Use este vídeo persuasivo para gerar interesse nos grupos:
                     </p>
                     <div className="relative rounded-xl overflow-hidden bg-black aspect-[9/16] max-w-[280px] mx-auto border border-primary/10 mb-4">
                       <video 
