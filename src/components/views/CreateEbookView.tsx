@@ -42,6 +42,7 @@ import { toast } from "sonner";
 import { useEbooks } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
 import { EbookPreview } from "@/components/EbookPreview";
+import videoDivulgacao from "@/assets/video-divulgacao.mp4.asset.json";
 
 const steps = ["Nicho", "Preço", "Ebook", "Página de Vendas", "Divulgação"];
 const pricePresets = [19.9, 29.9, 39.9, 49.9];
@@ -801,17 +802,16 @@ export function CreateEbookView() {
                     </p>
                     <div className="relative rounded-xl overflow-hidden bg-black aspect-[9/16] max-w-[280px] mx-auto border border-primary/10 mb-4">
                       <video 
-                        src="https://qtbkvshbmqlszncxlcuc.supabase.co/storage/v1/object/public/dsl-uploads/qc1FYzO6GYXb9ltNXoi70NtvXmd2/bac82b24-a160-43ec-b6e3-4459c69ffe28.png" 
+                        src={videoDivulgacao.url}
                         className="w-full h-full object-cover"
                         controls
-                        poster="https://qtbkvshbmqlszncxlcuc.supabase.co/storage/v1/object/public/dsl-uploads/qc1FYzO6GYXb9ltNXoi70NtvXmd2/bac82b24-a160-43ec-b6e3-4459c69ffe28.png"
                       />
                     </div>
                     <Button 
                       className="w-full bg-green-600 hover:bg-green-700 text-white shadow-sm gap-2"
                       onClick={() => {
                         const link = document.createElement('a');
-                        link.href = "https://qtbkvshbmqlszncxlcuc.supabase.co/storage/v1/object/public/dsl-uploads/qc1FYzO6GYXb9ltNXoi70NtvXmd2/bac82b24-a160-43ec-b6e3-4459c69ffe28.png";
+                        link.href = videoDivulgacao.url;
                         link.download = "video-divulgacao.mp4";
                         document.body.appendChild(link);
                         link.click();
