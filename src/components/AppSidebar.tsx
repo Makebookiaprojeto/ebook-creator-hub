@@ -102,14 +102,20 @@ export function AppSidebar({ active, onChange }: Props) {
             <SidebarMenu>
               {items.map((item) => {
                 const isActive = active === item.id;
+                const isCreateAction = item.id === "create";
+                
                 return (
                   <SidebarMenuItem key={item.id}>
                     <SidebarMenuButton
                       onClick={() => onChange(item.id)}
                       className={
                         isActive
-                          ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-                          : "hover:bg-sidebar-accent/60"
+                          ? isCreateAction 
+                            ? "bg-success text-success-foreground font-medium shadow-sm"
+                            : "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                          : isCreateAction
+                            ? "bg-success/10 text-success hover:bg-success/20 font-medium"
+                            : "hover:bg-sidebar-accent/60"
                       }
                     >
                       <item.icon className="h-4 w-4" />
