@@ -211,7 +211,7 @@ export function NotificationBell() {
                     {notif.message}
                   </p>
                 </DropdownMenuItem>
-              ))}
+              )})}
             </div>
           )}
         </DropdownMenuContent>
