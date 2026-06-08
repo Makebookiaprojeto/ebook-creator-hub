@@ -197,7 +197,7 @@ Deno.serve(async (req) => {
               const notifTitle = isApproved ? "Venda aprovada" : "Venda pendente";
               const notifMsg = isApproved 
                 ? "Pagamento confirmado para seu ebook." 
-                : "Uma nova compra foi iniciada para seu ebook.";
+                : "Nova venda gerada no seu checkout !!!";
               const notifType = isApproved ? "sale" : "pending_sale";
 
               await supabase.from("notifications").insert({
