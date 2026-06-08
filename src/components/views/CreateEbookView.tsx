@@ -4,7 +4,7 @@ import {
   ArrowLeft, ArrowRight, Check, Sparkles, Loader2, Copy, Users, Rocket,
   Search, ChevronDown, Star, Flame, ShieldCheck, Clock, Zap, Quote, Download, FileText, Eye,
   BookOpen, MousePointer2, Target, Layout, Award, Lock as LockIcon, ArrowRight as ArrowRightIcon,
-  TrendingUp, ExternalLink
+  TrendingUp, ExternalLink, Video
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -790,6 +790,38 @@ export function CreateEbookView() {
                         Copiar Mensagem
                       </Button>
                     </div>
+                  </div>
+                  <div className="rounded-2xl border bg-card p-5 shadow-sm">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
+                      <Video className="h-5 w-5 text-primary" />
+                      Vídeo pronto para divulgação
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Baixe o vídeo promocional para usar em seus anúncios e posts:
+                    </p>
+                    <div className="relative rounded-xl overflow-hidden bg-black aspect-[9/16] max-w-[280px] mx-auto border border-primary/10 mb-4">
+                      <video 
+                        src="https://qtbkvshbmqlszncxlcuc.supabase.co/storage/v1/object/public/dsl-uploads/qc1FYzO6GYXb9ltNXoi70NtvXmd2/bac82b24-a160-43ec-b6e3-4459c69ffe28.png" 
+                        className="w-full h-full object-cover"
+                        controls
+                        poster="https://qtbkvshbmqlszncxlcuc.supabase.co/storage/v1/object/public/dsl-uploads/qc1FYzO6GYXb9ltNXoi70NtvXmd2/bac82b24-a160-43ec-b6e3-4459c69ffe28.png"
+                      />
+                    </div>
+                    <Button 
+                      className="w-full bg-green-600 hover:bg-green-700 text-white shadow-sm gap-2"
+                      onClick={() => {
+                        const link = document.createElement('a');
+                        link.href = "https://qtbkvshbmqlszncxlcuc.supabase.co/storage/v1/object/public/dsl-uploads/qc1FYzO6GYXb9ltNXoi70NtvXmd2/bac82b24-a160-43ec-b6e3-4459c69ffe28.png";
+                        link.download = "video-divulgacao.mp4";
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        toast.success("Iniciando download do vídeo...");
+                      }}
+                    >
+                      <Download className="h-4 w-4" />
+                      Baixar Vídeo
+                    </Button>
                   </div>
                 </motion.div>
 
