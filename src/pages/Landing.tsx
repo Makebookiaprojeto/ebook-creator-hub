@@ -250,9 +250,14 @@ const Landing = () => {
               </div>
               <p className="text-xs font-bold uppercase tracking-widest text-primary mb-4"></p>
               <h3 className="text-2xl font-bold mb-2">Vitalício VIP</h3>
-              <div className="flex items-baseline gap-1 mb-2">
-                <span className="text-5xl font-black">R$ 249,90</span>
-                <span className="text-muted-foreground font-medium"> única vez</span>
+              <div className="flex flex-col mb-2">
+                <div className="flex items-baseline gap-1">
+                  <span className="text-5xl font-black">R$ 249,90</span>
+                  <span className="text-muted-foreground font-medium"> única vez</span>
+                </div>
+                <div className="text-sm font-bold text-primary mt-1">
+                  ou em até 12 X de R$ 25,82
+                </div>
               </div>
               <div className="flex items-center gap-2 text-xs text-primary font-bold mb-6">
                 <Clock className="h-3.5 w-3.5 animate-pulse" />
