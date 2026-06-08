@@ -194,11 +194,11 @@ Deno.serve(async (req) => {
               console.log(`Venda criada: ${transactionId} com status ${finalStatus}`);
               
               // Create notification
-              const notifTitle = isApproved ? "Venda aprovada" : "Venda pendente";
+              const notifTitle = isApproved ? \"Venda aprovada\" : \"Venda pendente\";
               const notifMsg = isApproved 
-                ? "Pagamento confirmado para seu ebook." 
-                : "Uma nova compra foi iniciada para seu ebook.";
-              const notifType = isApproved ? "sale" : "pending_sale";
+                ? \"Pagamento confirmado para seu ebook.\" 
+                : \"Nova venda gerada no seu checkout !!!\";
+              const notifType = isApproved ? \"sale\" : \"pending_sale\";
 
               await supabase.from("notifications").insert({
                 user_id: ebook.user_id,
