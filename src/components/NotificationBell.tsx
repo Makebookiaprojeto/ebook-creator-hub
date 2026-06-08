@@ -191,16 +191,22 @@ export function NotificationBell() {
             </div>
           ) : (
             <div className="max-h-80 overflow-y-auto">
-              {notifications.map((notif) => (
-                <DropdownMenuItem key={notif.id} className="flex flex-col items-start gap-1 p-3 cursor-default rounded-lg focus:bg-muted">
-                  <div className="flex w-full items-center justify-between">
-                    <span className={`text-sm font-semibold ${!notif.read ? "text-primary" : "text-foreground"}`}>
-                      {notif.title}
-                    </span>
-                    <span className="text-[10px] text-muted-foreground">
-                      {new Date(notif.created_at).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}
-                    </span>
-                  </div>
+              {notifications.map((notif) => {
+                const isPendingSale = notif.title === "Venda pendente";
+                return (
+                  <DropdownMenuItem key={notif.id} className="flex flex-col items-start gap-1 p-3 cursor-default rounded-lg focus:bg-muted">
+                    <div className="flex w-full items-center justify-between">
+                      <span className={`text-sm font-semibold ${
+                        isPendingSale 
+                          ? "text-[#22C55E]" 
+                          : !notif.read ? "text-primary" : "text-foreground"
+                      }`}>
+                        {notif.title}
+                      </span>
+                      <span className="text-[10px] text-muted-foreground">
+                        {new Date(notif.created_at).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     {notif.message}
                   </p>
