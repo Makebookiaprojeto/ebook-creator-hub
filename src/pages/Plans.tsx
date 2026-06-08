@@ -282,7 +282,10 @@ export default function Plans() {
                 </div>
                 <div className="flex items-baseline gap-1">
                   <span className="text-4xl font-bold">R$ 249,90</span>
-                  <span className="text-muted-foreground">único</span>
+                  <span className="text-muted-foreground text-sm">à vista</span>
+                </div>
+                <div className="text-sm font-medium text-primary mt-1">
+                  ou em até 12 X de R$ 25,82
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
                   Pague uma vez e use para sempre.
