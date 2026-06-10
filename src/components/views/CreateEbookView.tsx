@@ -807,10 +807,6 @@ export function CreateEbookView() {
                         poster={videoDivulgacaoPoster.url}
                         className="w-full h-full object-contain bg-black"
                         controls
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
                         preload="auto"
                       />
                     </div>
