@@ -412,12 +412,12 @@ export function CreateEbookView() {
                       onClick={() => setNiche(n.name)}
                       className={`group rounded-xl border p-4 text-center transition-all hover:shadow-md hover:-translate-y-0.5 min-h-[80px] flex items-center justify-center ${
                         niche === n.name 
-                          ? "border-[#22c55e] bg-[#22c55e] shadow-glow" 
-                          : "border-[#22c55e]/30 bg-[#22c55e]/10 hover:border-[#22c55e]/50"
+                          ? "border-primary bg-primary text-primary-foreground shadow-glow" 
+                          : "bg-card border-border hover:border-primary/50"
                       }`}
                     >
                       <p className={`font-semibold text-sm sm:text-base leading-tight ${
-                        niche === n.name ? "text-white" : "text-white"
+                        niche === n.name ? "text-primary-foreground" : "text-foreground"
                       }`}>
                         {n.name}
                       </p>
