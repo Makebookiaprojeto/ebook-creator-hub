@@ -803,8 +803,10 @@ export function CreateEbookView() {
                     <div className="relative rounded-xl overflow-hidden bg-black aspect-[9/16] max-w-[280px] mx-auto border border-primary/10 mb-4">
                       <video 
                         src={videoDivulgacao.url}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                         controls
+                        playsInline
+                        preload="metadata"
                       />
                     </div>
                     <Button 
