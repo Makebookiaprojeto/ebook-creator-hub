@@ -42,7 +42,7 @@ import { toast } from "sonner";
 import { useEbooks } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
 import { EbookPreview } from "@/components/EbookPreview";
-import videoDivulgacao from "@/assets/video-divulgacao-v2.mp4.asset.json";
+import videoDivulgacao from "@/assets/video-divulgacao.mp4.asset.json";
 
 const steps = ["Nicho", "Preço", "Ebook", "Página de Vendas", "Divulgação"];
 const pricePresets = [19.9, 29.9, 39.9, 49.9];
