@@ -50,10 +50,14 @@ export function useEbooks() {
       .order("created_at", { ascending: false });
     
     if (!error && data) {
-      const formatted = (data as any[]).map(eb => ({
-        ...eb,
-        chapter_count: eb.content_json?.length ?? 0
-      }));
+      const formatted = (data as any[]).map(eb => {
+        const content = eb.content_json;
+        const chapters = Array.isArray(content) ? content : (content?.chapters || []);
+        return {
+          ...eb,
+          chapter_count: chapters.length
+        };
+      });
       setEbooks(formatted);
     }
     setLoading(false);
@@ -138,7 +142,8 @@ export function useEbooks() {
     
     if (eErr || !ebook) throw eErr ?? new Error("Ebook não encontrado");
 
-    const chapters = (ebook.content_json as Chapter[]) || [];
+    const content = ebook.content_json as any;
+    const chapters = Array.isArray(content) ? (content as Chapter[]) : (content?.chapters as Chapter[]) || [];
     return { ebook, chapters };
   };
 
