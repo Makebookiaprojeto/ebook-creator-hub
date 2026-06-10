@@ -801,7 +801,7 @@ export function CreateEbookView() {
                     <p className="text-sm text-muted-foreground mb-4">
                       Use este vídeo persuasivo para gerar interesse nos grupos:
                     </p>
-                    <div className="relative rounded-xl overflow-hidden bg-black aspect-[9/16] max-w-[280px] mx-auto border border-primary/10 mb-4">
+                    <div className="relative rounded-xl overflow-hidden bg-black aspect-video w-full max-w-3xl mx-auto border border-primary/10 mb-4">
                       <video 
                         src={videoDivulgacao.url}
                         poster={videoDivulgacaoPoster.url}
