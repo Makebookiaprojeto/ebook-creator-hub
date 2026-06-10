@@ -42,7 +42,8 @@ import { toast } from "sonner";
 import { useEbooks } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
 import { EbookPreview } from "@/components/EbookPreview";
-import videoDivulgacao from "@/assets/video-divulgacao.mp4.asset.json";
+import videoDivulgacao from "@/assets/video-divulgacao-anexado.mp4.asset.json";
+import videoDivulgacaoPoster from "@/assets/video-divulgacao-poster.jpg.asset.json";
 
 const steps = ["Nicho", "Preço", "Ebook", "Página de Vendas", "Divulgação"];
 const pricePresets = [19.9, 29.9, 39.9, 49.9];
@@ -800,10 +801,11 @@ export function CreateEbookView() {
                     <p className="text-sm text-muted-foreground mb-4">
                       Use este vídeo persuasivo para gerar interesse nos grupos:
                     </p>
-                    <div className="relative rounded-xl overflow-hidden bg-black aspect-[9/16] max-w-[280px] mx-auto border border-primary/10 mb-4">
+                    <div className="relative rounded-xl overflow-hidden bg-black aspect-video w-full max-w-3xl mx-auto border border-primary/10 mb-4">
                       <video 
                         src={videoDivulgacao.url}
-                        className="w-full h-full object-contain"
+                        poster={videoDivulgacaoPoster.url}
+                        className="w-full h-full object-contain bg-black"
                         controls
                         playsInline
                         preload="metadata"
