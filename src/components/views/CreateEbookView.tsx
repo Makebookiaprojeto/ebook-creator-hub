@@ -42,8 +42,8 @@ import { toast } from "sonner";
 import { useEbooks } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
 import { EbookPreview } from "@/components/EbookPreview";
-import videoDivulgacao from "@/assets/video-divulgacao-anexado.mp4.asset.json";
-import videoDivulgacaoPoster from "@/assets/video-divulgacao-poster.jpg.asset.json";
+import videoDivulgacao from "@/assets/video-divulgacao-v3.mp4.asset.json";
+import videoDivulgacaoPoster from "@/assets/video-divulgacao-poster-v3.jpg.asset.json";
 
 const steps = ["Nicho", "Preço", "Ebook", "Página de Vendas", "Divulgação"];
 const pricePresets = [19.9, 29.9, 39.9, 49.9];
@@ -807,8 +807,11 @@ export function CreateEbookView() {
                         poster={videoDivulgacaoPoster.url}
                         className="w-full h-full object-contain bg-black"
                         controls
+                        autoPlay
+                        muted
+                        loop
                         playsInline
-                        preload="metadata"
+                        preload="auto"
                       />
                     </div>
                     <Button 
