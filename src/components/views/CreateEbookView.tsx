@@ -30,6 +30,8 @@ const niches = [
   { name: "Empreendedorismo", emoji: "🚀", desc: "Negócios, gestão, vendas" },
   { name: "Idiomas", emoji: "🌍", desc: "Inglês, espanhol fluente" },
   { name: "Viagens", emoji: "✈️", desc: "Roteiros, mochilão, dicas" },
+  { name: "Arquitetura e Decoração", emoji: "🏠", desc: "Design de interiores, organização" },
+  { name: "Moda e Estilo", emoji: "👗", desc: "Consultoria de imagem, tendências" },
 ];
 
 const testimonials = [
