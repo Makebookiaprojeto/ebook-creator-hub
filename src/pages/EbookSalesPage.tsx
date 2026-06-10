@@ -211,7 +211,7 @@ export default function EbookSalesPage() {
               const displayChapters = chaptersList.length > 0 ? chaptersList : chapters;
               if (displayChapters.length > 0) {
                 return displayChapters.map((chapter: any, i: number) => (
-                  <div key={chapter.id} className="group p-8 bg-white rounded-[2rem] border border-gray-100 shadow-sm hover:border-orange-500/20 transition-all">
+                  <div key={chapter.id || i} className="group p-8 bg-white rounded-[2rem] border border-gray-100 shadow-sm hover:border-orange-500/20 transition-all">
                     <div className="flex items-start justify-between mb-8">
                        <div className="h-12 w-12 bg-gray-50 rounded-full flex items-center justify-center font-black text-[#1E3A5F] opacity-40 group-hover:bg-orange-500 group-hover:text-white transition-colors">
                          {String(i + 1).padStart(2, '0')}
