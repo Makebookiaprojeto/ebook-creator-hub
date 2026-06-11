@@ -75,13 +75,13 @@ export default function EbookSalesPage() {
     })();
   }, [slug]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin h-10 w-10 text-orange-500" /></div>;
-  if (!ebook) return <div className="min-h-screen flex items-center justify-center bg-white">eBook não encontrado.</div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-background"><Loader2 className="animate-spin h-10 w-10 text-primary" /></div>;
+  if (!ebook) return <div className="min-h-screen flex items-center justify-center bg-background">eBook não encontrado.</div>;
 
   const price = formatPrice(ebook.price_cents);
 
   return (
-    <div className="min-h-screen bg-[#FFFFFF] text-[#111111] font-sans overflow-x-hidden selection:bg-orange-500 selection:text-white">
+    <div className="min-h-screen bg-background text-foreground font-sans overflow-x-hidden selection:bg-primary selection:text-background">
       {/* 1. HERO PREMIUM */}
       <section className="relative pt-32 pb-40 overflow-hidden">
         <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[800px] h-[800px] bg-orange-100/40 rounded-full blur-[120px] -z-10" />
