@@ -41,7 +41,7 @@ export default function EbookSalesPage() {
   const { slug } = useParams<{ slug: string }>();
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
-  const [ebook, setEbook] = useState<Ebook | null>(null);
+  const [ebook, setEbook] = useState<any | null>(null);
   const [chapters, setChapters] = useState<Chapter[]>([]);
 
   const handleCheckout = async () => {
