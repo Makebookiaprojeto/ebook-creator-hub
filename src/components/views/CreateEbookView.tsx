@@ -193,6 +193,8 @@ export function CreateEbookView() {
       if (eb.slug) {
         setCreatedEbookSlug(eb.slug);
         setEbookLink(`${window.location.origin}/e/${eb.slug}`);
+      } else {
+        setEbookLink(`${window.location.origin}/e/ebook-${Math.random().toString(36).substring(2, 7)}`);
       }
 
       const prog: any = eb.generation_progress ?? {};
