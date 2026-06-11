@@ -774,7 +774,7 @@ export function CreateEbookView() {
                     >
                       <span className="flex items-center gap-2">
                         <Search className="h-4 w-4" />
-                        Buscar melhores grupos relacionados a "{niche}" no Facebook
+                        {niche ? `Buscar melhores grupos relacionados a "${niche}" no Facebook` : "Buscar melhores grupos no Facebook"}
                       </span>
                       <ExternalLink className="h-4 w-4" />
                     </Button>
