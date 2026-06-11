@@ -31,13 +31,13 @@ function renderContent(content: string) {
     if (trimmed.split("\n").every((l) => /^\s*[-•]\s+/.test(l))) {
       const items = trimmed.split("\n").map((l) => l.replace(/^\s*[-•]\s+/, ""));
       return (
-        <ul key={i} className="my-4 ml-6 list-disc space-y-2 text-base leading-relaxed text-slate-800">
+        <ul key={i} className="my-4 ml-6 list-disc space-y-2 text-base leading-relaxed text-muted-foreground">
           {items.map((it, j) => <li key={j}>{it}</li>)}
         </ul>
       );
     }
     return (
-      <p key={i} className="text-base leading-relaxed text-slate-700 mb-4">
+      <p key={i} className="text-base leading-relaxed text-muted-foreground mb-4">
         {trimmed}
       </p>
     );
@@ -81,14 +81,14 @@ export function EbookPreview({ title, subtitle, coverUrl, chapters, pdfUrl, show
 
         {/* Chapters */}
         {displayedChapters.map((c, i) => (
-          <article key={i} className="rounded-xl bg-white border p-8 sm:p-12 shadow-soft overflow-hidden">
+          <article key={i} className="rounded-xl bg-card border p-8 sm:p-12 shadow-soft overflow-hidden">
             <div className="flex flex-col md:flex-row gap-8">
               <div className="flex-1">
                 <p className="text-xs font-bold uppercase tracking-widest text-primary/80">Capítulo {i + 1}</p>
-                <h3 className="mt-2 font-display text-3xl font-bold leading-tight text-slate-900">{c.title}</h3>
-                {c.subtitle && <p className="mt-2 text-md font-medium text-slate-500 italic">{c.subtitle}</p>}
+                <h3 className="mt-2 font-display text-3xl font-bold leading-tight text-foreground">{c.title}</h3>
+                {c.subtitle && <p className="mt-2 text-md font-medium text-muted-foreground italic">{c.subtitle}</p>}
                 
-                <div className="mt-8 prose prose-slate max-w-none">
+                <div className="mt-8 prose prose-invert max-w-none">
                   {renderContent(c.content || "_(gerando…)_")}
                 </div>
               </div>
@@ -99,7 +99,7 @@ export function EbookPreview({ title, subtitle, coverUrl, chapters, pdfUrl, show
                     <img
                       src={c.image_url}
                       alt={c.title}
-                      className="w-full aspect-[3/4] object-cover rounded-xl shadow-lg border-4 border-white"
+                      className="w-full aspect-[3/4] object-cover rounded-xl shadow-lg border-4 border-card"
                     />
                     <div className="mt-2 h-1.5 w-full bg-primary/20 rounded-full overflow-hidden">
                       <div className="h-full bg-primary w-1/3" />
