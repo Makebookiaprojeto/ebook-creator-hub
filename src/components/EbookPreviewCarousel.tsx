@@ -85,8 +85,8 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
   };
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto">
-      <div className="overflow-hidden rounded-2xl border bg-white shadow-xl min-h-[600px] flex flex-col relative">
+    <div className="relative w-full max-w-4xl mx-auto">
+      <div className="overflow-hidden rounded-2xl border bg-white shadow-xl min-h-[750px] sm:min-h-[850px] flex flex-col relative">
         <div className="flex-1 relative overflow-hidden">
           <AnimatePresence initial={false} custom={direction}>
             <motion.div
