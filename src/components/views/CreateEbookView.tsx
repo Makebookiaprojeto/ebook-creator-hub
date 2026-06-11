@@ -44,6 +44,7 @@ import { toast } from "sonner";
 import { useEbooks } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
 import { EbookPreview } from "@/components/EbookPreview";
+import { EbookPreviewCarousel } from "@/components/EbookPreviewCarousel";
 import videoDivulgacao from "@/assets/video-divulgacao-v3.mp4.asset.json";
 import videoDivulgacaoPoster from "@/assets/video-divulgacao-poster-v3.jpg.asset.json";
 
