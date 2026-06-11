@@ -224,7 +224,6 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
           <ChevronRight className="h-6 w-6 sm:h-8 sm:w-8" />
         </Button>
       </div>
-      </div>
       
       <p className="text-center mt-4 text-xs text-muted-foreground font-medium uppercase tracking-widest">
         Página {page + 1} de {totalPages} • Use as setas para navegar
