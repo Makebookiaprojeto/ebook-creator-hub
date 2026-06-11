@@ -111,10 +111,10 @@ export function AppSidebar({ active, onChange }: Props) {
                       className={
                         isActive
                           ? isCreateAction 
-                            ? "bg-[#22C55E] text-white font-bold shadow-lg hover:bg-[#16a34a]"
+                            ? "bg-primary text-background font-bold shadow-lg hover:bg-primary/90"
                             : "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                           : isCreateAction
-                            ? "bg-[#22C55E] text-white font-bold shadow-lg hover:bg-[#16a34a]"
+                            ? "bg-primary text-background font-bold shadow-lg hover:bg-primary/90"
                             : "hover:bg-sidebar-accent/60"
                       }
                     >
