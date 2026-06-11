@@ -738,12 +738,6 @@ export function CreateEbookView() {
               <div>
                 <h2 className="font-display text-xl font-semibold">Divulgação</h2>
                 <p className="mt-1 text-sm text-muted-foreground">Encontre os melhores grupos para divulgar seu produto.</p>
-                <div className="mt-6 rounded-2xl border bg-muted/30 p-5">
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <Input placeholder="Digite o nicho do seu Ebook" value={searchTopic} onChange={(e) => setSearchTopic(e.target.value)} />
-                    <Button onClick={() => { if (!searchTopic.trim()) return toast.error("Digite o assunto"); setSearchedGroups([{ name: "Ready", members: 0, engagement: "" }]); toast.success("Links gerados!"); }} className="gradient-primary text-primary-foreground shadow-glow"><Zap className="mr-2 h-4 w-4" /> Gerar Links</Button>
-                  </div>
-                </div>
 
                 <motion.div 
                   initial={{ opacity: 0, y: 10 }}
@@ -761,11 +755,11 @@ export function CreateEbookView() {
                     <Button 
                       variant="outline"
                       className="w-full justify-between hover:bg-primary/5 border-primary/20"
-                      onClick={() => window.open(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(searchTopic)}`, '_blank')}
+                      onClick={() => window.open(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(niche)}`, '_blank')}
                     >
                       <span className="flex items-center gap-2">
                         <Search className="h-4 w-4" />
-                        Buscar melhores grupos relacionados a "{searchTopic}" no Facebook
+                        Buscar melhores grupos relacionados a "{niche}" no Facebook
                       </span>
                       <ExternalLink className="h-4 w-4" />
                     </Button>
