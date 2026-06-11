@@ -131,15 +131,15 @@ export default function EbookSalesPage() {
       </section>
 
       {/* 2. APRESENTAÇÃO */}
-      <section className="py-24 bg-gray-50/50 border-y border-gray-100">
+      <section className="py-24 bg-card/50 border-y border-border">
         <div className="container mx-auto px-6 max-w-4xl">
           <div className="text-center space-y-8">
             <h2 className="text-4xl lg:text-5xl font-black leading-tight">Um produto desenhado para encantar.</h2>
-            <p className="text-xl text-[#1E3A5F] leading-relaxed font-medium mx-auto max-w-2xl">Cada página foi estruturada para garantir a melhor experiência de aprendizado, com visual moderno e conteúdo de fácil absorção.</p>
+            <p className="text-xl text-muted-foreground leading-relaxed font-medium mx-auto max-w-2xl">Cada página foi estruturada para garantir a melhor experiência de aprendizado, com visual moderno e conteúdo de fácil absorção.</p>
             <div className="flex flex-wrap justify-center gap-8 pt-4">
               {["Design Ultra-Moderno", "Diagramação Profissional", "Visualização em Qualquer Dispositivo"].map((item, i) => (
                 <div key={i} className="flex items-center gap-3 text-lg font-bold">
-                   <div className="h-6 w-6 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0"><Check size={14} className="text-white" /></div>
+                   <div className="h-6 w-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0"><Check size={14} className="text-background" /></div>
                    {item}
                 </div>
               ))}
@@ -149,11 +149,11 @@ export default function EbookSalesPage() {
       </section>
 
       {/* 4. BENEFÍCIOS (8-12 CARDS) */}
-      <section className="py-32 bg-white">
+      <section className="py-32 bg-background">
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
             <h2 className="text-5xl font-black tracking-tight">Vantagens Exclusivas</h2>
-            <p className="text-xl text-[#1E3A5F] font-medium">O que você ganha ao garantir este guia profissional hoje.</p>
+            <p className="text-xl text-muted-foreground font-medium">O que você ganha ao garantir este guia profissional hoje.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
@@ -169,13 +169,13 @@ export default function EbookSalesPage() {
               <motion.div 
                 key={i} 
                 whileHover={{ y: -10 }} 
-                className="p-8 bg-[#FFF7ED] rounded-3xl border border-orange-100/50 shadow-[0_10px_30px_-15px_rgba(249,115,22,0.1)] hover:shadow-[0_20px_40px_-15px_rgba(249,115,22,0.2)] transition-all"
+                className="p-8 bg-card rounded-3xl border border-border/50 shadow-[0_10px_30px_-15px_rgba(0,255,102,0.1)] hover:shadow-[0_20px_40px_-15px_rgba(0,255,102,0.2)] transition-all"
               >
-                <div className="h-16 w-16 bg-orange-50 rounded-2xl flex items-center justify-center mb-8">
-                  <benefit.icon className="h-8 w-8 text-orange-500" />
+                <div className="h-16 w-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-8">
+                  <benefit.icon className="h-8 w-8 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-4">{benefit.title}</h3>
-                <p className="text-[#1E3A5F] leading-relaxed">{benefit.desc}</p>
+                <p className="text-muted-foreground leading-relaxed">{benefit.desc}</p>
               </motion.div>
             ))}
           </div>
