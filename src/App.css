@@ -35,7 +35,7 @@
 
 .card {
   padding: 2em;
-  @apply shadow-green;
+  box-shadow: var(--shadow-glow);
 }
 
 .read-the-docs {
