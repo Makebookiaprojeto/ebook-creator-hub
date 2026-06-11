@@ -4,7 +4,9 @@ import {
   ArrowLeft, ArrowRight, Check, Sparkles, Loader2, Copy, Users, Rocket,
   Search, ChevronDown, Star, Flame, ShieldCheck, Clock, Zap, Quote, Download, FileText, Eye,
   BookOpen, MousePointer2, Target, Layout, Award, Lock as LockIcon, ArrowRight as ArrowRightIcon,
-  TrendingUp, ExternalLink, Video
+  TrendingUp, ExternalLink, Video,
+  Dumbbell, Utensils, Baby, Dog, Sparkle, GraduationCap, Laptop, Palette, Briefcase, Languages, Map, Home, Shirt,
+  Heart, Wallet, Brain, HeartPulse
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,26 +14,26 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 
 const niches = [
-  { name: "Emagrecimento", emoji: "🔥", desc: "Alta demanda, ticket médio R$47" },
-  { name: "Renda extra", emoji: "💰", desc: "Público engajado, conversão alta" },
-  { name: "Marketing digital", emoji: "📈", desc: "Ticket alto, R$97-197" },
-  { name: "Relacionamentos", emoji: "💕", desc: "Mercado emocional forte" },
-  { name: "Desenvolvimento pessoal", emoji: "🧠", desc: "Crescimento constante" },
-  { name: "Finanças", emoji: "💵", desc: "Profissional, ticket alto" },
-  { name: "Saúde mental", emoji: "🧘", desc: "Ansiedade, sono, foco" },
-  { name: "Fitness e musculação", emoji: "💪", desc: "Hipertrofia, treinos" },
-  { name: "Receitas e culinária", emoji: "🍳", desc: "Low carb, fit, doces" },
-  { name: "Maternidade", emoji: "👶", desc: "Gestação, sono do bebê" },
-  { name: "Pets", emoji: "🐶", desc: "Adestramento, cuidados" },
-  { name: "Espiritualidade", emoji: "✨", desc: "Tarô, astrologia, fe" },
-  { name: "Estudos e concursos", emoji: "📚", desc: "ENEM, OAB, vestibular" },
-  { name: "Tecnologia e programação", emoji: "💻", desc: "Dev, IA, no-code" },
-  { name: "Beleza e autocuidado", emoji: "💄", desc: "Skincare, cabelo, makeup" },
-  { name: "Empreendedorismo", emoji: "🚀", desc: "Negócios, gestão, vendas" },
-  { name: "Idiomas", emoji: "🌍", desc: "Inglês, espanhol fluente" },
-  { name: "Viagens", emoji: "✈️", desc: "Roteiros, mochilão, dicas" },
-  { name: "Arquitetura e Decoração", emoji: "🏠", desc: "Design de interiores, organização" },
-  { name: "Moda e Estilo", emoji: "👗", desc: "Consultoria de imagem, tendências" },
+  { name: "Emagrecimento", emoji: "🔥", icon: Flame, desc: "Alta demanda, ticket médio R$47" },
+  { name: "Renda extra", emoji: "💰", icon: Wallet, desc: "Público engajado, conversão alta" },
+  { name: "Marketing digital", icon: Rocket, emoji: "📈", desc: "Ticket alto, R$97-197" },
+  { name: "Relacionamentos", emoji: "💕", icon: Heart, desc: "Mercado emocional forte" },
+  { name: "Desenvolvimento pessoal", emoji: "🧠", icon: Brain, desc: "Crescimento constante" },
+  { name: "Finanças", emoji: "💵", icon: Wallet, desc: "Profissional, ticket alto" },
+  { name: "Saúde mental", emoji: "🧘", icon: HeartPulse, desc: "Ansiedade, sono, foco" },
+  { name: "Fitness e musculação", emoji: "💪", icon: Dumbbell, desc: "Hipertrofia, treinos" },
+  { name: "Receitas e culinária", emoji: "🍳", icon: Utensils, desc: "Low carb, fit, doces" },
+  { name: "Maternidade", emoji: "👶", icon: Baby, desc: "Gestação, sono do bebê" },
+  { name: "Pets", emoji: "🐶", icon: Dog, desc: "Adestramento, cuidados" },
+  { name: "Espiritualidade", emoji: "✨", icon: Sparkle, desc: "Tarô, astrologia, fe" },
+  { name: "Estudos e concursos", emoji: "📚", icon: GraduationCap, desc: "ENEM, OAB, vestibular" },
+  { name: "Tecnologia e programação", emoji: "💻", icon: Laptop, desc: "Dev, IA, no-code" },
+  { name: "Beleza e autocuidado", emoji: "💄", icon: Palette, desc: "Skincare, cabelo, makeup" },
+  { name: "Empreendedorismo", emoji: "🚀", icon: Briefcase, desc: "Negócios, gestão, vendas" },
+  { name: "Idiomas", emoji: "🌍", icon: Languages, desc: "Inglês, espanhol fluente" },
+  { name: "Viagens", emoji: "✈️", icon: Map, desc: "Roteiros, mochilão, dicas" },
+  { name: "Arquitetura e Decoração", emoji: "🏠", icon: Home, desc: "Design de interiores, organização" },
+  { name: "Moda e Estilo", emoji: "👗", icon: Shirt, desc: "Consultoria de imagem, tendências" },
 ];
 
 const testimonials = [
@@ -411,23 +413,27 @@ export function CreateEbookView() {
               <div>
                 <h2 className="font-display text-xl font-semibold">Selecione um nicho</h2>
                 <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-5">
-                  {niches.map((n) => (
-                    <button
-                      key={n.name}
-                      onClick={() => setNiche(n.name)}
-                      className={`group rounded-lg border px-3 py-2 text-center transition-all hover:shadow-sm hover:-translate-y-0.5 min-h-[48px] flex items-center justify-center ${
-                        niche === n.name 
-                          ? "border-primary bg-primary text-primary-foreground shadow-glow" 
-                          : "bg-card border-border hover:border-primary/50"
-                      }`}
-                    >
-                      <p className={`font-medium text-xs sm:text-sm leading-tight ${
-                        niche === n.name ? "text-primary-foreground" : "text-foreground"
-                      }`}>
-                        {n.name}
-                      </p>
-                    </button>
-                  ))}
+                  {niches.map((n) => {
+                    const Icon = n.icon;
+                    return (
+                      <button
+                        key={n.name}
+                        onClick={() => setNiche(n.name)}
+                        className={`group rounded-lg border px-3 py-3 text-center transition-all hover:shadow-sm hover:-translate-y-0.5 min-h-[64px] flex flex-col items-center justify-center gap-2 ${
+                          niche === n.name 
+                            ? "border-primary bg-primary text-primary-foreground shadow-glow" 
+                            : "bg-card border-border hover:border-primary/50"
+                        }`}
+                      >
+                        {Icon && <Icon className={`h-5 w-5 ${niche === n.name ? "text-primary-foreground" : "text-primary"}`} />}
+                        <p className={`font-medium text-xs sm:text-sm leading-tight ${
+                          niche === n.name ? "text-primary-foreground" : "text-foreground"
+                        }`}>
+                          {n.name}
+                        </p>
+                      </button>
+                    );
+                  })}
                 </div>
                 <div className="mt-8">
                   <label className="text-sm font-semibold">Quem é o público-alvo do seu ebook?</label>
