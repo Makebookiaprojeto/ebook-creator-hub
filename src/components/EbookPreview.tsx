@@ -51,7 +51,7 @@ export function EbookPreview({ title, subtitle, coverUrl, chapters, pdfUrl, show
     <div className="rounded-2xl border bg-muted/20 p-4 sm:p-6">
       <div className="mx-auto max-w-2xl space-y-6">
         {/* Cover page */}
-        <div className="aspect-[2/3] rounded-xl overflow-hidden shadow-2xl bg-gradient-to-br from-primary/80 to-primary relative">
+        <div className="aspect-[2/3] rounded-xl overflow-hidden shadow-2xl bg-background relative">
           {coverUrl ? (
             <img src={coverUrl} alt={title} className="absolute inset-0 h-full w-full object-cover" />
           ) : (
