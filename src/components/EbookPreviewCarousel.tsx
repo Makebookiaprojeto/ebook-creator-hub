@@ -130,10 +130,10 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
                     <ol className="space-y-5">
                       {chapters.map((c, i) => (
                         <li key={i} className="flex items-center gap-4 text-slate-700">
-                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-sm">
+                          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-base">
                             {String(i + 1).padStart(2, "0")}
                           </span>
-                          <span className="font-medium text-base truncate">{c.title}</span>
+                          <span className="font-medium text-lg truncate">{c.title}</span>
                           <div className="flex-1 border-b border-dotted border-slate-300 mx-2" />
                           <span className="text-slate-400 text-sm">pág. {i + 3}</span>
                         </li>
