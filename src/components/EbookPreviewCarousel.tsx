@@ -125,9 +125,9 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
 
               {page === 1 && (
                 <div className="h-full flex flex-col">
-                  <h3 className="font-display text-2xl font-bold text-slate-900 border-b pb-4 mb-6">Sumário</h3>
+                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-slate-900 border-b pb-4 mb-6">Sumário</h3>
                   <div className="flex-1">
-                    <ol className="space-y-4">
+                    <ol className="space-y-5">
                       {chapters.map((c, i) => (
                         <li key={i} className="flex items-center gap-4 text-slate-700">
                           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-sm">
