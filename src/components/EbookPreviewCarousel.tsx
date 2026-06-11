@@ -178,42 +178,43 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
         </div>
 
         {/* Footer Navigation */}
-        <div className="p-4 border-t flex items-center justify-between bg-slate-50">
+        <div className="p-4 border-t flex items-center justify-between bg-white">
           <Button
-            variant="ghost"
+            variant="outline"
             size="icon"
             onClick={() => paginate(-1)}
             disabled={page === 0}
-            className="rounded-full hover:bg-white hover:shadow-sm"
+            className="rounded-full h-10 w-10 border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-primary disabled:opacity-30 transition-all"
           >
             <ChevronLeft className="h-6 w-6" />
           </Button>
           
-          <div className="flex gap-1.5">
+          <div className="flex gap-1.5 px-4 overflow-x-auto no-scrollbar">
             {Array.from({ length: totalPages }).map((_, i) => (
-              <div
+              <button
                 key={i}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  i === page ? "w-6 bg-primary" : "w-1.5 bg-slate-300"
+                onClick={() => setPage([i, i > page ? 1 : -1])}
+                className={`h-1.5 rounded-full transition-all duration-300 shrink-0 ${
+                  i === page ? "w-6 bg-primary" : "w-1.5 bg-slate-200 hover:bg-slate-300"
                 }`}
               />
             ))}
           </div>
 
           <Button
-            variant="ghost"
+            variant="outline"
             size="icon"
             onClick={() => paginate(1)}
             disabled={page === totalPages - 1}
-            className="rounded-full hover:bg-white hover:shadow-sm"
+            className="rounded-full h-10 w-10 border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-primary disabled:opacity-30 transition-all"
           >
             <ChevronRight className="h-6 w-6" />
           </Button>
         </div>
       </div>
       
-      <p className="text-center mt-4 text-xs text-muted-foreground">
-        Página {page + 1} de {totalPages} • Use as setas para navegar na prévia
+      <p className="text-center mt-4 text-xs text-muted-foreground font-medium uppercase tracking-widest">
+        Página {page + 1} de {totalPages} • Use as setas para navegar
       </p>
     </div>
   );
