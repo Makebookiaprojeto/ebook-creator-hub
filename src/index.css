@@ -80,7 +80,7 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground text-base antialiased;
     font-feature-settings: "cv11", "ss01", "ss03";
     background-image:
       radial-gradient(circle at 15% 0%, hsl(142 70% 50% / 0.08), transparent 40%),
@@ -89,7 +89,12 @@
   }
 
   h1, h2, h3, h4 {
-    @apply tracking-tight;
+    @apply tracking-tight text-lg;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
   }
 }
 
