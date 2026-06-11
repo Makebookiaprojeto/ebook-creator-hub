@@ -770,11 +770,11 @@ export function CreateEbookView() {
                     <Button 
                       variant="outline"
                       className="w-full justify-between hover:bg-primary/5 border-primary/20"
-                      onClick={() => window.open(`https://www.facebook.com/search/groups/?q=${encodeURIComponent(niche)}`, '_blank')}
+                      onClick={() => window.open(`https://www.facebook.com/search/groups/?q=${encodeURIComponent(niche || "ebooks")}`, '_blank', 'noopener,noreferrer')}
                     >
                       <span className="flex items-center gap-2">
                         <Search className="h-4 w-4" />
-                        Buscar melhores grupos relacionados a "{niche}" no Facebook
+                        {niche ? `Buscar melhores grupos relacionados a "${niche}" no Facebook` : "Buscar melhores grupos no Facebook"}
                       </span>
                       <ExternalLink className="h-4 w-4" />
                     </Button>
