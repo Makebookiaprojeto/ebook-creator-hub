@@ -61,7 +61,7 @@ export function SupportView() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-        <div className="lg:col-span-3 rounded-2xl border bg-card p-6 shadow-soft">
+        <div className="lg:col-span-3 rounded-2xl border bg-card p-6 shadow-glow">
           <h2 className="font-display text-lg font-semibold">Perguntas frequentes</h2>
           <p className="text-sm text-muted-foreground">As dúvidas mais comuns dos nossos usuários.</p>
           <Accordion type="single" collapsible className="mt-4">
@@ -74,7 +74,7 @@ export function SupportView() {
           </Accordion>
         </div>
 
-        <div className="lg:col-span-2 rounded-2xl border bg-card p-6 shadow-soft">
+        <div className="lg:col-span-2 rounded-2xl border bg-card p-6 shadow-glow">
           <div className="flex items-center gap-2.5">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg gradient-primary text-primary-foreground">
               <MessageSquare className="h-4 w-4" />
