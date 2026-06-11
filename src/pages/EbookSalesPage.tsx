@@ -84,17 +84,17 @@ export default function EbookSalesPage() {
     <div className="min-h-screen bg-background text-foreground font-sans overflow-x-hidden selection:bg-primary selection:text-background">
       {/* 1. HERO PREMIUM */}
       <section className="relative pt-32 pb-40 overflow-hidden">
-        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[800px] h-[800px] bg-orange-100/40 rounded-full blur-[120px] -z-10" />
+        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] -z-10" />
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-center">
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="flex-1 space-y-10 relative z-10">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-50 text-orange-600 font-bold text-xs uppercase tracking-[0.2em] border border-orange-100">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary font-bold text-xs uppercase tracking-[0.2em] border border-primary/20">
                 <Sparkles size={14} /> Lançamento 2026
               </div>
-              <h1 className="text-6xl lg:text-8xl font-black tracking-tight leading-[0.9] text-[#111111]">
+              <h1 className="text-6xl lg:text-8xl font-black tracking-tight leading-[0.9] text-foreground">
                 {ebook.title}
               </h1>
-              <p className="text-2xl text-[#1E3A5F] leading-relaxed max-w-xl font-medium">
+              <p className="text-2xl text-muted-foreground leading-relaxed max-w-xl font-medium">
                 {ebook.subtitle || "Aprenda de forma prática e rápida com este guia definitivo desenvolvido por especialistas."}
               </p>
               <div className="flex flex-wrap items-center gap-8 pt-4">
@@ -102,18 +102,18 @@ export default function EbookSalesPage() {
                   size="lg" 
                   onClick={handleCheckout} 
                   disabled={checkoutLoading}
-                  className="h-20 px-12 text-xl font-black bg-[#F97316] hover:bg-[#EA580C] text-white rounded-full shadow-[0_20px_40px_-10px_rgba(249,115,22,0.3)] transition-all hover:scale-105 active:scale-95 flex items-center gap-3"
+                  className="h-20 px-12 text-xl font-black bg-primary hover:bg-primary/90 text-background rounded-full shadow-[0_20px_40px_-10px_rgba(0,255,102,0.3)] transition-all hover:scale-105 active:scale-95 flex items-center gap-3 border-none"
                 >
                   {checkoutLoading ? <Loader2 className="animate-spin" /> : <>OBTER ACESSO AGORA <ArrowRight /></>}
                 </Button>
                 <div className="text-left">
-                  <p className="text-sm text-[#1E3A5F] font-bold uppercase tracking-widest opacity-70">Oferta Exclusiva</p>
-                  <p className="text-4xl font-black text-[#111111]">{price}</p>
+                  <p className="text-sm text-muted-foreground font-bold uppercase tracking-widest opacity-70">Oferta Exclusiva</p>
+                  <p className="text-4xl font-black text-foreground">{price}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-6 pt-4 text-[#1E3A5F] font-bold text-sm">
-                <span className="flex items-center gap-2 uppercase tracking-tighter"><ShieldCheck size={18} className="text-green-500"/> Compra 100% Segura</span>
-                <span className="flex items-center gap-2 uppercase tracking-tighter"><Zap size={18} className="text-orange-500"/> Acesso Vitalício</span>
+              <div className="flex items-center gap-6 pt-4 text-muted-foreground font-bold text-sm">
+                <span className="flex items-center gap-2 uppercase tracking-tighter"><ShieldCheck size={18} className="text-primary"/> Compra 100% Segura</span>
+                <span className="flex items-center gap-2 uppercase tracking-tighter"><Zap size={18} className="text-primary"/> Acesso Vitalício</span>
               </div>
             </motion.div>
             
