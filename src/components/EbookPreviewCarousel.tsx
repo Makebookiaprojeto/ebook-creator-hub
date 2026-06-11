@@ -113,8 +113,8 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
                       </div>
                     )}
                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent p-6 pt-20">
-                      <h2 className="font-display text-2xl sm:text-3xl font-bold text-white leading-tight">{title}</h2>
-                      {subtitle && <p className="mt-2 text-sm text-white/80">{subtitle}</p>}
+                      <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">{title}</h2>
+                      {subtitle && <p className="mt-4 text-base sm:text-lg text-white/90">{subtitle}</p>}
                     </div>
                   </div>
                   <div className="text-center">
