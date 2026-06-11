@@ -87,8 +87,8 @@ const DownloadPage = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-slate-50">
-      <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-sm border text-center">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-background">
+      <div className="max-w-md w-full bg-card p-8 rounded-2xl shadow-sm border text-center">
         <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
           <Download className="w-8 h-8 text-primary" />
         </div>
