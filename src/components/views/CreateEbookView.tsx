@@ -408,18 +408,18 @@ export function CreateEbookView() {
             {step === 0 && (
               <div>
                 <h2 className="font-display text-xl font-semibold">Selecione um nicho</h2>
-                <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+                <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-5">
                   {niches.map((n) => (
                     <button
                       key={n.name}
                       onClick={() => setNiche(n.name)}
-                      className={`group rounded-xl border p-4 text-center transition-all hover:shadow-md hover:-translate-y-0.5 min-h-[80px] flex items-center justify-center ${
+                      className={`group rounded-lg border px-3 py-2 text-center transition-all hover:shadow-sm hover:-translate-y-0.5 min-h-[48px] flex items-center justify-center ${
                         niche === n.name 
                           ? "border-primary bg-primary text-primary-foreground shadow-glow" 
                           : "bg-card border-border hover:border-primary/50"
                       }`}
                     >
-                      <p className={`font-semibold text-sm sm:text-base leading-tight ${
+                      <p className={`font-medium text-xs sm:text-sm leading-tight ${
                         niche === n.name ? "text-primary-foreground" : "text-foreground"
                       }`}>
                         {n.name}
