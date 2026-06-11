@@ -66,7 +66,10 @@ export default function EbookSalesPage() {
   useEffect(() => {
     (async () => {
       if (!slug) return;
-      const { data: ebookData } = await (supabase.from("public_ebooks" as any).select("*").eq("slug", slug).maybeSingle() as any);
+      const { data: ebookData, error } = await supabase.from("public_ebooks").select("*").eq("slug", slug).maybeSingle();
+      if (error) {
+        console.error("Error fetching ebook:", error);
+      }
       if (!ebookData) { setLoading(false); return; }
       const { data: chData } = await supabase.from("chapters").select("*").eq("ebook_id", ebookData.id).order("order_index", { ascending: true });
       setEbook(ebookData);
