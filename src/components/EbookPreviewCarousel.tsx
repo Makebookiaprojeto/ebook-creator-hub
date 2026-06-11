@@ -163,7 +163,7 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
                         <img 
                           src={displayedChapters[page - 2].image_url} 
                           alt={displayedChapters[page - 2].title}
-                          className="w-full aspect-video object-cover"
+                          className="w-full aspect-video sm:aspect-[21/9] object-cover"
                         />
                       </div>
                     )}
