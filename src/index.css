@@ -154,4 +154,7 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  .shadow-green {
+    box-shadow: var(--shadow-glow);
+  }
 }
