@@ -549,99 +549,42 @@ export type Database = {
     Views: {
       public_ebooks: {
         Row: {
-          audience: string | null
-          author_name: string | null
-          cakto_checkout_url: string | null
-          cakto_product_id: string | null
-          category: string | null
           content_json: Json | null
           cover_url: string | null
           created_at: string | null
-          description: string | null
-          ebook_file_url: string | null
-          external_product_id: string | null
-          generation_error: string | null
-          generation_input: Json | null
-          generation_progress: Json | null
-          generation_status: string | null
           id: string | null
           is_public: boolean | null
-          is_template: boolean | null
-          niche: string | null
-          payment_platform: string | null
-          pdf_url: string | null
-          price: number | null
           price_cents: number | null
-          sales_pitch: string | null
           slug: string | null
           status: Database["public"]["Enums"]["ebook_status"] | null
           subtitle: string | null
           title: string | null
-          updated_at: string | null
           user_id: string | null
         }
         Insert: {
-          audience?: string | null
-          author_name?: string | null
-          cakto_checkout_url?: string | null
-          cakto_product_id?: string | null
-          category?: string | null
           content_json?: Json | null
           cover_url?: string | null
           created_at?: string | null
-          description?: string | null
-          ebook_file_url?: string | null
-          external_product_id?: string | null
-          generation_error?: string | null
-          generation_input?: Json | null
-          generation_progress?: Json | null
-          generation_status?: string | null
           id?: string | null
           is_public?: boolean | null
-          is_template?: boolean | null
-          niche?: string | null
-          payment_platform?: string | null
-          pdf_url?: string | null
-          price?: number | null
           price_cents?: number | null
-          sales_pitch?: string | null
           slug?: string | null
           status?: Database["public"]["Enums"]["ebook_status"] | null
           subtitle?: string | null
           title?: string | null
-          updated_at?: string | null
           user_id?: string | null
         }
         Update: {
-          audience?: string | null
-          author_name?: string | null
-          cakto_checkout_url?: string | null
-          cakto_product_id?: string | null
-          category?: string | null
           content_json?: Json | null
           cover_url?: string | null
           created_at?: string | null
-          description?: string | null
-          ebook_file_url?: string | null
-          external_product_id?: string | null
-          generation_error?: string | null
-          generation_input?: Json | null
-          generation_progress?: Json | null
-          generation_status?: string | null
           id?: string | null
           is_public?: boolean | null
-          is_template?: boolean | null
-          niche?: string | null
-          payment_platform?: string | null
-          pdf_url?: string | null
-          price?: number | null
           price_cents?: number | null
-          sales_pitch?: string | null
           slug?: string | null
           status?: Database["public"]["Enums"]["ebook_status"] | null
           subtitle?: string | null
           title?: string | null
-          updated_at?: string | null
           user_id?: string | null
         }
         Relationships: []

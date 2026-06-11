@@ -193,6 +193,8 @@ export function CreateEbookView() {
       if (eb.slug) {
         setCreatedEbookSlug(eb.slug);
         setEbookLink(`${window.location.origin}/e/${eb.slug}`);
+      } else {
+        setEbookLink(`${window.location.origin}/e/ebook-${Math.random().toString(36).substring(2, 7)}`);
       }
 
       const prog: any = eb.generation_progress ?? {};
@@ -705,7 +707,9 @@ export function CreateEbookView() {
                         if (!generatedEbookId) return toast.error("Gere o ebook primeiro");
                         setSaving(true);
                         try {
-                          await supabase.from("ebooks").update({ status: "published", is_public: true }).eq("id", generatedEbookId);
+                          const newSlug = `ebook-${Math.random().toString(36).substring(2, 7)}`;
+                          await supabase.from("ebooks").update({ status: "published", is_public: true, slug: newSlug }).eq("id", generatedEbookId);
+                          setEbookLink(`${window.location.origin}/e/${newSlug}`);
                           setIsPublished(true);
                           toast.success("Página publicada com sucesso! 🚀");
                         } catch (err) { toast.error("Erro ao publicar"); } finally { setSaving(false); }
