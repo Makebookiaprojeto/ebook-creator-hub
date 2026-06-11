@@ -765,18 +765,27 @@ export function CreateEbookView() {
                       Onde divulgar seu Ebook
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Clique no botão abaixo para encontrar grupos ativos no Facebook relacionados ao seu nicho:
+                      Digite o assunto para encontrar grupos ativos no Facebook:
                     </p>
+                    <div className="flex gap-2 mb-4">
+                      <Input 
+                        placeholder="Ex: Emagrecimento, Marketing Digital..." 
+                        value={searchTopic}
+                        onChange={(e) => setSearchTopic(e.target.value)}
+                        className="flex-1"
+                      />
+                    </div>
                     <Button 
-                      variant="outline"
-                      className="w-full justify-between hover:bg-primary/5 border-primary/20"
-                      onClick={() => window.open(`https://www.facebook.com/search/groups/?q=${encodeURIComponent(niche || "ebooks")}`, '_blank', 'noopener,noreferrer')}
+                      className="w-full gradient-primary text-primary-foreground shadow-glow gap-2"
+                      onClick={() => {
+                        const query = searchTopic || niche;
+                        if (!query) return toast.error("Digite um assunto para buscar");
+                        window.open(`https://www.facebook.com/search/groups/?q=${encodeURIComponent(query)}`, '_blank', 'noopener,noreferrer');
+                      }}
                     >
-                      <span className="flex items-center gap-2">
-                        <Search className="h-4 w-4" />
-                        {niche ? `Buscar melhores grupos relacionados a "${niche}" no Facebook` : "Buscar melhores grupos no Facebook"}
-                      </span>
-                      <ExternalLink className="h-4 w-4" />
+                      <Search className="h-4 w-4" />
+                      Buscar melhores grupos no Facebook
+                      <ExternalLink className="h-4 w-4 ml-1" />
                     </Button>
                   </div>
 
