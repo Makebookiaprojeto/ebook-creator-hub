@@ -240,31 +240,31 @@ export default function EbookSalesPage() {
       </section>
 
       {/* 7. TRANSFORMAÇÃO */}
-      <section className="py-32 bg-white">
+      <section className="py-32 bg-background">
         <div className="container mx-auto px-6 max-w-5xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-black tracking-tight mb-4">A Sua Transformação</h2>
-            <p className="text-xl text-[#1E3A5F] font-medium">O caminho exato que você vai percorrer.</p>
+            <p className="text-xl text-muted-foreground font-medium">O caminho exato que você vai percorrer.</p>
           </div>
-          <div className="grid md:grid-cols-2 gap-px bg-gray-100 rounded-[3rem] overflow-hidden shadow-2xl border border-gray-100">
-             <div className="bg-gray-50 p-16 space-y-8">
-                <div className="inline-block px-4 py-1 bg-red-50 text-red-500 font-black text-[10px] uppercase tracking-[0.2em] rounded-full">Situação Atual</div>
-                <h3 className="text-3xl font-black text-[#1E3A5F] opacity-40 italic">Antes do eBook</h3>
+          <div className="grid md:grid-cols-2 gap-px bg-border rounded-[3rem] overflow-hidden shadow-2xl border border-border">
+             <div className="bg-card p-16 space-y-8">
+                <div className="inline-block px-4 py-1 bg-destructive/10 text-destructive font-black text-[10px] uppercase tracking-[0.2em] rounded-full">Situação Atual</div>
+                <h3 className="text-3xl font-black text-muted-foreground opacity-40 italic">Antes do eBook</h3>
                 <ul className="space-y-6">
                    {["Insegurança nos processos", "Perda de tempo e energia", "Resultados estagnados", "Falta de metodologia"].map((item, i) => (
-                     <li key={i} className="flex items-center gap-4 text-[#1E3A5F] font-medium">
-                        <div className="h-5 w-5 bg-gray-200 rounded-full flex items-center justify-center text-[10px]">✕</div> {item}
+                     <li key={i} className="flex items-center gap-4 text-muted-foreground font-medium">
+                        <div className="h-5 w-5 bg-secondary rounded-full flex items-center justify-center text-[10px]">✕</div> {item}
                      </li>
                    ))}
                 </ul>
              </div>
-             <div className="bg-[#111111] p-16 space-y-8">
-                <div className="inline-block px-4 py-1 bg-orange-500/20 text-orange-500 font-black text-[10px] uppercase tracking-[0.2em] rounded-full">Nova Realidade</div>
-                <h3 className="text-3xl font-black text-white">Depois do eBook</h3>
+             <div className="bg-primary/5 p-16 space-y-8">
+                <div className="inline-block px-4 py-1 bg-primary/20 text-primary font-black text-[10px] uppercase tracking-[0.2em] rounded-full">Nova Realidade</div>
+                <h3 className="text-3xl font-black text-foreground">Depois do eBook</h3>
                 <ul className="space-y-6">
                    {["Domínio total das ferramentas", "Alta performance constante", "Crescimento acelerado", "Estratégia comprovada"].map((item, i) => (
-                     <li key={i} className="flex items-center gap-4 text-white font-medium">
-                        <div className="h-5 w-5 bg-orange-500 rounded-full flex items-center justify-center"><Check size={10} className="text-white"/></div> {item}
+                     <li key={i} className="flex items-center gap-4 text-foreground font-medium">
+                        <div className="h-5 w-5 bg-primary rounded-full flex items-center justify-center"><Check size={10} className="text-background"/></div> {item}
                      </li>
                    ))}
                 </ul>
