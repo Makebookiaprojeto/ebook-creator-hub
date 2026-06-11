@@ -118,9 +118,9 @@ export default function EbookSalesPage() {
             </motion.div>
             
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="flex-1 w-full max-w-[500px] relative z-10">
-              <div className="absolute -inset-4 bg-orange-500/5 blur-2xl rounded-[3rem] -z-10" />
+              <div className="absolute -inset-4 bg-primary/10 blur-2xl rounded-[3rem] -z-10" />
               <div className="relative group perspective-1000">
-                <div className="relative transform-gpu transition-all duration-700 lg:hover:rotate-y-12 lg:hover:rotate-x-6 hover:-translate-y-4 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] rounded-[2.5rem] overflow-hidden aspect-[3/4.2]">
+                <div className="relative transform-gpu transition-all duration-700 lg:hover:rotate-y-12 lg:hover:rotate-x-6 hover:-translate-y-4 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] rounded-[2.5rem] overflow-hidden aspect-[3/4.2] border border-border">
                   <img src={ebook.cover_url || ""} alt={ebook.title} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-tr from-black/20 via-transparent to-white/10" />
                 </div>
