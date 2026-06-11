@@ -730,6 +730,11 @@ export function CreateEbookView() {
                       onClick={() => {
                         if (isPublished && ebookLink) {
                           window.open(ebookLink, '_blank');
+                        } else if (generatedEbookId) {
+                          // Se já foi gerado mas não necessariamente publicado com o slug final, 
+                          // usamos o slug que já deve existir no banco (ou o temporário salvo no estado)
+                          const finalLink = ebookLink || `${window.location.origin}/e/${createdEbookSlug}`;
+                          window.open(finalLink, '_blank');
                         } else {
                           const previewData = { title, subtitle, price, chapters: chapters.map(c => ({ title: c.title, content: c.content })) };
                           sessionStorage.setItem('ebook_preview_data', JSON.stringify(previewData));
@@ -737,7 +742,7 @@ export function CreateEbookView() {
                         }
                       }}
                     >
-                      <Eye className="h-4 w-4" /> {isPublished ? "Ver Página na Web" : "Ver na Web"}
+                      <Eye className="h-4 w-4" /> Ver na Web
                     </Button>
                   </div>
                 )}
