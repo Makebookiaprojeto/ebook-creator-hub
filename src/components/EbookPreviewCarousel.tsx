@@ -18,9 +18,9 @@ type Props = {
 };
 
 function renderPartialContent(content: string) {
-  // Take first 4-5 paragraphs or more blocks to fill the larger area
+  // Take first 3 paragraphs to fill the medium area
   const blocks = content.split(/\n\s*\n/).filter(b => b.trim().length > 0);
-  const previewBlocks = blocks.slice(0, 4); // Increased from 2 to 4 blocks
+  const previewBlocks = blocks.slice(0, 3); // Reduced from 4 to 3 blocks
   
   return (
     <div className="space-y-4">
@@ -34,12 +34,12 @@ function renderPartialContent(content: string) {
           );
         }
         return (
-          <p key={i} className="text-sm sm:text-base leading-relaxed text-slate-700">
+          <p key={i} className="text-sm leading-relaxed text-slate-700">
             {trimmed}
           </p>
         );
       })}
-      {blocks.length > 4 && (
+      {blocks.length > 3 && (
         <div className="pt-4 border-t border-dashed border-slate-200">
           <p className="text-xs italic text-slate-400">Continua no ebook completo...</p>
         </div>
@@ -85,8 +85,8 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
   };
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto">
-      <div className="overflow-hidden rounded-2xl border bg-white shadow-xl min-h-[750px] sm:min-h-[850px] flex flex-col relative">
+    <div className="relative w-full max-w-3xl mx-auto">
+      <div className="overflow-hidden rounded-2xl border bg-white shadow-xl min-h-[650px] sm:min-h-[700px] flex flex-col relative">
         <div className="flex-1 relative overflow-hidden">
           <AnimatePresence initial={false} custom={direction}>
             <motion.div
@@ -113,8 +113,8 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
                       </div>
                     )}
                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent p-6 pt-20">
-                      <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">{title}</h2>
-                      {subtitle && <p className="mt-4 text-base sm:text-lg text-white/90">{subtitle}</p>}
+                      <h2 className="font-display text-2xl sm:text-3xl font-bold text-white leading-tight">{title}</h2>
+                      {subtitle && <p className="mt-2 text-sm sm:text-base text-white/90">{subtitle}</p>}
                     </div>
                   </div>
                   <div className="text-center">
@@ -125,15 +125,15 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
 
               {page === 1 && (
                 <div className="h-full flex flex-col">
-                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-slate-900 border-b pb-4 mb-6">Sumário</h3>
+                  <h3 className="font-display text-2xl font-bold text-slate-900 border-b pb-4 mb-6">Sumário</h3>
                   <div className="flex-1">
-                    <ol className="space-y-5">
+                    <ol className="space-y-4">
                       {chapters.map((c, i) => (
                         <li key={i} className="flex items-center gap-4 text-slate-700">
-                          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-base">
+                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-sm">
                             {String(i + 1).padStart(2, "0")}
                           </span>
-                          <span className="font-medium text-lg truncate">{c.title}</span>
+                          <span className="font-medium text-base truncate">{c.title}</span>
                           <div className="flex-1 border-b border-dotted border-slate-300 mx-2" />
                           <span className="text-slate-400 text-sm">pág. {i + 3}</span>
                         </li>
@@ -146,12 +146,12 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
               {page >= 2 && (
                 <div className="h-full flex flex-col overflow-y-auto pr-2 custom-scrollbar">
                   <div className="mb-6">
-                    <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-primary mb-2">Capítulo {page - 1}</p>
-                    <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 leading-tight">
+                    <p className="text-xs font-bold uppercase tracking-widest text-primary mb-2">Capítulo {page - 1}</p>
+                    <h3 className="font-display text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
                       {displayedChapters[page - 2]?.title}
                     </h3>
                     {displayedChapters[page - 2]?.subtitle && (
-                      <p className="mt-3 text-base font-medium text-slate-500 italic">
+                      <p className="mt-2 text-sm sm:text-base font-medium text-slate-500 italic">
                         {displayedChapters[page - 2]?.subtitle}
                       </p>
                     )}
@@ -163,7 +163,7 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
                         <img 
                           src={displayedChapters[page - 2].image_url} 
                           alt={displayedChapters[page - 2].title}
-                          className="w-full aspect-video sm:aspect-[21/9] object-cover"
+                          className="w-full aspect-video object-cover"
                         />
                       </div>
                     )}
