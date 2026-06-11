@@ -34,14 +34,14 @@ function renderPartialContent(content: string) {
           );
         }
         return (
-          <p key={i} className="text-sm leading-relaxed text-slate-700">
+          <p key={i} className="text-sm leading-relaxed text-muted-foreground">
             {trimmed}
           </p>
         );
       })}
       {blocks.length > 3 && (
-        <div className="pt-4 border-t border-dashed border-slate-200">
-          <p className="text-xs italic text-slate-400">Continua no ebook completo...</p>
+        <div className="pt-4 border-t border-dashed border-border">
+          <p className="text-xs italic text-muted-foreground/60">Continua no ebook completo...</p>
         </div>
       )}
     </div>
@@ -86,7 +86,7 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
 
   return (
     <div className="relative w-full max-w-4xl mx-auto px-4 sm:px-12">
-      <div className="overflow-hidden rounded-2xl border bg-white shadow-xl min-h-[600px] sm:min-h-[700px] flex flex-col relative">
+      <div className="overflow-hidden rounded-2xl border bg-card shadow-xl min-h-[600px] sm:min-h-[700px] flex flex-col relative">
         <div className="flex-1 relative overflow-hidden">
           <AnimatePresence initial={false} custom={direction}>
             <motion.div
@@ -109,7 +109,7 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
                       <img 
                         src={coverUrl} 
                         alt={title} 
-                        className="absolute inset-0 h-full w-full object-contain bg-slate-900/10" 
+                        className="absolute inset-0 h-full w-full object-contain bg-background/50" 
                       />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center">
@@ -122,24 +122,24 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
                     </div>
                   </div>
                   <div className="text-center">
-                    <p className="text-xs text-slate-400 font-medium uppercase tracking-widest">Capa do Ebook</p>
+                    <p className="text-xs text-muted-foreground/60 font-medium uppercase tracking-widest">Capa do Ebook</p>
                   </div>
                 </div>
               )}
 
               {page === 1 && (
                 <div className="h-full flex flex-col">
-                  <h3 className="font-display text-2xl font-bold text-slate-900 border-b pb-4 mb-6">Sumário</h3>
+                  <h3 className="font-display text-2xl font-bold text-foreground border-b pb-4 mb-6">Sumário</h3>
                   <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
                     <ol className="space-y-4">
                       {chapters.map((c, i) => (
-                        <li key={i} className="flex items-center gap-4 text-slate-700">
+                        <li key={i} className="flex items-center gap-4 text-muted-foreground">
                           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-sm">
                             {String(i + 1).padStart(2, "0")}
                           </span>
                           <span className="font-medium text-base truncate">{c.title}</span>
-                          <div className="flex-1 border-b border-dotted border-slate-300 mx-2" />
-                          <span className="text-slate-400 text-sm">pág. {i + 3}</span>
+                          <div className="flex-1 border-b border-dotted border-border mx-2" />
+                          <span className="text-muted-foreground/50 text-sm">pág. {i + 3}</span>
                         </li>
                       ))}
                     </ol>
@@ -151,11 +151,11 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
                 <div className="h-full flex flex-col overflow-y-auto pr-2 custom-scrollbar">
                   <div className="mb-6">
                     <p className="text-xs font-bold uppercase tracking-widest text-primary mb-2">Capítulo {page - 1}</p>
-                    <h3 className="font-display text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
+                    <h3 className="font-display text-2xl sm:text-3xl font-bold text-foreground leading-tight">
                       {displayedChapters[page - 2]?.title}
                     </h3>
                     {displayedChapters[page - 2]?.subtitle && (
-                      <p className="mt-2 text-sm sm:text-base font-medium text-slate-500 italic">
+                      <p className="mt-2 text-sm sm:text-base font-medium text-muted-foreground italic">
                         {displayedChapters[page - 2]?.subtitle}
                       </p>
                     )}
@@ -163,7 +163,7 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
                   
                   <div className="flex-1">
                     {displayedChapters[page - 2]?.image_url && (
-                      <div className="mb-6 rounded-xl overflow-hidden shadow-md bg-slate-50">
+                      <div className="mb-6 rounded-xl overflow-hidden shadow-md bg-background">
                         <img 
                           src={displayedChapters[page - 2].image_url} 
                           alt={displayedChapters[page - 2].title}
@@ -171,7 +171,7 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
                         />
                       </div>
                     )}
-                    <div className="prose prose-slate max-w-none">
+                    <div className="prose prose-invert max-w-none">
                       {renderPartialContent(displayedChapters[page - 2]?.content || "_(gerando…)_")}
                     </div>
                   </div>
@@ -182,14 +182,14 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
         </div>
 
         {/* Footer Navigation Dots Only */}
-        <div className="p-4 border-t flex items-center justify-center bg-white">
+        <div className="p-4 border-t flex items-center justify-center bg-card">
           <div className="flex gap-1.5 px-4 overflow-x-auto no-scrollbar">
             {Array.from({ length: totalPages }).map((_, i) => (
               <button
                 key={i}
                 onClick={() => setPage([i, i > page ? 1 : -1])}
                 className={`h-1.5 rounded-full transition-all duration-300 shrink-0 ${
-                  i === page ? "w-6 bg-primary" : "w-1.5 bg-slate-200 hover:bg-slate-300"
+                  i === page ? "w-6 bg-primary" : "w-1.5 bg-muted hover:bg-muted-foreground/30"
                 }`}
                 aria-label={`Ir para página ${i + 1}`}
               />
@@ -205,7 +205,7 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
           size="icon"
           onClick={() => paginate(-1)}
           disabled={page === 0}
-          className="rounded-full h-10 w-10 sm:h-12 sm:w-12 border-slate-200 bg-white shadow-lg text-slate-600 hover:bg-slate-50 hover:text-primary disabled:opacity-30 transition-all"
+          className="rounded-full h-10 w-10 sm:h-12 sm:w-12 border-border bg-card shadow-lg text-muted-foreground hover:bg-secondary hover:text-primary disabled:opacity-30 transition-all"
           aria-label="Página anterior"
         >
           <ChevronLeft className="h-6 w-6 sm:h-8 sm:w-8" />
@@ -218,7 +218,7 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
           size="icon"
           onClick={() => paginate(1)}
           disabled={page === totalPages - 1}
-          className="rounded-full h-10 w-10 sm:h-12 sm:w-12 border-slate-200 bg-white shadow-lg text-slate-600 hover:bg-slate-50 hover:text-primary disabled:opacity-30 transition-all"
+          className="rounded-full h-10 w-10 sm:h-12 sm:w-12 border-border bg-card shadow-lg text-muted-foreground hover:bg-secondary hover:text-primary disabled:opacity-30 transition-all"
           aria-label="Próxima página"
         >
           <ChevronRight className="h-6 w-6 sm:h-8 sm:w-8" />

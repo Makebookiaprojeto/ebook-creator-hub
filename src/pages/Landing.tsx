@@ -34,9 +34,9 @@ const Landing = () => {
   }, [user, loading, navigate]);
 
   return (
-    <div className="min-h-screen bg-[#050505] text-foreground font-sans selection:bg-primary/30">
+    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/30">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-white/5 bg-black/60 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-border/10 bg-black/60 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
           <Link to="/" className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl overflow-hidden shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)]">
@@ -96,7 +96,7 @@ const Landing = () => {
         </section>
 
         {/* The Pain vs Solution */}
-        <section className="py-20 bg-white/5 border-y border-white/5">
+        <section className="py-20 bg-card/20 border-y border-border/10">
           <div className="mx-auto max-w-6xl px-4">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div>
@@ -284,7 +284,7 @@ const Landing = () => {
         </section>
 
         {/* FAQ Section simplified */}
-        <section className="py-24 border-t border-white/5 bg-white/[0.02]">
+        <section className="py-24 border-t border-border/10 bg-card/5">
           <div className="mx-auto max-w-3xl px-4 text-center">
             <MessageSquare className="h-12 w-12 text-primary/40 mx-auto mb-6" />
             <h2 className="font-display text-4xl font-bold mb-10 text-gradient-primary">Ainda com dúvida?</h2>
