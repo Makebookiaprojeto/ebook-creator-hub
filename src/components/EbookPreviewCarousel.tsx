@@ -18,9 +18,9 @@ type Props = {
 };
 
 function renderPartialContent(content: string) {
-  // Take first 2-3 paragraphs or first 500 characters
+  // Take first 4-5 paragraphs or more blocks to fill the larger area
   const blocks = content.split(/\n\s*\n/).filter(b => b.trim().length > 0);
-  const previewBlocks = blocks.slice(0, 2); // Show first 2 blocks
+  const previewBlocks = blocks.slice(0, 4); // Increased from 2 to 4 blocks
   
   return (
     <div className="space-y-4">
@@ -34,12 +34,12 @@ function renderPartialContent(content: string) {
           );
         }
         return (
-          <p key={i} className="text-sm leading-relaxed text-slate-700">
+          <p key={i} className="text-sm sm:text-base leading-relaxed text-slate-700">
             {trimmed}
           </p>
         );
       })}
-      {blocks.length > 2 && (
+      {blocks.length > 4 && (
         <div className="pt-4 border-t border-dashed border-slate-200">
           <p className="text-xs italic text-slate-400">Continua no ebook completo...</p>
         </div>
