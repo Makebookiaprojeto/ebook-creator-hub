@@ -75,8 +75,8 @@ export default function EbookSalesPage() {
     })();
   }, [slug]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-background"><Loader2 className="animate-spin h-10 w-10 text-primary" /></div>;
-  if (!ebook) return <div className="min-h-screen flex items-center justify-center bg-background">eBook não encontrado.</div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground"><Loader2 className="animate-spin h-10 w-10 text-primary" /></div>;
+  if (!ebook) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">eBook não encontrado.</div>;
 
   const price = formatPrice(ebook.price_cents);
 
@@ -118,11 +118,11 @@ export default function EbookSalesPage() {
             </motion.div>
             
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="flex-1 w-full max-w-[500px] relative z-10">
-              <div className="absolute -inset-4 bg-primary/10 blur-2xl rounded-[3rem] -z-10" />
+              <div className="absolute -inset-4 bg-primary/5 blur-2xl rounded-[3rem] -z-10" />
               <div className="relative group perspective-1000">
-                <div className="relative transform-gpu transition-all duration-700 lg:hover:rotate-y-12 lg:hover:rotate-x-6 hover:-translate-y-4 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] rounded-[2.5rem] overflow-hidden aspect-[3/4.2] border border-border">
+                <div className="relative transform-gpu transition-all duration-700 lg:hover:rotate-y-12 lg:hover:rotate-x-6 hover:-translate-y-4 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.4)] rounded-[2.5rem] overflow-hidden aspect-[3/4.2] border border-border">
                   <img src={ebook.cover_url || ""} alt={ebook.title} className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-tr from-black/20 via-transparent to-white/10" />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-white/5" />
                 </div>
               </div>
             </motion.div>
@@ -275,23 +275,23 @@ export default function EbookSalesPage() {
 
       {/* 9. OFERTA & CTA FINAL */}
       <section className="py-40 relative">
-        <div className="absolute inset-0 bg-gray-50/50 -z-10" />
+        <div className="absolute inset-0 bg-card/20 -z-10" />
         <div className="container mx-auto px-6 max-w-4xl text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="space-y-12">
             <h2 className="text-6xl lg:text-8xl font-black tracking-tight leading-none">Pronto para a sua nova fase?</h2>
-            <div className="relative p-12 lg:p-20 bg-white rounded-[4rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] border border-gray-50">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-8 py-3 bg-[#111111] text-white rounded-full text-xs font-black uppercase tracking-[0.3em]">Acesso Imediato</div>
-              <p className="text-2xl font-bold mb-8 text-[#1E3A5F]">Invista no seu futuro profissional hoje</p>
+            <div className="relative p-12 lg:p-20 bg-card rounded-[4rem] shadow-[0_50px_100px_-20px_rgba(0,255,102,0.1)] border border-border">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-8 py-3 bg-primary text-background rounded-full text-xs font-black uppercase tracking-[0.3em]">Acesso Imediato</div>
+              <p className="text-2xl font-bold mb-8 text-muted-foreground">Invista no seu futuro profissional hoje</p>
               <div className="flex flex-col items-center gap-2 mb-12">
-                <span className="text-[#1E3A5F] line-through text-2xl font-black opacity-30">R$ {ebook.price_cents ? (ebook.price_cents * 2.5 / 100).toFixed(2) : "0,00"}</span>
-                <p className="text-8xl lg:text-9xl font-black text-[#F97316] tracking-tighter leading-none">{price}</p>
-                <span className="text-[#1E3A5F] font-bold uppercase tracking-widest text-sm opacity-60">Preço único • Sem mensalidade</span>
+                <span className="text-muted-foreground line-through text-2xl font-black opacity-30">R$ {ebook.price_cents ? (ebook.price_cents * 2.5 / 100).toFixed(2) : "0,00"}</span>
+                <p className="text-8xl lg:text-9xl font-black text-primary tracking-tighter leading-none">{price}</p>
+                <span className="text-muted-foreground font-bold uppercase tracking-widest text-sm opacity-60">Preço único • Sem mensalidade</span>
               </div>
               <Button 
                 size="lg" 
                 onClick={handleCheckout} 
                 disabled={checkoutLoading}
-                className="h-24 w-full max-w-2xl text-2xl lg:text-3xl font-black bg-[#F97316] hover:bg-[#EA580C] text-white rounded-full shadow-[0_25px_50px_-12px_rgba(249,115,22,0.4)] transition-all hover:scale-105"
+                className="h-24 w-full max-w-2xl text-2xl lg:text-3xl font-black bg-primary hover:bg-primary/90 text-background rounded-full shadow-[0_25px_50px_-12px_rgba(0,255,102,0.4)] transition-all hover:scale-105 border-none"
               >
                 {checkoutLoading ? <Loader2 className="animate-spin" /> : "QUERO GARANTIR MINHA VAGA"}
               </Button>
@@ -303,24 +303,24 @@ export default function EbookSalesPage() {
                    { icon: Star, text: "Exclusivo" }
                  ].map((badge, i) => (
                     <div key={i} className="flex flex-col items-center gap-2">
-                       <div className="h-10 w-10 bg-gray-50 rounded-full flex items-center justify-center"><badge.icon size={18} className="text-[#1E3A5F]" /></div>
-                       <span className="text-[10px] font-black uppercase tracking-widest text-[#1E3A5F] opacity-70">{badge.text}</span>
+                       <div className="h-10 w-10 bg-secondary rounded-full flex items-center justify-center border border-border"><badge.icon size={18} className="text-primary" /></div>
+                       <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-70">{badge.text}</span>
                     </div>
-                  ))}
+                 ))}
               </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      <footer className="py-20 bg-white border-t border-gray-50">
+      <footer className="py-20 bg-background border-t border-border">
         <div className="container mx-auto px-6 text-center space-y-8">
            <div className="flex items-center justify-center gap-2 text-xl font-black tracking-tighter">
-             <div className="h-8 w-8 bg-orange-500 rounded-lg flex items-center justify-center"><BookOpen size={16} className="text-white" /></div>
+             <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center"><BookOpen size={16} className="text-background" /></div>
              PREMIUM EBOOKS
            </div>
-           <p className="text-[#1E3A5F] text-sm max-w-md mx-auto opacity-80">Desenvolvido para impulsionar sua carreira com o melhor conteúdo digital do mercado.</p>
-           <div className="pt-8 text-[10px] font-bold text-[#1E3A5F] uppercase tracking-[0.3em] opacity-40">
+           <p className="text-muted-foreground text-sm max-w-md mx-auto opacity-80">Desenvolvido para impulsionar sua carreira com o melhor conteúdo digital do mercado.</p>
+           <div className="pt-8 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em] opacity-40">
              © {new Date().getFullYear()} • Todos os direitos reservados
            </div>
         </div>
