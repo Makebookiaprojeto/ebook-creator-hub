@@ -275,8 +275,8 @@ export function DashboardView() {
         <p className="text-sm font-medium text-primary/70 italic">"{quote}"</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
-        <div className="md:col-span-5">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+        <div className="md:col-span-5 shadow-glow rounded-2xl">
           <StatCard 
             label="Lucro" 
             value={`R$ ${(profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} 
@@ -297,7 +297,7 @@ export function DashboardView() {
             }
           />
         </div>
-        <div className="md:col-span-3.5 flex flex-col gap-4 md:col-span-3">
+        <div className="md:col-span-3.5 flex flex-col gap-4 md:col-span-3 shadow-glow rounded-2xl">
           <StatCard 
             label="Ebooks" 
             value={String(totalEbooks)} 
@@ -305,7 +305,7 @@ export function DashboardView() {
             tint="from-primary/10 to-primary/5" 
           />
         </div>
-        <div className="md:col-span-3.5 flex flex-col gap-4 md:col-span-4">
+        <div className="md:col-span-3.5 flex flex-col gap-4 md:col-span-4 shadow-glow rounded-2xl">
           <StatCard 
             label="Vendas" 
             value={String(stats.totalSales)} 
@@ -316,7 +316,7 @@ export function DashboardView() {
         </div>
       </div>
 
-      <div className="rounded-2xl border bg-card p-8 shadow-soft">
+      <div className="rounded-2xl border bg-card p-8 shadow-glow">
         <div className="mb-8">
           <h2 className="font-display text-xl font-semibold flex items-center gap-2">
             <CreditCard className="h-5 w-5 text-primary" />
