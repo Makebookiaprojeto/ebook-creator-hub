@@ -146,12 +146,12 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
               {page >= 2 && (
                 <div className="h-full flex flex-col overflow-y-auto pr-2 custom-scrollbar">
                   <div className="mb-6">
-                    <p className="text-xs font-bold uppercase tracking-widest text-primary mb-2">Capítulo {page - 1}</p>
-                    <h3 className="font-display text-2xl font-bold text-slate-900 leading-tight">
+                    <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-primary mb-2">Capítulo {page - 1}</p>
+                    <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 leading-tight">
                       {displayedChapters[page - 2]?.title}
                     </h3>
                     {displayedChapters[page - 2]?.subtitle && (
-                      <p className="mt-2 text-sm font-medium text-slate-500 italic">
+                      <p className="mt-3 text-base font-medium text-slate-500 italic">
                         {displayedChapters[page - 2]?.subtitle}
                       </p>
                     )}
