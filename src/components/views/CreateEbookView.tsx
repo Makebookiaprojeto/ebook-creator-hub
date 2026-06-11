@@ -560,7 +560,7 @@ export function CreateEbookView() {
                 )}
 
                 {salesPageGenerated && (
-                  <motion.div key="sales-page-preview" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="mt-6 rounded-3xl border border-gray-100 bg-white overflow-hidden shadow-2xl relative">
+                  <motion.div key="sales-page-preview" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="mt-6 rounded-3xl border border-border bg-background overflow-hidden shadow-2xl relative">
                     <div className="min-h-screen bg-[#FFFFFF] text-[#111111] font-sans overflow-x-hidden selection:bg-orange-500 selection:text-white">
                       {/* 1. HERO PREMIUM */}
                       <section className="relative pt-16 pb-20 overflow-hidden">
@@ -613,7 +613,7 @@ export function CreateEbookView() {
                       </section>
 
                       {/* 4. BENEFÍCIOS */}
-                      <section className="py-16 bg-white">
+                      <section className="py-16 bg-background">
                         <div className="container mx-auto px-6 max-w-7xl">
                           <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
                             <h2 className="text-4xl font-black tracking-tight text-orange-950">Vantagens Exclusivas</h2>
@@ -643,7 +643,7 @@ export function CreateEbookView() {
                           <h2 className="text-4xl font-black text-center mb-12 tracking-tight text-orange-950">O que você vai aprender</h2>
                           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {(chapters.length > 0 ? chapters.slice(0, 6) : [...Array(6)]).map((ch, i) => (
-                              <div key={i} className="group p-6 bg-white rounded-[2rem] border border-orange-100 shadow-sm text-left">
+                              <div key={i} className="group p-6 bg-card rounded-[2rem] border border-border shadow-sm text-left">
                                 <div className="flex items-start justify-between mb-6">
                                    <div className="h-10 w-10 bg-orange-50 rounded-full flex items-center justify-center font-black text-orange-600">
                                      {String(i + 1).padStart(2, '0')}
@@ -662,7 +662,7 @@ export function CreateEbookView() {
                         <div className="container mx-auto px-6 max-w-4xl text-center">
                           <div className="space-y-8">
                             <h2 className="text-4xl lg:text-6xl font-black tracking-tight leading-none text-orange-950">Pronto para a sua nova fase?</h2>
-                            <div className="relative p-8 lg:p-12 bg-white rounded-[3rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] border border-orange-50">
+                            <div className="relative p-8 lg:p-12 bg-card rounded-[3rem] shadow-[0_30px_60px_-15px_rgba(0,255,102,0.1)] border border-border">
                               <p className="text-xl font-bold mb-6 text-orange-900">Invista no seu futuro profissional hoje</p>
                               <div className="flex flex-col items-center gap-2 mb-8">
                                 <span className="text-orange-900/30 line-through text-xl font-black">R$ {(price * 2.5).toFixed(2).replace(".", ",")}</span>
