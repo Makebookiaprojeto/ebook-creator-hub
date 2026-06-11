@@ -66,7 +66,7 @@ export default function EbookSalesPage() {
   useEffect(() => {
     (async () => {
       if (!slug) return;
-      const { data: ebookData, error } = await supabase.from("public_ebooks").select("*").eq("slug", slug).maybeSingle();
+      const { data: ebookData, error } = await supabase.from("ebooks").select("*").eq("slug", slug).maybeSingle();
       if (error) {
         console.error("Error fetching ebook:", error);
       }
