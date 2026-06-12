@@ -775,18 +775,35 @@ export function CreateEbookView() {
                         className="flex-1"
                       />
                     </div>
-                    <Button 
-                      className="w-full gradient-primary text-primary-foreground shadow-glow gap-2"
-                      onClick={() => {
-                        const query = searchTopic || niche;
-                        if (!query) return toast.error("Digite um assunto para buscar");
-                        window.open(`https://www.facebook.com/search/groups/?q=${encodeURIComponent(query)}`, '_blank', 'noopener,noreferrer');
-                      }}
-                    >
-                      <Search className="h-4 w-4" />
-                      Buscar melhores grupos no Facebook
-                      <ExternalLink className="h-4 w-4 ml-1" />
-                    </Button>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <Button 
+                        className="w-full gradient-primary text-primary-foreground shadow-glow gap-2"
+                        onClick={() => {
+                          const query = searchTopic || niche;
+                          if (!query) return toast.error("Digite um assunto para buscar");
+                          window.open(`https://www.facebook.com/groups/search/?q=${encodeURIComponent(query)}`, '_blank', 'noopener,noreferrer');
+                        }}
+                      >
+                        <Users className="h-4 w-4" />
+                        Buscar no Facebook
+                      </Button>
+                      
+                      <Button 
+                        variant="outline"
+                        className="w-full gap-2 border-primary/20 hover:bg-primary/5 transition-all"
+                        onClick={() => {
+                          const query = searchTopic || niche;
+                          if (!query) return toast.error("Digite um assunto para buscar");
+                          window.open(`https://www.google.com/search?q=site:facebook.com/groups+${encodeURIComponent(query)}`, '_blank', 'noopener,noreferrer');
+                        }}
+                      >
+                        <Search className="h-4 w-4" />
+                        Alternativa (Google)
+                      </Button>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground mt-3 text-center opacity-70">
+                      Dica: Se o Facebook bloquear a busca direta, a alternativa via Google costuma encontrar mais grupos ativos.
+                    </p>
                   </div>
 
                   <div className="rounded-2xl border bg-card p-5 shadow-sm">
