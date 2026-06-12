@@ -502,8 +502,7 @@ export function CreateEbookView() {
 
             {step === 2 && (
               <div>
-                <h2 className="text-foreground text-lg font-semibold">Seu ebook</h2>
-                <p className="text-muted-foreground text-sm mt-1">Prévia do ebook gerado com base no seu nicho.</p>
+                <h2 className="text-foreground text-lg font-semibold">Seu Ebook</h2>
                 
                 {generating && !generated && (
                   <div className="mt-10 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-center">
