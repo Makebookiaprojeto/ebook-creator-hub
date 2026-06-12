@@ -687,11 +687,14 @@ export function CreateEbookView() {
 
                   <div className="relative">
                     
-                    <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-xl aspect-[3/4] relative scale-[0.9] origin-top">
+                    <div className="rounded-2xl border border-border overflow-hidden shadow-xl aspect-[3/4] relative scale-[0.9] origin-top" style={{ backgroundColor: secondaryColor }}>
                       <div className="h-full overflow-y-auto overflow-x-hidden scrollbar-none">
                         <section className="relative pt-8 pb-10 overflow-hidden text-center px-4">
-                          <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-40 h-40 rounded-full blur-[40px] -z-10" style={{ backgroundColor: `${primaryColor}20` }} />
+                          <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-40 h-40 rounded-full blur-[40px] -z-10" style={{ backgroundColor: `${primaryColor}33` }} />
                           <div className="space-y-4">
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mx-auto" style={{ backgroundColor: `${primaryColor}1A`, color: primaryColor, border: `1px solid ${primaryColor}33` }}>
+                              <Sparkles className="h-3 w-3" /> Lançamento
+                            </div>
                             <h1 className="text-2xl font-black tracking-tight leading-none text-[#111111]">
                               {title || "Seu Título"}
                             </h1>
@@ -702,9 +705,9 @@ export function CreateEbookView() {
                               <div className="h-10 px-6 text-sm font-black text-white rounded-full flex items-center justify-center shadow-lg" style={{ backgroundColor: primaryColor }}>
                                 OBTER ACESSO AGORA
                               </div>
-                              <p className="text-2xl font-black text-[#111111]">R$ {price.toFixed(2).replace(".", ",")}</p>
+                              <p className="text-2xl font-black" style={{ color: primaryColor }}>R$ {price.toFixed(2).replace(".", ",")}</p>
                             </div>
-                            <div className="mx-auto w-32 relative shadow-lg rounded-lg overflow-hidden aspect-[3/4.2]">
+                            <div className="mx-auto w-32 relative shadow-lg rounded-lg overflow-hidden aspect-[3/4.2]" style={{ boxShadow: `0 12px 30px -8px ${primaryColor}66`, border: `2px solid ${primaryColor}` }}>
                               {coverUrl ? <img src={coverUrl} alt="Capa" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-white/50" style={{ backgroundColor: primaryColor }}><BookOpen className="h-6 w-6" /></div>}
                             </div>
                           </div>
