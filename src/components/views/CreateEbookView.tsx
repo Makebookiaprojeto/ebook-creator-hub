@@ -587,7 +587,7 @@ export function CreateEbookView() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
-                      <label className="text-sm font-medium mb-1.5 block">Título do ebook</label>
+                      <label className="text-sm font-medium mb-1.5 block">Título do Ebook</label>
                       <Input 
                         placeholder="Digite o título do ebook" 
                         value={title} 
@@ -596,12 +596,16 @@ export function CreateEbookView() {
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium mb-1.5 block">Preço do ebook (R$)</label>
+                      <label className="text-sm font-medium mb-1.5 block">Preço do Ebook</label>
                       <Input 
-                        type="number" 
-                        placeholder="Digite o preço do ebook" 
-                        value={price} 
-                        onChange={(e) => setPrice(Number(e.target.value))} 
+                        placeholder="R$ 0,00" 
+                        value={new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price)} 
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, "");
+                          const numericValue = Number(value) / 100;
+                          setPrice(numericValue);
+                          setPriceInput(numericValue.toFixed(2).replace(".", ","));
+                        }} 
                         required 
                       />
                     </div>
@@ -682,7 +686,7 @@ export function CreateEbookView() {
                   </div>
 
                   <div className="relative">
-                    <p className="text-xs font-medium text-muted-foreground mb-2 text-center">Prévia em tempo real</p>
+                    
                     <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-xl aspect-[3/4] relative scale-[0.9] origin-top">
                       <div className="h-full overflow-y-auto overflow-x-hidden scrollbar-none">
                         <section className="relative pt-8 pb-10 overflow-hidden text-center px-4">
