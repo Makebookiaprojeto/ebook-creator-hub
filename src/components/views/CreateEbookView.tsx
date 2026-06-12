@@ -342,12 +342,18 @@ export function CreateEbookView() {
     ];
     for (const stage of stages) {
       setSalesPageStage(stage);
-      await new Promise(resolve => setTimeout(resolve, 1200));
+      await new Promise(resolve => setTimeout(resolve, 800));
     }
     setGeneratingSalesPage(false);
     setSalesPageGenerated(true);
     toast.success("Página de vendas gerada com sucesso!");
   };
+
+  const handleGenerateEbook = async () => {
+    await generate();
+    setStep(2);
+  };
+
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -496,22 +502,9 @@ export function CreateEbookView() {
 
             {step === 2 && (
               <div>
-                <h2 className="text-foreground text-lg font-semibold">Gere seu ebook</h2>
-                <p className="text-muted-foreground text-sm mt-1">Gere um ebook com base no nicho e público alvo definidos.</p>
-                {!generated && !generating && (
-                  <div className="mt-10 flex flex-col items-center justify-center rounded-2xl gradient-hero p-10 text-center">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl gradient-primary shadow-glow">
-                      <Sparkles className="h-8 w-8 text-primary-foreground" />
-                    </div>
-                    <p className="mt-4 font-display text-lg font-semibold">Pronto para a mágica?</p>
-                    <p className="mt-1 text-sm text-muted-foreground">Vamos gerar título, subtítulo e capítulos.</p>
-                    <div className="mt-6 flex flex-col items-center gap-4 w-full max-w-xs">
-                      <Button onClick={generate} size="lg" className="w-full gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
-                        <Sparkles className="mr-2 h-4 w-4" /> Gerar Ebook
-                      </Button>
-                    </div>
-                  </div>
-                )}
+                <h2 className="text-foreground text-lg font-semibold">Seu ebook</h2>
+                <p className="text-muted-foreground text-sm mt-1">Prévia do ebook gerado com base no seu nicho.</p>
+                
                 {generating && !generated && (
                   <div className="mt-10 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-center">
                     <Loader2 className="h-10 w-10 animate-spin text-primary" />
@@ -527,13 +520,24 @@ export function CreateEbookView() {
                     )}
                   </div>
                 )}
+                
                 {generated && (
                   <div className="mt-6 space-y-6">
                     <EbookPreviewCarousel title={title} subtitle={subtitle} coverUrl={coverUrl} chapters={chapters} />
                   </div>
                 )}
+
+                {!generating && !generated && (
+                  <div className="mt-10 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-center">
+                    <p className="text-muted-foreground">Ocorreu um erro ao exibir a prévia ou o ebook ainda não foi gerado.</p>
+                    <Button onClick={generate} variant="outline" className="mt-4">
+                      Tentar Gerar Novamente
+                    </Button>
+                  </div>
+                )}
               </div>
             )}
+
 
             {step === 3 && (
               <div key="step3-container">
@@ -883,10 +887,30 @@ export function CreateEbookView() {
       </div>
 
       <div className="flex items-center justify-between">
-        <Button variant="ghost" onClick={prev} disabled={step === 0}><ArrowLeft className="mr-2 h-4 w-4" /> Voltar</Button>
+        <Button variant="ghost" onClick={prev} disabled={step === 0 || generating}><ArrowLeft className="mr-2 h-4 w-4" /> Voltar</Button>
         {step < steps.length - 1 ? (
-          <Button onClick={next} className="gradient-primary text-primary-foreground shadow-glow">Continuar <ArrowRight className="ml-2 h-4 w-4" /></Button>
+          step === 1 ? (
+            <Button 
+              onClick={handleGenerateEbook} 
+              disabled={generating}
+              className="gradient-primary text-primary-foreground shadow-glow"
+            >
+              {generating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Gerando...
+                </>
+              ) : (
+                <>
+                  Gerar Ebook <Sparkles className="ml-2 h-4 w-4" />
+                </>
+              )}
+            </Button>
+          ) : (
+            <Button onClick={next} className="gradient-primary text-primary-foreground shadow-glow">Continuar <ArrowRight className="ml-2 h-4 w-4" /></Button>
+          )
         ) : (
+
           <Button
             disabled={saving}
             className="gradient-primary text-primary-foreground shadow-glow"
