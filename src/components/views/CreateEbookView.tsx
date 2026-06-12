@@ -346,8 +346,15 @@ export function CreateEbookView() {
   };
 
   const generateSalesPage = async () => {
+    if (!title || !price) {
+      toast.error("Preencha o título e o preço antes de gerar a página");
+      return;
+    }
+
     setGeneratingSalesPage(true);
     setSalesPageGenerated(false);
+    
+    // Simulate publication/generation
     const stages = [
       "Analisando a estrutura do ebook...",
       "Extraindo gatilhos mentais...",
@@ -355,13 +362,33 @@ export function CreateEbookView() {
       "Otimizando layout para mobile...",
       "Finalizando estrutura da página..."
     ];
+    
     for (const stage of stages) {
       setSalesPageStage(stage);
       await new Promise(resolve => setTimeout(resolve, 800));
     }
-    setGeneratingSalesPage(false);
-    setSalesPageGenerated(true);
-    toast.success("Página de vendas gerada com sucesso!");
+
+    try {
+      if (generatedEbookId) {
+        // Mock update of primary colors and price in DB if needed
+        await supabase.from("ebooks").update({ 
+          title, 
+          price, 
+          price_cents: Math.round(price * 100),
+          status: "published", 
+          is_public: true 
+        }).eq("id", generatedEbookId);
+      }
+      
+      setGeneratingSalesPage(false);
+      setSalesPageGenerated(true);
+      setIsPublished(true);
+      toast.success("Página de vendas gerada e publicada com sucesso!");
+    } catch (error) {
+      console.error(error);
+      setGeneratingSalesPage(false);
+      toast.error("Erro ao publicar a página de vendas");
+    }
   };
 
   const handleGenerateEbook = async () => {
