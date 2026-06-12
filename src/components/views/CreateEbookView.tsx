@@ -56,6 +56,16 @@ import videoDivulgacaoPoster from "@/assets/video-divulgacao-poster-v3.jpg.asset
 const steps = ["Nicho", "Preço", "Ebook", "Página de Vendas", "Divulgação"];
 const pricePresets = [19.9, 29.9, 39.9, 49.9];
 
+const colorOptions = [
+  { name: "Laranja", value: "#F97316" },
+  { name: "Azul", value: "#3B82F6" },
+  { name: "Verde", value: "#10B981" },
+  { name: "Roxo", value: "#8B5CF6" },
+  { name: "Rosa", value: "#EC4899" },
+  { name: "Preto", value: "#000000" },
+  { name: "Branco", value: "#FFFFFF" }
+];
+
 type FbGroup = { name: string; members: number; engagement: string };
 type ChapterDraft = {
   title: string;
