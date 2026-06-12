@@ -1,35 +1,19 @@
-Removerei completamente a funcionalidade de Login com Google e hCaptcha do projeto.
+I will investigate the cause of the Facebook search block and implement a more robust solution that includes a fallback to Google Search, which is a common and effective way to find groups without being blocked by Facebook's internal routing.
 
-### Análise de Dependências (O que será removido)
-*   **Componentes de UI:** Botão "Google" e componente `HCaptcha` em `src/pages/Auth.tsx`.
-*   **Lógica de Frontend:** Imports de `HCaptcha`, estados `captchaToken`, referências `captchaRef`, chamadas para `verify-captcha` e `handleGoogleLogin` no arquivo `src/pages/Auth.tsx`.
-*   **Integrações:** Método `signInWithOAuth` em `src/integrations/lovable/index.ts` (embora auto-gerado, vou remover a referência no Auth).
-*   **Dependências de Pacotes:** ` @hcaptcha/react-hcaptcha` do `package.json`.
-*   **Backend:** Edge Function `verify-captcha`.
+### Technical Analysis
+- **Cause of the block**: Facebook has significantly tightened its search URL routing. Direct deep links to search results (like `/search/groups/?q=...`) often return "Not Found" (404) or redirect to login pages if the session state is not perfect or if the request is deemed "unusual".
+- **Proposed Solution**: 
+  - Update the Facebook search URL to the most standard internal path (`/groups/search/`).
+  - Add a secondary option to search via Google (`site:facebook.com/groups ...`), which is often more reliable and bypasses Facebook's internal blocks.
+  - Keep the user input field so they can adjust the query easily.
 
-### Passos da Implementação
+### Implementation Details
+- **File**: `src/components/views/CreateEbookView.tsx`
+- **Changes**:
+  - Modify the primary search button to use a more stable Facebook URL.
+  - Add a "Fallback" button or a "Search on Google" option to ensure the user always finds results.
+  - Improve error handling and user feedback.
 
-1.  **Frontend (Auth.tsx):**
-    *   Remover import de `@hcaptcha/react-hcaptcha`.
-    *   Remover constante `HCAPTCHA_SITE_KEY`.
-    *   Remover estados e refs: `captchaToken`, `captchaRef`, `resetCaptcha`.
-    *   Remover validação de captcha no `handleSubmit` (removendo os blocos que chamam `verify-captcha`).
-    *   Remover função `handleGoogleLogin`.
-    *   Remover renderização do componente `HCaptcha`.
-    *   Remover separador "Ou continue com" e o botão do Google.
-
-2.  **Dependências:**
-    *   Remover `@hcaptcha/react-hcaptcha` do `package.json`.
-
-3.  **Backend:**
-    *   Remover diretório `supabase/functions/verify-captcha`.
-
-4.  **Limpeza:**
-    *   Sugerir a remoção das variáveis de ambiente `VITE_HCAPTCHA_SITE_KEY` e `HCAPTCHA_SECRET_KEY` (se existir no Supabase).
-
-### Validação
-*   Verificarei se o build continua funcionando.
-*   Confirmarei que o login por e-mail/senha permanece intacto.
-*   Confirmarei que não há erros de console relacionados a variáveis ausentes.
-
-**Impactos Possíveis:** A segurança contra bots no cadastro e login será reduzida sem o hCaptcha, mas a funcionalidade de autenticação por e-mail continuará operando normalmente.
+### User Interface
+- Maintain the current " Passo 5" structure.
+- Add a secondary search action for Google.
