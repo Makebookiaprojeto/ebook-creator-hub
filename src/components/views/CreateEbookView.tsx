@@ -102,6 +102,8 @@ export function CreateEbookView() {
   const [generatingSalesPage, setGeneratingSalesPage] = useState(false);
   const [salesPageGenerated, setSalesPageGenerated] = useState(false);
   const [salesPageStage, setSalesPageStage] = useState("");
+  const [primaryColor, setPrimaryColor] = useState("#F97316");
+  const [secondaryColor, setSecondaryColor] = useState("#FFF7ED");
 
   const resetForm = () => {
     setStep(0);
