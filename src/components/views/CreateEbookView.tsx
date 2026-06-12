@@ -686,7 +686,7 @@ export function CreateEbookView() {
                   </div>
 
                   <div className="relative">
-                    <p className="text-xs font-medium text-muted-foreground mb-2 text-center">Prévia em tempo real</p>
+                    
                     <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-xl aspect-[3/4] relative scale-[0.9] origin-top">
                       <div className="h-full overflow-y-auto overflow-x-hidden scrollbar-none">
                         <section className="relative pt-8 pb-10 overflow-hidden text-center px-4">
