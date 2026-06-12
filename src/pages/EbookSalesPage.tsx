@@ -48,6 +48,7 @@ export default function EbookSalesPage() {
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [ebook, setEbook] = useState<any | null>(null);
   const [chapters, setChapters] = useState<Chapter[]>([]);
+  const [searchTopic, setSearchTopic] = useState("");
 
   const handleCheckout = async () => {
     if (!ebook) return;
