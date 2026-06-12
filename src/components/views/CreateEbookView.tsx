@@ -801,6 +801,9 @@ export function CreateEbookView() {
                         Alternativa (Google)
                       </Button>
                     </div>
+                    <p className="text-[10px] text-muted-foreground mt-3 text-center opacity-70">
+                      Dica: Se o Facebook bloquear a busca direta, a alternativa via Google costuma encontrar mais grupos ativos.
+                    </p>
                   </div>
 
                   <div className="rounded-2xl border bg-card p-5 shadow-sm">
