@@ -48,10 +48,10 @@ export function EbookPreview({ title, subtitle, coverUrl, chapters, pdfUrl, show
   const displayedChapters = showOnlyFirstChapter ? chapters.slice(0, 1) : chapters;
 
   return (
-    <div className="rounded-2xl border bg-muted/20 p-4 sm:p-6">
+    <div className="rounded-2xl border bg-black p-4 sm:p-6">
       <div className="mx-auto max-w-2xl space-y-6">
         {/* Cover page */}
-        <div className="aspect-[2/3] rounded-xl overflow-hidden shadow-2xl bg-background relative">
+        <div className="aspect-[2/3] rounded-xl overflow-hidden shadow-2xl bg-black relative">
           {coverUrl ? (
             <img src={coverUrl} alt={title} className="absolute inset-0 h-full w-full object-cover" />
           ) : (
