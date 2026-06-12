@@ -322,6 +322,86 @@ export default function EbookSalesPage() {
         </div>
       </section>
 
+      {/* SEÇÃO DE DIVULGAÇÃO (Apenas para o vendedor/preview) */}
+      <section className="py-20 bg-background border-t border-border">
+        <div className="container mx-auto px-6 max-w-4xl">
+          <div className="space-y-10">
+            <div className="text-center space-y-4">
+              <h2 className="text-4xl font-black tracking-tight">Divulgação</h2>
+              <p className="text-muted-foreground font-medium">Configure como deseja encontrar seu público alvo.</p>
+            </div>
+            
+            <Card className="p-8 border-border bg-card shadow-xl rounded-[2.5rem] overflow-hidden">
+              <div className="space-y-8">
+                <div className="space-y-4">
+                  <label className="text-sm font-bold uppercase tracking-widest text-primary">Nicho do Ebook</label>
+                  <Input 
+                    placeholder="Digite o nicho do seu ebook (ex: Emagrecimento, Marketing Digital...)" 
+                    className="h-14 bg-background border-border rounded-2xl text-lg px-6"
+                    value={searchTopic}
+                    onChange={(e) => setSearchTopic(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-6">
+                  <div className="flex items-center gap-3">
+                    <Users className="h-6 w-6 text-primary" />
+                    <h3 className="text-xl font-bold">Onde divulgar seu ebook</h3>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <Button 
+                      className="h-16 bg-primary hover:bg-primary/90 text-background font-bold rounded-2xl gap-3 shadow-lg"
+                      onClick={() => {
+                        const query = searchTopic || ebook.title;
+                        window.open(`https://www.facebook.com/groups/search/?q=${encodeURIComponent(query)}`, '_blank', 'noopener,noreferrer');
+                      }}
+                    >
+                      <Users className="h-5 w-5" />
+                      Buscar no Facebook
+                    </Button>
+                    
+                    <Button 
+                      variant="outline"
+                      className="h-16 border-primary/20 hover:bg-primary/5 font-bold rounded-2xl gap-3 transition-all"
+                      onClick={() => {
+                        const query = searchTopic || ebook.title;
+                        window.open(`https://www.google.com/search?q=site:facebook.com/groups+${encodeURIComponent(query)}`, '_blank', 'noopener,noreferrer');
+                      }}
+                    >
+                      <Search className="h-5 w-5" />
+                      Alternativa (Google)
+                    </Button>
+                  </div>
+
+                  <div className="bg-muted/30 rounded-2xl p-6 border border-border">
+                    <h4 className="font-bold mb-4 flex items-center gap-2">
+                      <Sparkles className="h-4 w-4 text-primary" />
+                      Dicas de Canais:
+                    </h4>
+                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {[
+                        "Redes Sociais (Instagram, TikTok)",
+                        "Blogs Especializados",
+                        "Plataformas de Ebook",
+                        "Comunidades Online (Reddit, Discord)",
+                        "Grupos de WhatsApp e Telegram",
+                        "Anúncios Pagos (Meta Ads, Google Ads)"
+                      ].map((item, i) => (
+                        <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <CheckCircle2 className="h-4 w-4 text-primary" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       <footer className="py-20 bg-background border-t border-border">
         <div className="container mx-auto px-6 text-center space-y-8">
            <div className="flex items-center justify-center gap-2 text-xl font-black tracking-tighter">
