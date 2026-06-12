@@ -12,6 +12,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue
+} from "@/components/ui/select";
 
 const niches = [
   { name: "Emagrecimento", emoji: "🔥", icon: Flame, desc: "Alta demanda, ticket médio R$47" },
@@ -53,6 +56,16 @@ import videoDivulgacaoPoster from "@/assets/video-divulgacao-poster-v3.jpg.asset
 const steps = ["Nicho", "Preço", "Ebook", "Página de Vendas", "Divulgação"];
 const pricePresets = [19.9, 29.9, 39.9, 49.9];
 
+const colorOptions = [
+  { name: "Laranja", value: "#F97316" },
+  { name: "Azul", value: "#3B82F6" },
+  { name: "Verde", value: "#10B981" },
+  { name: "Roxo", value: "#8B5CF6" },
+  { name: "Rosa", value: "#EC4899" },
+  { name: "Preto", value: "#000000" },
+  { name: "Branco", value: "#FFFFFF" }
+];
+
 type FbGroup = { name: string; members: number; engagement: string };
 type ChapterDraft = {
   title: string;
@@ -89,6 +102,8 @@ export function CreateEbookView() {
   const [generatingSalesPage, setGeneratingSalesPage] = useState(false);
   const [salesPageGenerated, setSalesPageGenerated] = useState(false);
   const [salesPageStage, setSalesPageStage] = useState("");
+  const [primaryColor, setPrimaryColor] = useState("#F97316");
+  const [secondaryColor, setSecondaryColor] = useState("#FFF7ED");
 
   const resetForm = () => {
     setStep(0);
@@ -331,8 +346,15 @@ export function CreateEbookView() {
   };
 
   const generateSalesPage = async () => {
+    if (!title || !price) {
+      toast.error("Preencha o título e o preço antes de gerar a página");
+      return;
+    }
+
     setGeneratingSalesPage(true);
     setSalesPageGenerated(false);
+    
+    // Simulate publication/generation
     const stages = [
       "Analisando a estrutura do ebook...",
       "Extraindo gatilhos mentais...",
@@ -340,13 +362,33 @@ export function CreateEbookView() {
       "Otimizando layout para mobile...",
       "Finalizando estrutura da página..."
     ];
+    
     for (const stage of stages) {
       setSalesPageStage(stage);
       await new Promise(resolve => setTimeout(resolve, 800));
     }
-    setGeneratingSalesPage(false);
-    setSalesPageGenerated(true);
-    toast.success("Página de vendas gerada com sucesso!");
+
+    try {
+      if (generatedEbookId) {
+        // Mock update of primary colors and price in DB if needed
+        await supabase.from("ebooks").update({ 
+          title, 
+          price, 
+          price_cents: Math.round(price * 100),
+          status: "published", 
+          is_public: true 
+        }).eq("id", generatedEbookId);
+      }
+      
+      setGeneratingSalesPage(false);
+      setSalesPageGenerated(true);
+      setIsPublished(true);
+      toast.success("Página de vendas gerada e publicada com sucesso!");
+    } catch (error) {
+      console.error(error);
+      setGeneratingSalesPage(false);
+      toast.error("Erro ao publicar a página de vendas");
+    }
   };
 
   const handleGenerateEbook = async () => {
@@ -539,216 +581,134 @@ export function CreateEbookView() {
 
 
             {step === 3 && (
-              <div key="step3-container">
-                <h2 className="font-display text-xl font-semibold">Gere sua Página de Vendas</h2>
+              <div key="step3-container" className="space-y-6">
+                <h2 className="font-display text-xl font-semibold text-center mb-6">Configure sua Página de Vendas</h2>
 
-                {!salesPageGenerated && !generatingSalesPage && (
-                  <div key="cta-sales" className="mt-10 flex flex-col items-center justify-center rounded-2xl gradient-hero p-10 text-center border-2 border-dashed border-primary/20 bg-primary/5">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl gradient-primary shadow-glow">
-                      <Layout className="h-8 w-8 text-primary-foreground" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-sm font-medium mb-1.5 block">Título do ebook</label>
+                      <Input 
+                        placeholder="Digite o título do ebook" 
+                        value={title} 
+                        onChange={(e) => setTitle(e.target.value)} 
+                        required 
+                      />
                     </div>
-                    <p className="mt-4 font-display text-lg font-semibold">Sua página está quase pronta!</p>
-                    <p className="mt-1 text-sm text-muted-foreground">Clique no botão abaixo para gerar a estrutura de vendas.</p>
-                    <div className="mt-6 flex flex-col items-center gap-4 w-full max-w-xs">
-                      <Button onClick={generateSalesPage} size="lg" className="w-full gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
-                        <Zap className="mr-2 h-4 w-4" /> Gerar Página de Vendas
+                    <div>
+                      <label className="text-sm font-medium mb-1.5 block">Preço do ebook (R$)</label>
+                      <Input 
+                        type="number" 
+                        placeholder="Digite o preço do ebook" 
+                        value={price} 
+                        onChange={(e) => setPrice(Number(e.target.value))} 
+                        required 
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium mb-1.5 block">Cor primária</label>
+                        <Select value={primaryColor} onValueChange={setPrimaryColor}>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Selecione" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {colorOptions.map((color) => (
+                              <SelectItem key={color.value} value={color.value}>
+                                <div className="flex items-center gap-2">
+                                  <div className="h-4 w-4 rounded-full" style={{ backgroundColor: color.value }} />
+                                  <span>{color.name}</span>
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium mb-1.5 block">Cor secundária</label>
+                        <Select value={secondaryColor} onValueChange={setSecondaryColor}>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Selecione" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {colorOptions.map((color) => (
+                              <SelectItem key={color.value} value={color.value}>
+                                <div className="flex items-center gap-2">
+                                  <div className="h-4 w-4 rounded-full" style={{ backgroundColor: color.value }} />
+                                  <span>{color.name}</span>
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    
+                    <div className="pt-4 space-y-3">
+                      <Button 
+                        onClick={generateSalesPage} 
+                        disabled={generatingSalesPage || !title || !price}
+                        className="w-full gradient-primary text-primary-foreground shadow-glow h-12"
+                      >
+                        {generatingSalesPage ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Gerando...
+                          </>
+                        ) : (
+                          <>
+                            <Zap className="mr-2 h-4 w-4" /> Gerar página de vendas
+                          </>
+                        )}
                       </Button>
+
+                      {salesPageGenerated && (
+                        <Button
+                          variant="outline"
+                          className="w-full h-12 gap-2 border-primary/20 hover:bg-primary/5"
+                          onClick={() => {
+                            if (isPublished && ebookLink) {
+                              window.open(ebookLink, '_blank');
+                            } else if (generatedEbookId) {
+                              const finalLink = ebookLink || `${window.location.origin}/e/${createdEbookSlug}`;
+                              window.open(finalLink, '_blank');
+                            }
+                          }}
+                        >
+                          <ExternalLink className="h-4 w-4" /> Ver na web
+                        </Button>
+                      )}
                     </div>
                   </div>
-                )}
 
-                {generatingSalesPage && (
-                  <div key="generating-sales" className="mt-10 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-center">
-                    <Loader2 className="h-10 w-10 animate-spin text-primary" />
-                    <p className="mt-4 font-medium">Gerando sua página de vendas...</p>
-                    <p className="mt-1 text-sm text-muted-foreground">{salesPageStage || "Trabalhando..."}</p>
-                    <div className="mt-6 w-full max-w-xs">
-                      <div className="h-2 rounded-full bg-muted overflow-hidden">
-                        <motion.div className="h-full gradient-primary" initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ duration: 6, ease: "linear" }} />
+                  <div className="relative">
+                    <p className="text-xs font-medium text-muted-foreground mb-2 text-center">Prévia em tempo real</p>
+                    <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-xl aspect-[3/4] relative scale-[0.9] origin-top">
+                      <div className="h-full overflow-y-auto overflow-x-hidden scrollbar-none">
+                        <section className="relative pt-8 pb-10 overflow-hidden text-center px-4">
+                          <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-40 h-40 rounded-full blur-[40px] -z-10" style={{ backgroundColor: `${primaryColor}20` }} />
+                          <div className="space-y-4">
+                            <h1 className="text-2xl font-black tracking-tight leading-none text-[#111111]">
+                              {title || "Seu Título"}
+                            </h1>
+                            <p className="text-sm text-muted-foreground font-medium">
+                              {subtitle || "Aprenda de forma prática e rápida com este guia definitivo."}
+                            </p>
+                            <div className="flex flex-col items-center gap-4 pt-2">
+                              <div className="h-10 px-6 text-sm font-black text-white rounded-full flex items-center justify-center shadow-lg" style={{ backgroundColor: primaryColor }}>
+                                OBTER ACESSO AGORA
+                              </div>
+                              <p className="text-2xl font-black text-[#111111]">R$ {price.toFixed(2).replace(".", ",")}</p>
+                            </div>
+                            <div className="mx-auto w-32 relative shadow-lg rounded-lg overflow-hidden aspect-[3/4.2]">
+                              {coverUrl ? <img src={coverUrl} alt="Capa" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-white/50" style={{ backgroundColor: primaryColor }}><BookOpen className="h-6 w-6" /></div>}
+                            </div>
+                          </div>
+                        </section>
                       </div>
                     </div>
                   </div>
-                )}
-
-                {salesPageGenerated && (
-                  <motion.div key="sales-page-preview" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="mt-6 rounded-3xl border border-border bg-background overflow-hidden shadow-2xl relative">
-                    <div className="min-h-screen bg-[#FFFFFF] text-[#111111] font-sans overflow-x-hidden selection:bg-orange-500 selection:text-white">
-                      {/* 1. HERO PREMIUM */}
-                      <section className="relative pt-16 pb-20 overflow-hidden">
-                        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[400px] h-[400px] bg-orange-100/40 rounded-full blur-[80px] -z-10" />
-                        <div className="container mx-auto px-6 max-w-7xl">
-                          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
-                            <div className="flex-1 space-y-6 relative z-10 text-left">
-                              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-50 text-orange-600 font-bold text-xs uppercase tracking-[0.2em] border border-orange-100">
-                                <Sparkles size={14} /> Lançamento 2026
-                              </div>
-                              <h1 className="text-4xl lg:text-6xl font-black tracking-tight leading-[0.9] text-[#111111]">
-                                {title || "Seu Título"}
-                              </h1>
-                              <p className="text-xl text-orange-900/80 leading-relaxed max-w-xl font-medium">
-                                {subtitle || "Aprenda de forma prática e rápida com este guia definitivo desenvolvido por especialistas."}
-                              </p>
-                              <div className="flex flex-wrap items-center gap-6 pt-4">
-                                <Button 
-                                  size="lg" 
-                                  className="h-16 px-8 text-lg font-black bg-[#F97316] hover:bg-[#EA580C] text-white rounded-full shadow-[0_20px_40px_-10px_rgba(249,115,22,0.3)] transition-all flex items-center gap-3"
-                                  onClick={() => toast.info("Esta é apenas uma prévia.")}
-                                >
-                                  OBTER ACESSO AGORA <ArrowRightIcon size={20} />
-                                </Button>
-                                <div className="text-left">
-                                  <p className="text-sm text-orange-900/60 font-bold uppercase tracking-widest">Oferta Exclusiva</p>
-                                  <p className="text-3xl font-black text-[#111111]">R$ {price.toFixed(2).replace(".", ",")}</p>
-                                </div>
-                              </div>
-                            </div>
-                            
-                            <div className="flex-1 w-full max-w-[400px] relative z-10">
-                              <div className="relative transform-gpu shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] rounded-[2rem] overflow-hidden aspect-[3/4.2]">
-                                {coverUrl ? <img src={coverUrl} alt="Capa" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center bg-orange-600"><BookOpen className="h-10 w-10 text-white/50" /></div>}
-                                <div className="absolute inset-0 bg-gradient-to-tr from-black/20 via-transparent to-white/10" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </section>
-
-                      {/* 2. APRESENTAÇÃO */}
-                      <section className="py-12 bg-orange-50/30 border-y border-orange-100/50">
-                        <div className="container mx-auto px-6 max-w-4xl">
-                          <div className="text-center space-y-6">
-                            <h2 className="text-3xl lg:text-4xl font-black leading-tight text-orange-950">Um produto desenhado para encantar.</h2>
-                            <p className="text-lg text-orange-900/80 leading-relaxed font-medium mx-auto max-w-2xl">Cada página foi estruturada para garantir a melhor experiência de aprendizado, com visual moderno e conteúdo de fácil absorção.</p>
-                          </div>
-                        </div>
-                      </section>
-
-                      {/* 4. BENEFÍCIOS */}
-                      <section className="py-16 bg-background">
-                        <div className="container mx-auto px-6 max-w-7xl">
-                          <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-                            <h2 className="text-4xl font-black tracking-tight text-orange-950">Vantagens Exclusivas</h2>
-                          </div>
-                          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {[
-                              { icon: Rocket, title: "Aceleração Real", desc: "Resultados que aparecem já nas primeiras semanas de aplicação." },
-                              { icon: Target, title: "Foco no Resultado", desc: "Direto ao ponto, sem enrolação. Conteúdo 100% prático." },
-                              { icon: TrendingUp, title: "Escalabilidade", desc: "Aprenda métodos que podem ser replicados em larga escala." },
-                              { icon: Award, title: "Certificado de Valor", desc: "Conhecimento que se traduz em autoridade no mercado." }
-                            ].map((benefit, i) => (
-                              <div key={i} className="p-6 bg-[#FFF7ED] rounded-3xl border border-orange-100/50 text-left">
-                                <div className="h-12 w-12 bg-orange-50 rounded-2xl flex items-center justify-center mb-6">
-                                  <benefit.icon className="h-6 w-6 text-orange-500" />
-                                </div>
-                                <h3 className="text-lg font-bold mb-2 text-orange-950">{benefit.title}</h3>
-                                <p className="text-orange-900/70 text-sm leading-relaxed">{benefit.desc}</p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </section>
-
-                      {/* 5. O QUE VOCÊ VAI APRENDER */}
-                      <section className="py-16 bg-orange-50/20">
-                        <div className="container mx-auto px-6 max-w-7xl">
-                          <h2 className="text-4xl font-black text-center mb-12 tracking-tight text-orange-950">O que você vai aprender</h2>
-                          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {(chapters.length > 0 ? chapters.slice(0, 6) : [...Array(6)]).map((ch, i) => (
-                              <div key={i} className="group p-6 bg-card rounded-[2rem] border border-border shadow-sm text-left">
-                                <div className="flex items-start justify-between mb-6">
-                                   <div className="h-10 w-10 bg-orange-50 rounded-full flex items-center justify-center font-black text-orange-600">
-                                     {String(i + 1).padStart(2, '0')}
-                                   </div>
-                                </div>
-                                <h3 className="text-lg font-black mb-2 text-orange-950">{ch?.title || `Capítulo ${i + 1}`}</h3>
-                                <p className="text-orange-900/60 text-xs leading-relaxed line-clamp-3">Conteúdo detalhado sobre este tópico essencial para sua evolução.</p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </section>
-
-                      {/* 9. OFERTA & CTA FINAL */}
-                      <section className="py-20 relative">
-                        <div className="container mx-auto px-6 max-w-4xl text-center">
-                          <div className="space-y-8">
-                            <h2 className="text-4xl lg:text-6xl font-black tracking-tight leading-none text-orange-950">Pronto para a sua nova fase?</h2>
-                            <div className="relative p-8 lg:p-12 bg-card rounded-[3rem] shadow-[0_30px_60px_-15px_rgba(0,255,102,0.1)] border border-border">
-                              <p className="text-xl font-bold mb-6 text-orange-900">Invista no seu futuro profissional hoje</p>
-                              <div className="flex flex-col items-center gap-2 mb-8">
-                                <span className="text-orange-900/30 line-through text-xl font-black">R$ {(price * 2.5).toFixed(2).replace(".", ",")}</span>
-                                <p className="text-6xl lg:text-7xl font-black text-[#F97316] tracking-tighter leading-none">R$ {price.toFixed(2).replace(".", ",")}</p>
-                              </div>
-                              <Button 
-                                size="lg" 
-                                className="h-20 w-full max-w-2xl text-xl font-black bg-[#F97316] hover:bg-[#EA580C] text-white rounded-full shadow-[0_25px_50px_-12px_rgba(249,115,22,0.4)] transition-all"
-                                onClick={() => toast.info("Esta é apenas uma prévia.")}
-                              >
-                                QUERO GARANTIR MINHA VAGA
-                              </Button>
-                              <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-                                 {[
-                                   { icon: ShieldCheck, text: "Seguro" },
-                                   { icon: LockIcon, text: "Protegido" },
-                                   { icon: Flame, text: "Vitalício" },
-                                   { icon: Star, text: "Exclusivo" }
-                                 ].map((badge, i) => (
-                                    <div key={i} className="flex flex-col items-center gap-2">
-                                       <div className="h-8 w-8 bg-orange-50 rounded-full flex items-center justify-center"><badge.icon size={16} className="text-orange-600" /></div>
-                                       <span className="text-[8px] font-black uppercase tracking-widest text-orange-900/70">{badge.text}</span>
-                                    </div>
-                                  ))}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </section>
-                    </div>
-                  </motion.div>
-                )}
-
-                {salesPageGenerated && (
-                  <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                    <Button
-                      className="flex-1 gradient-primary text-primary-foreground shadow-glow"
-                      disabled={saving}
-                      onClick={async () => {
-                        if (!generatedEbookId) return toast.error("Gere o ebook primeiro");
-                        setSaving(true);
-                        try {
-                          const newSlug = `ebook-${Math.random().toString(36).substring(2, 7)}`;
-                          await supabase.from("ebooks").update({ status: "published", is_public: true, slug: newSlug }).eq("id", generatedEbookId);
-                          setEbookLink(`${window.location.origin}/e/${newSlug}`);
-                          setIsPublished(true);
-                          toast.success("Página publicada com sucesso! 🚀");
-                        } catch (err) { toast.error("Erro ao publicar"); } finally { setSaving(false); }
-                      }}
-                    >
-                      {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Rocket className="mr-2 h-4 w-4" />}
-                      Publicar página
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="flex-1 border-primary/20 hover:bg-primary/5 gap-2"
-                      onClick={() => {
-                        if (isPublished && ebookLink) {
-                          window.open(ebookLink, '_blank');
-                        } else if (generatedEbookId) {
-                          // Se já foi gerado mas não necessariamente publicado com o slug final, 
-                          // usamos o slug que já deve existir no banco (ou o temporário salvo no estado)
-                          const finalLink = ebookLink || `${window.location.origin}/e/${createdEbookSlug}`;
-                          window.open(finalLink, '_blank');
-                        } else {
-                          const previewData = { title, subtitle, price, chapters: chapters.map(c => ({ title: c.title, content: c.content })) };
-                          sessionStorage.setItem('ebook_preview_data', JSON.stringify(previewData));
-                          window.open(`${window.location.origin}/e/preview`, '_blank');
-                        }
-                      }}
-                    >
-                      <Eye className="h-4 w-4" /> Ver na Web
-                    </Button>
-                  </div>
-                )}
+                </div>
               </div>
             )}
 
