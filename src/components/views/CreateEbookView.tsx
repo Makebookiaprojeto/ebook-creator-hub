@@ -779,6 +779,47 @@ export function CreateEbookView() {
                 >
                   <div className="rounded-2xl border bg-card p-5 shadow-sm">
                     <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
+                      <Search className="h-5 w-5 text-primary" />
+                      Divulgação
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Digite o nicho do seu ebook para gerar um link de divulgação:
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <Input
+                        placeholder="Ex: Emagrecimento, Finanças..."
+                        value={divulgacaoNiche}
+                        onChange={(e) => setDivulgacaoNiche(e.target.value)}
+                        className="flex-1"
+                      />
+                      <Button
+                        className="gradient-primary text-primary-foreground shadow-glow gap-2"
+                        onClick={() => {
+                          if (!divulgacaoNiche.trim()) return toast.error("Digite o nicho do ebook");
+                          const link = `https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(divulgacaoNiche.trim())}`;
+                          setGeneratedDivulgacaoLink(link);
+                          navigator.clipboard.writeText(link).catch(() => {});
+                          toast.success("Link gerado e copiado!");
+                        }}
+                      >
+                        <Search className="h-4 w-4" />
+                        Gera link
+                      </Button>
+                    </div>
+                    {generatedDivulgacaoLink && (
+                      <a
+                        href={generatedDivulgacaoLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-3 block text-sm text-primary underline break-all"
+                      >
+                        {generatedDivulgacaoLink}
+                      </a>
+                    )}
+                  </div>
+
+                  <div className="rounded-2xl border bg-card p-5 shadow-sm">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
                       <Users className="h-5 w-5 text-primary" />
                       Onde divulgar seu Ebook
                     </h3>
