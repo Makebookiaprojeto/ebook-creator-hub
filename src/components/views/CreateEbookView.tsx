@@ -553,7 +553,7 @@ export function CreateEbookView() {
 
             {step === 2 && (
               <div>
-                <h2 className="text-foreground text-lg font-semibold">Seu Ebook</h2>
+                
                 
                 {generating && !generated && (
                   <div className="mt-10 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-center">
