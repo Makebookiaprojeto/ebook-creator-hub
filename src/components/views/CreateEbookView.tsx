@@ -824,23 +824,15 @@ export function CreateEbookView() {
                       Onde divulgar seu Ebook
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Digite o assunto para encontrar grupos ativos no Facebook:
+                      Usaremos o nicho digitado em "Divulgação" para encontrar grupos ativos no Facebook.
                     </p>
-                    <div className="flex gap-2 mb-4">
-                      <Input 
-                        placeholder="Ex: Emagrecimento, Marketing Digital..." 
-                        value={searchTopic}
-                        onChange={(e) => setSearchTopic(e.target.value)}
-                        className="flex-1"
-                      />
-                    </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <Button 
                         className="w-full gradient-primary text-primary-foreground shadow-glow gap-2"
                         onClick={() => {
-                          const query = searchTopic || niche;
-                          if (!query) return toast.error("Digite um assunto para buscar");
-                          window.open(`https://www.facebook.com/groups/search/?q=${encodeURIComponent(query)}`, '_blank', 'noopener,noreferrer');
+                          const query = divulgacaoNiche.trim() || niche;
+                          if (!query) return toast.error('Digite o nicho no campo "Divulgação"');
+                          window.open(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(query)}`, '_blank', 'noopener,noreferrer');
                         }}
                       >
                         <Users className="h-4 w-4" />
@@ -851,8 +843,8 @@ export function CreateEbookView() {
                         variant="outline"
                         className="w-full gap-2 border-primary/20 hover:bg-primary/5 transition-all"
                         onClick={() => {
-                          const query = searchTopic || niche;
-                          if (!query) return toast.error("Digite um assunto para buscar");
+                          const query = divulgacaoNiche.trim() || niche;
+                          if (!query) return toast.error('Digite o nicho no campo "Divulgação"');
                           window.open(`https://www.google.com/search?q=site:facebook.com/groups+${encodeURIComponent(query)}`, '_blank', 'noopener,noreferrer');
                         }}
                       >
