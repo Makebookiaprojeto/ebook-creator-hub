@@ -427,10 +427,6 @@ export function CreateEbookView() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="font-display text-3xl font-bold">Criar novo ebook</h1>
-        <p className="mt-1 text-muted-foreground">Siga as etapas e crie seu produto em minutos.</p>
-      </div>
 
       {/* Progress */}
       <div className="rounded-2xl border bg-card p-5 shadow-soft">
