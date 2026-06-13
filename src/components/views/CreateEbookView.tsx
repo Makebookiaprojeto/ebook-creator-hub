@@ -508,7 +508,6 @@ export function CreateEbookView() {
             {step === 1 && (
               <div className="max-w-xl mx-auto">
                 <h2 className="font-display text-xl font-semibold">Defina o preço</h2>
-                <p className="mt-1 text-sm text-muted-foreground">Digite ou escolha uma sugestão abaixo.</p>
                 <div className="mt-6">
                   <label className="text-xs font-medium uppercase text-muted-foreground">Preço de venda (R$)</label>
                   <div className="mt-2 relative">
