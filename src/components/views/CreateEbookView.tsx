@@ -782,9 +782,6 @@ export function CreateEbookView() {
                       <Search className="h-5 w-5 text-primary" />
                       Divulgação
                     </h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Digite o nicho do seu ebook para gerar um link de divulgação:
-                    </p>
                     <div className="flex flex-col sm:flex-row gap-2">
                       <Input
                         placeholder="Ex: Emagrecimento, Finanças..."
@@ -803,9 +800,10 @@ export function CreateEbookView() {
                         }}
                       >
                         <Search className="h-4 w-4" />
-                        Gera link
+                        Buscar
                       </Button>
                     </div>
+
                     {generatedDivulgacaoLink && (
                       <a
                         href={generatedDivulgacaoLink}
