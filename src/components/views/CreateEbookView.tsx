@@ -683,12 +683,49 @@ export function CreateEbookView() {
                         <Button
                           variant="outline"
                           className="w-full h-12 gap-2 border-primary/20 hover:bg-primary/5"
-                          onClick={() => {
-                            if (isPublished && ebookLink) {
-                              window.open(ebookLink, '_blank');
-                            } else if (generatedEbookId) {
-                              const finalLink = ebookLink || `${window.location.origin}/e/${createdEbookSlug}`;
-                              window.open(finalLink, '_blank');
+                          onClick={async () => {
+                            // Always open a tab synchronously to avoid popup blockers
+                            const tab = window.open("about:blank", "_blank");
+
+                            try {
+                              if (!generatedEbookId) {
+                                throw new Error("Ebook ainda não foi gerado");
+                              }
+
+                              // Re-fetch the canonical slug + ensure it is public
+                              const { data: eb, error } = await supabase
+                                .from("ebooks")
+                                .select("slug, is_public, status")
+                                .eq("id", generatedEbookId)
+                                .maybeSingle();
+
+                              if (error) throw error;
+                              if (!eb?.slug) {
+                                throw new Error("Link do ebook não encontrado");
+                              }
+
+                              // Make sure the page is actually public before opening
+                              if (!eb.is_public || eb.status !== "published") {
+                                const { error: upErr } = await supabase
+                                  .from("ebooks")
+                                  .update({ is_public: true, status: "published" })
+                                  .eq("id", generatedEbookId);
+                                if (upErr) throw upErr;
+                              }
+
+                              const url = `${window.location.origin}/e/${eb.slug}`;
+                              setCreatedEbookSlug(eb.slug);
+                              setEbookLink(url);
+
+                              if (tab) {
+                                tab.location.href = url;
+                              } else {
+                                window.location.href = url;
+                              }
+                            } catch (err: any) {
+                              console.error("Ver na web error:", err);
+                              if (tab) tab.close();
+                              toast.error(err?.message || "Não foi possível abrir a página de vendas");
                             }
                           }}
                         >
