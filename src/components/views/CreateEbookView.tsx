@@ -94,6 +94,8 @@ export function CreateEbookView() {
   const [generationProgress, setGenerationProgress] = useState<{ done: number; total: number } | null>(null);
   const [isPublished, setIsPublished] = useState(false);
   const [searchTopic, setSearchTopic] = useState("");
+  const [divulgacaoNiche, setDivulgacaoNiche] = useState("");
+  const [generatedDivulgacaoLink, setGeneratedDivulgacaoLink] = useState("");
   const [ebookLink, setEbookLink] = useState("");
   const [createdEbookSlug, setCreatedEbookSlug] = useState<string | null>(null);
   const [searchedGroups, setSearchedGroups] = useState<FbGroup[]>([]);
