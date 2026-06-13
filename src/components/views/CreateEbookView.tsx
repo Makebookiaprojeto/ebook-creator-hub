@@ -369,25 +369,40 @@ export function CreateEbookView() {
     }
 
     try {
-      if (generatedEbookId) {
-        // Mock update of primary colors and price in DB if needed
-        await supabase.from("ebooks").update({ 
-          title, 
-          price, 
-          price_cents: Math.round(price * 100),
-          status: "published", 
-          is_public: true 
-        }).eq("id", generatedEbookId);
+      if (!generatedEbookId) {
+        throw new Error("Ebook ainda não foi gerado");
       }
-      
+
+      await supabase.from("ebooks").update({
+        title,
+        price,
+        price_cents: Math.round(price * 100),
+        status: "published",
+        is_public: true,
+      }).eq("id", generatedEbookId);
+
+      // Re-fetch the canonical slug from DB to guarantee a valid public URL
+      const { data: ebRow, error: fetchErr } = await supabase
+        .from("ebooks")
+        .select("slug, is_public")
+        .eq("id", generatedEbookId)
+        .maybeSingle();
+
+      if (fetchErr || !ebRow?.slug) {
+        throw new Error("Não foi possível obter o link público do ebook");
+      }
+
+      setCreatedEbookSlug(ebRow.slug);
+      setEbookLink(`${window.location.origin}/e/${ebRow.slug}`);
+
       setGeneratingSalesPage(false);
       setSalesPageGenerated(true);
       setIsPublished(true);
       toast.success("Página de vendas gerada e publicada com sucesso!");
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      console.error("generateSalesPage error:", error);
       setGeneratingSalesPage(false);
-      toast.error("Erro ao publicar a página de vendas");
+      toast.error(error?.message || "Erro ao publicar a página de vendas");
     }
   };
 
