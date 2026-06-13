@@ -630,7 +630,7 @@ export function CreateEbookView() {
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Selecione" />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent position="popper" side="bottom">
                             {colorOptions.map((color) => (
                               <SelectItem key={color.value} value={color.value}>
                                 <div className="flex items-center gap-2">
@@ -648,7 +648,7 @@ export function CreateEbookView() {
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Selecione" />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent position="popper" side="bottom">
                             {colorOptions.map((color) => (
                               <SelectItem key={color.value} value={color.value}>
                                 <div className="flex items-center gap-2">
