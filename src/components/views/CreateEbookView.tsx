@@ -782,9 +782,6 @@ export function CreateEbookView() {
                       <Search className="h-5 w-5 text-primary" />
                       Divulgação
                     </h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Digite o nicho do seu ebook para gerar um link de divulgação:
-                    </p>
                     <div className="flex flex-col sm:flex-row gap-2">
                       <Input
                         placeholder="Ex: Emagrecimento, Finanças..."
@@ -803,9 +800,10 @@ export function CreateEbookView() {
                         }}
                       >
                         <Search className="h-4 w-4" />
-                        Gera link
+                        Buscar
                       </Button>
                     </div>
+
                     {generatedDivulgacaoLink && (
                       <a
                         href={generatedDivulgacaoLink}
@@ -823,38 +821,31 @@ export function CreateEbookView() {
                       <Users className="h-5 w-5 text-primary" />
                       Onde divulgar seu Ebook
                     </h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Usaremos o nicho digitado em "Divulgação" para encontrar grupos ativos no Facebook.
-                    </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <Button 
-                        className="w-full gradient-primary text-primary-foreground shadow-glow gap-2"
+                    <div className="relative">
+                      <Input
+                        readOnly
+                        value={`Buscar melhores grupos relacionados a "${divulgacaoNiche.trim() || "nicho preenchido em divulgação"}"`}
+                        className="pr-12 cursor-pointer"
                         onClick={() => {
                           const query = divulgacaoNiche.trim() || niche;
                           if (!query) return toast.error('Digite o nicho no campo "Divulgação"');
                           window.open(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(query)}`, '_blank', 'noopener,noreferrer');
                         }}
-                      >
-                        <Users className="h-4 w-4" />
-                        Buscar no Facebook
-                      </Button>
-                      
-                      <Button 
-                        variant="outline"
-                        className="w-full gap-2 border-primary/20 hover:bg-primary/5 transition-all"
+                      />
+                      <button
+                        type="button"
+                        aria-label="Abrir grupos no Facebook"
                         onClick={() => {
                           const query = divulgacaoNiche.trim() || niche;
                           if (!query) return toast.error('Digite o nicho no campo "Divulgação"');
-                          window.open(`https://www.google.com/search?q=site:facebook.com/groups+${encodeURIComponent(query)}`, '_blank', 'noopener,noreferrer');
+                          window.open(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(query)}`, '_blank', 'noopener,noreferrer');
                         }}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center rounded-md text-primary hover:bg-primary/10 transition-colors"
                       >
-                        <Search className="h-4 w-4" />
-                        Alternativa (Google)
-                      </Button>
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
                     </div>
-                    <p className="text-[10px] text-muted-foreground mt-3 text-center opacity-70">
-                      Dica: Se o Facebook bloquear a busca direta, a alternativa via Google costuma encontrar mais grupos ativos.
-                    </p>
+
                   </div>
 
                   <div className="rounded-2xl border bg-card p-5 shadow-sm">
