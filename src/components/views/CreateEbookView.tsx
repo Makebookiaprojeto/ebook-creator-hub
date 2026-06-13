@@ -63,7 +63,8 @@ const colorOptions = [
   { name: "Roxo", value: "#8B5CF6" },
   { name: "Rosa", value: "#EC4899" },
   { name: "Preto", value: "#000000" },
-  { name: "Branco", value: "#FFFFFF" }
+  { name: "Branco", value: "#FFFFFF" },
+  { name: "Cinza escuro", value: "#121212" }
 ];
 
 type FbGroup = { name: string; members: number; engagement: string };
