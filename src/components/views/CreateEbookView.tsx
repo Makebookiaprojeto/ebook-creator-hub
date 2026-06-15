@@ -829,7 +829,7 @@ export function CreateEbookView() {
                         onClick={() => {
                           const query = divulgacaoNiche.trim() || niche;
                           if (!query) return toast.error('Digite o nicho no campo "Divulgação"');
-                          window.open(`https://www.google.com/search?q=${encodeURIComponent(`site:facebook.com/groups "${query}"`)}`, '_blank', 'noopener,noreferrer');
+                          window.open(`https://www.google.com/search?q=${encodeURIComponent(`grupos do facebook sobre ${query}`)}`, '_blank', 'noopener,noreferrer');
                         }}
                       />
                       <button
@@ -838,7 +838,7 @@ export function CreateEbookView() {
                         onClick={() => {
                           const query = divulgacaoNiche.trim() || niche;
                           if (!query) return toast.error('Digite o nicho no campo "Divulgação"');
-                          window.open(`https://www.google.com/search?q=${encodeURIComponent(`site:facebook.com/groups "${query}"`)}`, '_blank', 'noopener,noreferrer');
+                          window.open(`https://www.google.com/search?q=${encodeURIComponent(`grupos do facebook sobre ${query}`)}`, '_blank', 'noopener,noreferrer');
                         }}
                         className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center rounded-md text-primary hover:bg-primary/10 transition-colors"
                       >
