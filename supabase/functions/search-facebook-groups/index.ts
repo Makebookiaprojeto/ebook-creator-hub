@@ -65,7 +65,12 @@ serve(async (req) => {
       },
     });
 
-    if (!response.ok) throw new Error("Não foi possível consultar resultados públicos agora.");
+    if (!response.ok) {
+      return new Response(JSON.stringify({ groups: [] }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      });
+    }
 
     const markdown = await response.text();
     const groups = new Map<string, GroupResult>();
