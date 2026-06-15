@@ -793,10 +793,10 @@ export function CreateEbookView() {
                         className="gradient-primary text-primary-foreground shadow-glow gap-2"
                         onClick={() => {
                           if (!divulgacaoNiche.trim()) return toast.error("Digite o nicho do ebook");
-                          const link = `https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(divulgacaoNiche.trim())}`;
-                          setGeneratedDivulgacaoLink(link);
-                          navigator.clipboard.writeText(link).catch(() => {});
-                          toast.success("Link gerado e copiado!");
+                          const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(`grupos de facebook sobre ${divulgacaoNiche.trim()}`)}`;
+                          setGeneratedDivulgacaoLink(searchUrl);
+                          window.open(searchUrl, "_blank", "noopener,noreferrer");
+                          toast.success("Pesquisa aberta em nova aba!");
                         }}
                       >
                         <Search className="h-4 w-4" />
