@@ -825,29 +825,13 @@ export function CreateEbookView() {
                       />
                       <Button
                         className="gradient-primary text-primary-foreground shadow-glow gap-2"
-                        onClick={() => {
-                          if (!divulgacaoNiche.trim()) return toast.error("Digite o nicho do ebook");
-                          const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(`grupos de facebook sobre ${divulgacaoNiche.trim()}`)}`;
-                          setGeneratedDivulgacaoLink(searchUrl);
-                          window.open(searchUrl, "_blank", "noopener,noreferrer");
-                          toast.success("Pesquisa aberta em nova aba!");
-                        }}
+                        onClick={searchFacebookGroups}
+                        disabled={searchingGroups}
                       >
-                        <Search className="h-4 w-4" />
+                        {searchingGroups ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
                         Buscar
                       </Button>
                     </div>
-
-                    {generatedDivulgacaoLink && (
-                      <a
-                        href={generatedDivulgacaoLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-3 block text-sm text-primary underline break-all"
-                      >
-                        {generatedDivulgacaoLink}
-                      </a>
-                    )}
                   </div>
 
                   <div className="rounded-2xl border bg-card p-5 shadow-sm">
@@ -856,35 +840,37 @@ export function CreateEbookView() {
                       Onde divulgar seu Ebook
                     </h3>
                     {(() => {
-                      const query = (divulgacaoNiche.trim() || niche).trim();
-                      if (!query) {
+                      if (searchingGroups) {
+                        return <p className="text-sm text-muted-foreground">Buscando grupos públicos encontrados pelo Google...</p>;
+                      }
+                      if (!groupSearchDone) {
                         return (
                           <p className="text-sm text-muted-foreground">
-                            Digite o nicho no campo "Divulgação" acima para ver pesquisas recomendadas.
+                            Digite o nicho no campo "Divulgação" acima para buscar grupos públicos.
                           </p>
                         );
                       }
-                      const g = (q: string) =>
-                        `https://www.google.com/search?q=${encodeURIComponent(q)}`;
-                      const recommendations = [
-                        { label: `Grupos de Facebook sobre ${query}`, url: g(`grupos de facebook sobre ${query}`) },
-                        { label: `Comunidades Reddit sobre ${query}`, url: g(`reddit comunidades sobre ${query}`) },
-                        { label: `Canais Telegram sobre ${query}`, url: g(`canais do telegram sobre ${query}`) },
-                        { label: `Fóruns especializados em ${query}`, url: g(`fóruns sobre ${query}`) },
-                        { label: `Palavras-chave para pesquisar ${query}`, url: g(`palavras-chave populares ${query}`) },
-                      ];
+                      if (searchedGroups.length === 0) {
+                        return <p className="text-sm text-muted-foreground">Não foram encontrados grupos públicos para esse nicho.</p>;
+                      }
                       return (
                         <ul className="space-y-2">
-                          {recommendations.map((r) => (
-                            <li key={r.label}>
+                          {searchedGroups.map((group) => (
+                            <li key={group.url}>
                               <a
-                                href={r.url}
+                                href={group.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="group flex items-center justify-between gap-3 rounded-lg border bg-background px-3 py-2 text-sm transition-colors hover:bg-primary/5 hover:border-primary/40"
                               >
-                                <span className="truncate">{r.label}</span>
-                                <ArrowRight className="h-4 w-4 text-primary shrink-0 transition-transform group-hover:translate-x-0.5" />
+                                <span className="min-w-0">
+                                  <span className="block truncate font-medium">{group.name}</span>
+                                  <span className="block truncate text-xs text-muted-foreground">{group.description || group.url}</span>
+                                </span>
+                                <span className="flex shrink-0 items-center gap-1 text-primary">
+                                  <span className="hidden sm:inline">Acessar Grupo</span>
+                                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                                </span>
                               </a>
                             </li>
                           ))}
