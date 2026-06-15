@@ -829,16 +829,16 @@ export function CreateEbookView() {
                         onClick={() => {
                           const query = divulgacaoNiche.trim() || niche;
                           if (!query) return toast.error('Digite o nicho no campo "Divulgação"');
-                          window.open(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(query)}`, '_blank', 'noopener,noreferrer');
+                          window.open(`https://www.google.com/search?q=${encodeURIComponent(`site:facebook.com/groups "${query}"`)}`, '_blank', 'noopener,noreferrer');
                         }}
                       />
                       <button
                         type="button"
-                        aria-label="Abrir grupos no Facebook"
+                        aria-label="Buscar grupos no Google"
                         onClick={() => {
                           const query = divulgacaoNiche.trim() || niche;
                           if (!query) return toast.error('Digite o nicho no campo "Divulgação"');
-                          window.open(`https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(query)}`, '_blank', 'noopener,noreferrer');
+                          window.open(`https://www.google.com/search?q=${encodeURIComponent(`site:facebook.com/groups "${query}"`)}`, '_blank', 'noopener,noreferrer');
                         }}
                         className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center rounded-md text-primary hover:bg-primary/10 transition-colors"
                       >
