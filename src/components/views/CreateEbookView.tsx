@@ -67,7 +67,7 @@ const colorOptions = [
   { name: "Cinza escuro", value: "#121212" }
 ];
 
-type FbGroup = { name: string; members: number; engagement: string };
+type FbGroup = { name: string; url: string; description: string };
 type ChapterDraft = {
   title: string;
   subtitle: string;
@@ -95,7 +95,8 @@ export function CreateEbookView() {
   const [isPublished, setIsPublished] = useState(false);
   const [searchTopic, setSearchTopic] = useState("");
   const [divulgacaoNiche, setDivulgacaoNiche] = useState("");
-  const [generatedDivulgacaoLink, setGeneratedDivulgacaoLink] = useState("");
+  const [searchingGroups, setSearchingGroups] = useState(false);
+  const [groupSearchDone, setGroupSearchDone] = useState(false);
   const [ebookLink, setEbookLink] = useState("");
   const [createdEbookSlug, setCreatedEbookSlug] = useState<string | null>(null);
   const [searchedGroups, setSearchedGroups] = useState<FbGroup[]>([]);
@@ -343,6 +344,39 @@ export function CreateEbookView() {
       console.error(e);
       toast.error(e?.message ?? "Erro ao buscar ebook");
       setGenerating(false);
+    }
+  };
+
+  const searchFacebookGroups = async () => {
+    const query = divulgacaoNiche.trim();
+    if (!query) return toast.error("Digite o nicho do ebook");
+
+    setSearchingGroups(true);
+    setGroupSearchDone(false);
+    setSearchedGroups([]);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("search-facebook-groups", {
+        body: { niche: query },
+      });
+
+      if (error) throw error;
+
+      const groups = Array.isArray(data?.groups) ? data.groups : [];
+      setSearchedGroups(groups);
+      setGroupSearchDone(true);
+
+      if (groups.length === 0) {
+        toast.info("Nenhum grupo público encontrado para esse nicho.");
+      } else {
+        toast.success("Grupos encontrados!");
+      }
+    } catch (e: any) {
+      console.error(e);
+      toast.error(e?.message ?? "Erro ao buscar grupos públicos");
+      setGroupSearchDone(true);
+    } finally {
+      setSearchingGroups(false);
     }
   };
 
