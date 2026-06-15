@@ -56,23 +56,27 @@ serve(async (req) => {
       });
     }
 
-    const googleUrl = `https://www.google.com/search?gbv=1&q=${encodeURIComponent(`site:facebook.com/groups "${query}"`)}`;
-    const searchUrl = `https://r.jina.ai/http://r.jina.ai/http://${googleUrl}`;
-    const response = await fetch(searchUrl, {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
-        "Accept-Language": "pt-BR,pt;q=0.9,en;q=0.8",
-      },
-    });
+    const googleQuery = `site:facebook.com/groups "${query}"`;
+    const googleUrls = [
+      `https://www.google.com/search?gbv=1&q=${encodeURIComponent(googleQuery)}`,
+      `https://www.google.com/search?q=${encodeURIComponent(googleQuery)}&gbv=1&num=10&hl=pt-BR`,
+      `https://www.google.com/search?q=${encodeURIComponent(googleQuery)}&udm=14&num=10&hl=pt-BR`,
+    ];
+    let markdown = "";
 
-    if (!response.ok) {
-      return new Response(JSON.stringify({ groups: [] }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 200,
+    for (const url of googleUrls) {
+      const response = await fetch(`https://r.jina.ai/http://r.jina.ai/http://${url}`, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+          "Accept-Language": "pt-BR,pt;q=0.9,en;q=0.8",
+        },
       });
-    }
 
-    const markdown = await response.text();
+      if (response.ok) {
+        markdown = await response.text();
+        if (markdown.includes("facebook.com/groups")) break;
+      }
+    }
     const groups = new Map<string, GroupResult>();
     const resultRegex = /### \[([^\]]+)\]\((https?:\/\/[^)]+facebook\.com\/groups\/[^)]+)\)([\s\S]*?)(?=\n### \[|$)/gi;
     let match: RegExpExecArray | null;
