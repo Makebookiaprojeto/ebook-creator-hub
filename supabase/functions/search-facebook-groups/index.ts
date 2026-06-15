@@ -56,7 +56,8 @@ serve(async (req) => {
       });
     }
 
-    const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(`site:facebook.com/groups "${query}"`)}&num=10&hl=pt-BR`;
+    const googleUrl = `https://www.google.com/search?gbv=1&q=${encodeURIComponent(`site:facebook.com/groups "${query}"`)}`;
+    const searchUrl = `https://r.jina.ai/http://r.jina.ai/http://${googleUrl}`;
     const response = await fetch(searchUrl, {
       headers: {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
@@ -66,17 +67,17 @@ serve(async (req) => {
 
     if (!response.ok) throw new Error("Não foi possível consultar resultados públicos agora.");
 
-    const html = await response.text();
+    const markdown = await response.text();
     const groups = new Map<string, GroupResult>();
-    const resultRegex = /<a\s+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>[\s\S]*?(?:<div[^>]*class="[^"]*(?:VwiC3b|IsZvec)[^"]*"[^>]*>([\s\S]*?)<\/div>)?/gi;
+    const resultRegex = /### \[([^\]]+)\]\((https?:\/\/[^)]+facebook\.com\/groups\/[^)]+)\)([\s\S]*?)(?=\n### \[|$)/gi;
     let match: RegExpExecArray | null;
 
-    while ((match = resultRegex.exec(html)) && groups.size < 8) {
-      const url = normalizeFacebookGroupUrl(match[1]);
+    while ((match = resultRegex.exec(markdown)) && groups.size < 8) {
+      const url = normalizeFacebookGroupUrl(match[2]);
       if (!url || groups.has(url)) continue;
 
-      const name = cleanText(match[2]).replace(/^Facebook\s*-\s*/i, "").slice(0, 90) || "Grupo do Facebook";
-      const description = cleanText(match[3] || "Grupo público encontrado nos resultados do Google.").slice(0, 180);
+      const name = cleanText(match[1]).replace(/!\[Image \d+\][^)]*\)/g, "").replace(/\s*Facebook.*$/i, "").slice(0, 90) || "Grupo do Facebook";
+      const description = cleanText(match[3] || "Grupo público encontrado nos resultados do Google.").replace(/\[Read more\].*$/i, "").slice(0, 180);
       groups.set(url, { name, url, description });
     }
 
