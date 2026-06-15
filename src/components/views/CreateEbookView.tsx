@@ -98,7 +98,7 @@ const normalizeFacebookGroupUrl = (rawUrl: string) => {
 };
 
 const extractFacebookGroups = (markdown: string): FbGroup[] => {
-  const groups = new Map<string, FbGroup>();
+  const groups = new globalThis.Map<string, FbGroup>();
   const resultRegex = /### \[([^\]]+)\]\((https?:\/\/[^)]+facebook\.com\/groups\/[^)]+)\)([\s\S]*?)(?=\n### \[|$)/gi;
   let match: RegExpExecArray | null;
 
@@ -395,13 +395,13 @@ export function CreateEbookView() {
     setSearchedGroups([]);
 
     try {
-      const { data, error } = await supabase.functions.invoke("search-facebook-groups", {
-        body: { niche: query },
-      });
+      const googleQuery = `site:facebook.com/groups "${query}"`;
+      const response = await fetch(
+        `https://r.jina.ai/http://r.jina.ai/http://https://www.google.com/search?gbv=1&q=${encodeURIComponent(googleQuery)}`
+      );
+      if (!response.ok) throw new Error("Não foi possível consultar resultados públicos agora.");
 
-      if (error) throw error;
-
-      const groups = Array.isArray(data?.groups) ? data.groups : [];
+      const groups = extractFacebookGroups(await response.text());
       setSearchedGroups(groups);
       setGroupSearchDone(true);
 
