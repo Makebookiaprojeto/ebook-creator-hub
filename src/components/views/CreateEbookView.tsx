@@ -821,32 +821,43 @@ export function CreateEbookView() {
                       <Users className="h-5 w-5 text-primary" />
                       Onde divulgar seu Ebook
                     </h3>
-                    <div className="relative">
-                      <Input
-                        readOnly
-                        value={`Buscar melhores grupos relacionados a "${divulgacaoNiche.trim() || "nicho preenchido em divulgação"}"`}
-                        className="pr-12 cursor-pointer"
-                        onClick={() => {
-                          const query = divulgacaoNiche.trim() || niche;
-                          if (!query) return toast.error('Digite o nicho no campo "Divulgação"');
-                          const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(`site:facebook.com/groups "${query}"`)}`;
-                          window.open(googleSearchUrl, '_blank', 'noopener,noreferrer');
-                        }}
-                      />
-                      <button
-                        type="button"
-                        aria-label="Buscar grupos no Google"
-                        onClick={() => {
-                          const query = divulgacaoNiche.trim() || niche;
-                          if (!query) return toast.error('Digite o nicho no campo "Divulgação"');
-                          const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(`site:facebook.com/groups "${query}"`)}`;
-                          window.open(googleSearchUrl, '_blank', 'noopener,noreferrer');
-                        }}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center rounded-md text-primary hover:bg-primary/10 transition-colors"
-                      >
-                        <ArrowRight className="h-4 w-4" />
-                      </button>
-                    </div>
+                    {(() => {
+                      const query = (divulgacaoNiche.trim() || niche).trim();
+                      if (!query) {
+                        return (
+                          <p className="text-sm text-muted-foreground">
+                            Digite o nicho no campo "Divulgação" acima para ver pesquisas recomendadas.
+                          </p>
+                        );
+                      }
+                      const g = (q: string) =>
+                        `https://www.google.com/search?q=${encodeURIComponent(q)}`;
+                      const recommendations = [
+                        { label: `Grupos de Facebook sobre ${query}`, url: g(`grupos de facebook sobre ${query}`) },
+                        { label: `Comunidades Reddit sobre ${query}`, url: g(`reddit comunidades sobre ${query}`) },
+                        { label: `Canais Telegram sobre ${query}`, url: g(`canais do telegram sobre ${query}`) },
+                        { label: `Fóruns especializados em ${query}`, url: g(`fóruns sobre ${query}`) },
+                        { label: `Palavras-chave para pesquisar ${query}`, url: g(`palavras-chave populares ${query}`) },
+                      ];
+                      return (
+                        <ul className="space-y-2">
+                          {recommendations.map((r) => (
+                            <li key={r.label}>
+                              <a
+                                href={r.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group flex items-center justify-between gap-3 rounded-lg border bg-background px-3 py-2 text-sm transition-colors hover:bg-primary/5 hover:border-primary/40"
+                              >
+                                <span className="truncate">{r.label}</span>
+                                <ArrowRight className="h-4 w-4 text-primary shrink-0 transition-transform group-hover:translate-x-0.5" />
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      );
+                    })()}
+
 
                   </div>
 
