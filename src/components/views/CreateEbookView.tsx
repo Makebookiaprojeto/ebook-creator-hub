@@ -75,6 +75,45 @@ type ChapterDraft = {
   image_url: string | null;
 };
 
+const cleanDivulgacaoText = (value: string) =>
+  value
+    .replace(/!\[Image \d+\]\([^)]*\)/g, "")
+    .replace(/\[Read more\].*$/i, "")
+    .replace(/[_*`#>]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const normalizeFacebookGroupUrl = (rawUrl: string) => {
+  try {
+    const url = new URL(rawUrl);
+    if (!url.hostname.includes("facebook.com")) return null;
+
+    const match = url.pathname.match(/^\/groups\/([^/?#]+)/i);
+    if (!match?.[1] || ["search", "discover", "feed"].includes(match[1].toLowerCase())) return null;
+
+    return `https://www.facebook.com/groups/${match[1]}`;
+  } catch {
+    return null;
+  }
+};
+
+const extractFacebookGroups = (markdown: string): FbGroup[] => {
+  const groups = new Map<string, FbGroup>();
+  const resultRegex = /### \[([^\]]+)\]\((https?:\/\/[^)]+facebook\.com\/groups\/[^)]+)\)([\s\S]*?)(?=\n### \[|$)/gi;
+  let match: RegExpExecArray | null;
+
+  while ((match = resultRegex.exec(markdown)) && groups.size < 8) {
+    const url = normalizeFacebookGroupUrl(match[2]);
+    if (!url || groups.has(url)) continue;
+
+    const name = cleanDivulgacaoText(match[1]).replace(/\s*Facebook.*$/i, "").slice(0, 90) || "Grupo do Facebook";
+    const description = cleanDivulgacaoText(match[3] || "Grupo público encontrado nos resultados do Google.").slice(0, 180);
+    groups.set(url, { name, url, description });
+  }
+
+  return Array.from(groups.values());
+};
+
 export function CreateEbookView() {
   const { createEbookWithChapters } = useEbooks();
   const [saving, setSaving] = useState(false);
