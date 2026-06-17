@@ -196,7 +196,7 @@ export function DashboardView() {
 
       setSalesHistory(last6Months);
 
-      const methods = ["Pix", "Cartão de Crédito", "Boleto", "Pix Automático", "PicPay", "Google Pay", "Apple Pay"];
+      const methods = ["Pix", "Cartão de Crédito", "Boleto", "Pix Automático"];
 
       const calculatedPaymentStats = methods.map(method => {
         const methodSales = realSales.filter(s => (s as any).payment_method === method || s.platform === method);
