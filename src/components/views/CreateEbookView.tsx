@@ -50,6 +50,7 @@ import { useEbooks } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
 import { EbookPreview } from "@/components/EbookPreview";
 import { EbookPreviewCarousel } from "@/components/EbookPreviewCarousel";
+import { generateEbookPdf, downloadPdf } from "@/lib/ebookPdf";
 import videoDivulgacao from "@/assets/video-divulgacao-v3.mp4.asset.json";
 import videoDivulgacaoPoster from "@/assets/video-divulgacao-poster-v3.jpg.asset.json";
 
@@ -125,6 +126,7 @@ export function CreateEbookView() {
   const [generating, setGenerating] = useState(false);
   const [generationStage, setGenerationStage] = useState<string>("");
   const [generated, setGenerated] = useState(false);
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [coverUrl, setCoverUrl] = useState<string | null>(null);
@@ -649,6 +651,32 @@ export function CreateEbookView() {
                 {generated && (
                   <div className="mt-6 space-y-6">
                     <EbookPreviewCarousel title={title} subtitle={subtitle} coverUrl={coverUrl} chapters={chapters} />
+                    <div className="flex justify-center">
+                      <Button
+                        onClick={async () => {
+                          try {
+                            setDownloadingPdf(true);
+                            const blob = await generateEbookPdf({ title, subtitle, cover_url: coverUrl, chapters });
+                            const safeName = (title || "ebook").replace(/[^a-z0-9-_ ]/gi, "").trim() || "ebook";
+                            downloadPdf(blob, `${safeName}.pdf`);
+                            toast.success("PDF baixado com sucesso!");
+                          } catch (e) {
+                            console.error(e);
+                            toast.error("Erro ao gerar PDF");
+                          } finally {
+                            setDownloadingPdf(false);
+                          }
+                        }}
+                        disabled={downloadingPdf}
+                        className="gradient-primary text-primary-foreground shadow-glow h-12 px-6"
+                      >
+                        {downloadingPdf ? (
+                          <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Gerando PDF...</>
+                        ) : (
+                          <><Download className="mr-2 h-4 w-4" /> Baixar PDF</>
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 )}
 
