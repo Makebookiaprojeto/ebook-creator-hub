@@ -996,7 +996,7 @@ export function CreateEbookView() {
                       </pre>
                       <Button 
                         size="sm"
-                        className="absolute bottom-3 right-3 bg-green-600 hover:bg-green-700 text-white shadow-sm gap-2"
+                        className="absolute bottom-3 right-3 bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm gap-2"
                         onClick={() => {
                           const text = `Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação !!!\n\nLink: ${ebookLink}`;
                           navigator.clipboard.writeText(text);
