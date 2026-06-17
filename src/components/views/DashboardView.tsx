@@ -312,6 +312,20 @@ export function DashboardView() {
         </div>
       </div>
 
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:max-w-2xl">
+        {[
+          { label: "Abandono C.", value: "0" },
+          { label: "Reembolso", value: "0%" },
+          { label: "Charge Back", value: "0%" },
+          { label: "MED", value: "0%" },
+        ].map((m) => (
+          <div key={m.label} className="rounded-2xl border bg-card p-4 shadow-soft">
+            <p className="text-xs text-muted-foreground">{m.label}</p>
+            <p className="mt-1 font-display text-2xl font-bold tracking-tight text-foreground">{m.value}</p>
+          </div>
+        ))}
+      </div>
+
       <div className="rounded-2xl border bg-card p-8 shadow-glow">
         <div className="mb-8">
           <h2 className="font-display text-xl font-semibold flex items-center gap-2">
