@@ -57,6 +57,21 @@ import videoDivulgacaoPoster from "@/assets/video-divulgacao-poster-v3.jpg.asset
 const steps = ["Nicho", "Preço", "Ebook", "Página de Vendas", "Divulgação"];
 const pricePresets = [19.9, 29.9, 39.9, 49.9];
 
+const getPreviewTextColor = (bg: string): string => {
+  const hex = bg.replace("#", "");
+  if (hex.length !== 6) return "#FFFFFF";
+  const r = parseInt(hex.slice(0, 2), 16);
+  const g = parseInt(hex.slice(2, 4), 16);
+  const b = parseInt(hex.slice(4, 6), 16);
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return luminance > 0.55 ? "#111111" : "#FFFFFF";
+};
+
+const getPreviewMutedColor = (bg: string): string => {
+  return getPreviewTextColor(bg) === "#FFFFFF" ? "#D1D5DB" : "#4B5563";
+};
+
+
 const colorOptions = [
   { name: "Laranja", value: "#F97316" },
   { name: "Azul", value: "#3B82F6" },
