@@ -96,7 +96,7 @@ export function AppSidebar({ active, onChange }: Props) {
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup className="py-0">
+        <SidebarGroup className="pt-3 pb-0">
           <SidebarGroupContent>
             <SidebarMenu>
               {items
