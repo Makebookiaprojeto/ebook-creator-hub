@@ -270,9 +270,9 @@ export function DashboardView() {
   const totalEbooks = baseEbooks + (ebooks?.length || 0);
 
   return (
-    <div className="space-y-6 animate-fade-in py-2">
+    <div className="space-y-3 animate-fade-in py-1">
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-12">
         <div className="md:col-span-5 shadow-glow rounded-2xl">
           <StatCard 
             label="Lucro" 
@@ -282,7 +282,7 @@ export function DashboardView() {
             large
             action={
               <Select value={profitPeriod} onValueChange={(v: any) => setProfitPeriod(v)}>
-                <SelectTrigger className="h-7 w-[120px] text-xs">
+                <SelectTrigger className="h-6 w-[110px] text-[11px]">
                   <SelectValue placeholder="Período" />
                 </SelectTrigger>
                 <SelectContent>
@@ -294,7 +294,7 @@ export function DashboardView() {
             }
           />
         </div>
-        <div className="md:col-span-3 flex flex-col gap-4 shadow-glow rounded-2xl">
+        <div className="md:col-span-3 flex flex-col gap-3 shadow-glow rounded-2xl">
           <StatCard 
             label="Ebooks" 
             value={String(totalEbooks)} 
@@ -302,7 +302,7 @@ export function DashboardView() {
             tint="from-primary/10 to-primary/5" 
           />
         </div>
-        <div className="md:col-span-4 flex flex-col gap-4 shadow-glow rounded-2xl">
+        <div className="md:col-span-4 flex flex-col gap-3 shadow-glow rounded-2xl">
           <StatCard 
             label="Vendas" 
             value={String(stats.totalSales)} 
@@ -313,11 +313,11 @@ export function DashboardView() {
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
-        <div className="md:col-span-2 rounded-2xl border bg-card p-5 shadow-glow">
-          <div className="mb-4">
-            <h2 className="font-display text-base font-semibold flex items-center gap-2">
-              <CreditCard className="h-4 w-4 text-primary" />
+      <div className="grid gap-3 md:grid-cols-3">
+        <div className="md:col-span-2 rounded-2xl border bg-card p-3 shadow-glow">
+          <div className="mb-2">
+            <h2 className="font-display text-sm font-semibold flex items-center gap-2">
+              <CreditCard className="h-3.5 w-3.5 text-primary" />
               Meios de pagamento
             </h2>
           </div>
@@ -326,23 +326,23 @@ export function DashboardView() {
             <Table>
               <TableHeader className="bg-muted/50">
                 <TableRow>
-                  <TableHead className="h-9 text-xs font-semibold">Método</TableHead>
-                  <TableHead className="h-9 text-xs font-semibold">Conversão</TableHead>
-                  <TableHead className="h-9 text-right text-xs font-semibold">Valor</TableHead>
+                  <TableHead className="h-7 text-[11px] font-semibold">Método</TableHead>
+                  <TableHead className="h-7 text-[11px] font-semibold">Conversão</TableHead>
+                  <TableHead className="h-7 text-right text-[11px] font-semibold">Valor</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {paymentStats.map((method) => (
                   <TableRow key={method.name} className="hover:bg-muted/30">
-                    <TableCell className="py-2 font-medium">
-                      <span className="text-xs">{method.name}</span>
+                    <TableCell className="py-1.5 font-medium">
+                      <span className="text-[11px]">{method.name}</span>
                     </TableCell>
-                    <TableCell className="py-2">
-                      <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
+                    <TableCell className="py-1.5">
+                      <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
                         {method.conversion}
                       </span>
                     </TableCell>
-                    <TableCell className="py-2 text-right text-xs font-semibold text-foreground/80">
+                    <TableCell className="py-1.5 text-right text-[11px] font-semibold text-foreground/80">
                       {method.value}
                     </TableCell>
                   </TableRow>
@@ -352,7 +352,7 @@ export function DashboardView() {
           </div>
         </div>
 
-        <div className="rounded-2xl border bg-card p-4 shadow-glow">
+        <div className="rounded-2xl border bg-card p-3 shadow-glow">
           <div className="flex flex-col divide-y">
             {[
               { label: "Abandono C.", value: "0" },
@@ -360,14 +360,15 @@ export function DashboardView() {
               { label: "Charge Back", value: "0%" },
               { label: "MED", value: "0%" },
             ].map((m) => (
-              <div key={m.label} className="flex items-center justify-between py-2 first:pt-0 last:pb-0">
-                <p className="text-xs text-muted-foreground">{m.label}</p>
-                <p className="font-display text-base font-bold tracking-tight text-foreground">{m.value}</p>
+              <div key={m.label} className="flex items-center justify-between py-1.5 first:pt-0 last:pb-0">
+                <p className="text-[11px] text-muted-foreground">{m.label}</p>
+                <p className="font-display text-sm font-bold tracking-tight text-foreground">{m.value}</p>
               </div>
             ))}
           </div>
         </div>
       </div>
+
 
       <SalesByHourChart total={stats.revenue30d} />
     </div>
