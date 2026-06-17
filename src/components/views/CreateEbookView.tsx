@@ -859,7 +859,7 @@ export function CreateEbookView() {
                             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mx-auto" style={{ backgroundColor: `${primaryColor}1A`, color: primaryColor, border: `1px solid ${primaryColor}33` }}>
                               <Sparkles className="h-3 w-3" /> Lançamento
                             </div>
-                            {(() => null)()}
+                            
                             <h1 className="text-2xl font-black tracking-tight leading-none" style={{ color: getPreviewTextColor(secondaryColor) }}>
                               {title || "Seu Título"}
                             </h1>
