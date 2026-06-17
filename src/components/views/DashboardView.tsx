@@ -312,55 +312,59 @@ export function DashboardView() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:max-w-2xl">
-        {[
-          { label: "Abandono C.", value: "0" },
-          { label: "Reembolso", value: "0%" },
-          { label: "Charge Back", value: "0%" },
-          { label: "MED", value: "0%" },
-        ].map((m) => (
-          <div key={m.label} className="rounded-2xl border bg-card p-4 shadow-soft">
-            <p className="text-xs text-muted-foreground">{m.label}</p>
-            <p className="mt-1 font-display text-2xl font-bold tracking-tight text-foreground">{m.value}</p>
+      <div className="grid gap-6 md:grid-cols-3">
+        <div className="md:col-span-2 rounded-2xl border bg-card p-8 shadow-glow">
+          <div className="mb-8">
+            <h2 className="font-display text-xl font-semibold flex items-center gap-2">
+              <CreditCard className="h-5 w-5 text-primary" />
+              Meios de pagamento
+            </h2>
           </div>
-        ))}
-      </div>
 
-      <div className="rounded-2xl border bg-card p-8 shadow-glow">
-        <div className="mb-8">
-          <h2 className="font-display text-xl font-semibold flex items-center gap-2">
-            <CreditCard className="h-5 w-5 text-primary" />
-            Meios de pagamento
-          </h2>
-        </div>
-        
-        <div className="overflow-hidden rounded-xl border">
-          <Table>
-            <TableHeader className="bg-muted/50">
-              <TableRow>
-                <TableHead className="font-semibold">Método</TableHead>
-                <TableHead className="font-semibold">Conversão</TableHead>
-                <TableHead className="text-right font-semibold">Valor</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {paymentStats.map((method) => (
-                <TableRow key={method.name} className="hover:bg-muted/30">
-                  <TableCell className="font-medium">
-                    <span className="text-sm">{method.name}</span>
-                  </TableCell>
-                  <TableCell>
-                    <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-                      {method.conversion}
-                    </span>
-                  </TableCell>
-                  <TableCell className="text-right font-semibold text-foreground/80">
-                    {method.value}
-                  </TableCell>
+          <div className="overflow-hidden rounded-xl border">
+            <Table>
+              <TableHeader className="bg-muted/50">
+                <TableRow>
+                  <TableHead className="font-semibold">Método</TableHead>
+                  <TableHead className="font-semibold">Conversão</TableHead>
+                  <TableHead className="text-right font-semibold">Valor</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {paymentStats.map((method) => (
+                  <TableRow key={method.name} className="hover:bg-muted/30">
+                    <TableCell className="font-medium">
+                      <span className="text-sm">{method.name}</span>
+                    </TableCell>
+                    <TableCell>
+                      <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                        {method.conversion}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-right font-semibold text-foreground/80">
+                      {method.value}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border bg-card p-6 shadow-glow">
+          <div className="flex flex-col divide-y">
+            {[
+              { label: "Abandono C.", value: "0" },
+              { label: "Reembolso", value: "0%" },
+              { label: "Charge Back", value: "0%" },
+              { label: "MED", value: "0%" },
+            ].map((m) => (
+              <div key={m.label} className="flex items-center justify-between py-3 first:pt-0 last:pb-0">
+                <p className="text-sm text-muted-foreground">{m.label}</p>
+                <p className="font-display text-lg font-bold tracking-tight text-foreground">{m.value}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
