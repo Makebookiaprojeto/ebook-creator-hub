@@ -97,33 +97,58 @@ export function AppSidebar({ active, onChange }: Props) {
 
       <SidebarContent>
         <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {items
+                .filter((i) => i.id === "create")
+                .map((item) => {
+                  const isActive = active === item.id;
+                  return (
+                    <SidebarMenuItem key={item.id}>
+                      <SidebarMenuButton
+                        onClick={() => onChange(item.id)}
+                        size="lg"
+                        className={
+                          (isActive
+                            ? "bg-primary text-background font-bold shadow-lg hover:bg-primary/90"
+                            : "bg-primary text-background font-bold shadow-lg hover:bg-primary/90") +
+                          " text-base"
+                        }
+                      >
+                        <item.icon className="h-5 w-5" />
+                        {!collapsed && <span>{item.title}</span>}
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => {
-                const isActive = active === item.id;
-                const isCreateAction = item.id === "create";
-                
-                return (
-                  <SidebarMenuItem key={item.id}>
-                    <SidebarMenuButton
-                      onClick={() => onChange(item.id)}
-                      className={
-                        isActive
-                          ? isCreateAction 
-                            ? "bg-primary text-background font-bold shadow-lg hover:bg-primary/90"
-                            : "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-                          : isCreateAction
-                            ? "bg-primary text-background font-bold shadow-lg hover:bg-primary/90"
+              {items
+                .filter((i) => i.id !== "create")
+                .map((item) => {
+                  const isActive = active === item.id;
+                  return (
+                    <SidebarMenuItem key={item.id}>
+                      <SidebarMenuButton
+                        onClick={() => onChange(item.id)}
+                        className={
+                          isActive
+                            ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                             : "hover:bg-sidebar-accent/60"
-                      }
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
+                        }
+                      >
+                        <item.icon className="h-4 w-4" />
+                        {!collapsed && <span>{item.title}</span>}
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
