@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
-import { BookOpen, ShoppingCart, DollarSign, CreditCard } from "lucide-react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { BookOpen, ShoppingCart, DollarSign, CreditCard, Clock } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip as RTooltip } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 import { StatCard } from "@/components/StatCard";
 import { useEbooks } from "@/hooks/useEbooks";
