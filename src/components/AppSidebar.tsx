@@ -107,15 +107,14 @@ export function AppSidebar({ active, onChange }: Props) {
                     <SidebarMenuItem key={item.id}>
                       <SidebarMenuButton
                         onClick={() => onChange(item.id)}
-                        size="lg"
                         className={
                           (isActive
                             ? "bg-primary text-background font-bold shadow-sm hover:bg-primary/90"
                             : "bg-primary text-background font-bold shadow-sm hover:bg-primary/90") +
-                          " text-base"
+                          " text-sm"
                         }
                       >
-                        <item.icon className="h-5 w-5" />
+                        <item.icon className="h-4 w-4" />
                         {!collapsed && <span>{item.title}</span>}
                       </SidebarMenuButton>
                     </SidebarMenuItem>
