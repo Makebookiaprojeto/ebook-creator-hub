@@ -393,11 +393,12 @@ function SalesByHourChart({ total }: { total: number }) {
   }, [total]);
 
   return (
-    <div className="rounded-2xl border bg-card p-5 shadow-glow">
-      <div className="mb-3 flex items-center justify-end">
-        <span className="text-xs text-muted-foreground">Últimos 30 dias</span>
+    <div className="rounded-2xl border bg-card p-3 shadow-glow">
+      <div className="mb-2 flex items-center justify-end">
+        <span className="text-[11px] text-muted-foreground">Últimos 30 dias</span>
       </div>
-      <div className="h-56 w-full">
+      <div className="h-40 w-full">
+
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
             <defs>
