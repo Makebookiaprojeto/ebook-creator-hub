@@ -96,7 +96,7 @@ export function AppSidebar({ active, onChange }: Props) {
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup>
+        <SidebarGroup className="py-0">
           <SidebarGroupContent>
             <SidebarMenu>
               {items
@@ -110,8 +110,8 @@ export function AppSidebar({ active, onChange }: Props) {
                         size="lg"
                         className={
                           (isActive
-                            ? "bg-primary text-background font-bold shadow-lg hover:bg-primary/90"
-                            : "bg-primary text-background font-bold shadow-lg hover:bg-primary/90") +
+                            ? "bg-primary text-background font-bold shadow-sm hover:bg-primary/90"
+                            : "bg-primary text-background font-bold shadow-sm hover:bg-primary/90") +
                           " text-base"
                         }
                       >
@@ -125,7 +125,8 @@ export function AppSidebar({ active, onChange }: Props) {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarGroup>
+        <SidebarGroup className="pt-0">
+
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
