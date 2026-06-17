@@ -651,6 +651,32 @@ export function CreateEbookView() {
                 {generated && (
                   <div className="mt-6 space-y-6">
                     <EbookPreviewCarousel title={title} subtitle={subtitle} coverUrl={coverUrl} chapters={chapters} />
+                    <div className="flex justify-center">
+                      <Button
+                        onClick={async () => {
+                          try {
+                            setDownloadingPdf(true);
+                            const blob = await generateEbookPdf({ title, subtitle, coverUrl, chapters });
+                            const safeName = (title || "ebook").replace(/[^a-z0-9-_ ]/gi, "").trim() || "ebook";
+                            downloadPdf(blob, `${safeName}.pdf`);
+                            toast.success("PDF baixado com sucesso!");
+                          } catch (e) {
+                            console.error(e);
+                            toast.error("Erro ao gerar PDF");
+                          } finally {
+                            setDownloadingPdf(false);
+                          }
+                        }}
+                        disabled={downloadingPdf}
+                        className="gradient-primary text-primary-foreground shadow-glow h-12 px-6"
+                      >
+                        {downloadingPdf ? (
+                          <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Gerando PDF...</>
+                        ) : (
+                          <><Download className="mr-2 h-4 w-4" /> Baixar PDF</>
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 )}
 
