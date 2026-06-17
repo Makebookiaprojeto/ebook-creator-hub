@@ -1030,7 +1030,7 @@ export function CreateEbookView() {
                       />
                     </div>
                     <Button 
-                      className="w-full bg-green-600 hover:bg-green-700 text-white shadow-sm gap-2"
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm gap-2"
                       onClick={() => {
                         const link = document.createElement('a');
                         link.href = videoDivulgacao.url;
