@@ -167,9 +167,17 @@ export default function EbookSalesPage() {
   if (!ebook) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">eBook não encontrado.</div>;
 
   const price = formatPrice(ebook.price_cents);
+  const salesPageConfig = (ebook?.generation_input as any)?.sales_page || {};
+  const salesPageStyle = buildSalesPageStyle(
+    salesPageConfig.primary_color,
+    salesPageConfig.secondary_color
+  );
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans overflow-x-hidden selection:bg-primary selection:text-background">
+    <div
+      className="min-h-screen bg-background text-foreground font-sans overflow-x-hidden selection:bg-primary selection:text-background"
+      style={salesPageStyle}
+    >
       {/* 1. HERO PREMIUM */}
       <section className="relative pt-32 pb-40 overflow-hidden">
         <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] -z-10" />
