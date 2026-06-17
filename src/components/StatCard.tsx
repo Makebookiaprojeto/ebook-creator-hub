@@ -27,7 +27,7 @@ export function StatCard({
             <p className={`${large ? 'text-sm' : 'text-xs'} text-muted-foreground`}>{label}</p>
             {action}
           </div>
-          <p className={`mt-1 font-display ${large ? 'text-4xl' : 'text-xl'} font-bold tracking-tight text-foreground`}>{value}</p>
+          <p className={`mt-1 font-display ${large ? 'text-5xl' : 'text-xl'} font-bold tracking-tight text-foreground`}>{value}</p>
         </div>
         <div className={`flex ${large ? 'h-10 w-10' : 'h-8 w-8'} flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${tint} text-white shadow-md ml-3`}>
           <Icon className={`${large ? 'h-5 w-5' : 'h-4 w-4'}`} />
