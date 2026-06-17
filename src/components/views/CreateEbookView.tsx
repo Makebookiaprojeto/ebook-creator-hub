@@ -464,12 +464,30 @@ export function CreateEbookView() {
         throw new Error("Ebook ainda não foi gerado");
       }
 
+      // Merge sales page customization into generation_input so the public page can read it
+      const { data: existing } = await supabase
+        .from("ebooks")
+        .select("generation_input")
+        .eq("id", generatedEbookId)
+        .maybeSingle();
+      const prevInput = (existing?.generation_input as any) || {};
+      const mergedInput = {
+        ...prevInput,
+        sales_page: {
+          title,
+          price,
+          primary_color: primaryColor,
+          secondary_color: secondaryColor,
+        },
+      };
+
       await supabase.from("ebooks").update({
         title,
         price,
         price_cents: Math.round(price * 100),
         status: "published",
         is_public: true,
+        generation_input: mergedInput,
       }).eq("id", generatedEbookId);
 
       // Re-fetch the canonical slug from DB to guarantee a valid public URL

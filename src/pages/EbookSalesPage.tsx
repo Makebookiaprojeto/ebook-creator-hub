@@ -42,6 +42,85 @@ function formatPrice(cents?: number | null) {
   }).format(cents / 100);
 }
 
+// Convert "#RRGGBB" to "H S% L%" triplet for Tailwind/shadcn hsl(var(--token)) tokens.
+function hexToHslTriplet(hex: string): string | null {
+  if (!hex) return null;
+  const cleaned = hex.replace("#", "").trim();
+  if (cleaned.length !== 6) return null;
+  const r = parseInt(cleaned.slice(0, 2), 16) / 255;
+  const g = parseInt(cleaned.slice(2, 4), 16) / 255;
+  const b = parseInt(cleaned.slice(4, 6), 16) / 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h = 0;
+  let s = 0;
+  const l = (max + min) / 2;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h /= 6;
+  }
+  return `${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
+}
+
+function hexLuminance(hex: string): number {
+  const cleaned = hex.replace("#", "");
+  if (cleaned.length !== 6) return 0;
+  const r = parseInt(cleaned.slice(0, 2), 16) / 255;
+  const g = parseInt(cleaned.slice(2, 4), 16) / 255;
+  const b = parseInt(cleaned.slice(4, 6), 16) / 255;
+  return 0.299 * r + 0.587 * g + 0.114 * b;
+}
+
+function buildSalesPageStyle(
+  primaryHex?: string | null,
+  secondaryHex?: string | null
+): React.CSSProperties | undefined {
+  if (!primaryHex && !secondaryHex) return undefined;
+  const style: Record<string, string> = {};
+  if (secondaryHex) {
+    const bg = hexToHslTriplet(secondaryHex);
+    if (bg) {
+      const isLight = hexLuminance(secondaryHex) > 0.55;
+      const fg = isLight ? "0 0% 7%" : "0 0% 100%";
+      const muted = isLight ? "0 0% 30%" : "0 0% 80%";
+      const card = isLight ? "0 0% 96%" : "0 0% 7%";
+      const border = isLight ? "0 0% 85%" : "0 0% 18%";
+      const secondaryTok = isLight ? "0 0% 92%" : "0 0% 12%";
+      style["--background"] = bg;
+      style["--foreground"] = fg;
+      style["--card"] = card;
+      style["--card-foreground"] = fg;
+      style["--popover"] = card;
+      style["--popover-foreground"] = fg;
+      style["--muted"] = secondaryTok;
+      style["--muted-foreground"] = muted;
+      style["--secondary"] = secondaryTok;
+      style["--secondary-foreground"] = fg;
+      style["--border"] = border;
+      style["--input"] = border;
+    }
+  }
+  if (primaryHex) {
+    const pr = hexToHslTriplet(primaryHex);
+    if (pr) {
+      const prFg = hexLuminance(primaryHex) > 0.55 ? "0 0% 7%" : "0 0% 100%";
+      style["--primary"] = pr;
+      style["--primary-foreground"] = prFg;
+      style["--primary-glow"] = pr;
+      style["--ring"] = pr;
+      style["--accent"] = pr;
+      style["--accent-foreground"] = prFg;
+    }
+  }
+  return style as React.CSSProperties;
+}
+
 export default function EbookSalesPage() {
   const { slug } = useParams<{ slug: string }>();
   const [loading, setLoading] = useState(true);
@@ -88,9 +167,17 @@ export default function EbookSalesPage() {
   if (!ebook) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">eBook não encontrado.</div>;
 
   const price = formatPrice(ebook.price_cents);
+  const salesPageConfig = (ebook?.generation_input as any)?.sales_page || {};
+  const salesPageStyle = buildSalesPageStyle(
+    salesPageConfig.primary_color,
+    salesPageConfig.secondary_color
+  );
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans overflow-x-hidden selection:bg-primary selection:text-background">
+    <div
+      className="min-h-screen bg-background text-foreground font-sans overflow-x-hidden selection:bg-primary selection:text-background"
+      style={salesPageStyle}
+    >
       {/* 1. HERO PREMIUM */}
       <section className="relative pt-32 pb-40 overflow-hidden">
         <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] -z-10" />
