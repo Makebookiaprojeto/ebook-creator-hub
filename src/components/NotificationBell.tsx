@@ -103,7 +103,7 @@ export function NotificationBell() {
               description: displayDescription,
               duration: 5000,
               position: "top-right",
-              icon: <ShoppingCart className="h-4 w-4 text-green-500" />,
+              icon: <ShoppingCart className="h-4 w-4 text-primary" />,
             });
             console.log("Toast disparado com sucesso.");
             window.dispatchEvent(new CustomEvent("refresh-dashboard"));
