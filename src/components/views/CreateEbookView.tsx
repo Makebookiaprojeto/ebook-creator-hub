@@ -126,6 +126,7 @@ export function CreateEbookView() {
   const [generating, setGenerating] = useState(false);
   const [generationStage, setGenerationStage] = useState<string>("");
   const [generated, setGenerated] = useState(false);
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [coverUrl, setCoverUrl] = useState<string | null>(null);
