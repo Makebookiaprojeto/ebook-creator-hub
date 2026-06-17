@@ -656,7 +656,7 @@ export function CreateEbookView() {
                         onClick={async () => {
                           try {
                             setDownloadingPdf(true);
-                            const blob = await generateEbookPdf({ title, subtitle, coverUrl, chapters });
+                            const blob = await generateEbookPdf({ title, subtitle, cover_url: coverUrl, chapters });
                             const safeName = (title || "ebook").replace(/[^a-z0-9-_ ]/gi, "").trim() || "ebook";
                             downloadPdf(blob, `${safeName}.pdf`);
                             toast.success("PDF baixado com sucesso!");
