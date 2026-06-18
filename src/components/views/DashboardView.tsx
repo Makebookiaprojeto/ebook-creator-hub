@@ -272,7 +272,7 @@ export function DashboardView() {
   return (
     <div className="space-y-3 animate-fade-in py-1">
 
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-12">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-12 items-start">
         <div className="md:col-span-6 shadow-glow rounded-2xl">
           <StatCard 
             label="Lucro" 
