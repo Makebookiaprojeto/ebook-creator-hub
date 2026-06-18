@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { 
   Sparkles, BookOpen, Wand2, TrendingUp, ArrowRight, Check, 
   ShieldCheck, Zap, Star, Users, MessageSquare, Timer,
-  Target, Rocket, Heart, Crown, Clock
+  Target, Rocket, Heart, Crown, Clock,
+  LayoutDashboard, Plus, Library, LifeBuoy, User, Bell, DollarSign, ShoppingCart, CreditCard
 } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
 
@@ -137,13 +138,13 @@ const Landing = () => {
               </div>
             </div>
 
-            {/* App Preview Mockup */}
+            {/* App Preview Mockup — replica fiel do dashboard real */}
             <div className="mt-20">
               <div className="text-center mb-8">
                 <p className="text-sm uppercase tracking-widest text-primary font-semibold mb-2">Veja por dentro</p>
                 <h3 className="font-display text-3xl font-bold">Uma plataforma feita para você criar sem fricção</h3>
               </div>
-              <div className="relative mx-auto max-w-5xl rounded-2xl border border-border/40 bg-card/60 shadow-2xl overflow-hidden backdrop-blur">
+              <div className="relative mx-auto max-w-6xl rounded-2xl border border-border/40 bg-card/60 shadow-2xl overflow-hidden backdrop-blur">
                 {/* Window chrome */}
                 <div className="flex items-center gap-2 px-4 py-3 border-b border-border/40 bg-background/60">
                   <div className="flex gap-1.5">
@@ -153,62 +154,112 @@ const Landing = () => {
                   </div>
                   <div className="mx-auto text-xs text-muted-foreground">app.ebookaibuilder.com</div>
                 </div>
-                <div className="grid grid-cols-12 min-h-[420px]">
-                  {/* Sidebar */}
-                  <aside className="col-span-3 border-r border-border/40 bg-background/40 p-4">
-                    <div className="flex items-center gap-2 mb-6">
-                      <div className="h-8 w-8 rounded-lg gradient-primary shadow-glow" />
-                      <span className="font-display font-bold text-sm">EbookAI</span>
+                <div className="grid grid-cols-12 min-h-[480px]">
+                  {/* Sidebar real */}
+                  <aside className="col-span-3 lg:col-span-2 border-r border-border/40 bg-background/50 flex flex-col">
+                    <div className="border-b border-border/40 px-3 py-3 flex items-center gap-2">
+                      <div className="h-9 w-9 rounded-xl overflow-hidden shadow-glow shrink-0">
+                        <img src={saasLogo} alt="EbookAI" className="h-full w-full object-cover" />
+                      </div>
                     </div>
-                    <div className="space-y-1.5">
+                    <div className="p-2 pt-3">
+                      <button className="w-full flex items-center gap-2 px-3 py-2 rounded-md bg-primary text-background font-bold text-xs shadow-sm">
+                        <Plus className="h-4 w-4" /> Nova Estrutura
+                      </button>
+                    </div>
+                    <div className="px-3 pt-3 pb-1 text-[10px] uppercase tracking-wider text-muted-foreground">Menu</div>
+                    <div className="px-2 space-y-0.5 flex-1">
                       {[
-                        { label: "Dashboard", active: false },
-                        { label: "Criar Ebook", active: true },
-                        { label: "Minha Biblioteca", active: false },
-                        { label: "Ferramentas", active: false },
-                        { label: "Perfil", active: false },
-                        { label: "Suporte", active: false },
+                        { label: "Dashboard", icon: LayoutDashboard, active: true },
+                        { label: "Biblioteca", icon: Library, active: false },
+                        { label: "Suporte", icon: LifeBuoy, active: false },
+                        { label: "Perfil", icon: User, active: false },
                       ].map(item => (
                         <div
                           key={item.label}
-                          className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs ${
+                          className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs ${
                             item.active
-                              ? "bg-primary/15 text-primary font-medium border border-primary/20"
+                              ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                               : "text-muted-foreground"
                           }`}
                         >
-                          <div className={`h-3 w-3 rounded ${item.active ? "bg-primary" : "bg-muted-foreground/30"}`} />
-                          {item.label}
+                          <item.icon className="h-3.5 w-3.5" /> {item.label}
                         </div>
                       ))}
+                    </div>
+                    <div className="border-t border-border/40 m-2 p-2 rounded-lg bg-card flex items-center gap-2">
+                      <div className="h-6 w-6 rounded-full gradient-primary text-[9px] font-bold text-primary-foreground flex items-center justify-center shadow-glow">U</div>
+                      <span className="text-[10px] text-muted-foreground truncate">usuario@email.com</span>
                     </div>
                   </aside>
-                  {/* Main content */}
-                  <main className="col-span-9 p-6 bg-background/20">
-                    <div className="flex items-center justify-between mb-6">
-                      <div>
-                        <h4 className="font-display text-xl font-bold">Criar Novo Ebook</h4>
-                        <p className="text-xs text-muted-foreground">Escolha um modelo ou comece do zero</p>
+
+                  {/* Main content — Dashboard real */}
+                  <main className="col-span-9 lg:col-span-10 bg-background/20">
+                    {/* Header */}
+                    <div className="flex items-center justify-between px-6 py-3 border-b border-border/40">
+                      <div className="text-xs text-muted-foreground">Dashboard</div>
+                      <div className="flex items-center gap-3">
+                        <Bell className="h-4 w-4 text-muted-foreground" />
+                        <div className="h-7 w-7 rounded-full gradient-primary shadow-glow" />
                       </div>
-                      <div className="h-8 w-24 rounded-lg gradient-primary shadow-glow" />
                     </div>
-                    <div className="grid grid-cols-3 gap-3 mb-3">
-                      {["Finanças", "Saúde", "Marketing"].map((cat, i) => (
-                        <div key={cat} className="rounded-xl border border-border/40 bg-card/60 p-3">
-                          <div className={`h-20 rounded-lg mb-2 ${i === 0 ? "gradient-primary" : "bg-muted/40"}`} />
-                          <div className="text-xs font-semibold">{cat}</div>
-                          <div className="text-[10px] text-muted-foreground">5 capítulos</div>
+
+                    <div className="p-6 space-y-4">
+                      {/* Stat cards reais */}
+                      <div className="grid grid-cols-4 gap-3">
+                        {[
+                          { icon: BookOpen, label: "Ebooks Criados", value: "27" },
+                          { icon: ShoppingCart, label: "Vendas Totais", value: "213" },
+                          { icon: DollarSign, label: "Receita Total", value: "R$ 8.124,90" },
+                          { icon: CreditCard, label: "Receita Hoje", value: "R$ 617,90" },
+                        ].map(s => (
+                          <div key={s.label} className="rounded-xl border border-border/40 bg-card/60 p-3">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-[10px] text-muted-foreground">{s.label}</span>
+                              <s.icon className="h-3.5 w-3.5 text-primary" />
+                            </div>
+                            <div className="text-sm font-bold">{s.value}</div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Chart placeholder */}
+                      <div className="rounded-xl border border-border/40 bg-card/60 p-4">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-xs font-semibold">Receita nos últimos 30 dias</span>
+                          <div className="h-5 w-16 rounded-md bg-muted/40" />
                         </div>
-                      ))}
-                    </div>
-                    <div className="grid grid-cols-3 gap-3">
-                      {["Negócios", "Receitas", "Mindset"].map((cat) => (
-                        <div key={cat} className="rounded-xl border border-border/40 bg-card/60 p-3">
-                          <div className="h-20 rounded-lg mb-2 bg-muted/40" />
-                          <div className="text-xs font-semibold">{cat}</div>
-                          <div className="text-[10px] text-muted-foreground">5 capítulos</div>
+                        <svg viewBox="0 0 400 90" className="w-full h-20">
+                          <defs>
+                            <linearGradient id="lpGrad" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.4" />
+                              <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
+                            </linearGradient>
+                          </defs>
+                          <path d="M0,70 L40,55 L80,60 L120,40 L160,45 L200,30 L240,35 L280,20 L320,28 L360,12 L400,18 L400,90 L0,90 Z" fill="url(#lpGrad)" />
+                          <path d="M0,70 L40,55 L80,60 L120,40 L160,45 L200,30 L240,35 L280,20 L320,28 L360,12 L400,18" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
+                        </svg>
+                      </div>
+
+                      {/* Tabela */}
+                      <div className="rounded-xl border border-border/40 bg-card/60 p-3">
+                        <div className="text-xs font-semibold mb-2 px-1">Vendas recentes</div>
+                        <div className="space-y-1.5">
+                          {[
+                            { ebook: "Liberdade Financeira em 90 dias", price: "R$ 47,00", method: "Pix" },
+                            { ebook: "Receitas Low Carb", price: "R$ 37,00", method: "Cartão" },
+                            { ebook: "Marketing Digital do Zero", price: "R$ 67,00", method: "Pix" },
+                          ].map(r => (
+                            <div key={r.ebook} className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-muted/20 text-[11px]">
+                              <span className="truncate">{r.ebook}</span>
+                              <div className="flex items-center gap-3 shrink-0">
+                                <span className="text-muted-foreground">{r.method}</span>
+                                <span className="font-semibold text-primary">{r.price}</span>
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      </div>
                     </div>
                   </main>
                 </div>
