@@ -11,7 +11,8 @@ const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SERVICE_ROLE = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const STATE_FILE = "/tmp/template-images-state.json";
 const BUCKET = "ebook-images";
-const CONCURRENCY = 4;
+const CONCURRENCY = 2;
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const supabase = createClient(SUPABASE_URL, SERVICE_ROLE);
 
