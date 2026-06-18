@@ -852,10 +852,11 @@ export function CreateEbookView() {
                   className="mt-6 space-y-4"
                 >
                   <div className="rounded-2xl border bg-card p-5 shadow-sm">
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-1">
                       <Users className="h-5 w-5 text-primary" />
                       Buscar grupos por nicho
                     </h3>
+                    <p className="text-sm text-muted-foreground mb-4">Digite o nicho do seu Ebook.</p>
                     <div className="flex flex-col sm:flex-row gap-2">
                       <Input
                         placeholder="Ex: Emagrecimento, Finanças, Marketing Digital..."
