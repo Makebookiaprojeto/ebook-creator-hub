@@ -371,7 +371,10 @@ export function DashboardView() {
       </div>
 
 
-      <SalesByHourChart total={stats.revenue30d} />
+      <div className="mt-6">
+        <SalesByHourChart total={stats.revenue30d} />
+      </div>
+
     </div>
   );
 }
