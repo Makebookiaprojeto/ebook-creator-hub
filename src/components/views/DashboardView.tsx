@@ -273,7 +273,7 @@ export function DashboardView() {
     <div className="space-y-3 animate-fade-in py-1">
 
       <div className="grid grid-cols-1 gap-3 md:grid-cols-12">
-        <div className="md:col-span-5 shadow-glow rounded-2xl">
+        <div className="md:col-span-6 shadow-glow rounded-2xl">
           <StatCard 
             label="Lucro" 
             value={`R$ ${(profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} 
@@ -302,7 +302,7 @@ export function DashboardView() {
             tint="from-primary/10 to-primary/5" 
           />
         </div>
-        <div className="md:col-span-4 flex flex-col gap-3 shadow-glow rounded-2xl">
+        <div className="md:col-span-3 flex flex-col gap-3 shadow-glow rounded-2xl">
           <StatCard 
             label="Vendas" 
             value={String(stats.totalSales)} 
@@ -313,7 +313,8 @@ export function DashboardView() {
         </div>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-3">
+      <div className="grid gap-3 md:grid-cols-3 mt-6">
+
         <div className="md:col-span-2 rounded-2xl border bg-card p-3 shadow-glow">
           <div className="mb-2">
             <h2 className="font-display text-sm font-semibold flex items-center gap-2">
@@ -370,7 +371,10 @@ export function DashboardView() {
       </div>
 
 
-      <SalesByHourChart total={stats.revenue30d} />
+      <div className="mt-6">
+        <SalesByHourChart total={stats.revenue30d} />
+      </div>
+
     </div>
   );
 }
