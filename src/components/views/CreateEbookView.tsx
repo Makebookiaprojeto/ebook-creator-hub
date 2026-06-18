@@ -891,9 +891,23 @@ export function CreateEbookView() {
                     {!showDivulgacaoMessage ? (
                       <Button
                         className="gradient-primary text-primary-foreground shadow-glow gap-2"
-                        onClick={() => setShowDivulgacaoMessage(true)}
+                        disabled={loadingDivulgacaoMessage}
+                        onClick={() => {
+                          setLoadingDivulgacaoMessage(true);
+                          setTimeout(() => {
+                            setShowDivulgacaoMessage(true);
+                            setLoadingDivulgacaoMessage(false);
+                          }, 2000);
+                        }}
                       >
-                        Gerar Mensagem
+                        {loadingDivulgacaoMessage ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Gerando mensagem...
+                          </>
+                        ) : (
+                          "Gerar Mensagem"
+                        )}
                       </Button>
                     ) : (
                       <div className="relative">
