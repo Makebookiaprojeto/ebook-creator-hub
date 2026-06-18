@@ -114,6 +114,7 @@ export function CreateEbookView() {
   const [searchTopic, setSearchTopic] = useState("");
   const [divulgacaoNiche, setDivulgacaoNiche] = useState("");
   const [showDivulgacaoMessage, setShowDivulgacaoMessage] = useState(false);
+  const [loadingDivulgacaoMessage, setLoadingDivulgacaoMessage] = useState(false);
   const [searchingGroups, setSearchingGroups] = useState(false);
   const [groupSearchDone, setGroupSearchDone] = useState(false);
   const [ebookLink, setEbookLink] = useState("");
@@ -890,9 +891,23 @@ export function CreateEbookView() {
                     {!showDivulgacaoMessage ? (
                       <Button
                         className="gradient-primary text-primary-foreground shadow-glow gap-2"
-                        onClick={() => setShowDivulgacaoMessage(true)}
+                        disabled={loadingDivulgacaoMessage}
+                        onClick={() => {
+                          setLoadingDivulgacaoMessage(true);
+                          setTimeout(() => {
+                            setShowDivulgacaoMessage(true);
+                            setLoadingDivulgacaoMessage(false);
+                          }, 2000);
+                        }}
                       >
-                        Gerar Mensagem
+                        {loadingDivulgacaoMessage ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Gerando mensagem...
+                          </>
+                        ) : (
+                          "Gerar Mensagem"
+                        )}
                       </Button>
                     ) : (
                       <div className="relative">
