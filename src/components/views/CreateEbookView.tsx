@@ -864,7 +864,7 @@ export function CreateEbookView() {
                         value={divulgacaoNiche}
                         onChange={(e) => setDivulgacaoNiche(e.target.value)}
                         onKeyDown={(e) => {
-                          if (e.key === "Enter" && !searchingGroups) {
+                          if (e.key === "Enter") {
                             e.preventDefault();
                             searchFacebookGroups();
                           }
@@ -874,57 +874,14 @@ export function CreateEbookView() {
                       <Button
                         className="gradient-primary text-primary-foreground shadow-glow gap-2"
                         onClick={searchFacebookGroups}
-                        disabled={searchingGroups}
                       >
-                        {searchingGroups ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
-                        {searchingGroups ? "Buscando..." : "Buscar grupos"}
+                        <Search className="h-4 w-4" />
+                        Buscar grupos
                       </Button>
                     </div>
-
-                    <div className="mt-5">
-                      {searchingGroups && (
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          Buscando grupos abertos no Facebook...
-                        </div>
-                      )}
-
-                      {!searchingGroups && !groupSearchDone && (
-                        <p className="text-sm text-muted-foreground">
-                          Os resultados aparecerão aqui após a busca.
-                        </p>
-                      )}
-
-                      {!searchingGroups && groupSearchDone && searchedGroups.length === 0 && (
-                        <p className="text-sm text-muted-foreground">
-                          Nenhum grupo encontrado. Tente um termo diferente ou mais específico.
-                        </p>
-                      )}
-
-                      {!searchingGroups && searchedGroups.length > 0 && (
-                        <ul className="space-y-2">
-                          {searchedGroups.map((group) => (
-                            <li key={group.url}>
-                              <a
-                                href={group.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="group flex items-center justify-between gap-3 rounded-lg border bg-background px-3 py-2 text-sm transition-colors hover:bg-primary/5 hover:border-primary/40"
-                              >
-                                <span className="min-w-0">
-                                  <span className="block truncate font-medium">{group.name}</span>
-                                  <span className="block truncate text-xs text-muted-foreground">{group.description || group.url}</span>
-                                </span>
-                                <span className="flex shrink-0 items-center gap-1 text-primary">
-                                  <span className="hidden sm:inline">Acessar grupo</span>
-                                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                                </span>
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
+                    <p className="mt-3 text-xs text-muted-foreground">
+                      A busca será aberta em uma nova aba diretamente no Facebook.
+                    </p>
                   </div>
 
 
