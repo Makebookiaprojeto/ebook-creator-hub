@@ -369,7 +369,7 @@ export function CreateEbookView() {
     const query = divulgacaoNiche.trim();
     if (!query) return toast.error("Digite o nicho do ebook");
 
-    const url = `https://www.facebook.com/search/groups/?q=${encodeURIComponent(query)}`;
+    const url = `https://www.google.com/search?q=${encodeURIComponent(`site:facebook.com/groups ${query}`)}`;
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
