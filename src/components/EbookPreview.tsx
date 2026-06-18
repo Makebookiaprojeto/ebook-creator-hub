@@ -66,18 +66,12 @@ export function EbookPreview({ title, subtitle, coverUrl, chapters, pdfUrl, show
           </div>
         </div>
 
-        {/* TOC - Always show all chapters in the table of contents */}
-        <div className="ebook-paper rounded-xl border p-6">
-          <h3 className="font-display text-lg font-bold">Sumário</h3>
-          <div className="ebook-paper-accent-bg mt-1 h-0.5 w-12 rounded-full" />
-          <ol className="mt-4 space-y-2.5">
-            {chapters.map((c, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm">
-                <span className="ebook-paper-accent font-bold tabular-nums">{String(i + 1).padStart(2, "0")}</span>
-                <span className="font-medium">{c.title}</span>
-              </li>
-            ))}
-          </ol>
+        {/* Title page (no TOC) */}
+        <div className="ebook-paper rounded-xl border p-8 text-center">
+          <p className="ebook-paper-accent text-xs font-bold uppercase tracking-widest">Ebook</p>
+          <h3 className="mt-3 font-display text-3xl font-bold leading-tight">{title}</h3>
+          {subtitle && <p className="ebook-paper-muted mt-3 text-base">{subtitle}</p>}
+          <div className="ebook-paper-accent-bg mx-auto mt-5 h-1 w-16 rounded-full" />
         </div>
 
         {/* Chapters */}
