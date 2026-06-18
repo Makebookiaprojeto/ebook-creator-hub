@@ -282,7 +282,7 @@ export function DashboardView() {
             large
             action={
               <Select value={profitPeriod} onValueChange={(v: any) => setProfitPeriod(v)}>
-                <SelectTrigger className="h-6 w-[110px] text-[11px]">
+                <SelectTrigger className="h-8 w-[150px] text-sm">
                   <SelectValue placeholder="Período" />
                 </SelectTrigger>
                 <SelectContent>
