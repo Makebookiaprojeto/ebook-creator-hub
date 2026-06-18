@@ -365,35 +365,12 @@ export function CreateEbookView() {
     }
   };
 
-  const searchFacebookGroups = async () => {
+  const searchFacebookGroups = () => {
     const query = divulgacaoNiche.trim();
     if (!query) return toast.error("Digite o nicho do ebook");
 
-    setSearchingGroups(true);
-    setGroupSearchDone(false);
-    setSearchedGroups([]);
-
-    try {
-      const { data, error } = await supabase.functions.invoke("search-facebook-groups", {
-        body: { query },
-      });
-      if (error) throw error;
-      const groups: FbGroup[] = Array.isArray(data?.groups) ? data.groups : [];
-      setSearchedGroups(groups);
-      setGroupSearchDone(true);
-
-      if (groups.length === 0) {
-        toast.info("Nenhum grupo público encontrado para esse nicho.");
-      } else {
-        toast.success(`${groups.length} grupo(s) encontrado(s)!`);
-      }
-    } catch (e: any) {
-      console.error(e);
-      toast.error(e?.message ?? "Erro ao buscar grupos públicos");
-      setGroupSearchDone(true);
-    } finally {
-      setSearchingGroups(false);
-    }
+    const url = `https://www.facebook.com/search/groups/?q=${encodeURIComponent(query)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
 
