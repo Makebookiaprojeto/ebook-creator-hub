@@ -83,9 +83,16 @@ async function main() {
   console.log(`Found ${templates.length} templates`);
 
   for (const t of templates) {
-    console.log(`\n→ ${t.niche} — ${t.title}`);
+    // skip if already long enough
+    const minLen = Math.min(...t.chapters.map(c => (c.content || "").trim().split(/\s+/).length));
+    if (minLen >= 420) {
+      console.log(`\n→ ${t.niche} — already long (min ${minLen}), skip`);
+      continue;
+    }
+    console.log(`\n→ ${t.niche} — ${t.title} (min ${minLen})`);
     let attempt = 0;
-    while (attempt < 3) {
+    let delay = 8000;
+    while (attempt < 6) {
       try {
         const newChapters = await generateForTemplate(t);
         const counts = newChapters.map(c => wc(c.content));
@@ -93,6 +100,7 @@ async function main() {
         if (counts.some(n => n < 380)) {
           attempt++;
           console.log(`  too short, retry ${attempt}`);
+          await new Promise(r => setTimeout(r, 5000));
           continue;
         }
         const { error: upErr } = await supabase
@@ -101,11 +109,18 @@ async function main() {
           .eq("id", t.id);
         if (upErr) throw upErr;
         console.log(`  ✓ updated`);
+        await new Promise(r => setTimeout(r, 6000));
         break;
       } catch (e: any) {
         attempt++;
         console.error(`  attempt ${attempt} failed:`, e.message);
-        await new Promise(r => setTimeout(r, 3000));
+        if (String(e.message).includes("429")) {
+          console.log(`  rate-limited, sleeping ${delay/1000}s`);
+          await new Promise(r => setTimeout(r, delay));
+          delay = Math.min(delay * 2, 90000);
+        } else {
+          await new Promise(r => setTimeout(r, 4000));
+        }
       }
     }
   }
