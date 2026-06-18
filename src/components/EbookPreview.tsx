@@ -1,4 +1,4 @@
-import { BookOpen, Download } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { Button } from "./ui/button";
 
 type Chapter = {
@@ -23,7 +23,7 @@ function renderContent(content: string) {
     if (!trimmed) return null;
     if (trimmed.startsWith("## ")) {
       return (
-        <h3 key={i} className="font-display text-xl font-bold mt-8 mb-4 text-primary">
+        <h3 key={i} className="ebook-paper-accent font-display text-xl font-bold mt-8 mb-4">
           {trimmed.replace(/^##\s+/, "")}
         </h3>
       );
@@ -31,13 +31,13 @@ function renderContent(content: string) {
     if (trimmed.split("\n").every((l) => /^\s*[-•]\s+/.test(l))) {
       const items = trimmed.split("\n").map((l) => l.replace(/^\s*[-•]\s+/, ""));
       return (
-        <ul key={i} className="my-4 ml-6 list-disc space-y-2 text-base leading-relaxed text-muted-foreground">
+        <ul key={i} className="ebook-paper-muted my-4 ml-6 list-disc space-y-2 text-base leading-relaxed">
           {items.map((it, j) => <li key={j}>{it}</li>)}
         </ul>
       );
     }
     return (
-      <p key={i} className="text-base leading-relaxed text-muted-foreground mb-4">
+      <p key={i} className="ebook-paper-muted text-base leading-relaxed mb-4">
         {trimmed}
       </p>
     );
