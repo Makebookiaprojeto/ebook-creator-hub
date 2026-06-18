@@ -37,11 +37,9 @@ async function generateImage(prompt: string): Promise<Buffer> {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "openai/gpt-image-2",
-        prompt,
-        quality: "high",
-        size: "1024x1024",
-        n: 1,
+        model: "google/gemini-3.1-flash-image-preview",
+        messages: [{ role: "user", content: prompt }],
+        modalities: ["image", "text"],
       }),
     });
     if (res.status === 429 || res.status >= 500) {
@@ -57,7 +55,7 @@ async function generateImage(prompt: string): Promise<Buffer> {
     }
     const body = await res.json();
     const b64 = body?.data?.[0]?.b64_json;
-    if (!b64) throw new Error("No b64_json in response: " + JSON.stringify(body).slice(0, 200));
+    if (!b64) throw new Error("No b64_json: " + JSON.stringify(body).slice(0, 300));
     return Buffer.from(b64, "base64");
   }
 }
