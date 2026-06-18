@@ -6,6 +6,8 @@ import {
   Sparkles, BookOpen, Wand2, TrendingUp, ArrowRight, Check, 
   ShieldCheck, Zap, Star, Users, MessageSquare, Timer,
   Target, Rocket, Heart, Crown, Clock
+  Target, Rocket, Heart, Crown, Clock,
+  LayoutDashboard, Plus, Library, LifeBuoy, User, Bell, DollarSign, ShoppingCart, CreditCard
 } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
 
