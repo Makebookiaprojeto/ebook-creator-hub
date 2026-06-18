@@ -52,7 +52,7 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
   const [currentPage, setCurrentPage] = useState(0);
 
   const displayedChapters = chapters.slice(0, 6);
-  const totalPages = 2 + displayedChapters.length;
+  const totalPages = 1 + displayedChapters.length;
 
   const nextPage = () => setCurrentPage((p) => Math.min(p + 1, totalPages - 1));
   const prevPage = () => setCurrentPage((p) => Math.max(p - 1, 0));
