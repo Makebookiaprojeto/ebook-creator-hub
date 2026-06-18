@@ -168,20 +168,20 @@
   .ebook-paper {
     background: hsl(0 0% 100%);
     color: hsl(0 0% 7%);
-    border-color: hsl(181 100% 41% / 0.24);
-    box-shadow: 0 22px 70px -28px hsl(181 100% 41% / 0.35);
+    border-color: hsl(150 70% 38% / 0.28);
+    box-shadow: 0 22px 70px -28px hsl(150 70% 38% / 0.35);
   }
 
   .ebook-paper-muted {
-    color: hsl(0 0% 32%);
+    color: hsl(0 0% 18%);
   }
 
   .ebook-paper-accent {
-    color: hsl(181 100% 35%);
+    color: hsl(150 75% 32%);
   }
 
   .ebook-paper-accent-bg {
-    background: hsl(181 100% 41%);
+    background: hsl(150 75% 35%);
   }
 
   .ebook-cover-gradient {
