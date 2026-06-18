@@ -12,6 +12,15 @@ import {
   Users,
   Zap,
   BookOpen,
+  LayoutDashboard,
+  Plus,
+  Library,
+  LifeBuoy,
+  User,
+  Bell,
+  DollarSign,
+  ShoppingCart,
+  CreditCard,
 } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
 import { Button } from "@/components/ui/button";
