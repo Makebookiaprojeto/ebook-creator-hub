@@ -11,7 +11,8 @@ const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SERVICE_ROLE = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const STATE_FILE = "/tmp/template-images-state.json";
 const BUCKET = "ebook-images";
-const CONCURRENCY = 4;
+const CONCURRENCY = 2;
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const supabase = createClient(SUPABASE_URL, SERVICE_ROLE);
 
@@ -26,28 +27,39 @@ function saveState(s: State) {
 }
 
 async function generateImage(prompt: string): Promise<Buffer> {
-  const res = await fetch("https://ai.gateway.lovable.dev/v1/images/generations", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${LOVABLE_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: "openai/gpt-image-2",
-      prompt,
-      quality: "high",
-      size: "1024x1024",
-      n: 1,
-    }),
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Gateway ${res.status}: ${text.slice(0, 200)}`);
+  let attempt = 0;
+  while (true) {
+    attempt++;
+    const res = await fetch("https://ai.gateway.lovable.dev/v1/images/generations", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "openai/gpt-image-2",
+        prompt,
+        quality: "high",
+        size: "1024x1024",
+        n: 1,
+      }),
+    });
+    if (res.status === 429 || res.status >= 500) {
+      if (attempt > 8) throw new Error(`Gateway ${res.status} after ${attempt} attempts`);
+      const wait = Math.min(60000, 5000 * attempt);
+      console.log(`  rate-limited, retrying in ${wait / 1000}s (attempt ${attempt})`);
+      await sleep(wait);
+      continue;
+    }
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`Gateway ${res.status}: ${text.slice(0, 200)}`);
+    }
+    const body = await res.json();
+    const b64 = body?.data?.[0]?.b64_json;
+    if (!b64) throw new Error("No b64_json in response: " + JSON.stringify(body).slice(0, 200));
+    return Buffer.from(b64, "base64");
   }
-  const body = await res.json();
-  const b64 = body?.data?.[0]?.b64_json;
-  if (!b64) throw new Error("No b64_json in response: " + JSON.stringify(body).slice(0, 200));
-  return Buffer.from(b64, "base64");
 }
 
 async function uploadImage(slug: string, name: string, buf: Buffer): Promise<string> {
