@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { 
   Sparkles, BookOpen, Wand2, TrendingUp, ArrowRight, Check, 
   ShieldCheck, Zap, Star, Users, MessageSquare, Timer,
-  Target, Rocket, Heart, Crown, Clock
   Target, Rocket, Heart, Crown, Clock,
   LayoutDashboard, Plus, Library, LifeBuoy, User, Bell, DollarSign, ShoppingCart, CreditCard
 } from "lucide-react";
