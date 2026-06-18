@@ -15,11 +15,11 @@ export type PdfEbook = {
   chapters: PdfChapter[];
 };
 
-// Premium palette: white bg, black text, turquoise accent
+// Premium palette: white bg, black text, green accent
 const COLORS = {
   ink: [17, 17, 17] as const,
-  muted: [110, 110, 115] as const,
-  accent: [0, 184, 212] as const, // turquoise (hsl 181 100% 41%)
+  muted: [60, 60, 65] as const,
+  accent: [22, 145, 80] as const, // green (hsl ~150 75% 33%)
   soft: [245, 247, 248] as const,
   white: [255, 255, 255] as const,
 };
