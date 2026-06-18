@@ -127,53 +127,33 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
                 </div>
               )}
 
-              {page === 1 && (
-                <div className="h-full flex flex-col">
-                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-foreground border-b pb-4 mb-6">Sumário</h3>
-                  <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
-                    <ol className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
-                      {chapters.map((c, i) => (
-                        <li key={i} className="flex items-center gap-3 text-muted-foreground">
-                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-sm">
-                            {String(i + 1).padStart(2, "0")}
-                          </span>
-                          <span className="font-medium text-base truncate">{c.title}</span>
-                          <div className="flex-1 border-b border-dotted border-border mx-1" />
-                          <span className="text-muted-foreground/50 text-sm shrink-0">pág. {i + 3}</span>
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
-                </div>
-              )}
-
-              {page >= 2 && (
+              {page >= 1 && (
                 <div className="h-full flex flex-col">
                   <div className="mb-5 shrink-0">
-                    <p className="text-xs font-bold uppercase tracking-widest text-primary mb-2">Capítulo {page - 1}</p>
+                    <p className="text-xs font-bold uppercase tracking-widest text-primary mb-2">Capítulo {page}</p>
                     <h3 className="font-display text-2xl sm:text-3xl font-bold text-foreground leading-tight">
-                      {displayedChapters[page - 2]?.title}
+                      {displayedChapters[page - 1]?.title}
                     </h3>
-                    {displayedChapters[page - 2]?.subtitle && (
+                    {displayedChapters[page - 1]?.subtitle && (
                       <p className="mt-2 text-sm sm:text-base font-medium text-muted-foreground italic">
-                        {displayedChapters[page - 2]?.subtitle}
+                        {displayedChapters[page - 1]?.subtitle}
                       </p>
                     )}
                   </div>
 
                   <div className="flex-1 grid grid-cols-1 sm:grid-cols-5 gap-6 min-h-0">
-                    {displayedChapters[page - 2]?.image_url && (
+                    {displayedChapters[page - 1]?.image_url && (
                       <div className="sm:col-span-2 rounded-xl overflow-hidden shadow-md bg-background flex items-center justify-center max-h-[260px] sm:max-h-none">
                         <img
-                          src={displayedChapters[page - 2].image_url}
-                          alt={displayedChapters[page - 2].title}
+                          src={displayedChapters[page - 1].image_url}
+                          alt={displayedChapters[page - 1].title}
                           className="w-full h-full object-cover"
                         />
                       </div>
                     )}
-                    <div className={`${displayedChapters[page - 2]?.image_url ? "sm:col-span-3" : "sm:col-span-5"} overflow-y-auto pr-2 custom-scrollbar`}>
+                    <div className={`${displayedChapters[page - 1]?.image_url ? "sm:col-span-3" : "sm:col-span-5"} overflow-y-auto pr-2 custom-scrollbar`}>
                       <div className="prose prose-invert max-w-none">
-                        {renderPartialContent(displayedChapters[page - 2]?.content || "_(gerando…)_")}
+                        {renderPartialContent(displayedChapters[page - 1]?.content || "_(gerando…)_")}
                       </div>
                     </div>
                   </div>
