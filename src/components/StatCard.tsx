@@ -24,10 +24,10 @@ export function StatCard({
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center justify-between gap-2">
-            <p className={`${large ? 'text-sm' : 'text-xs'} text-muted-foreground`}>{label}</p>
+            <p className={`${large ? 'text-base' : 'text-sm'} text-muted-foreground`}>{label}</p>
             {action}
           </div>
-          <p className={`mt-1 font-display ${large ? 'text-5xl' : 'text-xl'} font-bold tracking-tight text-foreground`}>{value}</p>
+          <p className={`mt-1 font-display ${large ? 'text-6xl' : 'text-3xl'} font-bold tracking-tight text-foreground`}>{value}</p>
         </div>
         <div className={`flex ${large ? 'h-10 w-10' : 'h-8 w-8'} flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${tint} text-white shadow-md ml-3`}>
           <Icon className={`${large ? 'h-5 w-5' : 'h-4 w-4'}`} />
