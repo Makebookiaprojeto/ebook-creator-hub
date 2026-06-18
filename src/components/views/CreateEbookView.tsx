@@ -91,44 +91,6 @@ type ChapterDraft = {
   image_url: string | null;
 };
 
-const cleanDivulgacaoText = (value: string) =>
-  value
-    .replace(/!\[Image \d+\]\([^)]*\)/g, "")
-    .replace(/\[Read more\].*$/i, "")
-    .replace(/[_*`#>]/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
-
-const normalizeFacebookGroupUrl = (rawUrl: string) => {
-  try {
-    const url = new URL(rawUrl);
-    if (!url.hostname.includes("facebook.com")) return null;
-
-    const match = url.pathname.match(/^\/groups\/([^/?#]+)/i);
-    if (!match?.[1] || ["search", "discover", "feed"].includes(match[1].toLowerCase())) return null;
-
-    return `https://www.facebook.com/groups/${match[1]}`;
-  } catch {
-    return null;
-  }
-};
-
-const extractFacebookGroups = (markdown: string): FbGroup[] => {
-  const groups = new globalThis.Map<string, FbGroup>();
-  const resultRegex = /### \[([^\]]+)\]\((https?:\/\/[^)]+facebook\.com\/groups\/[^)]+)\)([\s\S]*?)(?=\n### \[|$)/gi;
-  let match: RegExpExecArray | null;
-
-  while ((match = resultRegex.exec(markdown)) && groups.size < 8) {
-    const url = normalizeFacebookGroupUrl(match[2]);
-    if (!url || groups.has(url)) continue;
-
-    const name = cleanDivulgacaoText(match[1]).replace(/\s*Facebook.*$/i, "").slice(0, 90) || "Grupo do Facebook";
-    const description = cleanDivulgacaoText(match[3] || "Grupo público encontrado nos resultados do Google.").slice(0, 180);
-    groups.set(url, { name, url, description });
-  }
-
-  return Array.from(groups.values());
-};
 
 export function CreateEbookView() {
   const { createEbookWithChapters } = useEbooks();
@@ -412,20 +374,18 @@ export function CreateEbookView() {
     setSearchedGroups([]);
 
     try {
-      const googleQuery = `site:facebook.com/groups "${query}"`;
-      const response = await fetch(
-        `https://r.jina.ai/http://r.jina.ai/http://https://www.google.com/search?gbv=1&q=${encodeURIComponent(googleQuery)}`
-      );
-      if (!response.ok) throw new Error("Não foi possível consultar resultados públicos agora.");
-
-      const groups = extractFacebookGroups(await response.text());
+      const { data, error } = await supabase.functions.invoke("search-facebook-groups", {
+        body: { query },
+      });
+      if (error) throw error;
+      const groups: FbGroup[] = Array.isArray(data?.groups) ? data.groups : [];
       setSearchedGroups(groups);
       setGroupSearchDone(true);
 
       if (groups.length === 0) {
         toast.info("Nenhum grupo público encontrado para esse nicho.");
       } else {
-        toast.success("Grupos encontrados!");
+        toast.success(`${groups.length} grupo(s) encontrado(s)!`);
       }
     } catch (e: any) {
       console.error(e);
@@ -435,6 +395,7 @@ export function CreateEbookView() {
       setSearchingGroups(false);
     }
   };
+
 
   const generateSalesPage = async () => {
     if (!title || !price) {
@@ -904,24 +865,33 @@ export function CreateEbookView() {
 
             {step === 4 && (
               <div>
-                <h2 className="font-display text-xl font-semibold">Divulgação</h2>
-                <p className="mt-1 text-sm text-muted-foreground">Encontre os melhores grupos para divulgar seu produto.</p>
+                <h2 className="font-display text-xl font-semibold">Grupos do Facebook</h2>
+                <p className="mt-1 text-sm text-muted-foreground">Busque grupos públicos do Facebook relacionados ao nicho do seu ebook.</p>
 
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-6 space-y-4"
                 >
                   <div className="rounded-2xl border bg-card p-5 shadow-sm">
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
-                      <Search className="h-5 w-5 text-primary" />
-                      Divulgação
+                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-2">
+                      <Users className="h-5 w-5 text-primary" />
+                      Buscar grupos por nicho
                     </h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Digite um nicho ou tema (ex: "emagrecimento", "finanças pessoais") e encontraremos grupos abertos no Facebook.
+                    </p>
                     <div className="flex flex-col sm:flex-row gap-2">
                       <Input
-                        placeholder="Ex: Emagrecimento, Finanças..."
+                        placeholder="Ex: Emagrecimento, Finanças, Marketing Digital..."
                         value={divulgacaoNiche}
                         onChange={(e) => setDivulgacaoNiche(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && !searchingGroups) {
+                            e.preventDefault();
+                            searchFacebookGroups();
+                          }
+                        }}
                         className="flex-1"
                       />
                       <Button
@@ -930,31 +900,31 @@ export function CreateEbookView() {
                         disabled={searchingGroups}
                       >
                         {searchingGroups ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
-                        Buscar
+                        {searchingGroups ? "Buscando..." : "Buscar grupos"}
                       </Button>
                     </div>
-                  </div>
 
-                  <div className="rounded-2xl border bg-card p-5 shadow-sm">
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
-                      <Users className="h-5 w-5 text-primary" />
-                      Onde divulgar seu Ebook
-                    </h3>
-                    {(() => {
-                      if (searchingGroups) {
-                        return <p className="text-sm text-muted-foreground">Buscando grupos públicos encontrados pelo Google...</p>;
-                      }
-                      if (!groupSearchDone) {
-                        return (
-                          <p className="text-sm text-muted-foreground">
-                            Digite o nicho no campo "Divulgação" acima para buscar grupos públicos.
-                          </p>
-                        );
-                      }
-                      if (searchedGroups.length === 0) {
-                        return <p className="text-sm text-muted-foreground">Não foram encontrados grupos públicos para esse nicho.</p>;
-                      }
-                      return (
+                    <div className="mt-5">
+                      {searchingGroups && (
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Buscando grupos abertos no Facebook...
+                        </div>
+                      )}
+
+                      {!searchingGroups && !groupSearchDone && (
+                        <p className="text-sm text-muted-foreground">
+                          Os resultados aparecerão aqui após a busca.
+                        </p>
+                      )}
+
+                      {!searchingGroups && groupSearchDone && searchedGroups.length === 0 && (
+                        <p className="text-sm text-muted-foreground">
+                          Nenhum grupo encontrado. Tente um termo diferente ou mais específico.
+                        </p>
+                      )}
+
+                      {!searchingGroups && searchedGroups.length > 0 && (
                         <ul className="space-y-2">
                           {searchedGroups.map((group) => (
                             <li key={group.url}>
@@ -969,18 +939,17 @@ export function CreateEbookView() {
                                   <span className="block truncate text-xs text-muted-foreground">{group.description || group.url}</span>
                                 </span>
                                 <span className="flex shrink-0 items-center gap-1 text-primary">
-                                  <span className="hidden sm:inline">Acessar Grupo</span>
+                                  <span className="hidden sm:inline">Acessar grupo</span>
                                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                                 </span>
                               </a>
                             </li>
                           ))}
                         </ul>
-                      );
-                    })()}
-
-
+                      )}
+                    </div>
                   </div>
+
 
                   <div className="rounded-2xl border bg-card p-5 shadow-sm">
                     <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
