@@ -113,6 +113,7 @@ export function CreateEbookView() {
   const [isPublished, setIsPublished] = useState(false);
   const [searchTopic, setSearchTopic] = useState("");
   const [divulgacaoNiche, setDivulgacaoNiche] = useState("");
+  const [showDivulgacaoMessage, setShowDivulgacaoMessage] = useState(false);
   const [searchingGroups, setSearchingGroups] = useState(false);
   const [groupSearchDone, setGroupSearchDone] = useState(false);
   const [ebookLink, setEbookLink] = useState("");
