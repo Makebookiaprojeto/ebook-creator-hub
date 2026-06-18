@@ -128,49 +128,8 @@ export async function generateEbookPdf(ebook: PdfEbook): Promise<Blob> {
     doc.text(`POR ${ebook.author.toUpperCase()}`, margin, pageH - 18);
   }
 
-  // ---------- TABLE OF CONTENTS ----------
-  doc.addPage();
-  doc.setFillColor(...COLORS.white);
-  doc.rect(0, 0, pageW, pageH, "F");
+  // (No table of contents — go straight to chapters)
 
-  doc.setTextColor(...COLORS.accent);
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(11);
-  doc.text("CONTEÚDO", margin, 28);
-
-  doc.setTextColor(...COLORS.ink);
-  doc.setFontSize(28);
-  doc.text("Sumário", margin, 40);
-
-  doc.setFillColor(...COLORS.accent);
-  doc.rect(margin, 44, 28, 1.2, "F");
-
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(12);
-  let tocY = 62;
-  ebook.chapters.forEach((c, i) => {
-    if (tocY > pageH - margin) {
-      doc.addPage();
-      tocY = 30;
-    }
-    doc.setTextColor(...COLORS.accent);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(14);
-    doc.text(String(i + 1).padStart(2, "0"), margin, tocY);
-    doc.setTextColor(...COLORS.ink);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(12);
-    const title = doc.splitTextToSize(c.title, contentW - 18)[0];
-    doc.text(title, margin + 14, tocY);
-    // dotted separator + page note
-    doc.setDrawColor(220, 220, 220);
-    doc.setLineWidth(0.2);
-    doc.line(margin + 14 + doc.getTextWidth(title) + 3, tocY - 1, pageW - margin - 8, tocY - 1);
-    doc.setTextColor(...COLORS.muted);
-    doc.setFontSize(10);
-    doc.text(`${i + 1}`, pageW - margin, tocY, { align: "right" });
-    tocY += 11;
-  });
 
   // ---------- CHAPTERS ----------
   for (let i = 0; i < ebook.chapters.length; i++) {
