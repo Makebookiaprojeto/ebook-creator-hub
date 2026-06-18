@@ -3,7 +3,7 @@
 // Run with: bun run scripts/generate-template-images.ts [start_index] [end_index]
 
 import { createClient } from "@supabase/supabase-js";
-import { writeFileSync, readFileSync, existsSync, mkdirSync } from "node:fs";
+import { writeFileSync, readFileSync, existsSync } from "node:fs";
 import { TEMPLATES } from "./templates-content";
 
 const PEXELS_API_KEY = process.env.PEXELS_API_KEY!;
@@ -29,12 +29,13 @@ function saveState(s: State) {
 }
 
 function pexelsQueryFromPrompt(prompt: string, fallback: string): string {
-  const noise = /premium|minimalist|editorial|photography|photorealistic|4k|background|lighting|composition|focus|detail|watermark|typography|turquoise|accent|shadow|soft|natural|diffused|seamless|white|clean|crisp|magazine|grade|refined|directional|single|large|central|subject|surface|no text|no typography|#00ced1/gi;
+  const noise = /ultra|premium|minimalist|editorial|photography|photorealistic|4k|background|lighting|composition|focus|detail|watermark|typography|turquoise|accent|element|shadow|soft|natural|diffused|seamless|white|clean|crisp|magazine|grade|refined|directional|single|large|central|subject|surface|no text|no typography|book cover|dark/gi;
   const clauses = prompt
-    .replace(/[()#]/g, " ")
+    .replace(/#[0-9a-f]{6}/gi, " ")
+    .replace(/\([^)]*\)/g, " ")
     .split(",")
     .map((part) => part.replace(noise, " ").replace(/\s+/g, " ").trim())
-    .filter((part) => part.length > 8 && !/^(ultra|pure|no|subtle|fine)$/i.test(part));
+    .filter((part) => part.length > 8 && !/^(pure|no|subtle|fine|and)$/i.test(part));
   return (clauses.slice(0, 2).join(" ") || fallback).slice(0, 110);
 }
 
