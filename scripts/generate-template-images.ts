@@ -39,7 +39,7 @@ function pexelsQueryFromPrompt(prompt: string, fallback: string): string {
   return (clauses.slice(0, 2).join(" ") || fallback).slice(0, 110);
 }
 
-async function searchPexels(query: string, orientation: Orientation): Promise<string> {
+async function searchPexels(query: string, orientation: Orientation): Promise<string[]> {
   let attempt = 0;
   while (true) {
     attempt++;
@@ -76,7 +76,7 @@ async function searchPexels(query: string, orientation: Orientation): Promise<st
           (photo.width >= 2560 && photo.height >= 1440 ? 2_000_000 : 0),
       }))
       .sort((a, b) => b.score - a.score);
-    return ranked[0].photo.src?.original || ranked[0].photo.src?.large2x || ranked[0].photo.src?.large || "";
+    return [...new Set(ranked.flatMap(({ photo }) => [photo.src?.original, photo.src?.large2x, photo.src?.large]).filter(Boolean) as string[])];
   }
 }
 
@@ -111,9 +111,18 @@ async function processJob(state: State, job: Job) {
     const orientation: Orientation = job.kind === "cover" ? "portrait" : "landscape";
     const query = pexelsQueryFromPrompt(job.prompt, job.fallback);
     console.log(`QUERY ${label}: ${query}`);
-    const sourceUrl = await searchPexels(query, orientation);
-    if (!sourceUrl) throw new Error(`No source URL for ${query}`);
-    const buf = await downloadImage(sourceUrl);
+    const sourceUrls = await searchPexels(query, orientation);
+    if (!sourceUrls.length) throw new Error(`No source URL for ${query}`);
+    let buf: Buffer | null = null;
+    for (const sourceUrl of sourceUrls.slice(0, 6)) {
+      try {
+        buf = await downloadImage(sourceUrl);
+        break;
+      } catch (error: any) {
+        console.warn(`  download fallback: ${error.message}`);
+      }
+    }
+    if (!buf) throw new Error(`All Pexels downloads failed for ${query}`);
     const name = job.kind === "cover" ? "cover" : `chapter-${job.index}`;
     const url = await uploadImage(job.slug, name, buf);
     if (job.kind === "cover") state[job.slug].cover = url;
