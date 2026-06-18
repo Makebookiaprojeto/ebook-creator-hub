@@ -136,6 +136,84 @@ const Landing = () => {
                 </ul>
               </div>
             </div>
+
+            {/* App Preview Mockup */}
+            <div className="mt-20">
+              <div className="text-center mb-8">
+                <p className="text-sm uppercase tracking-widest text-primary font-semibold mb-2">Veja por dentro</p>
+                <h3 className="font-display text-3xl font-bold">Uma plataforma feita para você criar sem fricção</h3>
+              </div>
+              <div className="relative mx-auto max-w-5xl rounded-2xl border border-border/40 bg-card/60 shadow-2xl overflow-hidden backdrop-blur">
+                {/* Window chrome */}
+                <div className="flex items-center gap-2 px-4 py-3 border-b border-border/40 bg-background/60">
+                  <div className="flex gap-1.5">
+                    <span className="h-3 w-3 rounded-full bg-red-500/70" />
+                    <span className="h-3 w-3 rounded-full bg-yellow-500/70" />
+                    <span className="h-3 w-3 rounded-full bg-green-500/70" />
+                  </div>
+                  <div className="mx-auto text-xs text-muted-foreground">app.ebookaibuilder.com</div>
+                </div>
+                <div className="grid grid-cols-12 min-h-[420px]">
+                  {/* Sidebar */}
+                  <aside className="col-span-3 border-r border-border/40 bg-background/40 p-4">
+                    <div className="flex items-center gap-2 mb-6">
+                      <div className="h-8 w-8 rounded-lg gradient-primary shadow-glow" />
+                      <span className="font-display font-bold text-sm">EbookAI</span>
+                    </div>
+                    <div className="space-y-1.5">
+                      {[
+                        { label: "Dashboard", active: false },
+                        { label: "Criar Ebook", active: true },
+                        { label: "Minha Biblioteca", active: false },
+                        { label: "Ferramentas", active: false },
+                        { label: "Perfil", active: false },
+                        { label: "Suporte", active: false },
+                      ].map(item => (
+                        <div
+                          key={item.label}
+                          className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs ${
+                            item.active
+                              ? "bg-primary/15 text-primary font-medium border border-primary/20"
+                              : "text-muted-foreground"
+                          }`}
+                        >
+                          <div className={`h-3 w-3 rounded ${item.active ? "bg-primary" : "bg-muted-foreground/30"}`} />
+                          {item.label}
+                        </div>
+                      ))}
+                    </div>
+                  </aside>
+                  {/* Main content */}
+                  <main className="col-span-9 p-6 bg-background/20">
+                    <div className="flex items-center justify-between mb-6">
+                      <div>
+                        <h4 className="font-display text-xl font-bold">Criar Novo Ebook</h4>
+                        <p className="text-xs text-muted-foreground">Escolha um modelo ou comece do zero</p>
+                      </div>
+                      <div className="h-8 w-24 rounded-lg gradient-primary shadow-glow" />
+                    </div>
+                    <div className="grid grid-cols-3 gap-3 mb-3">
+                      {["Finanças", "Saúde", "Marketing"].map((cat, i) => (
+                        <div key={cat} className="rounded-xl border border-border/40 bg-card/60 p-3">
+                          <div className={`h-20 rounded-lg mb-2 ${i === 0 ? "gradient-primary" : "bg-muted/40"}`} />
+                          <div className="text-xs font-semibold">{cat}</div>
+                          <div className="text-[10px] text-muted-foreground">5 capítulos</div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="grid grid-cols-3 gap-3">
+                      {["Negócios", "Receitas", "Mindset"].map((cat) => (
+                        <div key={cat} className="rounded-xl border border-border/40 bg-card/60 p-3">
+                          <div className="h-20 rounded-lg mb-2 bg-muted/40" />
+                          <div className="text-xs font-semibold">{cat}</div>
+                          <div className="text-[10px] text-muted-foreground">5 capítulos</div>
+                        </div>
+                      ))}
+                    </div>
+                  </main>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
