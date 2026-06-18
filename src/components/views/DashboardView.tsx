@@ -282,13 +282,13 @@ export function DashboardView() {
             large
             action={
               <Select value={profitPeriod} onValueChange={(v: any) => setProfitPeriod(v)}>
-                <SelectTrigger className="h-6 w-[110px] text-[11px]">
+                <SelectTrigger className="h-8 w-[150px] text-sm">
                   <SelectValue placeholder="Período" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="today">Hoje</SelectItem>
-                  <SelectItem value="7d">Últimos 7 dias</SelectItem>
-                  <SelectItem value="30d">Últimos 30 dias</SelectItem>
+                  <SelectItem value="today" className="text-sm">Hoje</SelectItem>
+                  <SelectItem value="7d" className="text-sm">Últimos 7 dias</SelectItem>
+                  <SelectItem value="30d" className="text-sm">Últimos 30 dias</SelectItem>
                 </SelectContent>
               </Select>
             }
