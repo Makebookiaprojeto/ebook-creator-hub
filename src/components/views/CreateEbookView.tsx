@@ -882,10 +882,11 @@ export function CreateEbookView() {
 
 
                   <div className="rounded-2xl border bg-card p-5 shadow-sm">
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-1">
                       <Quote className="h-5 w-5 text-primary" />
                       Mensagem pronta para Divulgação
                     </h3>
+                    <p className="text-sm text-muted-foreground mb-4">Gere uma mensagem persuasiva, para aumentar sua conversão.</p>
                     {!showDivulgacaoMessage ? (
                       <Button
                         className="gradient-primary text-primary-foreground shadow-glow gap-2"
