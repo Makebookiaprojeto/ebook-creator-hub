@@ -374,20 +374,18 @@ export function CreateEbookView() {
     setSearchedGroups([]);
 
     try {
-      const googleQuery = `site:facebook.com/groups "${query}"`;
-      const response = await fetch(
-        `https://r.jina.ai/http://r.jina.ai/http://https://www.google.com/search?gbv=1&q=${encodeURIComponent(googleQuery)}`
-      );
-      if (!response.ok) throw new Error("Não foi possível consultar resultados públicos agora.");
-
-      const groups = extractFacebookGroups(await response.text());
+      const { data, error } = await supabase.functions.invoke("search-facebook-groups", {
+        body: { query },
+      });
+      if (error) throw error;
+      const groups: FbGroup[] = Array.isArray(data?.groups) ? data.groups : [];
       setSearchedGroups(groups);
       setGroupSearchDone(true);
 
       if (groups.length === 0) {
         toast.info("Nenhum grupo público encontrado para esse nicho.");
       } else {
-        toast.success("Grupos encontrados!");
+        toast.success(`${groups.length} grupo(s) encontrado(s)!`);
       }
     } catch (e: any) {
       console.error(e);
@@ -397,6 +395,7 @@ export function CreateEbookView() {
       setSearchingGroups(false);
     }
   };
+
 
   const generateSalesPage = async () => {
     if (!title || !price) {
