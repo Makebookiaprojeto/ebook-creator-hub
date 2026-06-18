@@ -113,6 +113,7 @@ export function CreateEbookView() {
   const [isPublished, setIsPublished] = useState(false);
   const [searchTopic, setSearchTopic] = useState("");
   const [divulgacaoNiche, setDivulgacaoNiche] = useState("");
+  const [showDivulgacaoMessage, setShowDivulgacaoMessage] = useState(false);
   const [searchingGroups, setSearchingGroups] = useState(false);
   const [groupSearchDone, setGroupSearchDone] = useState(false);
   const [ebookLink, setEbookLink] = useState("");
@@ -843,8 +844,7 @@ export function CreateEbookView() {
 
             {step === 4 && (
               <div>
-                <h2 className="font-display text-xl font-semibold">Grupos do Facebook</h2>
-                <p className="mt-1 text-sm text-muted-foreground">Busque grupos públicos do Facebook relacionados ao nicho do seu ebook.</p>
+                <h2 className="font-display text-xl font-semibold">Busca por Grupos</h2>
 
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -852,13 +852,10 @@ export function CreateEbookView() {
                   className="mt-6 space-y-4"
                 >
                   <div className="rounded-2xl border bg-card p-5 shadow-sm">
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-2">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
                       <Users className="h-5 w-5 text-primary" />
                       Buscar grupos por nicho
                     </h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Digite um nicho ou tema (ex: "emagrecimento", "finanças pessoais") e encontraremos grupos abertos no Facebook.
-                    </p>
                     <div className="flex flex-col sm:flex-row gap-2">
                       <Input
                         placeholder="Ex: Emagrecimento, Finanças, Marketing Digital..."
@@ -880,9 +877,6 @@ export function CreateEbookView() {
                         Buscar grupos
                       </Button>
                     </div>
-                    <p className="mt-3 text-xs text-muted-foreground">
-                      A busca será aberta em uma nova aba diretamente no Facebook.
-                    </p>
                   </div>
 
 
@@ -891,26 +885,32 @@ export function CreateEbookView() {
                       <Quote className="h-5 w-5 text-primary" />
                       Mensagem pronta para Divulgação
                     </h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Use esta copy persuasiva para gerar interesse nos grupos:
-                    </p>
-                    <div className="relative">
-                      <pre className="whitespace-pre-wrap font-sans text-sm bg-muted/50 p-4 pb-14 rounded-xl border border-dashed border-primary/20 leading-relaxed">
-                        {`Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação !!!\n\nLink: ${ebookLink}`}
-                      </pre>
-                      <Button 
-                        size="sm"
-                        className="absolute bottom-3 right-3 bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm gap-2"
-                        onClick={() => {
-                          const text = `Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação !!!\n\nLink: ${ebookLink}`;
-                          navigator.clipboard.writeText(text);
-                          toast.success("Mensagem copiada!");
-                        }}
+                    {!showDivulgacaoMessage ? (
+                      <Button
+                        className="gradient-primary text-primary-foreground shadow-glow gap-2"
+                        onClick={() => setShowDivulgacaoMessage(true)}
                       >
-                        <Copy className="h-3.5 w-3.5" />
-                        Copiar Mensagem
+                        Gerar Mensagem
                       </Button>
-                    </div>
+                    ) : (
+                      <div className="relative">
+                        <pre className="whitespace-pre-wrap font-sans text-sm bg-muted/50 p-4 pb-14 rounded-xl border border-dashed border-primary/20 leading-relaxed">
+                          {`Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação !!!!\n\nLink: ${ebookLink}`}
+                        </pre>
+                        <Button
+                          size="sm"
+                          className="absolute bottom-3 right-3 bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm gap-2"
+                          onClick={() => {
+                            const text = `Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação !!!!\n\nLink: ${ebookLink}`;
+                            navigator.clipboard.writeText(text);
+                            toast.success("Mensagem copiada!");
+                          }}
+                        >
+                          <Copy className="h-3.5 w-3.5" />
+                          Copiar Mensagem
+                        </Button>
+                      </div>
+                    )}
                   </div>
                   <div className="rounded-2xl border bg-card p-5 shadow-sm">
                     <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
