@@ -142,19 +142,20 @@ function DivulgacaoVideoCard({ title, src, filename, script }: { title: string; 
             aria-label="Reproduzir vídeo"
             className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors"
           >
-            <span className="flex items-center justify-center w-12 h-12 rounded-full bg-primary/90 text-primary-foreground shadow-lg">
+            <span className="flex items-center justify-center w-12 h-12 rounded-full bg-black/60 text-white shadow-lg backdrop-blur-sm">
               <Play className="h-5 w-5 ml-0.5" />
             </span>
           </button>
         )}
       </div>
-      <div className="flex-1 flex flex-col">
-        <h4 className="text-sm font-semibold mb-1">{title}</h4>
-        <p className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed flex-1">
+      <div className="flex-1 flex flex-col items-center text-center">
+        <h4 className="text-base font-semibold mb-2">{title}</h4>
+        <p className="text-base text-muted-foreground whitespace-pre-line leading-relaxed flex-1">
+          <span className="font-semibold text-foreground">Roteiro: </span>
           {script}
         </p>
         <div className="mt-3">
-          <Button size="sm" variant="outline" className="gap-2" onClick={handleDownload}>
+          <Button size="sm" className="gradient-primary text-primary-foreground shadow-glow gap-2" onClick={handleDownload}>
             <Download className="h-3.5 w-3.5" />
             Baixar Vídeo
           </Button>
