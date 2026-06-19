@@ -1017,7 +1017,7 @@ export function CreateEbookView() {
                       {[
                         {
                           title: "Vídeo 1",
-                          src: "",
+                          src: videoDivulgacao1.url,
                           filename: "video-divulgacao-1.mp4",
                           script: "Roteiro do vídeo 1 será adicionado em breve.",
                         },
