@@ -148,13 +148,15 @@ function DivulgacaoVideoCard({ title, src, filename, script }: { title: string; 
           </button>
         )}
       </div>
-      <div className="flex-1 flex flex-col justify-center">
+      <div className="flex-1 flex flex-col">
         <h4 className="text-base font-semibold mb-2">{title}</h4>
-        <p className="text-base text-muted-foreground whitespace-pre-line leading-relaxed">
-          <span className="font-semibold text-foreground">Roteiro: </span>
-          {script}
-        </p>
-        <div className="mt-3">
+        <div className="flex-1 flex flex-col justify-center -mt-2">
+          <p className="text-base text-muted-foreground whitespace-pre-line leading-relaxed">
+            <span className="font-semibold text-foreground">Roteiro: </span>
+            {script}
+          </p>
+        </div>
+        <div className="mt-3 flex justify-end">
           <Button size="sm" className="gradient-primary text-primary-foreground shadow-glow gap-2" onClick={handleDownload}>
             <Download className="h-3.5 w-3.5" />
             Baixar Vídeo
