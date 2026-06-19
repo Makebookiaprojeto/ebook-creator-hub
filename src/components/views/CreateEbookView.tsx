@@ -148,9 +148,9 @@ function DivulgacaoVideoCard({ title, src, filename, script }: { title: string; 
           </button>
         )}
       </div>
-      <div className="flex-1 flex flex-col items-center text-center">
+      <div className="flex-1 flex flex-col justify-center">
         <h4 className="text-base font-semibold mb-2">{title}</h4>
-        <p className="text-base text-muted-foreground whitespace-pre-line leading-relaxed flex-1">
+        <p className="text-base text-muted-foreground whitespace-pre-line leading-relaxed">
           <span className="font-semibold text-foreground">Roteiro: </span>
           {script}
         </p>
