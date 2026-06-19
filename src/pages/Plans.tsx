@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { SaasJourneyPreview } from "@/components/SaasJourneyPreview";
 import {
   Loader2,
   Check,
@@ -333,6 +334,7 @@ export default function Plans() {
               </div>
             </div>
           </div>
+          <SaasJourneyPreview />
         </section>
 
         {/* NÚMEROS DE IMPACTO */}
