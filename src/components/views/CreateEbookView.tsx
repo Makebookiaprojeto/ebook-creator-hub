@@ -53,6 +53,7 @@ import { EbookPreviewCarousel } from "@/components/EbookPreviewCarousel";
 import { generateEbookPdf, downloadPdf } from "@/lib/ebookPdf";
 import videoDivulgacao from "@/assets/video-divulgacao-v3.mp4.asset.json";
 import videoDivulgacaoPoster from "@/assets/video-divulgacao-poster-v3.jpg.asset.json";
+import videoDivulgacao1 from "@/assets/video-divulgacao-1.mp4.asset.json";
 
 const steps = ["Nicho", "Preço", "Ebook", "Página de Vendas", "Divulgação"];
 const pricePresets = [19.9, 29.9, 39.9, 49.9];
