@@ -1018,13 +1018,13 @@ export function CreateEbookView() {
                           title: "Vídeo 1",
                           src: videoDivulgacao1.url,
                           filename: "video-divulgacao-1.mp4",
-                          script: "Roteiro do vídeo 1 será adicionado em breve.",
+                          script: "Comprei esse ebook sem muita expectativa, mas me surpreendi. O conteúdo é direto, fácil de aplicar e realmente valeu cada centavo.",
                         },
                         {
                           title: "Vídeo 2",
                           src: videoDivulgacao2.url,
                           filename: "video-divulgacao-2.mp4",
-                          script: "Roteiro do vídeo 2 será adicionado em breve.",
+                          script: "Sinceramente, esse ebook superou minhas expectativas. Aprendi coisas que consegui colocar em prática na hora e já vi resultados.",
                         },
                       ].map((v, i) => (
                         <DivulgacaoVideoCard key={i} {...v} />
