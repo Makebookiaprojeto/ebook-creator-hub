@@ -91,6 +91,81 @@ type ChapterDraft = {
   image_url: string | null;
 };
 
+function DivulgacaoVideoCard({ title, src, filename, script }: { title: string; src: string; filename: string; script: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+
+  const handlePlay = () => {
+    if (!src) {
+      toast.info("Vídeo será disponibilizado em breve.");
+      return;
+    }
+    videoRef.current?.play();
+    setPlaying(true);
+  };
+
+  const handleDownload = () => {
+    if (!src) {
+      toast.info("Vídeo será disponibilizado em breve.");
+      return;
+    }
+    const link = document.createElement('a');
+    link.href = src;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success("Iniciando download do vídeo...");
+  };
+
+  return (
+    <div className="flex flex-col sm:flex-row gap-4 rounded-xl border bg-background/40 p-4">
+      <div className="relative shrink-0 mx-auto sm:mx-0 w-[140px] aspect-[9/16] rounded-lg overflow-hidden bg-black border border-primary/10">
+        {src ? (
+          <video
+            ref={videoRef}
+            src={src}
+            className="w-full h-full object-cover"
+            controls={playing}
+            playsInline
+            onPause={() => setPlaying(false)}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs text-center px-2">
+            Vídeo em breve
+          </div>
+        )}
+        {!playing && (
+          <button
+            type="button"
+            onClick={handlePlay}
+            aria-label="Reproduzir vídeo"
+            className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors"
+          >
+            <span className="flex items-center justify-center w-12 h-12 rounded-full bg-primary/90 text-primary-foreground shadow-lg">
+              <Play className="h-5 w-5 ml-0.5" />
+            </span>
+          </button>
+        )}
+      </div>
+      <div className="flex-1 flex flex-col">
+        <h4 className="text-sm font-semibold mb-1">{title}</h4>
+        <p className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed flex-1">
+          {script}
+        </p>
+        <div className="mt-3">
+          <Button size="sm" variant="outline" className="gap-2" onClick={handleDownload}>
+            <Download className="h-3.5 w-3.5" />
+            Baixar Vídeo
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
 
 export function CreateEbookView() {
   const { createEbookWithChapters } = useEbooks();
