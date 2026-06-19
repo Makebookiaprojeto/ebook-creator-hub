@@ -173,7 +173,7 @@ function DivulgacaoVideoCard({ title, src, filename, script }: { title: string; 
 export function CreateEbookView() {
   const { createEbookWithChapters } = useEbooks();
   const [saving, setSaving] = useState(false);
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(2);
   const [niche, setNiche] = useState("");
   const [audience, setAudience] = useState("");
   const [price, setPrice] = useState<number>(29.9);
