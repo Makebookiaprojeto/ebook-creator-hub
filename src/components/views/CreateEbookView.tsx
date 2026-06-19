@@ -930,41 +930,31 @@ export function CreateEbookView() {
                     )}
                   </div>
                   <div className="rounded-2xl border bg-card p-5 shadow-sm">
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-1">
                       <Video className="h-5 w-5 text-primary" />
-                      Vídeo pronto para divulgação
+                      Vídeos prontos para divulgação
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Use este vídeo persuasivo para gerar interesse nos grupos:
+                      Use estes vídeos persuasivos para gerar interesse nos grupos:
                     </p>
-                    <div className="relative rounded-xl overflow-hidden bg-black aspect-video w-full max-w-3xl mx-auto border border-primary/10 mb-4">
-                      <video 
-                        src={videoDivulgacao.url}
-                        poster={videoDivulgacaoPoster.url}
-                        className="w-full h-full object-contain bg-black"
-                        controls
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="auto"
-                      />
+                    <div className="flex flex-col gap-4">
+                      {[
+                        {
+                          title: "Vídeo 1",
+                          src: "",
+                          filename: "video-divulgacao-1.mp4",
+                          script: "Roteiro do vídeo 1 será adicionado em breve.",
+                        },
+                        {
+                          title: "Vídeo 2",
+                          src: "",
+                          filename: "video-divulgacao-2.mp4",
+                          script: "Roteiro do vídeo 2 será adicionado em breve.",
+                        },
+                      ].map((v, i) => (
+                        <DivulgacaoVideoCard key={i} {...v} />
+                      ))}
                     </div>
-                    <Button 
-                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm gap-2"
-                      onClick={() => {
-                        const link = document.createElement('a');
-                        link.href = videoDivulgacao.url;
-                        link.download = "video-divulgacao.mp4";
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                        toast.success("Iniciando download do vídeo...");
-                      }}
-                    >
-                      <Download className="h-4 w-4" />
-                      Baixar Vídeo
-                    </Button>
                   </div>
                 </motion.div>
 
