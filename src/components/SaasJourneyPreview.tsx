@@ -42,7 +42,6 @@ export function SaasJourneyPreview() {
               className={`absolute inset-0 h-full w-full object-cover object-top transition-opacity duration-700 ${
                 i === index ? "opacity-100" : "opacity-0"
               }`}
-              loading="lazy"
             />
           ))}
         </div>
