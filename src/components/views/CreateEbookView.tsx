@@ -51,8 +51,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { EbookPreview } from "@/components/EbookPreview";
 import { EbookPreviewCarousel } from "@/components/EbookPreviewCarousel";
 import { generateEbookPdf, downloadPdf } from "@/lib/ebookPdf";
-import videoDivulgacao1 from "@/assets/video-divulgacao-1.mp4.asset.json";
-import videoDivulgacao2 from "@/assets/video-divulgacao-2.mp4.asset.json";
+const videoDivulgacao1 = { url: "/videos/video-divulgacao-1.mp4" };
+const videoDivulgacao2 = { url: "/videos/video-divulgacao-2.mp4" };
 
 const steps = ["Nicho", "Preço", "Ebook", "Página de Vendas", "Divulgação"];
 const pricePresets = [19.9, 29.9, 39.9, 49.9];
