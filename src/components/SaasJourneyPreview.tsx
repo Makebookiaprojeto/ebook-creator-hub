@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react";
-import step1Asset from "@/assets/preview/step-1.png.asset.json";
-import step2Asset from "@/assets/preview/step-2.png.asset.json";
-import step3Asset from "@/assets/preview/step-3.png.asset.json";
-import step4Asset from "@/assets/preview/step-4.png.asset.json";
-import step5Asset from "@/assets/preview/step-5.png.asset.json";
 
 const STEPS = [
-  { label: "Passo 1 — Escolha o Nicho", url: step1Asset.url },
-  { label: "Passo 2 — Defina o Preço", url: step2Asset.url },
-  { label: "Passo 3 — Geração do Ebook", url: step3Asset.url },
-  { label: "Passo 4 — Geração da Página de Vendas", url: step4Asset.url },
-  { label: "Passo 5 — Divulgação e Venda", url: step5Asset.url },
+  { label: "Passo 1 — Escolha o Nicho", url: "/preview/step-1.png" },
+  { label: "Passo 2 — Defina o Preço", url: "/preview/step-2.png" },
+  { label: "Passo 3 — Geração do Ebook", url: "/preview/step-3.png" },
+  { label: "Passo 4 — Geração da Página de Vendas", url: "/preview/step-4.png" },
+  { label: "Passo 5 — Divulgação e Venda", url: "/preview/step-5.png" },
 ];
 
 const INTERVAL_MS = 4000;
