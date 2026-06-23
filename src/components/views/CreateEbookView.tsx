@@ -142,7 +142,7 @@ function DivulgacaoVideoCard({ title, src, filename, script }: { title: string; 
             controls={playing}
             playsInline
             preload="metadata"
-            crossOrigin="anonymous"
+
             onPause={() => setPlaying(false)}
           />
 
