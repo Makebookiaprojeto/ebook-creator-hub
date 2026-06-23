@@ -95,13 +95,26 @@ function DivulgacaoVideoCard({ title, src, filename, script }: { title: string; 
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
 
-  const handlePlay = () => {
+  const handlePlay = async () => {
     if (!src) {
       toast.info("Vídeo será disponibilizado em breve.");
       return;
     }
-    videoRef.current?.play();
-    setPlaying(true);
+    const el = videoRef.current;
+    if (!el) return;
+    try {
+      setPlaying(true);
+      el.muted = false;
+      await el.play();
+    } catch {
+      try {
+        el.muted = true;
+        await el.play();
+      } catch {
+        setPlaying(false);
+        toast.error("Não foi possível reproduzir o vídeo neste navegador.");
+      }
+    }
   };
 
   const handleDownload = () => {
@@ -128,8 +141,11 @@ function DivulgacaoVideoCard({ title, src, filename, script }: { title: string; 
             className="w-full h-full object-cover"
             controls={playing}
             playsInline
+            preload="metadata"
+
             onPause={() => setPlaying(false)}
           />
+
         ) : (
           <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs text-center px-2">
             Vídeo em breve
