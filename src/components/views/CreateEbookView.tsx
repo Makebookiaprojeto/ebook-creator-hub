@@ -141,8 +141,11 @@ function DivulgacaoVideoCard({ title, src, filename, script }: { title: string; 
             className="w-full h-full object-cover"
             controls={playing}
             playsInline
+            preload="metadata"
+            crossOrigin="anonymous"
             onPause={() => setPlaying(false)}
           />
+
         ) : (
           <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs text-center px-2">
             Vídeo em breve
