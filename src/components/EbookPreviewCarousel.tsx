@@ -18,30 +18,53 @@ type Props = {
 };
 
 function renderPartialContent(content: string) {
-  // Take first 3 paragraphs to fill the medium area
-  const blocks = content.split(/\n\s*\n/).filter(b => b.trim().length > 0);
-  const previewBlocks = blocks.slice(0, 3); // Reduced from 4 to 3 blocks
-  
+  const blocks = content.split(/\n\s*\n/).filter((b) => b.trim().length > 0);
+  const previewBlocks = blocks.slice(0, 4);
+
   return (
     <div className="space-y-4">
       {previewBlocks.map((block, i) => {
         const trimmed = block.trim();
         if (trimmed.startsWith("## ")) {
           return (
-            <h4 key={i} className="font-display text-lg font-bold mt-4 mb-2 text-primary">
+            <h4
+              key={i}
+              className="font-display text-lg font-bold mt-4 mb-2"
+              style={{ color: "hsl(150 75% 32%)" }}
+            >
               {trimmed.replace(/^##\s+/, "")}
             </h4>
           );
         }
+        if (trimmed.split("\n").every((l) => /^\s*[-•]\s+/.test(l))) {
+          const items = trimmed.split("\n").map((l) => l.replace(/^\s*[-•]\s+/, ""));
+          return (
+            <ul
+              key={i}
+              className="my-2 ml-5 list-disc space-y-1.5 text-[15px] leading-relaxed"
+              style={{ color: "hsl(0 0% 18%)" }}
+            >
+              {items.map((it, j) => (
+                <li key={j}>{it}</li>
+              ))}
+            </ul>
+          );
+        }
         return (
-          <p key={i} className="text-sm leading-relaxed text-muted-foreground">
+          <p
+            key={i}
+            className="text-[15px] leading-relaxed"
+            style={{ color: "hsl(0 0% 12%)" }}
+          >
             {trimmed}
           </p>
         );
       })}
-      {blocks.length > 3 && (
-        <div className="pt-4 border-t border-dashed border-border">
-          <p className="text-xs italic text-muted-foreground/60">Continua no ebook completo...</p>
+      {blocks.length > previewBlocks.length && (
+        <div className="pt-4 border-t border-dashed" style={{ borderColor: "hsl(150 70% 38% / 0.35)" }}>
+          <p className="text-xs italic" style={{ color: "hsl(0 0% 40%)" }}>
+            Continua no ebook completo...
+          </p>
         </div>
       )}
     </div>
@@ -49,29 +72,13 @@ function renderPartialContent(content: string) {
 }
 
 export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Props) {
-  const [currentPage, setCurrentPage] = useState(0);
-
-  const displayedChapters = chapters.slice(0, 6);
+  const displayedChapters = chapters.slice(0, 5);
   const totalPages = 1 + displayedChapters.length;
 
-  const nextPage = () => setCurrentPage((p) => Math.min(p + 1, totalPages - 1));
-  const prevPage = () => setCurrentPage((p) => Math.max(p - 1, 0));
-
   const variants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 300 : -300,
-      opacity: 0
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      x: direction < 0 ? 300 : -300,
-      opacity: 0
-    })
+    enter: (direction: number) => ({ x: direction > 0 ? 300 : -300, opacity: 0 }),
+    center: { zIndex: 1, x: 0, opacity: 1 },
+    exit: (direction: number) => ({ zIndex: 0, x: direction < 0 ? 300 : -300, opacity: 0 }),
   };
 
   const [[page, direction], setPage] = useState([0, 0]);
@@ -80,13 +87,22 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
     const newPage = page + newDirection;
     if (newPage >= 0 && newPage < totalPages) {
       setPage([newPage, newDirection]);
-      setCurrentPage(newPage);
     }
   };
 
+  const accent = "hsl(150 75% 32%)";
+  const accentBg = "hsl(150 75% 35%)";
+
   return (
     <div className="relative w-full max-w-4xl mx-auto px-4 sm:px-12">
-      <div className="overflow-hidden rounded-2xl border bg-card shadow-xl min-h-[600px] sm:min-h-[700px] flex flex-col relative">
+      <div
+        className="overflow-hidden rounded-2xl border shadow-2xl min-h-[640px] sm:min-h-[720px] flex flex-col relative"
+        style={{
+          background: "hsl(0 0% 100%)",
+          borderColor: "hsl(150 70% 38% / 0.28)",
+          boxShadow: "0 30px 80px -30px hsl(150 70% 38% / 0.45)",
+        }}
+      >
         <div className="flex-1 relative overflow-hidden">
           <AnimatePresence initial={false} custom={direction}>
             <motion.div
@@ -98,31 +114,33 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
               exit="exit"
               transition={{
                 x: { type: "spring", stiffness: 300, damping: 30 },
-                opacity: { duration: 0.2 }
+                opacity: { duration: 0.2 },
               }}
               className="absolute inset-0 w-full h-full p-6 sm:p-10"
             >
               {page === 0 && (
                 <div className="h-full flex flex-col">
-                  <div className="flex-1 rounded-xl overflow-hidden shadow-2xl bg-gradient-to-br from-primary/80 to-primary relative mb-4">
+                  <div className="flex-1 rounded-xl overflow-hidden shadow-2xl relative mb-4" style={{ background: accentBg }}>
                     {coverUrl ? (
-                      <img 
-                        src={coverUrl} 
-                        alt={title} 
-                        className="absolute inset-0 h-full w-full object-cover" 
-                      />
+                      <img src={coverUrl} alt={title} className="absolute inset-0 h-full w-full object-cover" />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <BookOpen className="h-24 w-24 text-primary-foreground/40" />
+                        <BookOpen className="h-24 w-24 text-white/40" />
                       </div>
                     )}
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent p-6 pt-20">
+                    <div
+                      className="absolute inset-x-0 bottom-0 p-6 pt-24"
+                      style={{ background: "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.78) 100%)" }}
+                    >
+                      <div className="h-1.5 w-16 rounded-full mb-4" style={{ background: accentBg }} />
                       <h2 className="font-display text-2xl sm:text-4xl font-bold text-white leading-tight">{title}</h2>
                       {subtitle && <p className="mt-2 text-sm sm:text-lg text-white/90">{subtitle}</p>}
                     </div>
                   </div>
                   <div className="text-center">
-                    <p className="text-xs text-muted-foreground/60 font-medium uppercase tracking-widest">Capa do Ebook</p>
+                    <p className="text-xs font-medium uppercase tracking-widest" style={{ color: "hsl(0 0% 45%)" }}>
+                      Capa do Ebook
+                    </p>
                   </div>
                 </div>
               )}
@@ -130,20 +148,23 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
               {page >= 1 && (
                 <div className="h-full flex flex-col">
                   <div className="mb-5 shrink-0">
-                    <p className="text-xs font-bold uppercase tracking-widest text-primary mb-2">Capítulo {page}</p>
-                    <h3 className="font-display text-2xl sm:text-3xl font-bold text-foreground leading-tight">
+                    <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: accent }}>
+                      Capítulo {page}
+                    </p>
+                    <h3 className="font-display text-2xl sm:text-3xl font-bold leading-tight" style={{ color: "hsl(0 0% 7%)" }}>
                       {displayedChapters[page - 1]?.title}
                     </h3>
                     {displayedChapters[page - 1]?.subtitle && (
-                      <p className="mt-2 text-sm sm:text-base font-medium text-muted-foreground italic">
+                      <p className="mt-2 text-sm sm:text-base font-medium italic" style={{ color: "hsl(0 0% 30%)" }}>
                         {displayedChapters[page - 1]?.subtitle}
                       </p>
                     )}
+                    <div className="mt-4 h-1 w-14 rounded-full" style={{ background: accentBg }} />
                   </div>
 
                   <div className="flex-1 grid grid-cols-1 sm:grid-cols-5 gap-6 min-h-0">
                     {displayedChapters[page - 1]?.image_url && (
-                      <div className="sm:col-span-2 rounded-xl overflow-hidden shadow-md bg-background flex items-center justify-center max-h-[260px] sm:max-h-none">
+                      <div className="sm:col-span-2 rounded-xl overflow-hidden shadow-md max-h-[260px] sm:max-h-none" style={{ background: "hsl(0 0% 96%)" }}>
                         <img
                           src={displayedChapters[page - 1].image_url}
                           alt={displayedChapters[page - 1].title}
@@ -151,10 +172,10 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
                         />
                       </div>
                     )}
-                    <div className={`${displayedChapters[page - 1]?.image_url ? "sm:col-span-3" : "sm:col-span-5"} overflow-y-auto pr-2 custom-scrollbar`}>
-                      <div className="prose prose-invert max-w-none">
-                        {renderPartialContent(displayedChapters[page - 1]?.content || "_(gerando…)_")}
-                      </div>
+                    <div
+                      className={`${displayedChapters[page - 1]?.image_url ? "sm:col-span-3" : "sm:col-span-5"} overflow-y-auto pr-2 custom-scrollbar`}
+                    >
+                      {renderPartialContent(displayedChapters[page - 1]?.content || "(gerando…)")}
                     </div>
                   </div>
                 </div>
@@ -163,16 +184,17 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
           </AnimatePresence>
         </div>
 
-        {/* Footer Navigation Dots Only */}
-        <div className="p-4 border-t flex items-center justify-center bg-card">
+        <div className="p-4 border-t flex items-center justify-center" style={{ background: "hsl(0 0% 100%)", borderColor: "hsl(0 0% 90%)" }}>
           <div className="flex gap-1.5 px-4 overflow-x-auto no-scrollbar">
             {Array.from({ length: totalPages }).map((_, i) => (
               <button
                 key={i}
                 onClick={() => setPage([i, i > page ? 1 : -1])}
-                className={`h-1.5 rounded-full transition-all duration-300 shrink-0 ${
-                  i === page ? "w-6 bg-primary" : "w-1.5 bg-muted hover:bg-muted-foreground/30"
-                }`}
+                className="h-1.5 rounded-full transition-all duration-300 shrink-0"
+                style={{
+                  width: i === page ? "1.5rem" : "0.375rem",
+                  background: i === page ? accentBg : "hsl(0 0% 82%)",
+                }}
                 aria-label={`Ir para página ${i + 1}`}
               />
             ))}
@@ -180,14 +202,13 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
         </div>
       </div>
 
-      {/* Side Navigation Arrows */}
       <div className="absolute top-1/2 -translate-y-1/2 left-0 sm:-left-4 z-10">
         <Button
           variant="outline"
           size="icon"
           onClick={() => paginate(-1)}
           disabled={page === 0}
-          className="rounded-full h-10 w-10 sm:h-12 sm:w-12 border-border bg-card shadow-lg text-muted-foreground hover:bg-secondary hover:text-primary disabled:opacity-30 transition-all"
+          className="rounded-full h-10 w-10 sm:h-12 sm:w-12 bg-card shadow-lg disabled:opacity-30"
           aria-label="Página anterior"
         >
           <ChevronLeft className="h-6 w-6 sm:h-8 sm:w-8" />
@@ -200,13 +221,13 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
           size="icon"
           onClick={() => paginate(1)}
           disabled={page === totalPages - 1}
-          className="rounded-full h-10 w-10 sm:h-12 sm:w-12 border-border bg-card shadow-lg text-muted-foreground hover:bg-secondary hover:text-primary disabled:opacity-30 transition-all"
+          className="rounded-full h-10 w-10 sm:h-12 sm:w-12 bg-card shadow-lg disabled:opacity-30"
           aria-label="Próxima página"
         >
           <ChevronRight className="h-6 w-6 sm:h-8 sm:w-8" />
         </Button>
       </div>
-      
+
       <p className="text-center mt-4 text-xs text-muted-foreground font-medium uppercase tracking-widest">
         Página {page + 1} de {totalPages} • Use as setas para navegar
       </p>
