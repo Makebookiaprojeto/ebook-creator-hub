@@ -95,9 +95,9 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
   const accentBg = "hsl(150 75% 35%)";
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto px-4 sm:px-12">
+    <div className="relative w-full max-w-3xl mx-auto px-4 sm:px-12">
       <div
-        className="overflow-hidden rounded-2xl border shadow-2xl min-h-[640px] sm:min-h-[720px] flex flex-col relative"
+        className="overflow-hidden rounded-2xl border shadow-2xl min-h-[560px] sm:min-h-[640px] flex flex-col relative"
         style={{
           background: "hsl(0 0% 100%)",
           borderColor: "hsl(150 70% 38% / 0.28)",
@@ -117,7 +117,7 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
                 x: { type: "spring", stiffness: 300, damping: 30 },
                 opacity: { duration: 0.2 },
               }}
-              className="absolute inset-0 w-full h-full p-6 sm:p-10"
+              className="absolute inset-0 w-full h-full p-5 sm:p-8"
             >
               {page === 0 && (
                 <div className="h-full flex flex-col">
@@ -134,8 +134,8 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
                       style={{ background: "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.78) 100%)" }}
                     >
                       <div className="h-1.5 w-16 rounded-full mb-4" style={{ background: accentBg }} />
-                      <h2 className="font-display text-2xl sm:text-4xl font-bold text-white leading-tight">{title}</h2>
-                      {subtitle && <p className="mt-2 text-sm sm:text-lg text-white/90">{subtitle}</p>}
+                      <h2 className="font-display text-xl sm:text-3xl font-bold text-white leading-tight">{title}</h2>
+                      {subtitle && <p className="mt-2 text-xs sm:text-base text-white/90">{subtitle}</p>}
                     </div>
                   </div>
                   <div className="text-center">
@@ -148,24 +148,24 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
 
               {page >= 1 && (
                 <div className="h-full flex flex-col">
-                  <div className="mb-5 shrink-0">
-                    <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: accent }}>
+                  <div className="mb-4 shrink-0">
+                    <p className="text-[11px] font-bold uppercase tracking-widest mb-1.5" style={{ color: accent }}>
                       Capítulo {page}
                     </p>
-                    <h3 className="font-display text-2xl sm:text-3xl font-bold leading-tight" style={{ color: "hsl(0 0% 7%)" }}>
+                    <h3 className="font-display text-xl sm:text-2xl font-bold leading-tight" style={{ color: "hsl(0 0% 7%)" }}>
                       {displayedChapters[page - 1]?.title}
                     </h3>
                     {displayedChapters[page - 1]?.subtitle && (
-                      <p className="mt-2 text-sm sm:text-base font-medium italic" style={{ color: "hsl(0 0% 30%)" }}>
+                      <p className="mt-1.5 text-xs sm:text-sm font-medium italic" style={{ color: "hsl(0 0% 30%)" }}>
                         {displayedChapters[page - 1]?.subtitle}
                       </p>
                     )}
-                    <div className="mt-4 h-1 w-14 rounded-full" style={{ background: accentBg }} />
+                    <div className="mt-3 h-1 w-12 rounded-full" style={{ background: accentBg }} />
                   </div>
 
-                  <div className="flex-1 grid grid-cols-1 sm:grid-cols-5 gap-6 min-h-0">
+                  <div className="flex-1 grid grid-cols-1 sm:grid-cols-5 gap-4 min-h-0">
                     {displayedChapters[page - 1]?.image_url && (
-                      <div className="sm:col-span-2 rounded-xl overflow-hidden shadow-md max-h-[260px] sm:max-h-none" style={{ background: "hsl(0 0% 96%)" }}>
+                      <div className="sm:col-span-2 rounded-xl overflow-hidden shadow-md max-h-[220px] sm:max-h-none" style={{ background: "hsl(0 0% 96%)" }}>
                         <img
                           src={displayedChapters[page - 1].image_url}
                           alt={displayedChapters[page - 1].title}
