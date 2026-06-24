@@ -19,17 +19,16 @@ type Props = {
 
 function renderPartialContent(content: string) {
   const blocks = content.split(/\n\s*\n/).filter((b) => b.trim().length > 0);
-  const previewBlocks = blocks.slice(0, 4);
 
   return (
-    <div className="space-y-4">
-      {previewBlocks.map((block, i) => {
+    <div className="space-y-3">
+      {blocks.map((block, i) => {
         const trimmed = block.trim();
         if (trimmed.startsWith("## ")) {
           return (
             <h4
               key={i}
-              className="font-display text-lg font-bold mt-4 mb-2"
+              className="font-display text-base sm:text-lg font-bold mt-3 mb-1"
               style={{ color: "hsl(150 75% 32%)" }}
             >
               {trimmed.replace(/^##\s+/, "")}
@@ -41,32 +40,34 @@ function renderPartialContent(content: string) {
           return (
             <ul
               key={i}
-              className="my-2 ml-5 list-disc space-y-1.5 text-[15px] leading-relaxed"
-              style={{ color: "hsl(0 0% 18%)" }}
+              className="my-1 ml-1 space-y-1.5 text-[14px] sm:text-[15px] leading-relaxed"
+              style={{ color: "hsl(0 0% 12%)" }}
             >
-              {items.map((it, j) => (
-                <li key={j}>{it}</li>
-              ))}
+              {items.map((it, j) => {
+                const isCheck = /^✓\s+/.test(it);
+                const text = it.replace(/^✓\s+/, "");
+                return (
+                  <li key={j} className="flex gap-2">
+                    <span className="shrink-0 font-bold" style={{ color: "hsl(150 75% 32%)" }}>
+                      {isCheck ? "✓" : "•"}
+                    </span>
+                    <span>{text}</span>
+                  </li>
+                );
+              })}
             </ul>
           );
         }
         return (
           <p
             key={i}
-            className="text-[15px] leading-relaxed"
+            className="text-[14px] sm:text-[15px] leading-relaxed"
             style={{ color: "hsl(0 0% 12%)" }}
           >
             {trimmed}
           </p>
         );
       })}
-      {blocks.length > previewBlocks.length && (
-        <div className="pt-4 border-t border-dashed" style={{ borderColor: "hsl(150 70% 38% / 0.35)" }}>
-          <p className="text-xs italic" style={{ color: "hsl(0 0% 40%)" }}>
-            Continua no ebook completo...
-          </p>
-        </div>
-      )}
     </div>
   );
 }
