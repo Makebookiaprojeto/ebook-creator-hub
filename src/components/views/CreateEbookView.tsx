@@ -556,6 +556,7 @@ export function CreateEbookView() {
   };
 
 
+  const stepContentRef = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const previewScrollDoneRef = useRef(false);
 
@@ -597,18 +598,20 @@ export function CreateEbookView() {
     const waitForStablePreview = () => {
       if (cancelled) return;
 
-      const target = previewRef.current;
+      const scrollTarget = stepContentRef.current;
+      const previewTarget = previewRef.current;
       const pageHeight = document.scrollingElement?.scrollHeight ?? document.documentElement.scrollHeight;
-      const rect = target?.getBoundingClientRect();
-      const targetReady = !!target && !!rect && rect.height > 320;
+      const previewRect = previewTarget?.getBoundingClientRect();
+      const targetReady = !!scrollTarget && !!previewTarget && !!previewRect && previewRect.height > 320;
       const pageHeightStable = Math.abs(pageHeight - previousPageHeight) < 1;
 
       stableFrames = pageHeightStable ? stableFrames + 1 : 0;
       previousPageHeight = pageHeight;
 
-      if (targetReady && stableFrames >= 2 && (imagesReady(target) || attempts > 45)) {
+      if (targetReady && stableFrames >= 2 && (imagesReady(previewTarget) || attempts > 45)) {
         previewScrollDoneRef.current = true;
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        const top = scrollTarget.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top, behavior: "smooth" });
         return;
       }
 
@@ -663,7 +666,7 @@ export function CreateEbookView() {
       </div>
 
       {/* Step content */}
-      <div className="rounded-2xl border bg-card p-6 sm:p-8 shadow-soft min-h-[420px]">
+      <div ref={stepContentRef} className="rounded-2xl border bg-card p-6 sm:p-8 shadow-soft min-h-[420px]">
         <AnimatePresence mode="wait">
           <motion.div
             key={step}
