@@ -557,6 +557,7 @@ export function CreateEbookView() {
 
 
   const previewRef = useRef<HTMLDivElement>(null);
+  const previewScrollDoneRef = useRef(false);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -572,21 +573,59 @@ export function CreateEbookView() {
     scrollToTop();
   };
 
-  // Ao chegar no Passo 3 (index 2) com a prévia renderizada, centralizar o container da prévia na viewport
+  // Ao chegar no Passo 3 (index 2), aguardar a montagem/animacao do conteúdo e a estabilizacao do layout antes de centralizar a prévia.
   useEffect(() => {
-    if (step !== 2 || !generated) return;
-    let raf1 = 0, raf2 = 0, t = 0;
-    raf1 = requestAnimationFrame(() => {
-      raf2 = requestAnimationFrame(() => {
-        t = window.setTimeout(() => {
-          previewRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-        }, 80);
-      });
-    });
+    if (step !== 2) {
+      previewScrollDoneRef.current = false;
+      return;
+    }
+
+    if (!generated || previewScrollDoneRef.current) return;
+
+    let cancelled = false;
+    let raf = 0;
+    let timeout = 0;
+    let attempts = 0;
+    let stableFrames = 0;
+    let previousPageHeight = 0;
+
+    const imagesReady = (target: HTMLElement) => {
+      const images = Array.from(target.querySelectorAll("img"));
+      return images.length === 0 || images.every((img) => img.complete && img.naturalWidth > 0);
+    };
+
+    const waitForStablePreview = () => {
+      if (cancelled) return;
+
+      const target = previewRef.current;
+      const pageHeight = document.scrollingElement?.scrollHeight ?? document.documentElement.scrollHeight;
+      const rect = target?.getBoundingClientRect();
+      const targetReady = !!target && !!rect && rect.height > 320;
+      const pageHeightStable = Math.abs(pageHeight - previousPageHeight) < 1;
+
+      stableFrames = pageHeightStable ? stableFrames + 1 : 0;
+      previousPageHeight = pageHeight;
+
+      if (targetReady && stableFrames >= 2 && (imagesReady(target) || attempts > 45)) {
+        previewScrollDoneRef.current = true;
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+
+      if (attempts < 90) {
+        attempts += 1;
+        raf = requestAnimationFrame(waitForStablePreview);
+      }
+    };
+
+    timeout = window.setTimeout(() => {
+      raf = requestAnimationFrame(waitForStablePreview);
+    }, 280);
+
     return () => {
-      cancelAnimationFrame(raf1);
-      cancelAnimationFrame(raf2);
-      clearTimeout(t);
+      cancelled = true;
+      cancelAnimationFrame(raf);
+      clearTimeout(timeout);
     };
   }, [step, generated]);
 
@@ -738,8 +777,10 @@ export function CreateEbookView() {
                 )}
                 
                 {generated && (
-                  <div ref={previewRef} className="mt-6 space-y-6">
-                    <EbookPreviewCarousel title={title} subtitle={subtitle} coverUrl={coverUrl} chapters={chapters} />
+                  <div className="mt-6 space-y-6">
+                    <div ref={previewRef} data-step3-preview>
+                      <EbookPreviewCarousel title={title} subtitle={subtitle} coverUrl={coverUrl} chapters={chapters} />
+                    </div>
 
                     <div className="flex justify-center">
                       <Button
