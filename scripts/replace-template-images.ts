@@ -132,16 +132,17 @@ const QUERIES: Record<string, { cover: string; chapters: string[]; style: string
     ],
   },
   "marketing-digital": {
-    style: "modern creator workspace photography",
-    cover: "creator filming content phone ring light home",
+    style: "premium editorial marketing branding photography cinematic",
+    cover: "confident marketing strategist presenting growth chart whiteboard modern office brand",
     chapters: [
-      "entrepreneur researching niche notebook laptop coffee",
-      "content creator filming video phone tripod",
-      "marketer crafting offer landing page laptop",
-      "marketer analyzing ads dashboard laptop screen",
-      "support agent customer chat smiling laptop",
+      "marketer researching target niche audience persona sticky notes wall strategy",
+      "content creator editorial calendar planning instagram posts desk notebook",
+      "marketing team presenting product offer pitch slides meeting room",
+      "digital marketer analyzing facebook ads campaign metrics dashboard monitor",
+      "sales consultant whatsapp customer conversation closing deal smartphone",
     ],
   },
+
   maternidade: {
     style: "tender warm family photography",
     cover: "mother holding newborn baby tender bonding",
