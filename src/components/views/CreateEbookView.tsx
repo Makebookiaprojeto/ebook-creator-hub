@@ -738,8 +738,9 @@ export function CreateEbookView() {
                 )}
                 
                 {generated && (
-                  <div className="mt-6 space-y-6">
+                  <div ref={previewRef} className="mt-6 space-y-6">
                     <EbookPreviewCarousel title={title} subtitle={subtitle} coverUrl={coverUrl} chapters={chapters} />
+
                     <div className="flex justify-center">
                       <Button
                         onClick={async () => {
