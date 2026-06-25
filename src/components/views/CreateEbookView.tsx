@@ -608,9 +608,7 @@ export function CreateEbookView() {
 
       if (targetReady && stableFrames >= 2 && (imagesReady(target) || attempts > 45)) {
         previewScrollDoneRef.current = true;
-        const rect = target.getBoundingClientRect();
-        const offset = 24; // espaço acima do topo do carrossel
-        window.scrollTo({ top: window.scrollY + rect.top - offset, behavior: "smooth" });
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
         return;
       }
 
