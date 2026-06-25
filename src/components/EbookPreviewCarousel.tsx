@@ -96,12 +96,13 @@ const RenderedContent = memo(function RenderedContent({ content }: { content: st
 });
 
 const variants = {
-  enter: (direction: number) => ({ x: direction > 0 ? 40 : -40, opacity: 0 }),
-  center: { zIndex: 1, x: 0, opacity: 1 },
-  exit: (direction: number) => ({ zIndex: 0, x: direction < 0 ? 40 : -40, opacity: 0 }),
+  enter: { opacity: 0 },
+  center: { zIndex: 1, opacity: 1 },
+  exit: { zIndex: 0, opacity: 0 },
 };
 
-const transition = { x: { duration: 0.18, ease: "easeOut" as const }, opacity: { duration: 0.12 } };
+const transition = { duration: 0.12, ease: "easeOut" as const };
+
 
 export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Props) {
   const displayedChapters = useMemo(() => chapters.slice(0, 5), [chapters]);
