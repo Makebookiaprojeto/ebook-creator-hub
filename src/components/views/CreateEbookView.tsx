@@ -556,6 +556,8 @@ export function CreateEbookView() {
   };
 
 
+  const previewRef = useRef<HTMLDivElement>(null);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -569,6 +571,25 @@ export function CreateEbookView() {
     setStep((s) => Math.max(s - 1, 0));
     scrollToTop();
   };
+
+  // Ao chegar no Passo 3 (index 2) com a prévia renderizada, centralizar o container da prévia na viewport
+  useEffect(() => {
+    if (step !== 2 || !generated) return;
+    let raf1 = 0, raf2 = 0, t = 0;
+    raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        t = window.setTimeout(() => {
+          previewRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 80);
+      });
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+      clearTimeout(t);
+    };
+  }, [step, generated]);
+
 
   return (
     <div className="space-y-6 animate-fade-in">
