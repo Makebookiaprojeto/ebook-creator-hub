@@ -101,7 +101,7 @@ const variants = {
   exit: (direction: number) => ({ zIndex: 0, x: direction < 0 ? 40 : -40, opacity: 0 }),
 };
 
-const transition = { x: { duration: 0.18, ease: "easeOut" }, opacity: { duration: 0.12 } };
+const transition = { x: { duration: 0.18, ease: "easeOut" as const }, opacity: { duration: 0.12 } };
 
 export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Props) {
   const displayedChapters = useMemo(() => chapters.slice(0, 5), [chapters]);
