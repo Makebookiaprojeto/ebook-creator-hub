@@ -6,7 +6,7 @@ import {
   BookOpen, MousePointer2, Target, Layout, Award, Lock as LockIcon, ArrowRight as ArrowRightIcon,
   TrendingUp, ExternalLink, Video, Play,
   Dumbbell, Utensils, Baby, Dog, Sparkle, GraduationCap, Laptop, Palette, Briefcase, Languages, Map, Home, Shirt,
-  Heart, Wallet, Brain, HeartPulse
+  Heart, Wallet, Brain, HeartPulse, DollarSign
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -670,7 +670,7 @@ export function CreateEbookView() {
       </div>
 
       {/* Step content */}
-      <div ref={stepContentRef} className={`px-6 sm:px-8 pt-2 pb-6 min-h-[420px] ${step === 0 ? "" : "rounded-2xl border bg-card shadow-soft"}`}>
+      <div ref={stepContentRef} className={`px-6 sm:px-8 pt-2 pb-6 min-h-[420px] ${step === 0 || step === 1 ? "" : "rounded-2xl border bg-card shadow-soft"}`}>
         <AnimatePresence mode="wait">
           <motion.div
             key={step}
@@ -724,7 +724,11 @@ export function CreateEbookView() {
 
             {step === 1 && (
               <div className="max-w-xl mx-auto">
-                <h2 className="font-display text-xl font-semibold">Defina o preço</h2>
+                <div className="flex flex-col items-center text-center">
+                  <DollarSign className="h-5 w-5" style={{ color: "#FFFF00" }} />
+                  <h2 className="font-display text-base font-semibold mt-1.5">Defina o preço</h2>
+                </div>
+
                 <div className="mt-6">
                   <label className="text-xs font-medium uppercase text-muted-foreground">Preço de venda (R$)</label>
                   <div className="mt-2 relative">
