@@ -763,7 +763,7 @@ export function CreateEbookView() {
             )}
 
             {step === 1 && (
-              <div className="max-w-xl mx-auto pt-4">
+              <div className="max-w-xl mx-auto -mt-4">
                 <div className="flex flex-col items-center text-center">
                   <BadgeDollarSign className="h-7 w-7" style={{ color: "#FFFF00" }} strokeWidth={2.2} />
                   <h2 className="font-display text-xl font-semibold mt-2 mb-4">Defina o preço</h2>
