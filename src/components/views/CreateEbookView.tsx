@@ -640,7 +640,7 @@ export function CreateEbookView() {
       <div className="p-5">
         <div className="mx-auto flex max-w-2xl items-center justify-between">
           {steps.map((label, i) => (
-            <div key={label} className="flex flex-1 items-center">
+            <div key={label} className={`flex items-center ${i < steps.length - 1 ? "flex-1" : ""}`}>
               <div className="flex flex-col items-center gap-1.5">
                 <div
                   className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium transition ${
