@@ -1083,7 +1083,7 @@ export function CreateEbookView() {
                 >
                   <div className="p-5">
                     <h3 className="text-lg font-semibold flex items-center gap-2 mb-1 text-[#FFFF00]">
-                      <Users className="h-5 w-5 text-[#FFFF00]" />
+                      <Users className="h-5 w-5 text-primary" />
                       Buscar grupos por nicho
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">Digite o nicho do seu Ebook.</p>
