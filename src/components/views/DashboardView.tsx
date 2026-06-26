@@ -410,7 +410,7 @@ function SalesByHourChart({ total }: { total: number }) {
                 <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={1} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+            
             <XAxis
               dataKey="hora"
               tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
