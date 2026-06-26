@@ -895,16 +895,17 @@ export function CreateEbookView() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
-                      <label className="text-sm font-medium mb-1.5 block">Título do Ebook</label>
+                      <label className="text-base font-medium mb-1.5 block">Título do Ebook</label>
                       <Input 
                         placeholder="Digite o título do ebook" 
                         value={title} 
                         onChange={(e) => setTitle(e.target.value)} 
                         required 
+                        className="text-base h-11"
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium mb-1.5 block">Preço do Ebook</label>
+                      <label className="text-base font-medium mb-1.5 block">Preço do Ebook</label>
                       <Input 
                         placeholder="R$ 0,00" 
                         value={new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price)} 
