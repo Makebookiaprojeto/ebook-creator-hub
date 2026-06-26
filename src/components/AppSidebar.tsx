@@ -114,7 +114,7 @@ export function AppSidebar({ active, onChange }: Props) {
                           " text-[15px] h-10 py-2"
                         }
                       >
-                        <item.icon className="h-4 w-4" />
+                        {collapsed && <item.icon className="h-4 w-4" />}
                         {!collapsed && <span className="text-[15px]">+ NOVA ESTRUTURA</span>}
 
                       </SidebarMenuButton>
