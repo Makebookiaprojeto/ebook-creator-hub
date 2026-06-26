@@ -109,8 +109,8 @@ export function AppSidebar({ active, onChange }: Props) {
                         onClick={() => onChange(item.id)}
                         className={
                           (isActive
-                            ? "bg-[#FFFF00] text-black font-bold hover:bg-[#FFFF00]/90"
-                            : "bg-[#FFFF00] text-black font-bold hover:bg-[#FFFF00]/90") +
+                            ? "bg-primary text-background font-bold hover:bg-primary/90"
+                            : "bg-primary text-background font-bold hover:bg-primary/90") +
                           " text-[13px] h-9 py-1.5"
                         }
                       >
