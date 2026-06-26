@@ -733,24 +733,24 @@ export function CreateEbookView() {
             {step === 0 && (
              <div className="-mt-2">
                  <div className="flex flex-col items-center text-center">
-                   <Sparkles className="h-5 w-5" style={{ color: "#FFFF00" }} />
-                   <h2 className="font-display text-base font-semibold mt-1.5">Selecione um nicho</h2>
+                   <Sparkles className="h-6 w-6" style={{ color: "#FFFF00" }} />
+                   <h2 className="font-display text-lg font-semibold mt-2">Selecione um nicho</h2>
                  </div>
-                 <div className="mt-4 mx-auto max-w-2xl grid grid-cols-5 gap-2">
+                 <div className="mt-5 mx-auto max-w-3xl grid grid-cols-5 gap-2.5">
                    {niches.slice(0, 20).map((n) => {
                      const Icon = n.icon;
                      return (
                        <button
                          key={n.name}
                          onClick={() => setNiche(n.name)}
-                         className={`group rounded-md border px-1.5 py-2 text-center transition-all hover:shadow-sm hover:-translate-y-0.5 min-h-[48px] flex flex-col items-center justify-center gap-1 ${
+                         className={`group rounded-md border px-2 py-2.5 text-center transition-all hover:shadow-sm hover:-translate-y-0.5 min-h-[58px] flex flex-col items-center justify-center gap-1.5 ${
                            niche === n.name 
                              ? "border-primary bg-primary text-primary-foreground shadow-glow" 
                              : "bg-card border-border hover:border-primary/50"
                          }`}
                        >
-                         {Icon && <Icon className={`h-4 w-4 ${niche === n.name ? "text-primary-foreground" : "text-primary"}`} />}
-                         <p className={`font-medium text-[12px] leading-tight ${
+                         {Icon && <Icon className={`h-5 w-5 ${niche === n.name ? "text-primary-foreground" : "text-primary"}`} />}
+                         <p className={`font-medium text-[13px] leading-tight ${
                            niche === n.name ? "text-primary-foreground" : "text-foreground"
                          }`}>
                            {n.name}
@@ -759,6 +759,7 @@ export function CreateEbookView() {
                      );
                    })}
                  </div>
+
               </div>
             )}
 
