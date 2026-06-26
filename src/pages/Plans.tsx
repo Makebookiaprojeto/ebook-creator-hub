@@ -236,8 +236,8 @@ export default function Plans() {
                     </div>
                   </div>
                   <div className="p-2 pt-3">
-                    <button className="w-full flex items-center gap-2 px-3 py-2 rounded-md bg-primary text-background font-bold text-xs shadow-sm">
-                      <Plus className="h-4 w-4" /> Nova Estrutura
+                    <button className="w-full flex items-center gap-2 px-3 py-2 rounded-md bg-primary text-background font-bold text-xs shadow-md">
+                      <Plus className="h-4 w-4" /> <span style={{ textShadow: "0 1px 2px rgba(0,0,0,0.35)" }}>Nova Estrutura</span>
                     </button>
                   </div>
                   <div className="px-3 pt-3 pb-1 text-[10px] uppercase tracking-wider text-muted-foreground">Menu</div>
