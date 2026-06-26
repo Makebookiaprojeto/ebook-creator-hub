@@ -892,7 +892,7 @@ export function CreateEbookView() {
                   <h2 className="font-display text-xl font-semibold text-center">Configure sua Página de Vendas</h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
                   <div className="space-y-4">
                     <div>
                       <label className="text-base font-medium mb-1.5 block">Título do Ebook</label>
