@@ -407,7 +407,7 @@ function SalesByHourChart({ total }: { total: number }) {
           <span className="text-[11px] font-medium text-muted-foreground">Últimos 30 dias</span>
         </div>
       </div>
-      <div className="h-52 w-full">
+      <div className="h-48 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
             <defs>
