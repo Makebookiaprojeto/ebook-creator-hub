@@ -368,7 +368,7 @@ export default function Plans() {
 
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {/* Mensal */}
-            <Card className="p-10 border-border/60 flex flex-col">
+            <Card className="px-10 py-12 border-border/60 flex flex-col">
               <div className="mb-6">
                 <div className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
                   Plano Mensal
