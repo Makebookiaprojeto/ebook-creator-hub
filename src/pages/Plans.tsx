@@ -368,13 +368,13 @@ export default function Plans() {
 
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {/* Mensal */}
-            <Card className="p-8 border-border/60 flex flex-col">
+            <Card className="p-10 border-border/60 flex flex-col">
               <div className="mb-6">
                 <div className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
                   Plano Mensal
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold">R$ 147,90</span>
+                  <span className="text-5xl font-bold">R$ 147,90</span>
                   <span className="text-muted-foreground">/mês</span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
