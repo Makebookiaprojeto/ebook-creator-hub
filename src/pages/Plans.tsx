@@ -92,7 +92,7 @@ const FAQS = [
   },
   {
     q: "Qual a diferença entre mensal e vitalício?",
-    a: "No mensal você paga R$ 149,90 todo mês. No vitalício você paga R$ 249,90 uma única vez e usa pra sempre, sem renovação.",
+    a: "No mensal você paga R$ 147,90 todo mês. No vitalício você paga R$ 247,90 uma única vez e usa pra sempre, sem renovação.",
   },
   {
     q: "O acesso é liberado em quanto tempo?",
@@ -374,7 +374,7 @@ export default function Plans() {
                   Plano Mensal
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold">R$ 149,90</span>
+                  <span className="text-4xl font-bold">R$ 147,90</span>
                   <span className="text-muted-foreground">/mês</span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
@@ -416,7 +416,7 @@ export default function Plans() {
                   Acesso Vitalício
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold">R$ 249,90</span>
+                  <span className="text-4xl font-bold">R$ 247,90</span>
                   <span className="text-muted-foreground text-sm">à vista</span>
                 </div>
                 <div className="text-sm font-medium text-primary mt-1">
@@ -463,7 +463,7 @@ export default function Plans() {
                 <p className="font-semibold mb-1">Faz as contas com a gente:</p>
                 <p className="text-muted-foreground">
                   Mensal por 1 ano = <span className="line-through">R$ 1.798,80</span>{" "}
-                  · Vitalício = <span className="font-semibold text-foreground">R$ 249,90</span>{" "}
+                  · Vitalício = <span className="font-semibold text-foreground">R$ 247,90</span>{" "}
                   para sempre. Você economiza{" "}
                   <span className="font-semibold text-primary">R$ 1.548,90</span> só
                   no primeiro ano.
