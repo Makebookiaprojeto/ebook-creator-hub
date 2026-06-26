@@ -111,11 +111,12 @@ export function AppSidebar({ active, onChange }: Props) {
                           (isActive
                             ? "bg-primary text-background font-bold shadow-sm hover:bg-primary/90"
                             : "bg-primary text-background font-bold shadow-sm hover:bg-primary/90") +
-                          " text-sm"
+                          " text-[15px]"
                         }
                       >
                         <item.icon className="h-4 w-4" />
-                        {!collapsed && <span>{item.title}</span>}
+                        {!collapsed && <span className="text-[15px]">{item.title}</span>}
+
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   );
@@ -126,7 +127,7 @@ export function AppSidebar({ active, onChange }: Props) {
 
         <SidebarGroup className="pt-0">
 
-          <SidebarGroupLabel>Menu</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-[13px]">Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items
@@ -138,13 +139,14 @@ export function AppSidebar({ active, onChange }: Props) {
                       <SidebarMenuButton
                         onClick={() => onChange(item.id)}
                         className={
-                          isActive
+                          (isActive
                             ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-                            : "hover:bg-sidebar-accent/60"
+                            : "hover:bg-sidebar-accent/60") + " text-[15px]"
                         }
                       >
                         <item.icon className="h-4 w-4" />
-                        {!collapsed && <span>{item.title}</span>}
+                        {!collapsed && <span className="text-[15px]">{item.title}</span>}
+
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   );
