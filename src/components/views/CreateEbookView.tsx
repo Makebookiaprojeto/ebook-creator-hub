@@ -165,7 +165,7 @@ function DivulgacaoVideoCard({ title, src, filename, script }: { title: string; 
         )}
       </div>
       <div className="flex-1 flex flex-col">
-        <h4 className="text-base font-semibold mb-2">{title}</h4>
+        <h4 className="text-base font-semibold mb-2 text-primary">{title}</h4>
         <div className="flex-1 flex flex-col justify-start pt-8">
           <p className="text-base text-muted-foreground whitespace-pre-line leading-relaxed">
             <span className="font-semibold text-[#FFFF00]">Roteiro: </span>
