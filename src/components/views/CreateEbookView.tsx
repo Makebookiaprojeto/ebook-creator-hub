@@ -637,7 +637,7 @@ export function CreateEbookView() {
     <div className="space-y-6 animate-fade-in">
 
       {/* Progress */}
-      <div className="rounded-2xl border bg-card p-5 shadow-soft">
+      <div className="p-5">
         <div className="flex items-center justify-between">
           {steps.map((label, i) => (
             <div key={label} className="flex flex-1 items-center">
