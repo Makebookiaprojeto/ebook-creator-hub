@@ -373,7 +373,7 @@ const Landing = () => {
             </div>
 
             {/* Vitalício */}
-            <div className="px-12 py-14 rounded-3xl border-2 border-primary bg-primary/5 flex flex-col relative plan-glow-animated">
+            <div className="px-12 py-10 rounded-3xl border-2 border-primary bg-primary/5 flex flex-col relative plan-glow-animated">
               <div className="absolute top-0 right-0 p-6">
                 <Crown className="h-12 w-12 text-primary/10" />
               </div>
@@ -393,7 +393,7 @@ const Landing = () => {
                 </div>
               </div>
               <ul className="space-y-4 mb-10 flex-1">
-                {["Criação de ebooks ilimitada", "IA premium (Cérebro Criativo)", "Página de vendas de alta conversão", "Checkout integrado", "Suporte prioritário", "Pagamento único", "Acesso para sempre", "Atualizações vitalícias inclusas"].map(item => (
+                {["Criação de ebooks ilimitada", "IA premium (Cérebro Criativo)", "Página de vendas de alta conversão", "Checkout integrado", "Suporte prioritário", "Pagamento único", "Atualizações vitalícias inclusas"].map(item => (
                   <li key={item} className="flex items-center gap-3 text-sm font-semibold">
                     <Check className="h-4 w-4 text-primary shrink-0" /> {item}
                   </li>
