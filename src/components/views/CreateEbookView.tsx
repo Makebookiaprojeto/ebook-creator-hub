@@ -721,7 +721,7 @@ export function CreateEbookView() {
       </div>
 
       {/* Step content */}
-      <div ref={stepContentRef} className={`px-6 sm:px-8 pt-2 ${step === 2 ? "pb-[70vh]" : "pb-6"} min-h-[420px] ${step === 0 || step === 1 ? "" : "rounded-2xl border bg-card shadow-soft"}`}>
+      <div ref={stepContentRef} className={`px-6 sm:px-8 pt-2 ${step === 2 ? "pb-[70vh]" : "pb-6"} min-h-[420px] ${step === 0 || step === 1 || step === 2 || step === 3 ? "" : "rounded-2xl border bg-card shadow-soft"}`}>
         <AnimatePresence mode="wait">
           <motion.div
             key={step}
@@ -1038,8 +1038,9 @@ export function CreateEbookView() {
 
                   <div className="relative">
                     
-                    <div className="rounded-2xl border border-border overflow-hidden shadow-xl aspect-[3/3.2] relative scale-[0.85] origin-top" style={{ backgroundColor: secondaryColor }}>
-                      <div className="h-full overflow-y-auto overflow-x-hidden scrollbar-none">
+                    <div className="rounded-2xl border border-border overflow-hidden shadow-xl aspect-[3/3.6] relative scale-[0.85] origin-top" style={{ backgroundColor: secondaryColor }}>
+                      <div className="h-full overflow-hidden">
+
                         <section className="relative pt-8 pb-10 overflow-hidden text-center px-4">
                           <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-40 h-40 rounded-full blur-[40px] -z-10" style={{ backgroundColor: `${primaryColor}33` }} />
                           <div className="space-y-4">
