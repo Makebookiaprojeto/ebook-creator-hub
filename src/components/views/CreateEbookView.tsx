@@ -713,7 +713,7 @@ export function CreateEbookView() {
 
                   <Textarea
                     className="mt-3 min-h-[110px]"
-                    placeholder=""
+                    placeholder="Ex: Mulheres de 30-45 anos, mães, que querem perder peso após a gravidez sem dietas restritivas e com pouco tempo para se exercitar..."
                     value={audience}
                     onChange={(e) => setAudience(e.target.value)}
                   />
