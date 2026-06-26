@@ -670,7 +670,7 @@ export function CreateEbookView() {
       </div>
 
       {/* Step content */}
-      <div ref={stepContentRef} className={`p-6 sm:p-8 min-h-[420px] ${step === 0 ? "" : "rounded-2xl border bg-card shadow-soft"}`}>
+      <div ref={stepContentRef} className={`px-6 sm:px-8 pt-2 pb-6 min-h-[420px] ${step === 0 ? "" : "rounded-2xl border bg-card shadow-soft"}`}>
         <AnimatePresence mode="wait">
           <motion.div
             key={step}
@@ -708,7 +708,7 @@ export function CreateEbookView() {
                      );
                    })}
                  </div>
-                <div className="mt-14">
+                <div className="mt-6">
                   <label className="text-base font-semibold">Defina o público alvo do seu ebook</label>
 
                   <Textarea
