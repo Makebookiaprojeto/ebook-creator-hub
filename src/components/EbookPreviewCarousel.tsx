@@ -143,9 +143,9 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
   );
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto px-3 sm:px-10">
+    <div className="relative w-full max-w-4xl mx-auto px-3 sm:px-10">
       <div
-        className="overflow-hidden rounded-2xl border shadow-2xl min-h-[680px] sm:min-h-[780px] flex flex-col relative"
+        className="overflow-hidden rounded-2xl border shadow-2xl min-h-[560px] sm:min-h-[640px] flex flex-col relative"
         style={{
           background: "hsl(0 0% 100%)",
           borderColor: "hsl(150 70% 38% / 0.28)",
