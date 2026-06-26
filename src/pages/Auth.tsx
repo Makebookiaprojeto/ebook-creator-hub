@@ -224,13 +224,13 @@ const Auth = () => {
               <TabsList className="grid w-full grid-cols-2 gap-3 h-auto bg-transparent p-0">
                 <TabsTrigger
                   value="login"
-                  className="h-12 rounded-xl text-sm font-medium border border-primary/40 bg-primary/10 text-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
+                  className="h-9 rounded-xl text-base font-semibold border border-primary/40 bg-background text-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
                 >
                   Entrar
                 </TabsTrigger>
                 <TabsTrigger
                   value="signup"
-                  className="h-12 rounded-xl text-sm font-medium border border-primary/40 bg-primary/10 text-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
+                  className="h-9 rounded-xl text-base font-semibold border border-primary/40 bg-background text-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
                 >
                   Criar conta
                 </TabsTrigger>
