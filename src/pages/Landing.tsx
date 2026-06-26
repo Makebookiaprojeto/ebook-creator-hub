@@ -350,7 +350,7 @@ const Landing = () => {
             <h2 className="font-display text-4xl font-bold mb-4 italic text-primary">O investimento que se paga em 1 venda.</h2>
             <p className="text-muted-foreground">Escolha o seu passaporte para a liberdade digital.</p>
           </div>
-          <div className="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
+          <div className="grid gap-8 md:grid-cols-2 max-w-5xl mx-auto">
             {/* Mensal */}
             <div className="p-12 rounded-3xl border bg-card/30 flex flex-col hover:border-white/20 transition-all">
               <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4"></p>
