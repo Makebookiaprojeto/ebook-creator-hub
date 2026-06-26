@@ -734,7 +734,7 @@ export function CreateEbookView() {
              <div className="pt-10">
                  <div className="flex flex-col items-center text-center">
                    <Sparkles className="h-5 w-5" style={{ color: "#FFFF00" }} />
-                   <h2 className="font-display text-base font-semibold mt-1.5">Selecione um nicho</h2>
+                   <h2 className="font-display text-base font-semibold -mt-0.5">Selecione um nicho</h2>
                  </div>
                  <div className="mt-4 mx-auto max-w-2xl grid grid-cols-5 gap-2">
                    {niches.slice(0, 20).map((n) => {
