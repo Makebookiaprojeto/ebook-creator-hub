@@ -424,6 +424,8 @@ function SalesByHourChart({ total }: { total: number }) {
               axisLine={false}
               ticks={[0, 300, 600, 900, 1200]}
               domain={[0, 1200]}
+              interval={0}
+              allowDecimals={false}
               tickFormatter={(v) => `R$${v >= 1000 ? `${(v / 1000).toFixed(1)}k` : v}`}
             />
             <RTooltip
