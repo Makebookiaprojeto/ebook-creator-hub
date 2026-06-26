@@ -637,11 +637,11 @@ export function CreateEbookView() {
     <div className="space-y-6 animate-fade-in">
 
       {/* Progress */}
-      <div className="p-5">
+      <div className="p-5 pb-10">
         <div className="mx-auto flex max-w-2xl items-center justify-between">
           {steps.map((label, i) => (
             <div key={label} className={`flex items-center ${i < steps.length - 1 ? "flex-1" : ""}`}>
-              <div className="flex flex-col items-center gap-1.5">
+              <div className="relative flex flex-col items-center gap-1.5">
                 <div
                   className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium transition ${
                     i < step
@@ -653,7 +653,7 @@ export function CreateEbookView() {
                 >
                   {i < step ? <Check className="h-4 w-4" /> : i + 1}
                 </div>
-                <span className={`hidden sm:block text-xs font-medium ${i === step ? "text-foreground" : "text-muted-foreground"}`}>{label}</span>
+                <span className={`hidden sm:block absolute top-full mt-1.5 whitespace-nowrap text-xs font-medium ${i === step ? "text-foreground" : "text-muted-foreground"}`}>{label}</span>
               </div>
               {i < steps.length - 1 && (
                 <div className="mx-2 h-0.5 flex-1 rounded-full bg-muted">
