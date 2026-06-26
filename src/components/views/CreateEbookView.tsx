@@ -698,8 +698,8 @@ export function CreateEbookView() {
                              : "bg-card border-border hover:border-primary/50"
                          }`}
                        >
-                         {Icon && <Icon className={`h-3.5 w-3.5 ${niche === n.name ? "text-primary-foreground" : "text-primary"}`} />}
-                         <p className={`font-medium text-[10px] leading-tight ${
+                         {Icon && <Icon className={`h-4 w-4 ${niche === n.name ? "text-primary-foreground" : "text-primary"}`} />}
+                         <p className={`font-medium text-[12px] leading-tight ${
                            niche === n.name ? "text-primary-foreground" : "text-foreground"
                          }`}>
                            {n.name}
@@ -709,7 +709,8 @@ export function CreateEbookView() {
                    })}
                  </div>
                 <div className="mt-8">
-                  <label className="text-sm font-semibold">Quem é o público-alvo do seu ebook?</label>
+                  <label className="text-sm font-semibold">Defina o público alvo do seu ebook</label>
+
                   <Textarea
                     className="mt-3 min-h-[110px]"
                     placeholder="Ex: Mulheres de 30-45 anos, mães, que querem perder peso após a gravidez sem dietas restritivas e com pouco tempo para se exercitar..."
