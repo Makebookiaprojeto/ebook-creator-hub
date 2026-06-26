@@ -373,7 +373,7 @@ const Landing = () => {
             </div>
 
             {/* Vitalício */}
-            <div className="px-12 py-14 rounded-3xl border-2 border-primary bg-primary/5 flex flex-col relative plan-glow-animated">
+            <div className="px-12 py-10 rounded-3xl border-2 border-primary bg-primary/5 flex flex-col relative plan-glow-animated">
               <div className="absolute top-0 right-0 p-6">
                 <Crown className="h-12 w-12 text-primary/10" />
               </div>
