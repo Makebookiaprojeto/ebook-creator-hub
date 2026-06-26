@@ -927,7 +927,7 @@ export function CreateEbookView() {
                       const primaryPalette = palette;
                       const secondaryPalette = palette;
                       const Swatches = ({ value, onChange, colors }: { value: string; onChange: (v: string) => void; colors: string[] }) => (
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap justify-center gap-2">
                           {colors.map((c) => {
                             const active = value.toLowerCase() === c.toLowerCase();
                             return (
@@ -945,12 +945,12 @@ export function CreateEbookView() {
                       );
                       return (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <div>
-                            <label className="text-sm font-medium mb-2 block">Cor primária</label>
+                          <div className="text-center">
+                            <label className="text-base font-medium mb-2 block">Cor primária</label>
                             <Swatches value={primaryColor} onChange={setPrimaryColor} colors={primaryPalette} />
                           </div>
-                          <div>
-                            <label className="text-sm font-medium mb-2 block">Cor secundária</label>
+                          <div className="text-center">
+                            <label className="text-base font-medium mb-2 block">Cor secundária</label>
                             <Swatches value={secondaryColor} onChange={setSecondaryColor} colors={secondaryPalette} />
                           </div>
                         </div>
