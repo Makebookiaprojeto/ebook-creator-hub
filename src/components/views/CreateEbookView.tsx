@@ -689,8 +689,8 @@ export function CreateEbookView() {
     <div className="space-y-6 animate-fade-in">
 
       {/* Progress */}
-      <div className="px-5 pt-0 pb-8 -mt-2">
-        <div className="mx-auto flex max-w-2xl items-center justify-between">
+      <div className="px-5 -mt-6 pb-8">
+        <div className="mx-auto flex max-w-2xl items-center justify-between rounded-2xl border border-border bg-card/40 px-6 py-5">
           {steps.map((label, i) => (
             <div key={label} className={`flex items-center ${i < steps.length - 1 ? "flex-1" : ""}`}>
               <div className="relative flex flex-col items-center gap-1.5">
