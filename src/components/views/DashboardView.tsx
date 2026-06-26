@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { BookOpen, ShoppingCart, DollarSign, CreditCard } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip as RTooltip } from "recharts";
+import { AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip as RTooltip } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 import { StatCard } from "@/components/StatCard";
 import { useEbooks } from "@/hooks/useEbooks";
@@ -396,59 +396,78 @@ function SalesByHourChart({ total }: { total: number }) {
   }, [total]);
 
   return (
-    <div className="rounded-2xl border bg-card p-3 shadow-[0_0_18px_rgba(255,255,0,0.22)]">
-      <div className="mb-2 flex items-center justify-end">
-        <span className="text-[11px] text-muted-foreground">Últimos 30 dias</span>
+    <div className="rounded-2xl border border-border/60 bg-gradient-to-b from-card to-card/40 p-5 shadow-[0_0_28px_rgba(212,175,55,0.12)]">
+      <div className="mb-4 flex items-end justify-between">
+        <div>
+          <h3 className="text-sm font-semibold tracking-tight text-foreground">Receita por hora</h3>
+          <p className="text-[11px] text-muted-foreground">Distribuição de vendas nas últimas 24h</p>
+        </div>
+        <div className="flex items-center gap-2 rounded-full border border-border/60 bg-background/40 px-3 py-1">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#D4AF37] shadow-[0_0_8px_#D4AF37]" />
+          <span className="text-[11px] font-medium text-muted-foreground">Últimos 30 dias</span>
+        </div>
       </div>
-      <div className="h-40 w-full">
-
+      <div className="h-52 w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+          <AreaChart data={data} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id="lineStroke" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#D4AF37" stopOpacity={0.9} />
-                <stop offset="100%" stopColor="#D4AF37" stopOpacity={1} />
+                <stop offset="0%" stopColor="#B8860B" stopOpacity={1} />
+                <stop offset="50%" stopColor="#D4AF37" stopOpacity={1} />
+                <stop offset="100%" stopColor="#F5D27A" stopOpacity={1} />
+              </linearGradient>
+              <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#D4AF37" stopOpacity={0.35} />
+                <stop offset="60%" stopColor="#D4AF37" stopOpacity={0.08} />
+                <stop offset="100%" stopColor="#D4AF37" stopOpacity={0} />
               </linearGradient>
             </defs>
-            
+
+            <CartesianGrid stroke="hsl(var(--border))" strokeOpacity={0.35} strokeDasharray="3 6" vertical={false} />
+
             <XAxis
               dataKey="hora"
-              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }}
               tickLine={false}
               axisLine={false}
-              interval={1}
+              interval={2}
+              dy={6}
             />
             <YAxis
-              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }}
               tickLine={false}
               axisLine={false}
               ticks={[0, 300, 600, 900, 1200]}
               domain={[0, 1200]}
               interval={0}
               allowDecimals={false}
+              width={48}
               tickFormatter={(v) => `R$${v >= 1000 ? `${(v / 1000).toFixed(1)}k` : v}`}
             />
             <RTooltip
-              cursor={{ stroke: "hsl(var(--primary))", strokeOpacity: 0.3 }}
+              cursor={{ stroke: "#D4AF37", strokeOpacity: 0.4, strokeDasharray: "4 4" }}
               contentStyle={{
                 background: "hsl(var(--popover))",
-                border: "1px solid hsl(var(--border))",
-                borderRadius: 12,
+                border: "1px solid rgba(212,175,55,0.35)",
+                borderRadius: 10,
                 color: "hsl(var(--popover-foreground))",
                 fontSize: 12,
+                boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
               }}
+              labelStyle={{ color: "hsl(var(--muted-foreground))", fontSize: 11, marginBottom: 4 }}
               formatter={(v: any) => [`R$ ${Number(v).toFixed(2)}`, "Vendas"]}
               labelFormatter={(l) => `Horário: ${l}`}
             />
-            <Line
+            <Area
               type="monotone"
               dataKey="valor"
               stroke="url(#lineStroke)"
-              strokeWidth={2.5}
-              dot={{ r: 3, fill: "#D4AF37", strokeWidth: 0 }}
-              activeDot={{ r: 5, fill: "#D4AF37" }}
+              strokeWidth={2.25}
+              fill="url(#areaFill)"
+              dot={false}
+              activeDot={{ r: 5, fill: "#D4AF37", stroke: "hsl(var(--background))", strokeWidth: 2 }}
             />
-          </LineChart>
+          </AreaChart>
         </ResponsiveContainer>
       </div>
     </div>
