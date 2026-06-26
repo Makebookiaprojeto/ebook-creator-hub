@@ -54,7 +54,7 @@ export function SupportView() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in -mt-6">
       <div>
         <h1 className="font-display text-3xl font-bold">Suporte</h1>
         <p className="mt-1 text-muted-foreground">Tire suas dúvidas ou fale com nosso time.</p>
