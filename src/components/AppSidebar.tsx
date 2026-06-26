@@ -88,8 +88,8 @@ export function AppSidebar({ active, onChange }: Props) {
   return (
     <Sidebar collapsible="icon" className="border-r">
       <SidebarHeader className="border-b border-sidebar-border">
-        <div className="flex items-center gap-2.5 px-2 py-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl overflow-hidden shadow-glow">
+        <div className="flex items-center gap-2.5 px-2 py-3 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl overflow-hidden shadow-glow group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8">
             <img src={saasLogo} alt="EbookAI Builder" className="h-full w-full object-cover" />
           </div>
         </div>
