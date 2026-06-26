@@ -221,9 +221,19 @@ const Auth = () => {
             </>
           ) : (
             <Tabs value={tab} onValueChange={(v) => setTab(v as "login" | "signup")}>
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">Entrar</TabsTrigger>
-                <TabsTrigger value="signup">Criar conta</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-2 h-12 p-1 rounded-xl border border-primary/30 bg-primary/5 shadow-[0_0_18px_hsl(var(--primary)/0.25)]">
+                <TabsTrigger
+                  value="login"
+                  className="rounded-lg text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_0_12px_hsl(var(--primary)/0.6)] transition-all"
+                >
+                  Entrar
+                </TabsTrigger>
+                <TabsTrigger
+                  value="signup"
+                  className="rounded-lg text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_0_12px_hsl(var(--primary)/0.6)] transition-all"
+                >
+                  Criar conta
+                </TabsTrigger>
               </TabsList>
 
               <form onSubmit={handleSubmit} className="mt-6 space-y-4" autoComplete="off">
