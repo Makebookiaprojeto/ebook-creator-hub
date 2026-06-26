@@ -354,9 +354,10 @@ const Landing = () => {
             {/* Mensal */}
             <div className="px-12 py-14 rounded-3xl border bg-card/30 flex flex-col hover:border-white/20 transition-all">
               <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4"></p>
-              <h3 className="text-2xl font-bold mb-2">Mensal PRO</h3>
+              <h3 className="text-2xl font-bold mb-2">Mensal</h3>
               <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-7xl font-black">R$ 147,90</span>
+                <span className="text-base font-bold align-top">R$</span>
+                <span className="text-6xl font-black">147,90</span>
                 <span className="text-muted-foreground font-medium">/mês</span>
               </div>
               <ul className="space-y-4 mb-10 flex-1">
@@ -367,7 +368,7 @@ const Landing = () => {
                 ))}
               </ul>
               <Link to="/auth" className="block">
-                <Button variant="outline" className="w-full h-12 border-primary/20 hover:bg-primary/5">Assinar Mensal</Button>
+                <Button variant="outline" className="w-full h-12 border-primary/20 hover:bg-primary/5">ASSINAR AGORA</Button>
               </Link>
             </div>
 
