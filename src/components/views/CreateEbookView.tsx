@@ -4,7 +4,7 @@ import {
   ArrowLeft, ArrowRight, Check, Sparkles, Loader2, Copy, Users, Rocket,
   Search, ChevronDown, Star, Flame, ShieldCheck, Clock, Zap, Quote, Download, FileText, Eye,
   BookOpen, MousePointer2, Target, Layout, Award, Lock as LockIcon, ArrowRight as ArrowRightIcon,
-  TrendingUp, ExternalLink, Video, Play,
+  TrendingUp, ExternalLink, Video, Play, Megaphone,
   Dumbbell, Utensils, Baby, Dog, Sparkle, GraduationCap, Laptop, Palette, Briefcase, Languages, Map, Home, Shirt,
   Heart, Wallet, Brain, HeartPulse, DollarSign, BadgeDollarSign
 } from "lucide-react";
