@@ -4,7 +4,7 @@ import {
   ArrowLeft, ArrowRight, Check, Sparkles, Loader2, Copy, Users, Rocket,
   Search, ChevronDown, Star, Flame, ShieldCheck, Clock, Zap, Quote, Download, FileText, Eye,
   BookOpen, MousePointer2, Target, Layout, Award, Lock as LockIcon, ArrowRight as ArrowRightIcon,
-  TrendingUp, ExternalLink, Video, Play,
+  TrendingUp, ExternalLink, Video, Play, Megaphone,
   Dumbbell, Utensils, Baby, Dog, Sparkle, GraduationCap, Laptop, Palette, Briefcase, Languages, Map, Home, Shirt,
   Heart, Wallet, Brain, HeartPulse, DollarSign, BadgeDollarSign
 } from "lucide-react";
@@ -166,12 +166,13 @@ function DivulgacaoVideoCard({ title, src, filename, script }: { title: string; 
       </div>
       <div className="flex-1 flex flex-col">
         <h4 className="text-base font-semibold mb-2">{title}</h4>
-        <div className="flex-1 flex flex-col justify-start">
+        <div className="flex-1 flex flex-col justify-start pt-8">
           <p className="text-base text-muted-foreground whitespace-pre-line leading-relaxed">
-            <span className="font-semibold text-foreground">Roteiro: </span>
+            <span className="font-semibold text-[#FFFF00]">Roteiro: </span>
             {script}
           </p>
         </div>
+
         <div className="mt-3 flex justify-end">
           <Button size="sm" className="gradient-primary text-primary-foreground shadow-glow gap-2" onClick={handleDownload}>
             <Download className="h-3.5 w-3.5" />
@@ -1070,16 +1071,19 @@ export function CreateEbookView() {
 
             {step === 4 && (
               <div>
-                <h2 className="font-display text-xl font-semibold">Busca por Grupos</h2>
+                <div className="flex flex-col items-center text-center">
+                  <Megaphone className="h-7 w-7 text-[#FFFF00]" />
+                  <h2 className="font-display text-xl font-semibold mt-2">Busca por Grupos</h2>
+                </div>
 
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-6 space-y-4"
                 >
-                  <div className="rounded-2xl border bg-card p-5 shadow-sm">
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-1">
-                      <Users className="h-5 w-5 text-primary" />
+                  <div className="p-5">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-1 text-[#FFFF00]">
+                      <Users className="h-5 w-5 text-[#FFFF00]" />
                       Buscar grupos por nicho
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">Digite o nicho do seu Ebook.</p>
@@ -1107,9 +1111,9 @@ export function CreateEbookView() {
                   </div>
 
 
-                  <div className="rounded-2xl border bg-card p-5 shadow-sm">
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-1">
-                      <Quote className="h-5 w-5 text-primary" />
+                  <div className="p-5">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-1 text-[#FFFF00]">
+                      <Quote className="h-5 w-5 text-[#FFFF00]" />
                       Mensagem pronta para Divulgação
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">Gere uma mensagem persuasiva, para aumentar sua conversão.</p>
@@ -1137,13 +1141,13 @@ export function CreateEbookView() {
                     ) : (
                       <div className="relative">
                         <pre className="whitespace-pre-wrap font-sans text-sm bg-muted/50 p-4 pb-14 rounded-xl border border-dashed border-primary/20 leading-relaxed">
-                          {`Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação !!!!\n\nLink: ${ebookLink}`}
+                          {`Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação. Clique no link abaixo para saber mais !!!!\n\nLink: ${ebookLink}`}
                         </pre>
                         <Button
                           size="sm"
                           className="absolute bottom-3 right-3 bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm gap-2"
                           onClick={() => {
-                            const text = `Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação !!!!\n\nLink: ${ebookLink}`;
+                            const text = `Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação. Clique no link abaixo para saber mais !!!!\n\nLink: ${ebookLink}`;
                             navigator.clipboard.writeText(text);
                             toast.success("Mensagem copiada!");
                           }}
@@ -1154,9 +1158,9 @@ export function CreateEbookView() {
                       </div>
                     )}
                   </div>
-                  <div className="rounded-2xl border bg-card p-5 shadow-sm">
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-1">
-                      <Video className="h-5 w-5 text-primary" />
+                  <div className="p-5">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-1 text-[#FFFF00]">
+                      <Video className="h-5 w-5 text-[#FFFF00]" />
                       Vídeos prontos para divulgação
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">
@@ -1182,6 +1186,7 @@ export function CreateEbookView() {
                     </div>
                   </div>
                 </motion.div>
+
 
                 {pdfUrl && (
                   <div className="mt-4 rounded-2xl border bg-secondary/10 p-5 border-secondary/20">
