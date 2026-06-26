@@ -445,8 +445,8 @@ function SalesByHourChart({ total }: { total: number }) {
               dataKey="valor"
               stroke="url(#lineStroke)"
               strokeWidth={2.5}
-              dot={{ r: 3, fill: "hsl(var(--primary))", strokeWidth: 0 }}
-              activeDot={{ r: 5, fill: "hsl(var(--primary))" }}
+              dot={{ r: 3, fill: "#D4AF37", strokeWidth: 0 }}
+              activeDot={{ r: 5, fill: "#D4AF37" }}
             />
           </LineChart>
         </ResponsiveContainer>
