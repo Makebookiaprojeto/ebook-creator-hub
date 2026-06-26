@@ -795,8 +795,8 @@ export function CreateEbookView() {
                       className="pl-12 h-14 text-2xl font-bold font-display"
                     />
                   </div>
-                </div>
-                <div className="mt-5">
+                  <div className="mt-5">
+
                   <p className="text-xs text-muted-foreground mb-2">Sugestões rápidas</p>
                   <div className="flex flex-wrap gap-2">
                     {pricePresets.map((p) => (
