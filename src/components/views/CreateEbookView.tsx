@@ -870,10 +870,8 @@ export function CreateEbookView() {
                           <><Download className="mr-2 h-4 w-4" /> Baixar PDF</>
                         )}
                       </Button>
-                      <Button onClick={next} className="gradient-primary text-primary-foreground shadow-glow h-12 px-6">
-                        Continuar <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
                     </div>
+
 
                   </div>
                 )}
