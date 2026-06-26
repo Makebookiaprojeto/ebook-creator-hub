@@ -855,44 +855,42 @@ export function CreateEbookView() {
                         required 
                       />
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-sm font-medium mb-1.5 block">Cor primária</label>
-                        <Select value={primaryColor} onValueChange={setPrimaryColor}>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Selecione" />
-                          </SelectTrigger>
-                          <SelectContent position="popper" side="bottom">
-                            {colorOptions.map((color) => (
-                              <SelectItem key={color.value} value={color.value}>
-                                <div className="flex items-center gap-2">
-                                  <div className="h-4 w-4 rounded-full" style={{ backgroundColor: color.value }} />
-                                  <span>{color.name}</span>
-                                </div>
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium mb-1.5 block">Cor secundária</label>
-                        <Select value={secondaryColor} onValueChange={setSecondaryColor}>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Selecione" />
-                          </SelectTrigger>
-                          <SelectContent position="popper" side="bottom">
-                            {colorOptions.map((color) => (
-                              <SelectItem key={color.value} value={color.value}>
-                                <div className="flex items-center gap-2">
-                                  <div className="h-4 w-4 rounded-full" style={{ backgroundColor: color.value }} />
-                                  <span>{color.name}</span>
-                                </div>
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
+                    {(() => {
+                      const swatchPalette = [
+                        "#00CED1","#3B82F6","#2563EB","#6366F1","#8B5CF6","#A855F7",
+                        "#EC4899","#EF4444","#F97316","#F59E0B","#EAB308","#84CC16",
+                        "#22C55E","#14B8A6","#06B6D4","#6B7280","#111827","#FFFFFF",
+                      ];
+                      const Swatches = ({ value, onChange }: { value: string; onChange: (v: string) => void }) => (
+                        <div className="flex flex-wrap gap-2">
+                          {swatchPalette.map((c) => {
+                            const active = value.toLowerCase() === c.toLowerCase();
+                            return (
+                              <button
+                                key={c}
+                                type="button"
+                                onClick={() => onChange(c)}
+                                aria-label={c}
+                                className={`h-6 w-6 rounded-full transition-transform duration-150 cursor-pointer hover:scale-110 active:scale-95 ${active ? "ring-2 ring-offset-2 ring-offset-background ring-primary" : "ring-1 ring-border"}`}
+                                style={{ backgroundColor: c }}
+                              />
+                            );
+                          })}
+                        </div>
+                      );
+                      return (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Cor primária</label>
+                            <Swatches value={primaryColor} onChange={setPrimaryColor} />
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Cor secundária</label>
+                            <Swatches value={secondaryColor} onChange={setSecondaryColor} />
+                          </div>
+                        </div>
+                      );
+                    })()}
                     
                     <div className="pt-4 space-y-3">
                       <Button 
