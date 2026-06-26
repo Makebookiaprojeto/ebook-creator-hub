@@ -273,7 +273,7 @@ export function DashboardView() {
     <div className="space-y-3 animate-fade-in py-1">
 
       <div className="grid grid-cols-1 gap-3 md:grid-cols-3 items-start">
-        <div className="shadow-glow rounded-2xl">
+        <div className="shadow-[0_0_18px_rgba(255,255,0,0.22)] rounded-2xl">
           <StatCard 
             label="Lucro" 
             value={`R$ ${(profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} 
@@ -293,7 +293,7 @@ export function DashboardView() {
             }
           />
         </div>
-        <div className="shadow-glow rounded-2xl">
+        <div className="shadow-[0_0_18px_rgba(255,255,0,0.22)] rounded-2xl">
           <StatCard 
             label="Ebooks" 
             value={String(totalEbooks)} 
@@ -301,7 +301,7 @@ export function DashboardView() {
             tint="from-primary/10 to-primary/5" 
           />
         </div>
-        <div className="shadow-glow rounded-2xl">
+        <div className="shadow-[0_0_18px_rgba(255,255,0,0.22)] rounded-2xl">
           <StatCard 
             label="Vendas" 
             value={String(stats.totalSales)} 
@@ -314,7 +314,7 @@ export function DashboardView() {
 
       <div className="grid gap-3 md:grid-cols-3 mt-6">
 
-        <div className="md:col-span-2 rounded-2xl border bg-card p-3 shadow-glow">
+        <div className="md:col-span-2 rounded-2xl border bg-card p-3 shadow-[0_0_18px_rgba(255,255,0,0.22)]">
           <div className="mb-2">
             <h2 className="font-display text-sm font-semibold flex items-center gap-2">
               <CreditCard className="h-3.5 w-3.5 text-primary" />
@@ -352,7 +352,7 @@ export function DashboardView() {
           </div>
         </div>
 
-        <div className="rounded-2xl border bg-card p-3 shadow-glow">
+        <div className="rounded-2xl border bg-card p-3 shadow-[0_0_18px_rgba(255,255,0,0.22)]">
           <div className="flex flex-col divide-y">
             {[
               { label: "Abandono C.", value: "0" },
@@ -396,7 +396,7 @@ function SalesByHourChart({ total }: { total: number }) {
   }, [total]);
 
   return (
-    <div className="rounded-2xl border bg-card p-3 shadow-glow">
+    <div className="rounded-2xl border bg-card p-3 shadow-[0_0_18px_rgba(255,255,0,0.22)]">
       <div className="mb-2 flex items-center justify-end">
         <span className="text-[11px] text-muted-foreground">Últimos 30 dias</span>
       </div>
