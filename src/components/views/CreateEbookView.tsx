@@ -643,9 +643,10 @@ export function CreateEbookView() {
             <div key={label} className={`flex items-center ${i < steps.length - 1 ? "flex-1" : ""}`}>
               <div className="relative flex flex-col items-center gap-1.5">
                 <div
+                  style={i < step ? { backgroundColor: "#FFFF00", color: "#000000" } : undefined}
                   className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium transition ${
                     i < step
-                      ? "bg-success text-success-foreground"
+                      ? ""
                       : i === step
                       ? "gradient-primary text-primary-foreground shadow-glow"
                       : "bg-muted text-muted-foreground"
@@ -657,7 +658,10 @@ export function CreateEbookView() {
               </div>
               {i < steps.length - 1 && (
                 <div className="mx-2 h-0.5 flex-1 rounded-full bg-muted">
-                  <div className={`h-full rounded-full transition-all duration-500 ${i < step ? "bg-success w-full" : "w-0"}`} />
+                  <div
+                    style={i < step ? { backgroundColor: "#FFFF00" } : undefined}
+                    className={`h-full rounded-full transition-all duration-500 ${i < step ? "w-full" : "w-0"}`}
+                  />
                 </div>
               )}
             </div>
