@@ -109,13 +109,13 @@ export function AppSidebar({ active, onChange }: Props) {
                         onClick={() => onChange(item.id)}
                         className={
                           (isActive
-                            ? "bg-primary text-background font-bold hover:bg-primary/90"
-                            : "bg-primary text-background font-bold hover:bg-primary/90") +
-                          " text-[16px] h-11 py-2.5 shadow-[0_0_14px_rgba(255,255,0,0.55)] hover:shadow-[0_0_18px_rgba(255,255,0,0.7)]"
+                            ? "bg-[#FFFF00] text-black font-bold hover:bg-[#FFFF00]/90"
+                            : "bg-[#FFFF00] text-black font-bold hover:bg-[#FFFF00]/90") +
+                          " text-[15px] h-10 py-2"
                         }
                       >
-                        <item.icon className="h-4 w-4" />
-                        {!collapsed && <span className="text-[16px]">{item.title}</span>}
+                        {collapsed && <item.icon className="h-4 w-4" />}
+                        {!collapsed && <span className="text-[15px]">+ NOVA ESTRUTURA</span>}
 
                       </SidebarMenuButton>
                     </SidebarMenuItem>
