@@ -20,7 +20,7 @@ export function StatCard({
   large
 }: Props) {
   return (
-    <div className={`group rounded-2xl border bg-card ${large ? 'p-5 py-10' : 'p-3 py-5'} shadow-soft transition hover:shadow-elevated hover:-translate-y-0.5`}>
+    <div className={`group rounded-2xl border bg-card ${large ? 'p-5 py-10' : 'p-4 py-7'} shadow-soft transition hover:shadow-elevated hover:-translate-y-0.5`}>
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-start justify-between gap-2">
