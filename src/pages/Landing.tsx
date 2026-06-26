@@ -383,7 +383,7 @@ const Landing = () => {
               <h3 className="text-2xl font-bold mb-2">Vitalício VIP</h3>
               <div className="flex flex-col mb-2">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-6xl font-black">R$ 247,90</span>
+                  <span className="text-7xl font-black">R$ 247,90</span>
                   <span className="text-muted-foreground font-medium"> única vez</span>
                 </div>
                 <div className="text-sm font-bold text-primary mt-1">
