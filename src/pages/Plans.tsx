@@ -374,7 +374,7 @@ export default function Plans() {
                   Plano Mensal
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-5xl font-bold">R$ 147,90</span>
+                  <span className="text-6xl font-bold">R$ 147,90</span>
                   <span className="text-muted-foreground">/mês</span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
