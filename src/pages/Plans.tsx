@@ -368,13 +368,13 @@ export default function Plans() {
 
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {/* Mensal */}
-            <Card className="p-8 border-border/60 flex flex-col">
+            <Card className="p-10 border-border/60 flex flex-col">
               <div className="mb-6">
                 <div className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
                   Plano Mensal
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold">R$ 147,90</span>
+                  <span className="text-5xl font-bold">R$ 147,90</span>
                   <span className="text-muted-foreground">/mês</span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
@@ -406,7 +406,7 @@ export default function Plans() {
             </Card>
 
             {/* Vitalício */}
-            <Card className="p-8 border-primary bg-primary/5 flex flex-col relative overflow-hidden ring-2 ring-primary/40">
+            <Card className="p-10 border-primary bg-primary/5 flex flex-col relative overflow-hidden ring-2 ring-primary/40 plan-glow-animated">
               <div className="absolute top-4 right-4 flex items-center gap-1 text-xs font-medium bg-primary text-primary-foreground px-2 py-1 rounded-full">
                 <Crown className="h-3 w-3" /> Mais escolhido
               </div>
@@ -416,7 +416,7 @@ export default function Plans() {
                   Acesso Vitalício
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold">R$ 247,90</span>
+                  <span className="text-5xl font-bold">R$ 247,90</span>
                   <span className="text-muted-foreground text-sm">à vista</span>
                 </div>
                 <div className="text-sm font-medium text-primary mt-1">

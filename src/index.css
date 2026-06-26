@@ -188,3 +188,23 @@
     background: linear-gradient(180deg, transparent 0%, hsl(0 0% 0% / 0.72) 100%);
   }
 }
+
+@keyframes plan-glow-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 24px -4px hsl(var(--primary) / 0.35),
+      0 0 60px -10px hsl(var(--primary) / 0.25),
+      0 0 0 1px hsl(var(--primary) / 0.45);
+  }
+  50% {
+    box-shadow:
+      0 0 40px -2px hsl(var(--primary) / 0.55),
+      0 0 90px -8px hsl(var(--primary) / 0.4),
+      0 0 0 1px hsl(var(--primary) / 0.7);
+  }
+}
+
+.plan-glow-animated {
+  animation: plan-glow-pulse 4.5s ease-in-out infinite;
+  will-change: box-shadow;
+}
