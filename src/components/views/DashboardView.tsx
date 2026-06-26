@@ -272,17 +272,16 @@ export function DashboardView() {
   return (
     <div className="space-y-3 animate-fade-in py-1">
 
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-12 items-start">
-        <div className="md:col-span-6 shadow-glow rounded-2xl">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-3 items-start">
+        <div className="shadow-glow rounded-2xl">
           <StatCard 
             label="Lucro" 
             value={`R$ ${(profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} 
             icon={DollarSign} 
             tint="from-primary/10 to-primary/5"
-            large
             action={
               <Select value={profitPeriod} onValueChange={(v: any) => setProfitPeriod(v)}>
-                <SelectTrigger className="h-8 w-[150px] text-sm">
+                <SelectTrigger className="h-7 w-[130px] text-xs">
                   <SelectValue placeholder="Período" />
                 </SelectTrigger>
                 <SelectContent>
@@ -294,7 +293,7 @@ export function DashboardView() {
             }
           />
         </div>
-        <div className="md:col-span-3 flex flex-col gap-3 shadow-glow rounded-2xl">
+        <div className="shadow-glow rounded-2xl">
           <StatCard 
             label="Ebooks" 
             value={String(totalEbooks)} 
@@ -302,7 +301,7 @@ export function DashboardView() {
             tint="from-primary/10 to-primary/5" 
           />
         </div>
-        <div className="md:col-span-3 flex flex-col gap-3 shadow-glow rounded-2xl">
+        <div className="shadow-glow rounded-2xl">
           <StatCard 
             label="Vendas" 
             value={String(stats.totalSales)} 
