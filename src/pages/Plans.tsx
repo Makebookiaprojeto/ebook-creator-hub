@@ -427,11 +427,8 @@ export default function Plans() {
                 <p className="text-sm text-muted-foreground mt-2">
                   Pague uma vez e use para sempre.
                 </p>
-                <div className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium bg-primary/15 text-primary px-2 py-1 rounded">
-                  <TrendingUp className="h-3 w-3" />
-                  Economize R$ 1.548 no 1º ano
-                </div>
               </div>
+
 
               <ul className="space-y-3 mb-8 flex-1">
                 {[
@@ -456,7 +453,7 @@ export default function Plans() {
                 className="w-full"
                 onClick={() => handleCheckout("lifetime")}
               >
-                Garantir vitalício
+                GARANTIR VITALÍCIO
               </Button>
             </Card>
           </div>
