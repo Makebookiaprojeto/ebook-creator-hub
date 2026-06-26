@@ -670,7 +670,7 @@ export function CreateEbookView() {
       </div>
 
       {/* Step content */}
-      <div ref={stepContentRef} className="rounded-2xl border bg-card p-6 sm:p-8 shadow-soft min-h-[420px]">
+      <div ref={stepContentRef} className={`p-6 sm:p-8 min-h-[420px] ${step === 0 ? "" : "rounded-2xl border bg-card shadow-soft"}`}>
         <AnimatePresence mode="wait">
           <motion.div
             key={step}
