@@ -224,17 +224,18 @@ const Auth = () => {
               <TabsList className="grid w-full grid-cols-2 gap-3 h-auto bg-transparent p-0">
                 <TabsTrigger
                   value="login"
-                  className="h-9 rounded-xl text-base font-semibold border border-primary/40 bg-background text-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
+                  className="group relative h-11 rounded-xl text-base font-semibold tracking-wide border border-primary/40 bg-background text-primary overflow-hidden transition-all duration-300 hover:border-primary/70 hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-[0_0_20px_-4px_hsl(var(--primary)/0.6)] data-[state=active]:scale-[1.02]"
                 >
                   Entrar
                 </TabsTrigger>
                 <TabsTrigger
                   value="signup"
-                  className="h-9 rounded-xl text-base font-semibold border border-primary/40 bg-background text-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
+                  className="group relative h-11 rounded-xl text-base font-semibold tracking-wide border border-primary/40 bg-background text-primary overflow-hidden transition-all duration-300 hover:border-primary/70 hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-[0_0_20px_-4px_hsl(var(--primary)/0.6)] data-[state=active]:scale-[1.02]"
                 >
                   Criar conta
                 </TabsTrigger>
               </TabsList>
+
 
 
               <form onSubmit={handleSubmit} className="mt-6 space-y-4" autoComplete="off">
