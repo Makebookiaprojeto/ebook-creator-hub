@@ -610,7 +610,7 @@ export function CreateEbookView() {
 
       if (targetReady && stableFrames >= 2 && (imagesReady(previewTarget) || attempts > 45)) {
         previewScrollDoneRef.current = true;
-        const top = scrollTarget.getBoundingClientRect().top + window.scrollY;
+        const top = previewTarget.getBoundingClientRect().top + window.scrollY;
         window.scrollTo({ top, behavior: "smooth" });
         return;
       }
