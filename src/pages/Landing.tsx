@@ -372,7 +372,7 @@ const Landing = () => {
             </div>
 
             {/* Vitalício */}
-            <div className="p-10 rounded-3xl border-2 border-primary bg-primary/5 flex flex-col relative shadow-[0_0_40px_rgba(var(--primary-rgb),0.15)]">
+            <div className="p-12 rounded-3xl border-2 border-primary bg-primary/5 flex flex-col relative plan-glow-animated">
               <div className="absolute top-0 right-0 p-6">
                 <Crown className="h-12 w-12 text-primary/10" />
               </div>
@@ -383,7 +383,7 @@ const Landing = () => {
               <h3 className="text-2xl font-bold mb-2">Vitalício VIP</h3>
               <div className="flex flex-col mb-2">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-5xl font-black">R$ 247,90</span>
+                  <span className="text-6xl font-black">R$ 247,90</span>
                   <span className="text-muted-foreground font-medium"> única vez</span>
                 </div>
                 <div className="text-sm font-bold text-primary mt-1">
