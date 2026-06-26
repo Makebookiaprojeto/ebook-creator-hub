@@ -724,7 +724,11 @@ export function CreateEbookView() {
 
             {step === 1 && (
               <div className="max-w-xl mx-auto">
-                <h2 className="font-display text-xl font-semibold">Defina o preço</h2>
+                <div className="flex flex-col items-center text-center">
+                  <DollarSign className="h-5 w-5" style={{ color: "#FFFF00" }} />
+                  <h2 className="font-display text-base font-semibold mt-1.5">Defina o preço</h2>
+                </div>
+
                 <div className="mt-6">
                   <label className="text-xs font-medium uppercase text-muted-foreground">Preço de venda (R$)</label>
                   <div className="mt-2 relative">
