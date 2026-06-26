@@ -183,7 +183,7 @@ const Auth = () => {
           <div className="flex h-10 w-10 items-center justify-center rounded-xl overflow-hidden shadow-glow">
             <img src={saasLogo} alt="EbookAI Builder" className="h-full w-full object-cover" />
           </div>
-          <span className="font-display text-xl font-bold">EbookAI Builder</span>
+          <span className="font-display text-xl font-bold">EbookAI <span className="text-primary">Builder</span></span>
         </Link>
 
         <div className="rounded-2xl border bg-card p-6 shadow-xl">
@@ -224,13 +224,13 @@ const Auth = () => {
               <TabsList className="grid w-full grid-cols-2 gap-3 h-auto bg-transparent p-0">
                 <TabsTrigger
                   value="login"
-                  className="group relative h-11 rounded-xl text-base font-semibold tracking-wide border border-primary/40 bg-background text-primary overflow-hidden transition-all duration-300 hover:border-primary/70 hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-[0_0_20px_-4px_hsl(var(--primary)/0.6)] data-[state=active]:scale-[1.02]"
+                  className="group relative h-11 rounded-xl text-base font-semibold tracking-wide border border-muted-foreground/30 bg-muted text-foreground overflow-hidden transition-all duration-300 hover:border-muted-foreground/50 hover:bg-muted/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-[0_0_20px_-4px_hsl(var(--primary)/0.6)] data-[state=active]:scale-[1.02]"
                 >
                   Entrar
                 </TabsTrigger>
                 <TabsTrigger
                   value="signup"
-                  className="group relative h-11 rounded-xl text-base font-semibold tracking-wide border border-primary/40 bg-background text-primary overflow-hidden transition-all duration-300 hover:border-primary/70 hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-[0_0_20px_-4px_hsl(var(--primary)/0.6)] data-[state=active]:scale-[1.02]"
+                  className="group relative h-11 rounded-xl text-base font-semibold tracking-wide border border-muted-foreground/30 bg-muted text-foreground overflow-hidden transition-all duration-300 hover:border-muted-foreground/50 hover:bg-muted/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-[0_0_20px_-4px_hsl(var(--primary)/0.6)] data-[state=active]:scale-[1.02]"
                 >
                   Criar conta
                 </TabsTrigger>
