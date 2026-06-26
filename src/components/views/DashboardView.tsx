@@ -406,8 +406,8 @@ function SalesByHourChart({ total }: { total: number }) {
           <LineChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id="lineStroke" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.9} />
-                <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={1} />
+                <stop offset="0%" stopColor="#D4AF37" stopOpacity={0.9} />
+                <stop offset="100%" stopColor="#D4AF37" stopOpacity={1} />
               </linearGradient>
             </defs>
             
@@ -445,8 +445,8 @@ function SalesByHourChart({ total }: { total: number }) {
               dataKey="valor"
               stroke="url(#lineStroke)"
               strokeWidth={2.5}
-              dot={{ r: 3, fill: "hsl(var(--primary))", strokeWidth: 0 }}
-              activeDot={{ r: 5, fill: "hsl(var(--primary))" }}
+              dot={{ r: 3, fill: "#D4AF37", strokeWidth: 0 }}
+              activeDot={{ r: 5, fill: "#D4AF37" }}
             />
           </LineChart>
         </ResponsiveContainer>
