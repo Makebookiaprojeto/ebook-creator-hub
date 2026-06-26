@@ -441,7 +441,7 @@ export default function Plans() {
                   "Checkout integrado",
                   "Suporte prioritário",
                   "Pagamento único",
-                  "Acesso para sempre",
+                  
                   "Atualizações vitalícias inclusas",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm font-medium">
