@@ -886,7 +886,7 @@ export function CreateEbookView() {
 
 
             {step === 3 && (
-              <div key="step3-container" className="space-y-6 pt-10">
+              <div key="step3-container" className="space-y-6 pt-2">
                 <div className="flex flex-col items-center mb-6">
                   <Rocket className="h-7 w-7 mb-2" style={{ color: "#FFFF00" }} />
                   <h2 className="font-display text-xl font-semibold text-center">Configure sua Página de Vendas</h2>
@@ -895,16 +895,17 @@ export function CreateEbookView() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
-                      <label className="text-sm font-medium mb-1.5 block">Título do Ebook</label>
+                      <label className="text-base font-medium mb-1.5 block">Título do Ebook</label>
                       <Input 
                         placeholder="Digite o título do ebook" 
                         value={title} 
                         onChange={(e) => setTitle(e.target.value)} 
                         required 
+                        className="text-base h-11"
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium mb-1.5 block">Preço do Ebook</label>
+                      <label className="text-base font-medium mb-1.5 block">Preço do Ebook</label>
                       <Input 
                         placeholder="R$ 0,00" 
                         value={new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price)} 
@@ -915,6 +916,7 @@ export function CreateEbookView() {
                           setPriceInput(numericValue.toFixed(2).replace(".", ","));
                         }} 
                         required 
+                        className="text-base h-11"
                       />
                     </div>
                     {(() => {
@@ -925,7 +927,7 @@ export function CreateEbookView() {
                       const primaryPalette = palette;
                       const secondaryPalette = palette;
                       const Swatches = ({ value, onChange, colors }: { value: string; onChange: (v: string) => void; colors: string[] }) => (
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap justify-center gap-2">
                           {colors.map((c) => {
                             const active = value.toLowerCase() === c.toLowerCase();
                             return (
@@ -943,12 +945,12 @@ export function CreateEbookView() {
                       );
                       return (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <div>
-                            <label className="text-sm font-medium mb-2 block">Cor primária</label>
+                          <div className="text-center">
+                            <label className="text-base font-medium mb-2 block">Cor primária</label>
                             <Swatches value={primaryColor} onChange={setPrimaryColor} colors={primaryPalette} />
                           </div>
-                          <div>
-                            <label className="text-sm font-medium mb-2 block">Cor secundária</label>
+                          <div className="text-center">
+                            <label className="text-base font-medium mb-2 block">Cor secundária</label>
                             <Swatches value={secondaryColor} onChange={setSecondaryColor} colors={secondaryPalette} />
                           </div>
                         </div>
@@ -1032,7 +1034,7 @@ export function CreateEbookView() {
 
                   <div className="relative">
                     
-                    <div className="rounded-2xl border border-border overflow-hidden shadow-xl aspect-[3/3.6] relative scale-[0.85] origin-top" style={{ backgroundColor: secondaryColor }}>
+                    <div className="rounded-2xl border border-border overflow-hidden shadow-xl aspect-[3/3.7] relative scale-[0.92] origin-top" style={{ backgroundColor: secondaryColor }}>
                       <div className="h-full overflow-hidden">
 
                         <section className="relative pt-8 pb-10 overflow-hidden text-center px-4">
