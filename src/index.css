@@ -189,61 +189,20 @@
   }
 }
 
-@property --plan-glow-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-
-@keyframes plan-glow-rotate {
-  to { --plan-glow-angle: 360deg; }
+@keyframes plan-glow-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px hsl(var(--primary) / 0.35),
+      0 0 24px -6px hsl(var(--primary) / 0.45);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px hsl(var(--primary) / 0.55),
+      0 0 40px -4px hsl(var(--primary) / 0.7);
+  }
 }
 
 .plan-glow-animated {
-  position: relative;
-  box-shadow:
-    0 0 0 1px hsl(var(--primary) / 0.35),
-    0 0 30px -10px hsl(var(--primary) / 0.25);
+  animation: plan-glow-pulse 3s ease-in-out infinite;
 }
 
-.plan-glow-animated::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  border-radius: inherit;
-  padding: 2px;
-  background: conic-gradient(
-    from var(--plan-glow-angle),
-    transparent 0deg,
-    transparent 270deg,
-    hsl(var(--primary) / 0.9) 320deg,
-    hsl(var(--primary)) 340deg,
-    hsl(var(--primary) / 0.9) 360deg
-  );
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  pointer-events: none;
-  animation: plan-glow-rotate 4s linear infinite;
-  filter: drop-shadow(0 0 12px hsl(var(--primary) / 0.6));
-}
-
-.plan-glow-animated::after {
-  content: "";
-  position: absolute;
-  inset: -10px;
-  border-radius: inherit;
-  background: conic-gradient(
-    from var(--plan-glow-angle),
-    transparent 0deg,
-    transparent 290deg,
-    hsl(var(--primary) / 0.55) 335deg,
-    transparent 360deg
-  );
-  filter: blur(18px);
-  pointer-events: none;
-  z-index: -1;
-  animation: plan-glow-rotate 4s linear infinite;
-}
