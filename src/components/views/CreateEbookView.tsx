@@ -771,9 +771,9 @@ export function CreateEbookView() {
 
                 <div className="mt-8 rounded-2xl border bg-card shadow-soft p-6">
 
-                  <label className="text-xs font-medium uppercase text-muted-foreground">Preço de venda (R$)</label>
+                  <label className="text-sm font-medium uppercase text-muted-foreground">Preço de venda (R$)</label>
                   <div className="mt-2 relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-semibold text-muted-foreground">R$</span>
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-semibold text-muted-foreground">R$</span>
                     <Input
                       type="text"
                       inputMode="decimal"
@@ -792,23 +792,24 @@ export function CreateEbookView() {
                         if (!priceInput) return;
                         setPriceInput(price.toFixed(2).replace(".", ","));
                       }}
-                      className="pl-12 h-14 text-2xl font-bold font-display"
+                      className="pl-12 h-16 text-3xl font-bold font-display"
                     />
                   </div>
                   <div className="mt-5">
 
-                  <p className="text-xs text-muted-foreground mb-2">Sugestões rápidas</p>
+                  <p className="text-sm text-muted-foreground mb-2">Sugestões rápidas</p>
                   <div className="flex flex-wrap gap-2">
                     {pricePresets.map((p) => (
                       <button
                         key={p}
                         onClick={() => { setPrice(p); setPriceInput(p.toFixed(2).replace(".", ",")); }}
-                        className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition hover:border-primary ${price === p ? "border-primary bg-accent text-accent-foreground" : ""}`}
+                        className={`rounded-lg border px-4 py-2 text-base font-medium transition hover:border-primary ${price === p ? "border-primary bg-accent text-accent-foreground" : ""}`}
                       >
                         R$ {p.toFixed(2).replace(".", ",")}
                       </button>
                     ))}
                   </div>
+
                 </div>
                 </div>
               </div>
