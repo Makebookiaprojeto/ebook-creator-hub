@@ -810,7 +810,9 @@ export function CreateEbookView() {
                     ))}
                   </div>
                 </div>
+                </div>
               </div>
+
             )}
 
             {step === 2 && (
