@@ -165,7 +165,7 @@ function DivulgacaoVideoCard({ title, src, filename, script }: { title: string; 
         )}
       </div>
       <div className="flex-1 flex flex-col">
-        <h4 className="text-base font-semibold mb-2">{title}</h4>
+        <h4 className="text-base font-semibold mb-2 text-primary">{title}</h4>
         <div className="flex-1 flex flex-col justify-start pt-8">
           <p className="text-base text-muted-foreground whitespace-pre-line leading-relaxed">
             <span className="font-semibold text-[#FFFF00]">Roteiro: </span>
@@ -722,7 +722,7 @@ export function CreateEbookView() {
       </div>
 
       {/* Step content */}
-      <div ref={stepContentRef} className={`px-6 sm:px-8 pt-2 ${step === 2 ? "pb-[70vh]" : "pb-6"} min-h-[420px] ${step === 0 || step === 1 || step === 2 || step === 3 ? "" : "rounded-2xl border bg-card shadow-soft"}`}>
+      <div ref={stepContentRef} className={`px-6 sm:px-8 pt-2 ${step === 2 ? "pb-[70vh]" : "pb-6"} min-h-[420px] ${step === 0 || step === 1 || step === 2 || step === 3 || step === 4 ? "" : "rounded-2xl border bg-card shadow-soft"}`}>
         <AnimatePresence mode="wait">
           <motion.div
             key={step}
@@ -1083,7 +1083,7 @@ export function CreateEbookView() {
                 >
                   <div className="p-5">
                     <h3 className="text-lg font-semibold flex items-center gap-2 mb-1 text-[#FFFF00]">
-                      <Users className="h-5 w-5 text-[#FFFF00]" />
+                      <Users className="h-5 w-5 text-primary" />
                       Buscar grupos por nicho
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">Digite o nicho do seu Ebook.</p>
@@ -1113,7 +1113,7 @@ export function CreateEbookView() {
 
                   <div className="p-5">
                     <h3 className="text-lg font-semibold flex items-center gap-2 mb-1 text-[#FFFF00]">
-                      <Quote className="h-5 w-5 text-[#FFFF00]" />
+                      <Quote className="h-5 w-5 text-primary" />
                       Mensagem pronta para Divulgação
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">Gere uma mensagem persuasiva, para aumentar sua conversão.</p>
@@ -1160,7 +1160,7 @@ export function CreateEbookView() {
                   </div>
                   <div className="p-5">
                     <h3 className="text-lg font-semibold flex items-center gap-2 mb-1 text-[#FFFF00]">
-                      <Video className="h-5 w-5 text-[#FFFF00]" />
+                      <Video className="h-5 w-5 text-primary" />
                       Vídeos prontos para divulgação
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">
