@@ -1113,7 +1113,7 @@ export function CreateEbookView() {
 
                   <div className="p-5">
                     <h3 className="text-lg font-semibold flex items-center gap-2 mb-1 text-[#FFFF00]">
-                      <Quote className="h-5 w-5 text-[#FFFF00]" />
+                      <Quote className="h-5 w-5 text-primary" />
                       Mensagem pronta para Divulgação
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">Gere uma mensagem persuasiva, para aumentar sua conversão.</p>
