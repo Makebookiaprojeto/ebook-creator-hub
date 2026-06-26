@@ -856,14 +856,17 @@ export function CreateEbookView() {
                       />
                     </div>
                     {(() => {
-                      const swatchPalette = [
-                        "#00CED1","#3B82F6","#2563EB","#6366F1","#8B5CF6","#A855F7",
-                        "#EC4899","#EF4444","#F97316","#F59E0B","#EAB308","#84CC16",
-                        "#22C55E","#14B8A6","#06B6D4","#6B7280","#111827","#FFFFFF",
+                      const primaryPalette = [
+                        "#F97316","#EF4444","#EC4899","#8B5CF6",
+                        "#3B82F6","#06B6D4","#22C55E","#EAB308",
                       ];
-                      const Swatches = ({ value, onChange }: { value: string; onChange: (v: string) => void }) => (
+                      const secondaryPalette = [
+                        "#000000","#111827","#1F2937","#374151",
+                        "#6B7280","#F3F4F6","#FFFFFF","#0F172A",
+                      ];
+                      const Swatches = ({ value, onChange, colors }: { value: string; onChange: (v: string) => void; colors: string[] }) => (
                         <div className="flex flex-wrap gap-2">
-                          {swatchPalette.map((c) => {
+                          {colors.map((c) => {
                             const active = value.toLowerCase() === c.toLowerCase();
                             return (
                               <button
@@ -882,15 +885,16 @@ export function CreateEbookView() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
                             <label className="text-sm font-medium mb-2 block">Cor primária</label>
-                            <Swatches value={primaryColor} onChange={setPrimaryColor} />
+                            <Swatches value={primaryColor} onChange={setPrimaryColor} colors={primaryPalette} />
                           </div>
                           <div>
                             <label className="text-sm font-medium mb-2 block">Cor secundária</label>
-                            <Swatches value={secondaryColor} onChange={setSecondaryColor} />
+                            <Swatches value={secondaryColor} onChange={setSecondaryColor} colors={secondaryPalette} />
                           </div>
                         </div>
                       );
                     })()}
+
                     
                     <div className="pt-4 space-y-3">
                       <Button 
