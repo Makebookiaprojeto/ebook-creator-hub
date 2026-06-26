@@ -892,8 +892,11 @@ export function CreateEbookView() {
 
 
             {step === 3 && (
-              <div key="step3-container" className="space-y-6">
-                <h2 className="font-display text-xl font-semibold text-center mb-6">Configure sua Página de Vendas</h2>
+              <div key="step3-container" className="space-y-6 pt-10">
+                <div className="flex flex-col items-center mb-6">
+                  <Rocket className="h-7 w-7 mb-2" style={{ color: "#FFFF00" }} />
+                  <h2 className="font-display text-xl font-semibold text-center">Configure sua Página de Vendas</h2>
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
@@ -1035,7 +1038,7 @@ export function CreateEbookView() {
 
                   <div className="relative">
                     
-                    <div className="rounded-2xl border border-border overflow-hidden shadow-xl aspect-[3/4] relative scale-[0.9] origin-top" style={{ backgroundColor: secondaryColor }}>
+                    <div className="rounded-2xl border border-border overflow-hidden shadow-xl aspect-[3/3.2] relative scale-[0.85] origin-top" style={{ backgroundColor: secondaryColor }}>
                       <div className="h-full overflow-y-auto overflow-x-hidden scrollbar-none">
                         <section className="relative pt-8 pb-10 overflow-hidden text-center px-4">
                           <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-40 h-40 rounded-full blur-[40px] -z-10" style={{ backgroundColor: `${primaryColor}33` }} />
