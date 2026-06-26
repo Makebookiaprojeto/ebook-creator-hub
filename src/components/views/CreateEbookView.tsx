@@ -845,7 +845,7 @@ export function CreateEbookView() {
                       <EbookPreviewCarousel title={title} subtitle={subtitle} coverUrl={coverUrl} chapters={chapters} />
                     </div>
 
-                    <div className="flex justify-center gap-3 flex-wrap">
+                    <div className="w-full text-center">
                       <Button
                         onClick={async () => {
                           try {
@@ -862,7 +862,7 @@ export function CreateEbookView() {
                           }
                         }}
                         disabled={downloadingPdf}
-                        className="gradient-primary text-primary-foreground shadow-glow h-12 px-6"
+                        className="mx-auto gradient-primary text-primary-foreground shadow-glow h-12 px-6"
                       >
                         {downloadingPdf ? (
                           <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Gerando PDF...</>
@@ -871,6 +871,7 @@ export function CreateEbookView() {
                         )}
                       </Button>
                     </div>
+
 
 
                   </div>
