@@ -67,23 +67,26 @@ const Index = () => {
         <AppSidebar active={view} onChange={setView} />
 
         <div className="flex-1 flex flex-col min-w-0">
-          <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b bg-background/80 backdrop-blur-md px-4 sm:px-6">
+          <header className="sticky top-0 z-10 flex h-14 items-center gap-3 bg-background/80 backdrop-blur-md px-4 sm:px-6">
             <SidebarTrigger />
             <div className="flex-1" />
-            <div className="ml-auto flex items-center gap-3">
-              <NotificationBell />
-              <button
-                onClick={() => setView("profile")}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/20 bg-muted overflow-hidden gradient-primary text-sm font-semibold text-primary-foreground shadow-glow transition-transform hover:scale-105 active:scale-95"
-              >
-                {avatarUrl ? (
-                  <img src={avatarUrl} alt="Perfil" className="h-full w-full object-cover" />
-                ) : (
-                  initialFromName(displayName || resolveDisplayName(null, user))
-                )}
-              </button>
-            </div>
+            {view === "dashboard" && (
+              <div className="ml-auto flex items-center gap-3">
+                <NotificationBell />
+                <button
+                  onClick={() => setView("profile")}
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/20 bg-muted overflow-hidden gradient-primary text-sm font-semibold text-primary-foreground shadow-glow transition-transform hover:scale-105 active:scale-95"
+                >
+                  {avatarUrl ? (
+                    <img src={avatarUrl} alt="Perfil" className="h-full w-full object-cover" />
+                  ) : (
+                    initialFromName(displayName || resolveDisplayName(null, user))
+                  )}
+                </button>
+              </div>
+            )}
           </header>
+
 
           <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1400px] w-full mx-auto">
             {view === "dashboard" && <DashboardView />}
