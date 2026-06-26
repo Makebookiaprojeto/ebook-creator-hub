@@ -586,6 +586,7 @@ export function CreateEbookView() {
     let cancelled = false;
     let raf = 0;
     let timeout = 0;
+    const correctionTimers: number[] = [];
     let attempts = 0;
     let stableFrames = 0;
     let previousPageHeight = 0;
@@ -593,6 +594,51 @@ export function CreateEbookView() {
     const imagesReady = (target: HTMLElement) => {
       const images = Array.from(target.querySelectorAll("img"));
       return images.length === 0 || images.every((img) => img.complete && img.naturalWidth > 0);
+    };
+
+    const getStickyHeaderOffset = () => {
+      const header = document.querySelector("header");
+      if (!header) return 0;
+
+      const style = window.getComputedStyle(header);
+      if (style.position !== "sticky" && style.position !== "fixed") return 0;
+
+      return Math.ceil(header.getBoundingClientRect().height);
+    };
+
+    const getScrollContainer = (target: HTMLElement): HTMLElement | Window => {
+      let parent = target.parentElement;
+
+      while (parent && parent !== document.body) {
+        const style = window.getComputedStyle(parent);
+        const canScroll = /(auto|scroll|overlay)/.test(style.overflowY);
+        if (canScroll && parent.scrollHeight > parent.clientHeight) return parent;
+        parent = parent.parentElement;
+      }
+
+      return window;
+    };
+
+    const alignPreviewToTop = () => {
+      const previewTarget = previewRef.current;
+      if (!previewTarget) return;
+
+      const headerOffset = getStickyHeaderOffset();
+      const scrollContainer = getScrollContainer(previewTarget);
+
+      if (scrollContainer === window) {
+        const top = previewTarget.getBoundingClientRect().top + window.scrollY - headerOffset;
+        window.scrollTo({ top: Math.max(0, top), behavior: "auto" });
+        return;
+      }
+
+      const container = scrollContainer as HTMLElement;
+      const containerRect = container.getBoundingClientRect();
+      const targetRect = previewTarget.getBoundingClientRect();
+      container.scrollTo({
+        top: container.scrollTop + targetRect.top - containerRect.top - headerOffset,
+        behavior: "auto",
+      });
     };
 
     const waitForStablePreview = () => {
@@ -610,8 +656,12 @@ export function CreateEbookView() {
 
       if (targetReady && stableFrames >= 2 && (imagesReady(previewTarget) || attempts > 45)) {
         previewScrollDoneRef.current = true;
-        const top = previewTarget.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({ top, behavior: "smooth" });
+        alignPreviewToTop();
+        [80, 180, 360].forEach((delay) => {
+          correctionTimers.push(window.setTimeout(() => {
+            if (!cancelled) alignPreviewToTop();
+          }, delay));
+        });
         return;
       }
 
@@ -629,6 +679,7 @@ export function CreateEbookView() {
       cancelled = true;
       cancelAnimationFrame(raf);
       clearTimeout(timeout);
+      correctionTimers.forEach(clearTimeout);
     };
   }, [step, generated]);
 
