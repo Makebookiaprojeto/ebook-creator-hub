@@ -681,33 +681,33 @@ export function CreateEbookView() {
           >
             {step === 0 && (
              <div>
-                <div className="flex flex-col items-center text-center">
-                  <Sparkles className="h-7 w-7" style={{ color: "#FFFF00" }} />
-                  <h2 className="font-display text-xl font-semibold mt-2">Selecione um nicho</h2>
-                </div>
-                <div className="mt-5 grid grid-cols-3 gap-1.5 sm:grid-cols-5 lg:grid-cols-7">
-                  {niches.map((n) => {
-                    const Icon = n.icon;
-                    return (
-                      <button
-                        key={n.name}
-                        onClick={() => setNiche(n.name)}
-                        className={`group rounded-md border px-1.5 py-1.5 text-center transition-all hover:shadow-sm hover:-translate-y-0.5 min-h-[44px] flex flex-col items-center justify-center gap-1 ${
-                          niche === n.name 
-                            ? "border-primary bg-primary text-primary-foreground shadow-glow" 
-                            : "bg-card border-border hover:border-primary/50"
-                        }`}
-                      >
-                        {Icon && <Icon className={`h-3.5 w-3.5 ${niche === n.name ? "text-primary-foreground" : "text-primary"}`} />}
-                        <p className={`font-medium text-[10px] sm:text-xs leading-tight ${
-                          niche === n.name ? "text-primary-foreground" : "text-foreground"
-                        }`}>
-                          {n.name}
-                        </p>
-                      </button>
-                    );
-                  })}
-                </div>
+                 <div className="flex flex-col items-center text-center">
+                   <Sparkles className="h-5 w-5" style={{ color: "#FFFF00" }} />
+                   <h2 className="font-display text-base font-semibold mt-1.5">Selecione um nicho</h2>
+                 </div>
+                 <div className="mt-4 mx-auto max-w-xl grid grid-cols-4 gap-1.5">
+                   {niches.slice(0, 20).map((n) => {
+                     const Icon = n.icon;
+                     return (
+                       <button
+                         key={n.name}
+                         onClick={() => setNiche(n.name)}
+                         className={`group rounded-md border px-1 py-1.5 text-center transition-all hover:shadow-sm hover:-translate-y-0.5 min-h-[36px] flex flex-col items-center justify-center gap-0.5 ${
+                           niche === n.name 
+                             ? "border-primary bg-primary text-primary-foreground shadow-glow" 
+                             : "bg-card border-border hover:border-primary/50"
+                         }`}
+                       >
+                         {Icon && <Icon className={`h-3 w-3 ${niche === n.name ? "text-primary-foreground" : "text-primary"}`} />}
+                         <p className={`font-medium text-[9px] leading-tight ${
+                           niche === n.name ? "text-primary-foreground" : "text-foreground"
+                         }`}>
+                           {n.name}
+                         </p>
+                       </button>
+                     );
+                   })}
+                 </div>
                 <div className="mt-8">
                   <label className="text-sm font-semibold">Quem é o público-alvo do seu ebook?</label>
                   <Textarea
