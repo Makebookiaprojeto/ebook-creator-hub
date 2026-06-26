@@ -6,7 +6,7 @@ import {
   BookOpen, MousePointer2, Target, Layout, Award, Lock as LockIcon, ArrowRight as ArrowRightIcon,
   TrendingUp, ExternalLink, Video, Play,
   Dumbbell, Utensils, Baby, Dog, Sparkle, GraduationCap, Laptop, Palette, Briefcase, Languages, Map, Home, Shirt,
-  Heart, Wallet, Brain, HeartPulse, DollarSign
+  Heart, Wallet, Brain, HeartPulse, DollarSign, BadgeDollarSign
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
