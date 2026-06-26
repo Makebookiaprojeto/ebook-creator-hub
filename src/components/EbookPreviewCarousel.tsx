@@ -143,9 +143,9 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
   );
 
   return (
-    <div className="relative w-full max-w-3xl mx-auto px-4 sm:px-12">
+    <div className="relative w-full max-w-2xl mx-auto px-3 sm:px-10">
       <div
-        className="overflow-hidden rounded-2xl border shadow-2xl min-h-[560px] sm:min-h-[640px] flex flex-col relative"
+        className="overflow-hidden rounded-2xl border shadow-2xl min-h-[680px] sm:min-h-[780px] flex flex-col relative"
         style={{
           background: "hsl(0 0% 100%)",
           borderColor: "hsl(150 70% 38% / 0.28)",
@@ -283,9 +283,9 @@ const ChapterPage = memo(function ChapterPage({
         <div className="mt-3 h-1 w-12 rounded-full" style={{ background: ACCENT_BG }} />
       </div>
 
-      <div className="flex-1 grid grid-cols-1 sm:grid-cols-5 gap-4 min-h-0">
+      <div className="flex-1 grid grid-cols-1 sm:grid-cols-12 gap-4 min-h-0">
         {chapter?.image_url && (
-          <div className="sm:col-span-2 rounded-xl overflow-hidden shadow-md max-h-[220px] sm:max-h-none" style={{ background: "hsl(0 0% 96%)" }}>
+          <div className="sm:col-span-5 rounded-xl overflow-hidden shadow-md max-h-[240px] sm:max-h-none" style={{ background: "hsl(0 0% 96%)" }}>
             <img
               src={chapter.image_url}
               alt={chapter.title}
@@ -295,7 +295,7 @@ const ChapterPage = memo(function ChapterPage({
             />
           </div>
         )}
-        <div className={`${chapter?.image_url ? "sm:col-span-3" : "sm:col-span-5"} overflow-y-auto pr-2 custom-scrollbar`}>
+        <div className={`${chapter?.image_url ? "sm:col-span-7" : "sm:col-span-12"} overflow-y-auto pr-2 custom-scrollbar`}>
           <RenderedContent content={chapter?.content || "(gerando…)"} />
         </div>
       </div>
