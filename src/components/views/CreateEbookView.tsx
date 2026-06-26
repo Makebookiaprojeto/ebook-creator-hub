@@ -690,32 +690,30 @@ export function CreateEbookView() {
 
       {/* Progress */}
       <div className="px-5 -mt-6 pb-8">
-        <div className="mx-auto flex max-w-2xl items-center justify-between rounded-2xl border border-border bg-card/40 px-6 py-5">
+        <div className="mx-auto grid max-w-2xl grid-cols-5 rounded-2xl border border-border bg-card/40 px-6 py-5">
           {steps.map((label, i) => (
-            <div key={label} className={`flex items-center ${i < steps.length - 1 ? "flex-1" : ""}`}>
-              <div className="flex flex-col items-center gap-1.5">
-                <div
-                  style={i < step ? { backgroundColor: "#FFFF00", color: "#000000" } : undefined}
-                  className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium transition ${
-                    i < step
-                      ? ""
-                      : i === step
-                      ? "gradient-primary text-primary-foreground shadow-glow"
-                      : "bg-muted text-muted-foreground"
-                  }`}
-                >
-                  {i < step ? <Check className="h-4 w-4" /> : i + 1}
-                </div>
-                <span className={`hidden sm:block whitespace-nowrap text-xs font-medium ${i === step ? "text-foreground" : "text-muted-foreground"}`}>{label}</span>
-              </div>
+            <div key={label} className="relative flex flex-col items-center gap-1.5">
               {i < steps.length - 1 && (
-                <div className="mx-2 h-0.5 flex-1 -translate-y-2.5 rounded-full bg-muted">
+                <div className="absolute left-1/2 top-[18px] h-0.5 w-full -translate-y-1/2 rounded-full bg-muted">
                   <div
                     style={i < step ? { backgroundColor: "#FFFF00" } : undefined}
                     className={`h-full rounded-full transition-all duration-500 ${i < step ? "w-full" : "w-0"}`}
                   />
                 </div>
               )}
+              <div
+                style={i < step ? { backgroundColor: "#FFFF00", color: "#000000" } : undefined}
+                className={`relative z-10 flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium transition ${
+                  i < step
+                    ? ""
+                    : i === step
+                    ? "gradient-primary text-primary-foreground shadow-glow"
+                    : "bg-muted text-muted-foreground"
+                }`}
+              >
+                {i < step ? <Check className="h-4 w-4" /> : i + 1}
+              </div>
+              <span className={`hidden sm:block whitespace-nowrap text-xs font-medium ${i === step ? "text-foreground" : "text-muted-foreground"}`}>{label}</span>
             </div>
           ))}
         </div>
