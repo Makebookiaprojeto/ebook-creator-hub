@@ -435,7 +435,11 @@ export default function Plans() {
 
               <ul className="space-y-3 mb-8 flex-1">
                 {[
-                  "Tudo do PRO",
+                  "Criação de ebooks ilimitada",
+                  "IA premium (Cérebro Criativo)",
+                  "Página de vendas de alta conversão",
+                  "Checkout integrado",
+                  "Suporte prioritário",
                   "Pagamento único",
                   "Acesso para sempre",
                   "Atualizações vitalícias inclusas",

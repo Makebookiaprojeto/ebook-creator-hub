@@ -393,14 +393,14 @@ const Landing = () => {
                 </div>
               </div>
               <ul className="space-y-4 mb-10 flex-1">
-                {["Tudo do PRO", "Pagamento único", "Acesso para sempre", "Atualizações vitalícias inclusas"].map(item => (
+                {["Criação de ebooks ilimitada", "IA premium (Cérebro Criativo)", "Página de vendas de alta conversão", "Checkout integrado", "Suporte prioritário", "Pagamento único", "Acesso para sempre", "Atualizações vitalícias inclusas"].map(item => (
                   <li key={item} className="flex items-center gap-3 text-sm font-semibold">
                     <Check className="h-4 w-4 text-primary shrink-0" /> {item}
                   </li>
                 ))}
               </ul>
               <Link to="/auth" className="block">
-                <Button className="w-full h-14 text-lg font-black gradient-primary text-primary-foreground shadow-glow hover:scale-105 transition-all">GARANTIR MINHA VAGA</Button>
+                <Button className="w-full h-12 text-base font-black gradient-primary text-primary-foreground shadow-glow hover:scale-105 transition-all">GARANTIR MINHA VAGA</Button>
               </Link>
             </div>
           </div>
