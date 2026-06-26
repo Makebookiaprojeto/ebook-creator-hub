@@ -680,23 +680,26 @@ export function CreateEbookView() {
             transition={{ duration: 0.25 }}
           >
             {step === 0 && (
-              <div>
-                <h2 className="font-display text-xl font-semibold">Selecione um nicho</h2>
-                <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-5">
+             <div>
+                <div className="flex flex-col items-center text-center">
+                  <Sparkles className="h-7 w-7" style={{ color: "#FFFF00" }} />
+                  <h2 className="font-display text-xl font-semibold mt-2">Selecione um nicho</h2>
+                </div>
+                <div className="mt-5 grid grid-cols-3 gap-1.5 sm:grid-cols-5 lg:grid-cols-7">
                   {niches.map((n) => {
                     const Icon = n.icon;
                     return (
                       <button
                         key={n.name}
                         onClick={() => setNiche(n.name)}
-                        className={`group rounded-lg border px-3 py-3 text-center transition-all hover:shadow-sm hover:-translate-y-0.5 min-h-[64px] flex flex-col items-center justify-center gap-2 ${
+                        className={`group rounded-md border px-1.5 py-1.5 text-center transition-all hover:shadow-sm hover:-translate-y-0.5 min-h-[44px] flex flex-col items-center justify-center gap-1 ${
                           niche === n.name 
                             ? "border-primary bg-primary text-primary-foreground shadow-glow" 
                             : "bg-card border-border hover:border-primary/50"
                         }`}
                       >
-                        {Icon && <Icon className={`h-5 w-5 ${niche === n.name ? "text-primary-foreground" : "text-primary"}`} />}
-                        <p className={`font-medium text-xs sm:text-sm leading-tight ${
+                        {Icon && <Icon className={`h-3.5 w-3.5 ${niche === n.name ? "text-primary-foreground" : "text-primary"}`} />}
+                        <p className={`font-medium text-[10px] sm:text-xs leading-tight ${
                           niche === n.name ? "text-primary-foreground" : "text-foreground"
                         }`}>
                           {n.name}
