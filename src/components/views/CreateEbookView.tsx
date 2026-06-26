@@ -845,7 +845,7 @@ export function CreateEbookView() {
                       <EbookPreviewCarousel title={title} subtitle={subtitle} coverUrl={coverUrl} chapters={chapters} />
                     </div>
 
-                    <div className="flex justify-center gap-3 flex-wrap">
+                    <div className="w-full flex items-center justify-center">
                       <Button
                         onClick={async () => {
                           try {
