@@ -221,20 +221,21 @@ const Auth = () => {
             </>
           ) : (
             <Tabs value={tab} onValueChange={(v) => setTab(v as "login" | "signup")}>
-              <TabsList className="grid w-full grid-cols-2 h-12 p-1 rounded-xl border border-primary/30 bg-primary/5 shadow-[0_0_18px_hsl(var(--primary)/0.25)]">
+              <TabsList className="grid w-full grid-cols-2 gap-3 h-auto bg-transparent p-0">
                 <TabsTrigger
                   value="login"
-                  className="rounded-lg text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_0_12px_hsl(var(--primary)/0.6)] transition-all"
+                  className="h-12 rounded-xl text-sm font-medium border border-primary/40 bg-primary/10 text-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
                 >
                   Entrar
                 </TabsTrigger>
                 <TabsTrigger
                   value="signup"
-                  className="rounded-lg text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_0_12px_hsl(var(--primary)/0.6)] transition-all"
+                  className="h-12 rounded-xl text-sm font-medium border border-primary/40 bg-primary/10 text-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
                 >
                   Criar conta
                 </TabsTrigger>
               </TabsList>
+
 
               <form onSubmit={handleSubmit} className="mt-6 space-y-4" autoComplete="off">
                 {tab === "signup" && (
