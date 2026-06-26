@@ -731,7 +731,7 @@ export function CreateEbookView() {
             transition={{ duration: 0.25 }}
           >
             {step === 0 && (
-             <div>
+             <div className="pt-10">
                  <div className="flex flex-col items-center text-center">
                    <Sparkles className="h-5 w-5" style={{ color: "#FFFF00" }} />
                    <h2 className="font-display text-base font-semibold mt-1.5">Selecione um nicho</h2>
