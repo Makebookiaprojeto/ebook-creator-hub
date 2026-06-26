@@ -722,7 +722,7 @@ export function CreateEbookView() {
       </div>
 
       {/* Step content */}
-      <div ref={stepContentRef} className={`px-6 sm:px-8 pt-2 ${step === 2 ? "pb-[70vh]" : "pb-6"} min-h-[420px] ${step === 0 || step === 1 || step === 2 || step === 3 || step === 4 ? "" : "rounded-2xl border bg-card shadow-soft"}`}>
+      <div ref={stepContentRef} className={`px-6 sm:px-8 pt-2 pb-6 min-h-[420px] ${step === 0 || step === 1 || step === 2 || step === 3 || step === 4 ? "" : "rounded-2xl border bg-card shadow-soft"}`}>
         <AnimatePresence mode="wait">
           <motion.div
             key={step}
@@ -845,7 +845,7 @@ export function CreateEbookView() {
                       <EbookPreviewCarousel title={title} subtitle={subtitle} coverUrl={coverUrl} chapters={chapters} />
                     </div>
 
-                    <div className="flex justify-center">
+                    <div className="flex justify-end gap-3 flex-wrap">
                       <Button
                         onClick={async () => {
                           try {
@@ -870,7 +870,11 @@ export function CreateEbookView() {
                           <><Download className="mr-2 h-4 w-4" /> Baixar PDF</>
                         )}
                       </Button>
+                      <Button onClick={next} className="gradient-primary text-primary-foreground shadow-glow h-12 px-6">
+                        Continuar <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
                     </div>
+
                   </div>
                 )}
 
