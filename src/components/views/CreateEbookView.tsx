@@ -638,7 +638,7 @@ export function CreateEbookView() {
 
       {/* Progress */}
       <div className="p-5">
-        <div className="flex items-center justify-between">
+        <div className="mx-auto flex max-w-2xl items-center justify-between">
           {steps.map((label, i) => (
             <div key={label} className="flex flex-1 items-center">
               <div className="flex flex-col items-center gap-1.5">
