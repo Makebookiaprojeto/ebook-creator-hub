@@ -708,7 +708,7 @@ export function CreateEbookView() {
                      );
                    })}
                  </div>
-                <div className="mt-14">
+                <div className="mt-6">
                   <label className="text-base font-semibold">Defina o público alvo do seu ebook</label>
 
                   <Textarea
