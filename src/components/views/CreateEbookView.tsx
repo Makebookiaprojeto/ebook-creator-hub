@@ -222,7 +222,7 @@ export function CreateEbookView() {
   const [salesPageGenerated, setSalesPageGenerated] = useState(false);
   const [salesPageStage, setSalesPageStage] = useState("");
   const [primaryColor, setPrimaryColor] = useState("#F97316");
-  const [secondaryColor, setSecondaryColor] = useState("#121212");
+  const [secondaryColor, setSecondaryColor] = useState("#000000");
 
   const resetForm = () => {
     setStep(0);
@@ -1061,8 +1061,21 @@ export function CreateEbookView() {
                             <div className="mx-auto w-32 relative shadow-lg rounded-lg overflow-hidden aspect-[3/4.2]" style={{ boxShadow: `0 12px 30px -8px ${primaryColor}66`, border: `2px solid ${primaryColor}` }}>
                               {coverUrl ? <img src={coverUrl} alt="Capa" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-white/50" style={{ backgroundColor: primaryColor }}><BookOpen className="h-6 w-6" /></div>}
                             </div>
+                            <div className="pt-3 space-y-2">
+                              <div className="grid grid-cols-2 gap-2 max-w-[260px] mx-auto">
+                                {["Acesso imediato","Garantia 7 dias","Bônus exclusivos","Suporte premium"].map((f) => (
+                                  <div key={f} className="flex items-center gap-1.5 text-[10px] font-medium px-2 py-1 rounded-md" style={{ backgroundColor: `${primaryColor}1A`, color: getPreviewTextColor(secondaryColor), border: `1px solid ${primaryColor}33` }}>
+                                    <Check className="h-3 w-3" style={{ color: primaryColor }} /> {f}
+                                  </div>
+                                ))}
+                              </div>
+                              <p className="text-[9px] uppercase tracking-widest font-semibold" style={{ color: getPreviewMutedColor(secondaryColor) }}>
+                                Pagamento 100% seguro • Compra protegida
+                              </p>
+                            </div>
                           </div>
                         </section>
+
                       </div>
                     </div>
                   </div>
