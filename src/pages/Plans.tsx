@@ -371,10 +371,11 @@ export default function Plans() {
             <Card className="px-10 py-12 border-border/60 flex flex-col">
               <div className="mb-6">
                 <div className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
-                  Plano Mensal
+                  Mensal
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-6xl font-bold">R$ 147,90</span>
+                  <span className="text-sm font-bold align-top">R$</span>
+                  <span className="text-5xl font-bold">147,90</span>
                   <span className="text-muted-foreground">/mês</span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
@@ -401,7 +402,7 @@ export default function Plans() {
                 className="w-full"
                 onClick={() => handleCheckout("monthly")}
               >
-                Assinar mensal
+                ASSINAR AGORA
               </Button>
             </Card>
 
@@ -413,10 +414,11 @@ export default function Plans() {
 
               <div className="mb-6">
                 <div className="text-sm font-medium text-primary uppercase tracking-wide mb-2">
-                  Acesso Vitalício
+                  Vitalício
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-6xl font-bold">R$ 247,90</span>
+                  <span className="text-sm font-bold align-top">R$</span>
+                  <span className="text-5xl font-bold">247,90</span>
                   <span className="text-muted-foreground text-sm">à vista</span>
                 </div>
                 <div className="text-sm font-medium text-primary mt-1">

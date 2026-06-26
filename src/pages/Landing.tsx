@@ -354,9 +354,10 @@ const Landing = () => {
             {/* Mensal */}
             <div className="px-12 py-14 rounded-3xl border bg-card/30 flex flex-col hover:border-white/20 transition-all">
               <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4"></p>
-              <h3 className="text-2xl font-bold mb-2">Mensal PRO</h3>
+              <h3 className="text-2xl font-bold mb-2">Mensal</h3>
               <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-7xl font-black">R$ 147,90</span>
+                <span className="text-base font-bold align-top">R$</span>
+                <span className="text-6xl font-black">147,90</span>
                 <span className="text-muted-foreground font-medium">/mês</span>
               </div>
               <ul className="space-y-4 mb-10 flex-1">
@@ -367,7 +368,7 @@ const Landing = () => {
                 ))}
               </ul>
               <Link to="/auth" className="block">
-                <Button variant="outline" className="w-full h-12 border-primary/20 hover:bg-primary/5">Assinar Mensal</Button>
+                <Button variant="outline" className="w-full h-12 border-primary/20 hover:bg-primary/5">ASSINAR AGORA</Button>
               </Link>
             </div>
 
@@ -380,19 +381,16 @@ const Landing = () => {
                 OFERTA VITALÍCIA
               </div>
               <p className="text-xs font-bold uppercase tracking-widest text-primary mb-4"></p>
-              <h3 className="text-2xl font-bold mb-2">Vitalício VIP</h3>
-              <div className="flex flex-col mb-2">
+              <h3 className="text-2xl font-bold mb-2">Vitalício</h3>
+              <div className="flex flex-col mb-6">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-7xl font-black">R$ 247,90</span>
+                  <span className="text-base font-bold align-top">R$</span>
+                  <span className="text-6xl font-black">247,90</span>
                   <span className="text-muted-foreground font-medium"> única vez</span>
                 </div>
                 <div className="text-sm font-bold text-primary mt-1">
                   ou em até 12 X de R$ 25,82
                 </div>
-              </div>
-              <div className="flex items-center gap-2 text-xs text-primary font-bold mb-6">
-                <Clock className="h-3.5 w-3.5 animate-pulse" />
-                <span>Oferta encerra em: {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}</span>
               </div>
               <ul className="space-y-4 mb-10 flex-1">
                 {["Tudo do PRO", "Pagamento único", "Acesso para sempre", "Atualizações vitalícias inclusas"].map(item => (
