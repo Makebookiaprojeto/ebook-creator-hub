@@ -856,14 +856,12 @@ export function CreateEbookView() {
                       />
                     </div>
                     {(() => {
-                      const primaryPalette = [
-                        "#F97316","#EF4444","#EC4899","#8B5CF6",
-                        "#3B82F6","#06B6D4","#22C55E","#EAB308",
+                      const palette = [
+                        "#EF4444","#F97316","#EAB308",
+                        "#22C55E","#3B82F6","#000000","#FFFFFF",
                       ];
-                      const secondaryPalette = [
-                        "#000000","#111827","#1F2937","#374151",
-                        "#6B7280","#F3F4F6","#FFFFFF","#0F172A",
-                      ];
+                      const primaryPalette = palette;
+                      const secondaryPalette = palette;
                       const Swatches = ({ value, onChange, colors }: { value: string; onChange: (v: string) => void; colors: string[] }) => (
                         <div className="flex flex-wrap gap-2">
                           {colors.map((c) => {
