@@ -708,15 +708,16 @@ export function CreateEbookView() {
                      );
                    })}
                  </div>
-                <div className="mt-8">
-                  <label className="text-sm font-semibold">Defina o público alvo do seu ebook</label>
+                <div className="mt-14">
+                  <label className="text-base font-semibold">Defina o público alvo do seu ebook</label>
 
                   <Textarea
                     className="mt-3 min-h-[110px]"
-                    placeholder="Ex: Mulheres de 30-45 anos, mães, que querem perder peso após a gravidez sem dietas restritivas e com pouco tempo para se exercitar..."
+                    placeholder=""
                     value={audience}
                     onChange={(e) => setAudience(e.target.value)}
                   />
+
                 </div>
               </div>
             )}
