@@ -406,7 +406,7 @@ export default function Plans() {
             </Card>
 
             {/* Vitalício */}
-            <Card className="px-10 py-12 border-primary bg-primary/5 flex flex-col relative overflow-hidden ring-2 ring-primary/40 plan-glow-animated">
+            <Card className="px-10 py-12 border-primary bg-primary/5 flex flex-col relative ring-2 ring-primary/40 plan-glow-animated">
               <div className="absolute top-4 right-4 flex items-center gap-1 text-xs font-medium bg-primary text-primary-foreground px-2 py-1 rounded-full">
                 <Crown className="h-3 w-3" /> Mais escolhido
               </div>
