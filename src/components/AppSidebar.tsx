@@ -111,11 +111,12 @@ export function AppSidebar({ active, onChange }: Props) {
                           (isActive
                             ? "bg-primary text-background font-bold shadow-sm hover:bg-primary/90"
                             : "bg-primary text-background font-bold shadow-sm hover:bg-primary/90") +
-                          " text-sm"
+                          " text-[15px]"
                         }
                       >
                         <item.icon className="h-4 w-4" />
-                        {!collapsed && <span>{item.title}</span>}
+                        {!collapsed && <span className="text-[15px]">{item.title}</span>}
+
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   );
