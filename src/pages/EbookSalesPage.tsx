@@ -190,12 +190,6 @@ export default function EbookSalesPage() {
     { q: "Preciso de conhecimento prévio?", a: "Não. O material foi feito para iniciantes e também aprofunda em pontos avançados." },
   ];
 
-  const bonuses = [
-    { title: "Checklist Imprimível", desc: "Acompanhe seu progresso com clareza", value: "R$ 97" },
-    { title: "Templates Prontos", desc: "Modelos para aplicar imediatamente", value: "R$ 197" },
-    { title: "Grupo VIP no Telegram", desc: "Comunidade exclusiva de leitores", value: "R$ 297" },
-    { title: "Atualizações Vitalícias", desc: "Receba todas as novas versões grátis", value: "R$ 497" },
-  ];
 
   return (
     <div
