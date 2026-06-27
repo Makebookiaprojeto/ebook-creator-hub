@@ -9,6 +9,7 @@ import {
   LayoutDashboard, Plus, Library, LifeBuoy, User, Bell, DollarSign, ShoppingCart, CreditCard
 } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
+import { SaasJourneyPreview } from "@/components/SaasJourneyPreview";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -264,6 +265,7 @@ const Landing = () => {
                   </main>
                 </div>
               </div>
+              <SaasJourneyPreview />
             </div>
           </div>
         </section>

@@ -6,14 +6,14 @@ import passo4 from "@/assets/preview-steps/PASSO-4.png?url";
 import passo5 from "@/assets/preview-steps/PASSO-5.png?url";
 
 const STEPS = [
-  { label: "Passo 1 — Escolha o Nicho", url: passo1 },
+  { label: "Passo 1 — Selecione o Nicho", url: passo1 },
   { label: "Passo 2 — Defina o Preço", url: passo2 },
-  { label: "Passo 3 — Geração do Ebook", url: passo3 },
-  { label: "Passo 4 — Geração da Página de Vendas", url: passo4 },
-  { label: "Passo 5 — Divulgação e Venda", url: passo5 },
+  { label: "Passo 3 — Gere o Ebook", url: passo3 },
+  { label: "Passo 4 — Configure a Página de Vendas", url: passo4 },
+  { label: "Passo 5 — Divulgue seu Produto", url: passo5 },
 ];
 
-const INTERVAL_MS = 4000;
+const INTERVAL_MS = 1000;
 
 export function SaasJourneyPreview() {
   const [index, setIndex] = useState(0);
