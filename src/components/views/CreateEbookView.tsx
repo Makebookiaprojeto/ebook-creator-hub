@@ -694,7 +694,7 @@ export function CreateEbookView() {
           {steps.map((label, i) => (
             <div key={label} className="relative flex flex-col items-center gap-1.5">
               {i < steps.length - 1 && (
-                <div className="absolute left-1/2 top-[18px] h-0.5 w-full -translate-y-1/2 rounded-full bg-muted">
+                <div className="absolute left-1/2 top-[18px] h-0.5 w-full -translate-y-1/2 rounded-full bg-zinc-600">
                   <div
                     style={i < step ? { backgroundColor: "#FFFF00" } : undefined}
                     className={`h-full rounded-full transition-all duration-500 ${i < step ? "w-full" : "w-0"}`}
