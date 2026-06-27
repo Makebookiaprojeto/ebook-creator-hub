@@ -894,7 +894,7 @@ export function CreateEbookView() {
                   <h2 className="font-display text-xl font-semibold text-center">Configure sua Página de Vendas</h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
+                <div className="max-w-xl mx-auto pt-6">
                   <div className="space-y-4">
                     <div>
                       <label className="text-base font-medium mb-1.5 block">Título do Ebook</label>
@@ -1031,47 +1031,6 @@ export function CreateEbookView() {
                           <ExternalLink className="h-4 w-4" /> Ver na web
                         </Button>
                       )}
-                    </div>
-                  </div>
-
-                  <div className="relative">
-                    
-                    <div className="shadow-gold rounded-2xl border border-border overflow-hidden aspect-[3/3.7] relative scale-[0.92] origin-top" style={{ backgroundColor: secondaryColor }}>
-                      <div className="h-full overflow-hidden">
-
-                        <section className="relative pt-8 pb-10 overflow-hidden text-center px-4">
-                          <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-40 h-40 rounded-full blur-[40px] -z-10" style={{ backgroundColor: `${primaryColor}33` }} />
-                          <div className="space-y-4">
-                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mx-auto" style={{ backgroundColor: `${primaryColor}1A`, color: primaryColor, border: `1px solid ${primaryColor}33` }}>
-                              <Sparkles className="h-3 w-3" /> Lançamento
-                            </div>
-
-                            <h1 className="text-2xl font-black tracking-tight leading-tight px-2" style={{ color: getPreviewTextColor(secondaryColor) }}>
-                              {title || "Seu Título"}
-                            </h1>
-
-                            <div className="h-10 px-6 text-sm font-black text-white rounded-full inline-flex items-center justify-center shadow-lg mx-auto" style={{ backgroundColor: primaryColor }}>
-                              OBTER ACESSO AGORA
-                            </div>
-
-                            <p className="text-2xl font-black" style={{ color: primaryColor }}>R$ {price.toFixed(2).replace(".", ",")}</p>
-
-                            <div className="mx-auto w-32 relative shadow-lg rounded-lg overflow-hidden aspect-[3/4.2]" style={{ boxShadow: `0 12px 30px -8px ${primaryColor}66`, border: `2px solid ${primaryColor}` }}>
-                              {coverUrl ? <img src={coverUrl} alt="Capa" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-white/50" style={{ backgroundColor: primaryColor }}><BookOpen className="h-6 w-6" /></div>}
-                            </div>
-
-                            <div className="flex justify-center gap-2 pt-2 max-w-[260px] mx-auto">
-                              {["Acesso imediato","Garantia 7 dias"].map((f) => (
-                                <div key={f} className="flex items-center gap-1.5 text-[10px] font-medium px-2.5 py-1 rounded-md" style={{ backgroundColor: `${primaryColor}1A`, color: getPreviewTextColor(secondaryColor), border: `1px solid ${primaryColor}33` }}>
-                                  <Check className="h-3 w-3" style={{ color: primaryColor }} /> {f}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                        </section>
-
-                      </div>
                     </div>
                   </div>
                 </div>
