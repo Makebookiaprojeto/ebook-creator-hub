@@ -313,7 +313,7 @@ export default function EbookSalesPage() {
               { icon: Zap, title: "Não tem tempo a perder", desc: "Quer conteúdo direto, prático, sem enrolação ou teoria desnecessária." },
               { icon: Crown, title: "Busca se destacar", desc: "Deseja dominar o assunto e construir autoridade no seu mercado." },
             ].map((item, i) => (
-              <motion.div key={i} whileHover={{ y: -6 }} className="p-8 rounded-3xl bg-card border border-border shadow-sm hover:shadow-xl hover:border-primary/30 transition-all">
+              <motion.div key={i} whileHover={{ y: -6 }} className="p-8 rounded-3xl bg-card border border-border shadow-[0_20px_50px_-12px_hsl(var(--primary)/0.4)] hover:shadow-[0_30px_70px_-15px_hsl(var(--primary)/0.6)] hover:border-primary/30 transition-all">
                 <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
                   <item.icon className="text-primary" size={26} />
                 </div>
