@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 
-const V = "20260627d";
+const V = "20260627e";
 const STEPS = [
   { label: "Passo 1 — Escolha o Nicho", url: `/preview/PASSO%201.png?v=${V}` },
   { label: "Passo 2 — Defina o Preço", url: `/preview/PASSO%202.png?v=${V}` },
   { label: "Passo 3 — Geração do Ebook", url: `/preview/PASSO%203.png?v=${V}` },
-  { label: "Passo 4 — Geração da Página de Vendas", url: `/preview/PASSO4.png?v=${V}` },
+  { label: "Passo 4 — Geração da Página de Vendas", url: `/preview/PASSO%204.png?v=${V}` },
   { label: "Passo 5 — Divulgação e Venda", url: `/preview/PASSO%205.png?v=${V}` },
 ];
 
