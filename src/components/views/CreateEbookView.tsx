@@ -769,7 +769,7 @@ export function CreateEbookView() {
                   <h2 className="font-display text-xl font-semibold mt-2 mb-4">Defina o preço</h2>
                 </div>
 
-                <div className="mt-5 rounded-2xl border bg-card shadow-soft p-6">
+                <div className="mt-5 rounded-2xl border border-[#D4AF37] bg-card shadow-[0_0_18px_rgba(212,175,55,0.35)] p-6">
 
 
                   <label className="text-sm font-medium uppercase text-muted-foreground">Preço de venda (R$)</label>
