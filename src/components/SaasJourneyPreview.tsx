@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
+import passo1 from "@/assets/preview-steps/passo-1.png.asset.json";
+import passo2 from "@/assets/preview-steps/passo-2.png.asset.json";
+import passo3 from "@/assets/preview-steps/passo-3.png.asset.json";
+import passo4 from "@/assets/preview-steps/passo-4.png.asset.json";
+import passo5 from "@/assets/preview-steps/passo-5.png.asset.json";
 
-const V = "20260627e";
 const STEPS = [
-  { label: "Passo 1 — Escolha o Nicho", url: `/preview/PASSO%201.png?v=${V}` },
-  { label: "Passo 2 — Defina o Preço", url: `/preview/PASSO%202.png?v=${V}` },
-  { label: "Passo 3 — Geração do Ebook", url: `/preview/PASSO%203.png?v=${V}` },
-  { label: "Passo 4 — Geração da Página de Vendas", url: `/preview/PASSO%204.png?v=${V}` },
-  { label: "Passo 5 — Divulgação e Venda", url: `/preview/PASSO%205.png?v=${V}` },
+  { label: "Passo 1 — Escolha o Nicho", url: passo1.url },
+  { label: "Passo 2 — Defina o Preço", url: passo2.url },
+  { label: "Passo 3 — Geração do Ebook", url: passo3.url },
+  { label: "Passo 4 — Geração da Página de Vendas", url: passo4.url },
+  { label: "Passo 5 — Divulgação e Venda", url: passo5.url },
 ];
 
 const INTERVAL_MS = 4000;
