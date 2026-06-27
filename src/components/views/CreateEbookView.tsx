@@ -1080,9 +1080,9 @@ export function CreateEbookView() {
 
             {step === 4 && (
               <div>
-                <div className="flex flex-col items-center text-center">
+                <div className="flex flex-col items-center text-center -mt-4">
                   <Megaphone className="h-7 w-7 text-[#FFFF00]" />
-                  <h2 className="font-display text-xl font-semibold mt-2">Busca por Grupos</h2>
+                  <h2 className="font-display text-xl font-semibold mt-1">Busca por Grupos</h2>
                 </div>
 
                 <motion.div
@@ -1090,7 +1090,7 @@ export function CreateEbookView() {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-6 space-y-4"
                 >
-                  <div className="p-5 rounded-lg border border-border bg-card/40">
+                  <div className="p-6 rounded-lg border border-border bg-card/40">
                     <h3 className="text-lg font-semibold flex items-center gap-2 mb-1 text-[#FFFF00]">
                       <Users className="h-5 w-5 text-primary" />
                       Buscar grupos por nicho
@@ -1107,8 +1107,9 @@ export function CreateEbookView() {
                             searchFacebookGroups();
                           }
                         }}
-                        className="flex-1"
+                        className="flex-1 h-11 text-base"
                       />
+
                       <Button
                         className="gradient-primary text-primary-foreground shadow-glow gap-2"
                         onClick={searchFacebookGroups}
