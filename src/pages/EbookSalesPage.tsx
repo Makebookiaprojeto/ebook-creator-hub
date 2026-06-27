@@ -190,12 +190,6 @@ export default function EbookSalesPage() {
     { q: "Preciso de conhecimento prévio?", a: "Não. O material foi feito para iniciantes e também aprofunda em pontos avançados." },
   ];
 
-  const bonuses = [
-    { title: "Checklist Imprimível", desc: "Acompanhe seu progresso com clareza", value: "R$ 97" },
-    { title: "Templates Prontos", desc: "Modelos para aplicar imediatamente", value: "R$ 197" },
-    { title: "Grupo VIP no Telegram", desc: "Comunidade exclusiva de leitores", value: "R$ 297" },
-    { title: "Atualizações Vitalícias", desc: "Receba todas as novas versões grátis", value: "R$ 497" },
-  ];
 
   return (
     <div
@@ -255,7 +249,7 @@ export default function EbookSalesPage() {
               <div className="flex flex-wrap gap-x-6 gap-y-2 pt-2 text-xs font-bold text-muted-foreground uppercase tracking-wider">
                 <span className="flex items-center gap-1.5"><ShieldCheck size={14} className="text-primary" /> Compra Segura</span>
                 <span className="flex items-center gap-1.5"><InfinityIcon size={14} className="text-primary" /> Acesso Vitalício</span>
-                <span className="flex items-center gap-1.5"><Gift size={14} className="text-primary" /> 4 Bônus</span>
+                <span className="flex items-center gap-1.5"><Gift size={14} className="text-primary" /> Garantia 7 dias</span>
               </div>
             </motion.div>
 
@@ -313,7 +307,7 @@ export default function EbookSalesPage() {
               { icon: Zap, title: "Não tem tempo a perder", desc: "Quer conteúdo direto, prático, sem enrolação ou teoria desnecessária." },
               { icon: Crown, title: "Busca se destacar", desc: "Deseja dominar o assunto e construir autoridade no seu mercado." },
             ].map((item, i) => (
-              <motion.div key={i} whileHover={{ y: -6 }} className="p-8 rounded-3xl bg-card border border-border shadow-sm hover:shadow-xl hover:border-primary/30 transition-all">
+              <motion.div key={i} whileHover={{ y: -6 }} className="p-8 rounded-3xl bg-card border border-border shadow-[0_20px_50px_-12px_hsl(var(--primary)/0.4)] hover:shadow-[0_30px_70px_-15px_hsl(var(--primary)/0.6)] hover:border-primary/30 transition-all">
                 <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
                   <item.icon className="text-primary" size={26} />
                 </div>
@@ -344,7 +338,7 @@ export default function EbookSalesPage() {
               { icon: Layout, title: "Base Sólida", desc: "Estrutura robusta para crescer." },
               { icon: Star, title: "Suporte VIP", desc: "Atualizações e bônus contínuos." },
             ].map((b, i) => (
-              <motion.div key={i} whileHover={{ y: -6 }} className="group p-7 rounded-2xl bg-background border border-border hover:border-primary/40 hover:shadow-[0_15px_40px_-15px_hsl(var(--primary)/0.3)] transition-all">
+              <motion.div key={i} whileHover={{ y: -6 }} className="group p-7 rounded-2xl bg-background border border-border shadow-[0_18px_45px_-12px_hsl(var(--primary)/0.4)] hover:border-primary/40 hover:shadow-[0_28px_60px_-15px_hsl(var(--primary)/0.6)] transition-all">
                 <div className="h-12 w-12 rounded-xl bg-primary/10 group-hover:bg-primary group-hover:text-primary-foreground flex items-center justify-center mb-5 transition-colors">
                   <b.icon size={22} className="text-primary group-hover:text-primary-foreground transition-colors" />
                 </div>
@@ -363,12 +357,25 @@ export default function EbookSalesPage() {
             <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-widest">Conteúdo</div>
             <h2 className="text-4xl lg:text-5xl font-black tracking-tight">O que você vai aprender</h2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-6 gap-6">
             {(() => {
               const items = learningTopics.length > 0 ? learningTopics : displayChapters;
+              const total = items.length || 6;
+              const lastRowCount = total % 3 === 0 ? 3 : total % 3;
+              const firstInLastRow = total - lastRowCount;
+              const cardClass = (i: number) => {
+                const base = "lg:col-span-2";
+                if (i < firstInLastRow) return base;
+                // center last row
+                if (lastRowCount === 1) return `${base} lg:col-start-3`;
+                if (lastRowCount === 2) {
+                  return i === firstInLastRow ? `${base} lg:col-start-2` : base;
+                }
+                return base;
+              };
               if (items.length === 0) {
                 return [...Array(6)].map((_, i) => (
-                  <div key={i} className="p-7 rounded-2xl bg-card border border-border">
+                  <div key={i} className={`p-7 rounded-2xl bg-card border border-border shadow-[0_20px_50px_-12px_hsl(var(--primary)/0.35)] ${cardClass(i)}`}>
                     <div className="text-5xl font-black text-primary/20 mb-4">{String(i + 1).padStart(2, "0")}</div>
                     <h3 className="text-lg font-black mb-2">Módulo {i + 1}</h3>
                     <p className="text-sm text-muted-foreground">Conteúdo essencial para sua evolução.</p>
@@ -376,7 +383,7 @@ export default function EbookSalesPage() {
                 ));
               }
               return items.map((item: any, i: number) => (
-                <motion.div key={i} whileHover={{ y: -4 }} className="group relative p-7 rounded-2xl bg-card border border-border hover:border-primary/40 hover:shadow-lg transition-all overflow-hidden">
+                <motion.div key={i} whileHover={{ y: -4 }} className={`group relative p-7 rounded-2xl bg-card border border-border shadow-[0_20px_50px_-12px_hsl(var(--primary)/0.35)] hover:border-primary/40 hover:shadow-[0_30px_70px_-15px_hsl(var(--primary)/0.55)] transition-all overflow-hidden ${cardClass(i)}`}>
                   <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors" />
                   <div className="relative">
                     <div className="text-5xl font-black text-primary/20 group-hover:text-primary/40 mb-4 transition-colors leading-none">{String(i + 1).padStart(2, "0")}</div>
@@ -432,7 +439,7 @@ export default function EbookSalesPage() {
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((t, i) => (
-              <motion.div key={i} whileHover={{ y: -6 }} className="p-8 rounded-3xl bg-card border border-border shadow-sm relative">
+              <motion.div key={i} whileHover={{ y: -6 }} className="p-8 rounded-3xl bg-card border border-border shadow-[0_20px_50px_-12px_hsl(var(--primary)/0.4)] hover:shadow-[0_30px_70px_-15px_hsl(var(--primary)/0.6)] transition-all relative">
                 <Quote className="absolute top-6 right-6 text-primary/20" size={40} />
                 <div className="flex gap-1 mb-4 text-amber-500">
                   {[...Array(t.rating)].map((_, j) => <Star key={j} size={16} fill="currentColor" />)}
@@ -447,28 +454,6 @@ export default function EbookSalesPage() {
                     <div className="text-xs text-muted-foreground font-medium">{t.role}</div>
                   </div>
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* BÔNUS */}
-      <section className="py-24 bg-card/40 border-y border-border">
-        <div className="container mx-auto px-6 max-w-6xl">
-          <div className="text-center mb-14 space-y-4">
-            <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-widest">Bônus exclusivos</div>
-            <h2 className="text-4xl lg:text-5xl font-black tracking-tight">Ganhe 4 bônus comprando hoje</h2>
-            <p className="text-lg text-muted-foreground">Valor total dos bônus: <span className="text-primary font-black">R$ 1.088</span></p>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {bonuses.map((b, i) => (
-              <motion.div key={i} whileHover={{ y: -6 }} className="relative p-7 rounded-2xl bg-background border-2 border-dashed border-primary/30 hover:border-primary transition-all">
-                <div className="absolute -top-3 left-6 bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full">Bônus #{i + 1}</div>
-                <Gift className="text-primary mb-4" size={28} />
-                <h3 className="text-lg font-black mb-2">{b.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4">{b.desc}</p>
-                <div className="text-xs font-black text-primary">Valor: <span className="line-through opacity-60">{b.value}</span></div>
               </motion.div>
             ))}
           </div>
@@ -510,7 +495,7 @@ export default function EbookSalesPage() {
               </div>
 
               <div className="grid sm:grid-cols-2 gap-4 mb-10 text-left max-w-md mx-auto">
-                {["Ebook completo em PDF", "4 bônus exclusivos", "Acesso vitalício", "7 dias de garantia"].map((item, i) => (
+                {["Ebook completo em PDF", "Acesso imediato", "Acesso vitalício", "7 dias de garantia"].map((item, i) => (
                   <div key={i} className="flex items-center gap-2 text-sm font-bold">
                     <CheckCircle2 className="text-primary flex-shrink-0" size={18} /> {item}
                   </div>
