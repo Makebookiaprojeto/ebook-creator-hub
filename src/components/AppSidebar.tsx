@@ -159,7 +159,7 @@ export function AppSidebar({ active, onChange }: Props) {
               const display = resolveDisplayName(displayName, user);
 
               return (
-              <div className="mx-2 mb-2 flex items-center justify-between gap-2 rounded-lg border bg-card p-2">
+              <div className="mx-2 mb-2 flex items-center justify-between gap-2 rounded-lg border border-[#D4AF37]/40 bg-card p-2 shadow-[0_0_14px_rgba(212,175,55,0.5)]">
                 <div className="flex items-center gap-2 min-w-0">
                   <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-muted overflow-hidden gradient-primary text-[11px] font-bold text-primary-foreground shadow-glow">
                     {avatarUrl ? (
