@@ -338,7 +338,7 @@ export function DashboardView() {
                       <span className="text-[11px]">{method.name}</span>
                     </TableCell>
                     <TableCell className="py-1.5">
-                      <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+                      <span className="inline-flex items-center rounded-full bg-[#D4AF37]/10 px-2 py-0.5 text-[10px] font-medium text-[#D4AF37] shadow-[0_0_10px_rgba(212,175,55,0.45)]">
                         {method.conversion}
                       </span>
                     </TableCell>
