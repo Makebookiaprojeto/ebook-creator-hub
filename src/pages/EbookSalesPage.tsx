@@ -344,7 +344,7 @@ export default function EbookSalesPage() {
               { icon: Layout, title: "Base Sólida", desc: "Estrutura robusta para crescer." },
               { icon: Star, title: "Suporte VIP", desc: "Atualizações e bônus contínuos." },
             ].map((b, i) => (
-              <motion.div key={i} whileHover={{ y: -6 }} className="group p-7 rounded-2xl bg-background border border-border hover:border-primary/40 hover:shadow-[0_15px_40px_-15px_hsl(var(--primary)/0.3)] transition-all">
+              <motion.div key={i} whileHover={{ y: -6 }} className="group p-7 rounded-2xl bg-background border border-border shadow-[0_18px_45px_-12px_hsl(var(--primary)/0.4)] hover:border-primary/40 hover:shadow-[0_28px_60px_-15px_hsl(var(--primary)/0.6)] transition-all">
                 <div className="h-12 w-12 rounded-xl bg-primary/10 group-hover:bg-primary group-hover:text-primary-foreground flex items-center justify-center mb-5 transition-colors">
                   <b.icon size={22} className="text-primary group-hover:text-primary-foreground transition-colors" />
                 </div>
