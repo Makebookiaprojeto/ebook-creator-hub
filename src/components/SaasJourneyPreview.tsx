@@ -4,6 +4,7 @@ import passo2 from "@/assets/preview-steps/PASSO-2.png?url";
 import passo3 from "@/assets/preview-steps/PASSO-3.png?url";
 import passo4 from "@/assets/preview-steps/PASSO-4.png?url";
 import passo5 from "@/assets/preview-steps/PASSO-5.png?url";
+import passo5b from "@/assets/preview-steps/PASSO-5b.png?url";
 
 const STEPS = [
   { label: "Passo 1 — Selecione o Nicho", url: passo1 },
@@ -11,6 +12,7 @@ const STEPS = [
   { label: "Passo 3 — Gere o Ebook", url: passo3 },
   { label: "Passo 4 — Configure a Página de Vendas", url: passo4 },
   { label: "Passo 5 — Divulgue seu Produto", url: passo5 },
+  { label: "Passo 5 — Vídeos prontos para divulgação", url: passo5b },
 ];
 
 const INTERVAL_MS = 1000;
