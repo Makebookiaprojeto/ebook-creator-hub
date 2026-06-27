@@ -111,7 +111,7 @@ export function AppSidebar({ active, onChange }: Props) {
                         className="bg-black hover:bg-black/90 font-bold text-[14px] h-10 py-2 border border-[#D4AF37]/40 justify-center"
                       >
                         {collapsed && <item.icon className="h-3.5 w-3.5" />}
-                        {!collapsed && <span className="text-[13px] -ml-2" style={{ color: "#D4AF37" }}><span className="text-[17px] leading-none align-middle relative -top-[2px]">+</span> NOVA ESTRUTURA</span>}
+                        {!collapsed && <span className="text-[14px] -ml-2" style={{ color: "#D4AF37" }}><span className="text-[18px] leading-none align-middle relative -top-[2px]">+</span> NOVA ESTRUTURA</span>}
 
                       </SidebarMenuButton>
                     </SidebarMenuItem>
