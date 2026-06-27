@@ -281,7 +281,7 @@ export function DashboardView() {
             tint="from-primary/10 to-primary/5"
             action={
               <Select value={profitPeriod} onValueChange={(v: any) => setProfitPeriod(v)}>
-                <SelectTrigger className="h-7 w-[130px] text-xs">
+                <SelectTrigger className="h-7 w-[130px] text-xs -mt-2">
                   <SelectValue placeholder="Período" />
                 </SelectTrigger>
                 <SelectContent>
