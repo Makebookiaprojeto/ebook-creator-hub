@@ -903,7 +903,7 @@ export function CreateEbookView() {
                         value={title} 
                         onChange={(e) => setTitle(e.target.value)} 
                         required 
-                        className="text-base h-11"
+                        className="text-base h-11 shadow-gold"
                       />
                     </div>
                     <div>
