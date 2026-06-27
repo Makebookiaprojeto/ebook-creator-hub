@@ -1125,47 +1125,24 @@ export function CreateEbookView() {
                       <Quote className="h-5 w-5 text-primary" />
                       Mensagem pronta para Divulgação
                     </h3>
-                    <p className="text-sm text-muted-foreground mb-4">Gere uma mensagem persuasiva, para aumentar sua conversão.</p>
-                    {!showDivulgacaoMessage ? (
+                    <p className="text-sm text-muted-foreground mb-4">Use esta mensagem persuasiva para aumentar sua conversão.</p>
+                    <div className="relative">
+                      <pre className="whitespace-pre-wrap font-sans text-sm bg-muted/50 p-4 pb-14 rounded-xl border border-dashed border-primary/20 leading-relaxed">
+                        {`Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação. Clique no link abaixo para saber mais !!!!\n\nLink: ${ebookLink}`}
+                      </pre>
                       <Button
-                        className="gradient-primary text-primary-foreground shadow-glow gap-2"
-                        disabled={loadingDivulgacaoMessage}
+                        size="sm"
+                        className="absolute bottom-3 right-3 bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm gap-2"
                         onClick={() => {
-                          setLoadingDivulgacaoMessage(true);
-                          setTimeout(() => {
-                            setShowDivulgacaoMessage(true);
-                            setLoadingDivulgacaoMessage(false);
-                          }, 2000);
+                          const text = `Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação. Clique no link abaixo para saber mais !!!!\n\nLink: ${ebookLink}`;
+                          navigator.clipboard.writeText(text);
+                          toast.success("Mensagem copiada!");
                         }}
                       >
-                        {loadingDivulgacaoMessage ? (
-                          <>
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                            Gerando mensagem...
-                          </>
-                        ) : (
-                          "Gerar Mensagem"
-                        )}
+                        <Copy className="h-3.5 w-3.5" />
+                        Copiar Mensagem
                       </Button>
-                    ) : (
-                      <div className="relative">
-                        <pre className="whitespace-pre-wrap font-sans text-sm bg-muted/50 p-4 pb-14 rounded-xl border border-dashed border-primary/20 leading-relaxed">
-                          {`Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação. Clique no link abaixo para saber mais !!!!\n\nLink: ${ebookLink}`}
-                        </pre>
-                        <Button
-                          size="sm"
-                          className="absolute bottom-3 right-3 bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm gap-2"
-                          onClick={() => {
-                            const text = `Comprei sem grandes expectativas e me surpreendi. O conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava. Em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação. Clique no link abaixo para saber mais !!!!\n\nLink: ${ebookLink}`;
-                            navigator.clipboard.writeText(text);
-                            toast.success("Mensagem copiada!");
-                          }}
-                        >
-                          <Copy className="h-3.5 w-3.5" />
-                          Copiar Mensagem
-                        </Button>
-                      </div>
-                    )}
+                    </div>
                   </div>
                   <div className="p-5">
                     <h3 className="text-lg font-semibold flex items-center gap-2 mb-1 text-[#FFFF00]">
