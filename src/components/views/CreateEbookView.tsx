@@ -918,7 +918,7 @@ export function CreateEbookView() {
                           setPriceInput(numericValue.toFixed(2).replace(".", ","));
                         }} 
                         required 
-                        className="text-base h-11"
+                        className="text-base h-11 shadow-gold"
                       />
                     </div>
                     {(() => {
