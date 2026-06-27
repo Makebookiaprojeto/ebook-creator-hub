@@ -220,7 +220,7 @@ export function ProfileView() {
 
       {/* Admin access removed based on user request */}
 
-      <div className="rounded-2xl border bg-card p-6 shadow-glow">
+      <div className="rounded-2xl border bg-card p-6 shadow-[0_0_18px_rgba(212,175,55,0.35)]">
         <div className="flex items-center gap-6 flex-wrap sm:flex-nowrap">
           <div className="relative group">
             <div className="flex h-24 w-24 items-center justify-center rounded-full border-2 border-primary/20 bg-muted overflow-hidden shadow-glow">
