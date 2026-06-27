@@ -255,7 +255,7 @@ export default function EbookSalesPage() {
               <div className="flex flex-wrap gap-x-6 gap-y-2 pt-2 text-xs font-bold text-muted-foreground uppercase tracking-wider">
                 <span className="flex items-center gap-1.5"><ShieldCheck size={14} className="text-primary" /> Compra Segura</span>
                 <span className="flex items-center gap-1.5"><InfinityIcon size={14} className="text-primary" /> Acesso Vitalício</span>
-                <span className="flex items-center gap-1.5"><Gift size={14} className="text-primary" /> 4 Bônus</span>
+                <span className="flex items-center gap-1.5"><Gift size={14} className="text-primary" /> Garantia 7 dias</span>
               </div>
             </motion.div>
 
