@@ -690,7 +690,7 @@ export function CreateEbookView() {
 
       {/* Progress */}
       <div className="px-5 -mt-6 pb-8">
-        <div className="mx-auto grid max-w-2xl grid-cols-5 rounded-2xl border border-border bg-card/40 px-6 py-5">
+        <div className="mx-auto grid max-w-2xl grid-cols-5 rounded-2xl border border-border bg-card/40 px-6 py-5 shadow-gold">
           {steps.map((label, i) => (
             <div key={label} className="relative flex flex-col items-center gap-1.5">
               {i < steps.length - 1 && (
