@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import passo1 from "@/assets/preview-steps/PASSO-1.png";
-import passo2 from "@/assets/preview-steps/PASSO-2.png";
-import passo3 from "@/assets/preview-steps/PASSO-3.png";
-import passo4 from "@/assets/preview-steps/PASSO-4.png";
-import passo5 from "@/assets/preview-steps/PASSO-5.png";
+import passo1 from "@/assets/preview-steps/PASSO-1.png?url";
+import passo2 from "@/assets/preview-steps/PASSO-2.png?url";
+import passo3 from "@/assets/preview-steps/PASSO-3.png?url";
+import passo4 from "@/assets/preview-steps/PASSO-4.png?url";
+import passo5 from "@/assets/preview-steps/PASSO-5.png?url";
 
 const STEPS = [
   { label: "Passo 1 — Escolha o Nicho", url: passo1 },
