@@ -1082,15 +1082,15 @@ export function CreateEbookView() {
               <div>
                 <div className="flex flex-col items-center text-center -mt-4">
                   <Megaphone className="h-7 w-7 text-[#FFFF00]" />
-                  <h2 className="font-display text-xl font-semibold mt-1">Divulgação e Venda</h2>
+                  <h2 className="font-display text-xl font-semibold mt-3 mb-2">Divulgação e Venda</h2>
                 </div>
 
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-6 space-y-4"
+                  className="mt-8 space-y-4"
                 >
-                  <div className="p-6 rounded-lg border border-border bg-card/40">
+                  <div className="p-6 rounded-lg border border-border bg-card/40 shadow-gold">
                     <h3 className="text-lg font-semibold flex items-center gap-2 mb-1 text-[#FFFF00]">
                       <Users className="h-5 w-5 text-primary" />
                       Buscar grupos por nicho
