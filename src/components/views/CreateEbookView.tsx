@@ -132,7 +132,7 @@ function DivulgacaoVideoCard({ title, src, filename, script }: { title: string; 
   };
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4 rounded-xl border bg-background/40 p-4">
+    <div className="flex flex-col sm:flex-row gap-4 rounded-xl border bg-background/40 p-4 shadow-gold">
       <div className="relative shrink-0 mx-auto sm:mx-0 w-[140px] aspect-[9/16] rounded-lg overflow-hidden bg-black border border-primary/10">
         {src ? (
           <video
@@ -690,7 +690,7 @@ export function CreateEbookView() {
 
       {/* Progress */}
       <div className="px-5 -mt-6 pb-8">
-        <div className="mx-auto grid max-w-2xl grid-cols-5 rounded-2xl border border-border bg-card/40 px-6 py-5">
+        <div className="mx-auto grid max-w-2xl grid-cols-5 rounded-2xl border border-border bg-card/40 px-6 py-5 shadow-gold">
           {steps.map((label, i) => (
             <div key={label} className="relative flex flex-col items-center gap-1.5">
               {i < steps.length - 1 && (
@@ -742,11 +742,11 @@ export function CreateEbookView() {
                        <button
                          key={n.name}
                          onClick={() => setNiche(n.name)}
-                         className={`group rounded-md border px-2 py-2.5 text-center transition-all hover:shadow-sm hover:-translate-y-0.5 min-h-[58px] flex flex-col items-center justify-center gap-1.5 ${
-                           niche === n.name 
-                             ? "border-primary bg-primary text-primary-foreground shadow-glow" 
-                             : "bg-card border-border hover:border-primary/50"
-                         }`}
+                          className={`group rounded-md border px-2 py-2.5 text-center transition-all shadow-gold hover:-translate-y-0.5 min-h-[58px] flex flex-col items-center justify-center gap-1.5 ${
+                            niche === n.name 
+                              ? "border-primary bg-primary text-primary-foreground" 
+                              : "bg-card border-border hover:border-primary/50"
+                          }`}
                        >
                          {Icon && <Icon className={`h-5 w-5 ${niche === n.name ? "text-primary-foreground" : "text-primary"}`} />}
                          <p className={`font-medium text-[13px] leading-tight ${
@@ -1036,7 +1036,7 @@ export function CreateEbookView() {
 
                   <div className="relative">
                     
-                    <div className="rounded-2xl border border-border overflow-hidden shadow-xl aspect-[3/3.7] relative scale-[0.92] origin-top" style={{ backgroundColor: secondaryColor }}>
+                    <div className="gold-glow-rotate rounded-2xl border border-border overflow-hidden shadow-xl aspect-[3/3.7] relative scale-[0.92] origin-top" style={{ backgroundColor: secondaryColor }}>
                       <div className="h-full overflow-hidden">
 
                         <section className="relative pt-8 pb-10 overflow-hidden text-center px-4">
@@ -1082,7 +1082,7 @@ export function CreateEbookView() {
               <div>
                 <div className="flex flex-col items-center text-center -mt-4">
                   <Megaphone className="h-7 w-7 text-[#FFFF00]" />
-                  <h2 className="font-display text-xl font-semibold mt-1">Busca por Grupos</h2>
+                  <h2 className="font-display text-xl font-semibold mt-1">Divulgação e Venda</h2>
                 </div>
 
                 <motion.div

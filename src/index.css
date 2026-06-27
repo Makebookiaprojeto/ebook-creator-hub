@@ -218,6 +218,57 @@
   will-change: box-shadow;
 }
 
+.shadow-gold {
+  box-shadow:
+    0 0 0 1px hsl(45 75% 52% / 0.45),
+    0 0 18px -4px hsl(45 75% 52% / 0.5);
+}
+
+.gold-glow-rotate {
+  position: relative;
+}
+.gold-glow-rotate::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--plan-glow-angle),
+    transparent 0deg,
+    transparent 240deg,
+    hsl(45 80% 55% / 0.85) 310deg,
+    hsl(45 90% 65%) 340deg,
+    hsl(45 80% 55% / 0.85) 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  animation: plan-glow-rotate 6s linear infinite;
+  will-change: --plan-glow-angle;
+}
+.gold-glow-rotate::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--plan-glow-angle),
+    transparent 0deg,
+    transparent 260deg,
+    hsl(45 85% 55% / 0.5) 320deg,
+    transparent 360deg
+  );
+  filter: blur(16px);
+  pointer-events: none;
+  z-index: -1;
+  animation: plan-glow-rotate 6s linear infinite;
+  will-change: --plan-glow-angle;
+}
+
 .plan-glow-animated::before {
   content: "";
   position: absolute;
