@@ -1036,7 +1036,7 @@ export function CreateEbookView() {
 
                   <div className="relative">
                     
-                    <div className="gold-glow-rotate rounded-2xl border border-border overflow-hidden shadow-xl aspect-[3/3.7] relative scale-[0.92] origin-top" style={{ backgroundColor: secondaryColor }}>
+                    <div className="shadow-gold rounded-2xl border border-border overflow-hidden aspect-[3/3.7] relative scale-[0.92] origin-top" style={{ backgroundColor: secondaryColor }}>
                       <div className="h-full overflow-hidden">
 
                         <section className="relative pt-8 pb-10 overflow-hidden text-center px-4">
