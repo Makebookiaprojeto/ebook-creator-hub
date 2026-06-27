@@ -15,7 +15,7 @@ const STEPS = [
   { label: "Passo 5 — Vídeos prontos para divulgação", url: passo5b },
 ];
 
-const INTERVAL_MS = 1000;
+const INTERVAL_MS = 1800;
 
 export function SaasJourneyPreview() {
   const [index, setIndex] = useState(0);
