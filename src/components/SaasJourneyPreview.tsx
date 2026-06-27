@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 
-const V = "20260627c";
+const V = "20260627d";
 const STEPS = [
-  { label: "Passo 1 — Escolha o Nicho", url: `/preview/saas-journey-step-1-current-20260627.png?v=${V}` },
-  { label: "Passo 2 — Defina o Preço", url: `/preview/saas-journey-step-2-current-20260627.png?v=${V}` },
-  { label: "Passo 3 — Geração do Ebook", url: `/preview/saas-journey-step-3-current-20260627.png?v=${V}` },
-  { label: "Passo 4 — Geração da Página de Vendas", url: `/preview/saas-journey-step-4-current-20260627.png?v=${V}` },
-  { label: "Passo 5 — Divulgação e Venda", url: `/preview/saas-journey-step-5-current-20260627.png?v=${V}` },
+  { label: "Passo 1 — Escolha o Nicho", url: `/preview/PASSO%201.png?v=${V}` },
+  { label: "Passo 2 — Defina o Preço", url: `/preview/PASSO%202.png?v=${V}` },
+  { label: "Passo 3 — Geração do Ebook", url: `/preview/PASSO%203.png?v=${V}` },
+  { label: "Passo 4 — Geração da Página de Vendas", url: `/preview/PASSO4.png?v=${V}` },
+  { label: "Passo 5 — Divulgação e Venda", url: `/preview/PASSO%205.png?v=${V}` },
 ];
 
 const INTERVAL_MS = 4000;
