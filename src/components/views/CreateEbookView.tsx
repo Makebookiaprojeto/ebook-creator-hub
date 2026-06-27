@@ -1082,7 +1082,7 @@ export function CreateEbookView() {
               <div>
                 <div className="flex flex-col items-center text-center -mt-4">
                   <Megaphone className="h-7 w-7 text-[#FFFF00]" />
-                  <h2 className="font-display text-xl font-semibold mt-1">Busca por Grupos</h2>
+                  <h2 className="font-display text-xl font-semibold mt-1">Divulgação e Venda</h2>
                 </div>
 
                 <motion.div
