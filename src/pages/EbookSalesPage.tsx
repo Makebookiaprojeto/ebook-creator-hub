@@ -363,12 +363,25 @@ export default function EbookSalesPage() {
             <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-widest">Conteúdo</div>
             <h2 className="text-4xl lg:text-5xl font-black tracking-tight">O que você vai aprender</h2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-6 gap-6">
             {(() => {
               const items = learningTopics.length > 0 ? learningTopics : displayChapters;
+              const total = items.length || 6;
+              const lastRowCount = total % 3 === 0 ? 3 : total % 3;
+              const firstInLastRow = total - lastRowCount;
+              const cardClass = (i: number) => {
+                const base = "lg:col-span-2";
+                if (i < firstInLastRow) return base;
+                // center last row
+                if (lastRowCount === 1) return `${base} lg:col-start-3`;
+                if (lastRowCount === 2) {
+                  return i === firstInLastRow ? `${base} lg:col-start-2` : base;
+                }
+                return base;
+              };
               if (items.length === 0) {
                 return [...Array(6)].map((_, i) => (
-                  <div key={i} className="p-7 rounded-2xl bg-card border border-border">
+                  <div key={i} className={`p-7 rounded-2xl bg-card border border-border shadow-[0_20px_50px_-12px_hsl(var(--primary)/0.35)] ${cardClass(i)}`}>
                     <div className="text-5xl font-black text-primary/20 mb-4">{String(i + 1).padStart(2, "0")}</div>
                     <h3 className="text-lg font-black mb-2">Módulo {i + 1}</h3>
                     <p className="text-sm text-muted-foreground">Conteúdo essencial para sua evolução.</p>
@@ -376,7 +389,7 @@ export default function EbookSalesPage() {
                 ));
               }
               return items.map((item: any, i: number) => (
-                <motion.div key={i} whileHover={{ y: -4 }} className="group relative p-7 rounded-2xl bg-card border border-border hover:border-primary/40 hover:shadow-lg transition-all overflow-hidden">
+                <motion.div key={i} whileHover={{ y: -4 }} className={`group relative p-7 rounded-2xl bg-card border border-border shadow-[0_20px_50px_-12px_hsl(var(--primary)/0.35)] hover:border-primary/40 hover:shadow-[0_30px_70px_-15px_hsl(var(--primary)/0.55)] transition-all overflow-hidden ${cardClass(i)}`}>
                   <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors" />
                   <div className="relative">
                     <div className="text-5xl font-black text-primary/20 group-hover:text-primary/40 mb-4 transition-colors leading-none">{String(i + 1).padStart(2, "0")}</div>
