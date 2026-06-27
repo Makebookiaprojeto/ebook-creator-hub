@@ -466,28 +466,6 @@ export default function EbookSalesPage() {
         </div>
       </section>
 
-      {/* BÔNUS */}
-      <section className="py-24 bg-card/40 border-y border-border">
-        <div className="container mx-auto px-6 max-w-6xl">
-          <div className="text-center mb-14 space-y-4">
-            <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-widest">Bônus exclusivos</div>
-            <h2 className="text-4xl lg:text-5xl font-black tracking-tight">Ganhe 4 bônus comprando hoje</h2>
-            <p className="text-lg text-muted-foreground">Valor total dos bônus: <span className="text-primary font-black">R$ 1.088</span></p>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {bonuses.map((b, i) => (
-              <motion.div key={i} whileHover={{ y: -6 }} className="relative p-7 rounded-2xl bg-background border-2 border-dashed border-primary/30 hover:border-primary transition-all">
-                <div className="absolute -top-3 left-6 bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full">Bônus #{i + 1}</div>
-                <Gift className="text-primary mb-4" size={28} />
-                <h3 className="text-lg font-black mb-2">{b.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4">{b.desc}</p>
-                <div className="text-xs font-black text-primary">Valor: <span className="line-through opacity-60">{b.value}</span></div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* GARANTIA */}
       <section className="py-24">
         <div className="container mx-auto px-6 max-w-4xl">
