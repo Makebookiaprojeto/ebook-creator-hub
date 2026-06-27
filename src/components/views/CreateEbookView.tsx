@@ -742,16 +742,16 @@ export function CreateEbookView() {
                        <button
                          key={n.name}
                          onClick={() => setNiche(n.name)}
-                          className={`group rounded-md border px-2 py-2.5 text-center transition-all shadow-gold hover:-translate-y-0.5 min-h-[58px] flex flex-col items-center justify-center gap-1.5 ${
-                            niche === n.name 
-                              ? "border-primary bg-primary text-primary-foreground" 
-                              : "bg-card border-border hover:border-primary/50"
-                          }`}
-                       >
-                         {Icon && <Icon className={`h-5 w-5 ${niche === n.name ? "text-primary-foreground" : "text-primary"}`} />}
-                         <p className={`font-medium text-[13px] leading-tight ${
-                           niche === n.name ? "text-primary-foreground" : "text-foreground"
-                         }`}>
+                           className={`group rounded-md border px-2 py-2.5 text-center transition-all shadow-gold hover:-translate-y-0.5 min-h-[58px] flex flex-col items-center justify-center gap-1.5 ${
+                             niche === n.name 
+                               ? "border-[#D4AF37] bg-[#D4AF37] text-black" 
+                               : "bg-card border-border hover:border-primary/50"
+                           }`}
+                        >
+                          {Icon && <Icon className={`h-5 w-5 ${niche === n.name ? "text-black" : "text-primary"}`} />}
+                          <p className={`font-medium text-[13px] leading-tight ${
+                            niche === n.name ? "text-black" : "text-foreground"
+                          }`}>
                            {n.name}
                          </p>
                        </button>
