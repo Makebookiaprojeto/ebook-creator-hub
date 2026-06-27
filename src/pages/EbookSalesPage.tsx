@@ -501,7 +501,7 @@ export default function EbookSalesPage() {
               </div>
 
               <div className="grid sm:grid-cols-2 gap-4 mb-10 text-left max-w-md mx-auto">
-                {["Ebook completo em PDF", "4 bônus exclusivos", "Acesso vitalício", "7 dias de garantia"].map((item, i) => (
+                {["Ebook completo em PDF", "Acesso imediato", "Acesso vitalício", "7 dias de garantia"].map((item, i) => (
                   <div key={i} className="flex items-center gap-2 text-sm font-bold">
                     <CheckCircle2 className="text-primary flex-shrink-0" size={18} /> {item}
                   </div>
