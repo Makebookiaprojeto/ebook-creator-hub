@@ -173,14 +173,15 @@ export function NotificationBell() {
       />
       <DropdownMenu onOpenChange={(open) => open && markAsRead()}>
         <DropdownMenuTrigger asChild>
-          <button className="relative flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background transition-all hover:bg-muted active:scale-95">
-            <Bell className="h-4.5 w-4.5 text-muted-foreground" />
+          <button className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-[#D4AF37]/40 bg-gradient-to-br from-black to-zinc-900 shadow-[0_0_14px_rgba(212,175,55,0.45)] transition-all hover:shadow-[0_0_22px_rgba(212,175,55,0.7)] hover:scale-105 active:scale-95">
+            <Bell className="h-[18px] w-[18px] text-[#D4AF37] transition-transform group-hover:rotate-12" />
             {unreadCount > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary p-0.5 text-[10px] font-bold text-primary-foreground animate-in zoom-in">
+              <span className="absolute -right-1 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-gradient-to-br from-red-500 to-red-600 px-1 text-[10px] font-bold text-white shadow-[0_0_8px_rgba(239,68,68,0.6)] ring-2 ring-background animate-in zoom-in">
                 {unreadCount > 9 ? "9+" : unreadCount}
               </span>
             )}
           </button>
+
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-80 p-2">
           <DropdownMenuLabel className="px-2 py-1.5">Notificações</DropdownMenuLabel>
