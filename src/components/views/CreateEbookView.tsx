@@ -793,7 +793,7 @@ export function CreateEbookView() {
                         if (!priceInput) return;
                         setPriceInput(price.toFixed(2).replace(".", ","));
                       }}
-                      className="pl-12 h-16 text-3xl font-bold font-display"
+                      className="pl-12 h-16 text-3xl font-bold font-display border-[#D4AF37] focus-visible:ring-[#D4AF37]"
                     />
                   </div>
                   <div className="mt-5">
