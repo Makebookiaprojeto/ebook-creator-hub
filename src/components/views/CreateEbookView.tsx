@@ -1090,7 +1090,7 @@ export function CreateEbookView() {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-6 space-y-4"
                 >
-                  <div className="p-5">
+                  <div className="p-5 rounded-lg border border-border bg-card/40">
                     <h3 className="text-lg font-semibold flex items-center gap-2 mb-1 text-[#FFFF00]">
                       <Users className="h-5 w-5 text-primary" />
                       Buscar grupos por nicho
