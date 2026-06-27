@@ -23,6 +23,7 @@ import {
   CreditCard,
 } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
+import { SaasJourneyPreview } from "@/components/SaasJourneyPreview";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -332,6 +333,7 @@ export default function Plans() {
                 </main>
               </div>
             </div>
+            <SaasJourneyPreview />
           </div>
         </section>
 
