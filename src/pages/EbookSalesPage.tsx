@@ -445,7 +445,7 @@ export default function EbookSalesPage() {
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((t, i) => (
-              <motion.div key={i} whileHover={{ y: -6 }} className="p-8 rounded-3xl bg-card border border-border shadow-sm relative">
+              <motion.div key={i} whileHover={{ y: -6 }} className="p-8 rounded-3xl bg-card border border-border shadow-[0_20px_50px_-12px_hsl(var(--primary)/0.4)] hover:shadow-[0_30px_70px_-15px_hsl(var(--primary)/0.6)] transition-all relative">
                 <Quote className="absolute top-6 right-6 text-primary/20" size={40} />
                 <div className="flex gap-1 mb-4 text-amber-500">
                   {[...Array(t.rating)].map((_, j) => <Star key={j} size={16} fill="currentColor" />)}
