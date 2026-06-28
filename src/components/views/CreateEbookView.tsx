@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, ArrowRight, Check, Sparkles, Loader2, Copy, Users, Rocket,
@@ -91,7 +91,7 @@ type ChapterDraft = {
   image_url: string | null;
 };
 
-function DivulgacaoVideoCard({ title, src, filename, script }: { title: string; src: string; filename: string; script: string }) {
+const DivulgacaoVideoCard = memo(function DivulgacaoVideoCard({ title, src, filename, script }: { title: string; src: string; filename: string; script: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
 
@@ -182,7 +182,7 @@ function DivulgacaoVideoCard({ title, src, filename, script }: { title: string; 
       </div>
     </div>
   );
-}
+});
 
 
 
