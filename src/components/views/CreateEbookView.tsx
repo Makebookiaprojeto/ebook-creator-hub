@@ -625,7 +625,7 @@ export function CreateEbookView() {
       if (!previewTarget) return;
 
       const headerOffset = getStickyHeaderOffset();
-      const extraOffset = 120; // rola um pouco menos para baixo
+      const extraOffset = 20; // para ~20px antes da prévia
       const scrollContainer = getScrollContainer(previewTarget);
 
       if (scrollContainer === window) {
