@@ -228,36 +228,71 @@ export function DashboardView() {
 
     fetchDashboardData();
 
+    // Debounce: agrupa múltiplos eventos próximos em um único refresh (~500ms)
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+    const scheduleRefresh = () => {
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        fetchDashboardData();
+      }, 500);
+    };
+
+    // IDs de ebooks do próprio usuário (para filtrar ebook_views client-side,
+    // já que postgres_changes filter não suporta IN).
+    let ownedEbookIds = new Set<string>();
+    const loadOwnedEbookIds = async () => {
+      const { data } = await supabase
+        .from("ebooks")
+        .select("id")
+        .eq("user_id", authUser.id);
+      ownedEbookIds = new Set((data || []).map((e: any) => e.id));
+    };
+    loadOwnedEbookIds();
+
     const channel = supabase
       .channel(`dashboard-updates-${authUser.id}`)
-      .on("postgres_changes", { 
-        event: "*", 
-        schema: "public", 
+      .on("postgres_changes", {
+        event: "*",
+        schema: "public",
         table: "purchases",
         filter: `seller_user_id=eq.${authUser.id}`
-      }, () => fetchDashboardData())
-      .on("postgres_changes", { 
-        event: "INSERT", 
-        schema: "public", 
-        table: "notifications", 
-        filter: `user_id=eq.${authUser.id}` 
-      }, () => fetchDashboardData())
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "ebook_views" }, () => fetchDashboardData())
-      .on("postgres_changes", { 
-        event: "*", 
-        schema: "public", 
-        table: "ebooks", 
-        filter: `user_id=eq.${authUser.id}` 
-      }, () => fetchDashboardData())
+      }, () => scheduleRefresh())
+      .on("postgres_changes", {
+        event: "INSERT",
+        schema: "public",
+        table: "notifications",
+        filter: `user_id=eq.${authUser.id}`
+      }, () => scheduleRefresh())
+      .on("postgres_changes", {
+        event: "INSERT",
+        schema: "public",
+        table: "ebook_views"
+      }, (payload) => {
+        const ebookId = (payload.new as any)?.ebook_id;
+        if (ebookId && ownedEbookIds.has(ebookId)) scheduleRefresh();
+      })
+      .on("postgres_changes", {
+        event: "*",
+        schema: "public",
+        table: "ebooks",
+        filter: `user_id=eq.${authUser.id}`
+      }, (payload) => {
+        const newId = (payload.new as any)?.id;
+        const oldId = (payload.old as any)?.id;
+        if (newId) ownedEbookIds.add(newId);
+        if (payload.eventType === "DELETE" && oldId) ownedEbookIds.delete(oldId);
+        scheduleRefresh();
+      })
       .subscribe();
 
     const handleRefresh = () => {
       console.log("Refreshing dashboard data due to notification...");
-      fetchDashboardData();
+      scheduleRefresh();
     };
     window.addEventListener("refresh-dashboard", handleRefresh);
 
     return () => {
+      if (debounceTimer) clearTimeout(debounceTimer);
       supabase.removeChannel(channel);
       window.removeEventListener("refresh-dashboard", handleRefresh);
     };
