@@ -298,6 +298,20 @@ export function CreateEbookView() {
     checkOngoing();
   }, []);
 
+  const pollMountedRef = useRef(true);
+  const pollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    pollMountedRef.current = true;
+    return () => {
+      pollMountedRef.current = false;
+      if (pollTimeoutRef.current) {
+        clearTimeout(pollTimeoutRef.current);
+        pollTimeoutRef.current = null;
+      }
+    };
+  }, []);
+
   const startPolling = async (ebookId: string) => {
     setGenerating(true);
     setGeneratedEbookId(ebookId);
@@ -305,7 +319,14 @@ export function CreateEbookView() {
     const MAX_TRIES = 240; 
     let tries = 0;
 
+    const scheduleNext = () => {
+      if (!pollMountedRef.current) return;
+      if (pollTimeoutRef.current) clearTimeout(pollTimeoutRef.current);
+      pollTimeoutRef.current = setTimeout(poll, POLL_MS);
+    };
+
     const poll = async (): Promise<void> => {
+      if (!pollMountedRef.current) return;
       tries += 1;
       const { data: eb } = await supabase
         .from("ebooks")
@@ -313,9 +334,11 @@ export function CreateEbookView() {
         .eq("id", ebookId)
         .maybeSingle();
 
+      if (!pollMountedRef.current) return;
+
       if (!eb) {
         if (tries < MAX_TRIES) {
-          setTimeout(poll, POLL_MS);
+          scheduleNext();
           return;
         }
         setGenerating(false);
@@ -368,7 +391,7 @@ export function CreateEbookView() {
       }
       
       if (tries < MAX_TRIES) {
-        setTimeout(poll, POLL_MS);
+        scheduleNext();
       } else {
         setGenerating(false);
         toast.error("Tempo esgotado aguardando a geração.");
@@ -376,6 +399,7 @@ export function CreateEbookView() {
     };
     poll();
   };
+
 
   const generate = async () => {
     if (!niche.trim()) {
