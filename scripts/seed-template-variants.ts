@@ -17,7 +17,7 @@ const LOVABLE_API_KEY = process.env.LOVABLE_API_KEY!;
 const PEXELS_API_KEY = process.env.PEXELS_API_KEY!;
 
 const GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
-const TEXT_MODEL = "google/gemini-2.5-flash";
+const TEXT_MODEL = "google/gemini-2.5-flash-lite";
 
 type Chapter = { title: string; content: string; pexels_query: string };
 type GeneratedTemplate = {
