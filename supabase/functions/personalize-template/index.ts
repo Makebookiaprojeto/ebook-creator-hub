@@ -73,12 +73,12 @@ Deno.serve(async (req) => {
     const { niche, audience } = await req.json();
     if (!niche || typeof niche !== "string") return jsonResponse({ error: "Nicho inválido" }, 400);
 
-    // Buscar template ativo via SECURITY DEFINER (bypassa RLS)
-    const { data: tpls, error: tErr } = await supabase.rpc("find_active_template_by_niche", {
+    // Buscar próximo template na rotação 1→2→3→4 do nicho (cursor persistido por nicho)
+    const { data: tpls, error: tErr } = await supabase.rpc("pick_next_template_for_niche", {
       _niche: niche,
     });
     if (tErr) {
-      console.error("find_active_template_by_niche error:", tErr);
+      console.error("pick_next_template_for_niche error:", tErr);
       return jsonResponse({ template: null });
     }
     const template = Array.isArray(tpls) && tpls.length > 0 ? tpls[0] : null;
