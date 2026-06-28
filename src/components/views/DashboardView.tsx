@@ -431,7 +431,7 @@ function SalesByHourChart({ total }: { total: number }) {
   }, [total]);
 
   return (
-    <div className="rounded-2xl border border-border/60 bg-gradient-to-b from-card to-card/40 p-5 shadow-[0_0_28px_rgba(212,175,55,0.12)]">
+    <div className="rounded-2xl border border-border/60 bg-gradient-to-b from-card to-card/40 p-5 shadow-[0_0_42px_rgba(212,175,55,0.28)]">
       <div className="mb-4 flex items-end justify-between">
         <div>
           <h3 className="text-sm font-semibold tracking-tight text-foreground">Receita por hora</h3>
