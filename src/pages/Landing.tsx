@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
 import { SaasJourneyPreview } from "@/components/SaasJourneyPreview";
+import { DashboardMockupMain } from "@/components/DashboardMockupMain";
 
 const Landing = () => {
   const navigate = useNavigate();
