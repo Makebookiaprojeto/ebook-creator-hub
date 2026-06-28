@@ -625,10 +625,11 @@ export function CreateEbookView() {
       if (!previewTarget) return;
 
       const headerOffset = getStickyHeaderOffset();
+      const extraOffset = 120; // rola um pouco menos para baixo
       const scrollContainer = getScrollContainer(previewTarget);
 
       if (scrollContainer === window) {
-        const top = previewTarget.getBoundingClientRect().top + window.scrollY - headerOffset;
+        const top = previewTarget.getBoundingClientRect().top + window.scrollY - headerOffset - extraOffset;
         window.scrollTo({ top: Math.max(0, top), behavior: "auto" });
         return;
       }
@@ -637,7 +638,7 @@ export function CreateEbookView() {
       const containerRect = container.getBoundingClientRect();
       const targetRect = previewTarget.getBoundingClientRect();
       container.scrollTo({
-        top: container.scrollTop + targetRect.top - containerRect.top - headerOffset,
+        top: container.scrollTop + targetRect.top - containerRect.top - headerOffset - extraOffset,
         behavior: "auto",
       });
     };
