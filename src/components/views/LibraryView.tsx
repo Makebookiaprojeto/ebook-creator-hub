@@ -326,6 +326,8 @@ export function LibraryView({ onCreateNew }: Props) {
                   <img
                     src={eb.cover_url}
                     alt={eb.title}
+                    loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-cover transition group-hover:scale-105"
                   />
                 ) : (
