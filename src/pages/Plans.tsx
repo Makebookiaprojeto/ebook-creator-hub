@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
 import { SaasJourneyPreview } from "@/components/SaasJourneyPreview";
+import { DashboardMockupMain } from "@/components/DashboardMockupMain";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -266,71 +267,8 @@ export default function Plans() {
                   </div>
                 </aside>
 
-                {/* Main content — Dashboard real */}
-                <main className="col-span-9 lg:col-span-10 bg-background/20">
-                  <div className="flex items-center justify-between px-6 py-3 border-b border-border/40">
-                    <div className="text-xs text-muted-foreground">Dashboard</div>
-                    <div className="flex items-center gap-3">
-                      <Bell className="h-4 w-4 text-muted-foreground" />
-                      <div className="h-7 w-7 rounded-full gradient-primary shadow-glow" />
-                    </div>
-                  </div>
-
-                  <div className="p-6 space-y-4">
-                    <div className="grid grid-cols-4 gap-3">
-                      {[
-                        { icon: BookOpen, label: "Ebooks Criados", value: "27" },
-                        { icon: ShoppingCart, label: "Vendas Totais", value: "213" },
-                        { icon: DollarSign, label: "Receita Total", value: "R$ 8.124,90" },
-                        { icon: CreditCard, label: "Receita Hoje", value: "R$ 617,90" },
-                      ].map((s) => (
-                        <div key={s.label} className="rounded-xl border border-border/40 bg-card/60 p-3">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-[10px] text-muted-foreground">{s.label}</span>
-                            <s.icon className="h-3.5 w-3.5 text-primary" />
-                          </div>
-                          <div className="text-sm font-bold">{s.value}</div>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="rounded-xl border border-border/40 bg-card/60 p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-xs font-semibold">Receita nos últimos 30 dias</span>
-                        <div className="h-5 w-16 rounded-md bg-muted/40" />
-                      </div>
-                      <svg viewBox="0 0 400 90" className="w-full h-20">
-                        <defs>
-                          <linearGradient id="plansGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.4" />
-                            <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
-                          </linearGradient>
-                        </defs>
-                        <path d="M0,70 L40,55 L80,60 L120,40 L160,45 L200,30 L240,35 L280,20 L320,28 L360,12 L400,18 L400,90 L0,90 Z" fill="url(#plansGrad)" />
-                        <path d="M0,70 L40,55 L80,60 L120,40 L160,45 L200,30 L240,35 L280,20 L320,28 L360,12 L400,18" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
-                      </svg>
-                    </div>
-
-                    <div className="rounded-xl border border-border/40 bg-card/60 p-3">
-                      <div className="text-xs font-semibold mb-2 px-1">Vendas recentes</div>
-                      <div className="space-y-1.5">
-                        {[
-                          { ebook: "Liberdade Financeira em 90 dias", price: "R$ 47,00", method: "Pix" },
-                          { ebook: "Receitas Low Carb", price: "R$ 37,00", method: "Cartão" },
-                          { ebook: "Marketing Digital do Zero", price: "R$ 67,00", method: "Pix" },
-                        ].map((r) => (
-                          <div key={r.ebook} className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-muted/20 text-[11px]">
-                            <span className="truncate">{r.ebook}</span>
-                            <div className="flex items-center gap-3 shrink-0">
-                              <span className="text-muted-foreground">{r.method}</span>
-                              <span className="font-semibold text-primary">{r.price}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </main>
+                {/* Main content — Dashboard real (atual) */}
+                <DashboardMockupMain />
               </div>
             </div>
             <SaasJourneyPreview />
