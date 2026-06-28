@@ -1082,7 +1082,7 @@ export function CreateEbookView() {
                       <Users className="h-5 w-5 text-primary" />
                       Buscar grupos por nicho
                     </h3>
-                    <p className="text-sm text-muted-foreground mb-4">Digite o nicho do seu Ebook.</p>
+                    <p className="text-sm text-muted-foreground mb-4">Encontre os melhores grupos para divulgar seu Ebook.</p>
                     <div className="flex flex-col sm:flex-row gap-2">
                       <Input
                         placeholder="Ex: Emagrecimento, Finanças, Marketing Digital..."
