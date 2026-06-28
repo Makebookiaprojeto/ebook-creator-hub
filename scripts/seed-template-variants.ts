@@ -50,64 +50,75 @@ Crie um ebook com:
 
 Importante: o conteúdo deve girar EXCLUSIVAMENTE sobre o ângulo "${angle}", não cobrir o nicho de forma genérica. Cada capítulo aborda um aspecto diferente desse ângulo.`;
 
-  const resp = await fetch(GATEWAY, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${LOVABLE_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: TEXT_MODEL,
-      messages: [
-        { role: "system", content: sys },
-        { role: "user", content: user },
-      ],
-      tools: [
-        {
-          type: "function",
-          function: {
-            name: "emit_template",
-            description: "Retorna a estrutura do template",
-            parameters: {
-              type: "object",
-              properties: {
-                title: { type: "string" },
-                subtitle: { type: "string" },
-                cover_pexels_query: { type: "string" },
-                chapters: {
-                  type: "array",
-                  minItems: 5,
-                  maxItems: 5,
-                  items: {
-                    type: "object",
-                    properties: {
-                      title: { type: "string" },
-                      content: { type: "string" },
-                      pexels_query: { type: "string" },
-                    },
-                    required: ["title", "content", "pexels_query"],
-                    additionalProperties: false,
+  const body = {
+    model: TEXT_MODEL,
+    messages: [
+      { role: "system", content: sys },
+      { role: "user", content: user },
+    ],
+    tools: [
+      {
+        type: "function",
+        function: {
+          name: "emit_template",
+          description: "Retorna a estrutura do template",
+          parameters: {
+            type: "object",
+            properties: {
+              title: { type: "string" },
+              subtitle: { type: "string" },
+              cover_pexels_query: { type: "string" },
+              chapters: {
+                type: "array",
+                minItems: 5,
+                maxItems: 5,
+                items: {
+                  type: "object",
+                  properties: {
+                    title: { type: "string" },
+                    content: { type: "string" },
+                    pexels_query: { type: "string" },
                   },
+                  required: ["title", "content", "pexels_query"],
+                  additionalProperties: false,
                 },
               },
-              required: ["title", "subtitle", "cover_pexels_query", "chapters"],
-              additionalProperties: false,
             },
+            required: ["title", "subtitle", "cover_pexels_query", "chapters"],
+            additionalProperties: false,
           },
         },
-      ],
-      tool_choice: { type: "function", function: { name: "emit_template" } },
-    }),
-  });
+      },
+    ],
+    tool_choice: { type: "function", function: { name: "emit_template" } },
+  };
 
-  if (!resp.ok) {
-    const text = await resp.text();
-    throw new Error(`AI call failed ${resp.status}: ${text}`);
+  let lastErr = "";
+  for (let attempt = 0; attempt < 8; attempt++) {
+    const resp = await fetch(GATEWAY, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    if (resp.ok) {
+      const data = await resp.json();
+      const args = data?.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
+      if (!args) throw new Error(`No tool args: ${JSON.stringify(data).slice(0, 300)}`);
+      return JSON.parse(args);
+    }
+    lastErr = `${resp.status}: ${(await resp.text()).slice(0, 200)}`;
+    if (resp.status === 429 || resp.status >= 500) {
+      const wait = Math.min(60000, 8000 * Math.pow(1.6, attempt));
+      console.warn(`   ⏳ rate-limit, esperando ${Math.round(wait / 1000)}s (tentativa ${attempt + 1}/8)`);
+      await sleep(wait);
+      continue;
+    }
+    throw new Error(`AI call failed ${lastErr}`);
   }
-  const data = await resp.json();
-  const args = data?.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
-  if (!args) throw new Error(`No tool args returned: ${JSON.stringify(data).slice(0, 300)}`);
-  return JSON.parse(args);
+  throw new Error(`AI call failed after retries: ${lastErr}`);
 }
 
 async function fetchPexelsAndUpload(
