@@ -1,7 +1,7 @@
 project_id = "qbksltxsnpkeaijfihug"
 
 [functions.generate-ebook]
-verify_jwt = false
+verify_jwt = true
 
 [functions.verify-payment]
 verify_jwt = false
