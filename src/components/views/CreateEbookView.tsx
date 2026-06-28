@@ -1173,7 +1173,7 @@ export function CreateEbookView() {
         </AnimatePresence>
       </div>
 
-      <div className={`flex items-center justify-between ${step === 0 ? "mt-6" : ""}`}>
+      <div className={`flex items-center justify-between ${step === 0 ? "mt-12" : ""}`}>
         <Button variant="ghost" onClick={prev} disabled={step === 0 || generating}><ArrowLeft className="mr-2 h-4 w-4" /> Voltar</Button>
         {step < steps.length - 1 ? (
           step === 1 ? (
