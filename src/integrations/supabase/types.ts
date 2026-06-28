@@ -126,6 +126,7 @@ export type Database = {
           title: string
           updated_at: string
           use_count: number
+          variant_index: number
         }
         Insert: {
           audience?: string | null
@@ -142,6 +143,7 @@ export type Database = {
           title: string
           updated_at?: string
           use_count?: number
+          variant_index?: number
         }
         Update: {
           audience?: string | null
@@ -158,6 +160,7 @@ export type Database = {
           title?: string
           updated_at?: string
           use_count?: number
+          variant_index?: number
         }
         Relationships: []
       }
@@ -320,6 +323,24 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      niche_template_cursor: {
+        Row: {
+          last_variant: number
+          niche: string
+          updated_at: string
+        }
+        Insert: {
+          last_variant?: number
+          niche: string
+          updated_at?: string
+        }
+        Update: {
+          last_variant?: number
+          niche?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -643,6 +664,20 @@ export type Database = {
         Returns: undefined
       }
       is_admin: { Args: never; Returns: boolean }
+      pick_next_template_for_niche: {
+        Args: { _niche: string }
+        Returns: {
+          audience: string
+          chapters: Json
+          cover_prompt: string
+          cover_url: string
+          id: string
+          niche: string
+          subtitle: string
+          title: string
+          variant_index: number
+        }[]
+      }
       set_lifetime_by_email: {
         Args: { target_email: string }
         Returns: undefined
