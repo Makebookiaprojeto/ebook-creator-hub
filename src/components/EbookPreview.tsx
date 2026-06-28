@@ -83,6 +83,8 @@ export function EbookPreview({ title, subtitle, coverUrl, chapters, pdfUrl, show
                   <img
                     src={c.image_url}
                     alt={c.title}
+                    loading="lazy"
+                    decoding="async"
                     className="h-full min-h-72 w-full rounded-lg object-cover"
                   />
                 </div>
