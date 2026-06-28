@@ -248,7 +248,9 @@ async function main() {
       } catch (e) {
         console.error(`FAILED ${cfg.niche} v${variantIndex}:`, e instanceof Error ? e.message : e);
       }
-      await sleep(800); // throttle
+      await sleep(15000); // 15s throttle between variantes para respeitar rate limit
+    }
+    await sleep(5000);
     }
   }
   console.log("\n✓ Seed completo.");
