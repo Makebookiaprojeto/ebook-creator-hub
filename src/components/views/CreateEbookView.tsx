@@ -182,7 +182,7 @@ const DivulgacaoVideoCard = memo(function DivulgacaoVideoCard({ title, src, file
       </div>
     </div>
   );
-}
+});
 
 
 
