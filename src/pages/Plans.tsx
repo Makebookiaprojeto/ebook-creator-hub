@@ -189,10 +189,10 @@ export default function Plans() {
             <Zap className="h-3.5 w-3.5" />
             Acesso liberado imediatamente
           </div>
-          <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5">
             Comece a vender seu primeiro eBook ainda <span className="text-primary">esta semana</span>
           </h1>
-          <p className="text-muted-foreground text-lg mb-6 max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-xl md:text-2xl mb-6 max-w-3xl mx-auto">
             Crie, publique e venda eBooks profissionais com IA. Sem precisar
             saber escrever, designer ou programador.
           </p>
