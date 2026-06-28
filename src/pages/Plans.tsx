@@ -213,7 +213,7 @@ export default function Plans() {
           </Button>
 
           {/* App Preview Mockup — replica fiel do dashboard real */}
-          <div className="mt-16">
+          <div className="mt-16 relative left-1/2 -translate-x-1/2 w-screen max-w-[1200px] px-6">
             <div className="text-center mb-8">
               <p className="text-sm uppercase tracking-widest text-primary font-semibold mb-2">Veja por dentro</p>
               <h3 className="font-display text-3xl font-bold">Uma plataforma feita para você criar sem fricção</h3>
