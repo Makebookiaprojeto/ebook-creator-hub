@@ -251,7 +251,6 @@ async function main() {
       await sleep(15000); // 15s throttle between variantes para respeitar rate limit
     }
     await sleep(5000);
-    }
   }
   console.log("\n✓ Seed completo.");
 }
