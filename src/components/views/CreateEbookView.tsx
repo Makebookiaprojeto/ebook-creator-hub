@@ -4,7 +4,7 @@ import {
   ArrowLeft, ArrowRight, Check, Sparkles, Loader2, Copy, Users, Rocket,
   Search, ChevronDown, Star, Flame, ShieldCheck, Clock, Zap, Quote, Download, FileText, Eye,
   BookOpen, MousePointer2, Target, Layout, Award, Lock as LockIcon, ArrowRight as ArrowRightIcon,
-  TrendingUp, ExternalLink, Video, Play, Megaphone,
+  TrendingUp, ExternalLink, Video, Play, Megaphone, Rocket,
   Dumbbell, Utensils, Baby, Dog, Sparkle, GraduationCap, Laptop, Palette, Briefcase, Languages, Map, Home, Shirt,
   Heart, Wallet, Brain, HeartPulse, DollarSign, BadgeDollarSign
 } from "lucide-react";
@@ -1068,7 +1068,7 @@ export function CreateEbookView() {
             {step === 4 && (
               <div>
                 <div className="flex flex-col items-center text-center -mt-8">
-                  <Megaphone className="h-7 w-7 text-[#FFFF00]" />
+                  <Rocket className="h-7 w-7 text-[#FFFF00]" />
                   <h2 className="font-display text-xl font-semibold mt-0 mb-2">Divulgação e Venda</h2>
                 </div>
 
