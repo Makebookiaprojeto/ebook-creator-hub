@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback, memo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
 import { Button } from "./ui/button";
+
 
 type Chapter = {
   title: string;
