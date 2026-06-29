@@ -454,7 +454,7 @@ export function LibraryView({ onCreateNew }: Props) {
                        ID do Produto
                      </label>
                      <Input
-                       placeholder="UUID do Produto no painel Cakto"
+                       placeholder="ID do Produto"
                        value={productIdDrafts[eb.id] ?? (eb as any).cakto_product_id ?? ""}
                        onChange={(e) =>
                          setProductIdDrafts((p) => ({ ...p, [eb.id]: e.target.value }))
