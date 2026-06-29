@@ -95,22 +95,57 @@ const RenderedContent = memo(function RenderedContent({ content }: { content: st
   );
 });
 
-const variants = {
-  enter: { opacity: 0 },
-  center: { zIndex: 1, opacity: 1 },
-  exit: { zIndex: 0, opacity: 0 },
-};
-
-const transition = { duration: 0.12, ease: "easeOut" as const };
-
+const CoverPage = memo(function CoverPage({
+  title,
+  subtitle,
+  coverUrl,
+}: {
+  title: string;
+  subtitle?: string;
+  coverUrl?: string | null;
+}) {
+  return (
+    <div className="h-full flex flex-col">
+      <div className="flex-1 rounded-xl overflow-hidden shadow-2xl relative mb-4" style={{ background: ACCENT_BG }}>
+        {coverUrl ? (
+          <img
+            src={coverUrl}
+            alt={title}
+            className="absolute inset-0 h-full w-full object-cover"
+            decoding="async"
+            loading="eager"
+            fetchPriority="high"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <BookOpen className="h-24 w-24 text-white/40" />
+          </div>
+        )}
+        <div
+          className="absolute inset-x-0 bottom-0 p-6 pt-24"
+          style={{ background: "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.78) 100%)" }}
+        >
+          <div className="h-1.5 w-16 rounded-full mb-4" style={{ background: ACCENT_BG }} />
+          <h2 className="font-display text-xl sm:text-3xl font-bold text-white leading-tight">{title}</h2>
+          {subtitle && <p className="mt-2 text-xs sm:text-base text-white/90">{subtitle}</p>}
+        </div>
+      </div>
+      <div className="text-center">
+        <p className="text-xs font-medium uppercase tracking-widest" style={{ color: "hsl(0 0% 45%)" }}>
+          Capa do Ebook
+        </p>
+      </div>
+    </div>
+  );
+});
 
 export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Props) {
   const displayedChapters = useMemo(() => chapters.slice(0, 5), [chapters]);
   const totalPages = 1 + displayedChapters.length;
 
-  const [[page, direction], setPage] = useState<[number, number]>([0, 0]);
+  const [page, setPage] = useState(0);
 
-  // Preload all images once when sources change
+  // Preload all images aggressively as soon as sources are known
   useEffect(() => {
     const urls = [coverUrl, ...displayedChapters.map((c) => c.image_url)].filter(
       (u): u is string => !!u,
@@ -118,7 +153,9 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
     const imgs = urls.map((src) => {
       const img = new Image();
       img.decoding = "async";
+      (img as HTMLImageElement & { fetchPriority?: string }).fetchPriority = "high";
       img.src = src;
+      img.decode?.().catch(() => {});
       return img;
     });
     return () => {
@@ -128,19 +165,16 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
 
   const paginate = useCallback(
     (newDirection: number) => {
-      setPage(([p]) => {
+      setPage((p) => {
         const np = p + newDirection;
-        if (np < 0 || np >= totalPages) return [p, 0];
-        return [np, newDirection];
+        if (np < 0 || np >= totalPages) return p;
+        return np;
       });
     },
     [totalPages],
   );
 
-  const goTo = useCallback(
-    (i: number) => setPage(([p]) => [i, i > p ? 1 : -1]),
-    [],
-  );
+  const goTo = useCallback((i: number) => setPage(i), []);
 
   return (
     <div className="relative w-full max-w-4xl mx-auto px-3 sm:px-10">
@@ -154,59 +188,29 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
         }}
       >
         <div className="flex-1 relative overflow-hidden">
-          <AnimatePresence initial={false} custom={direction} mode="popLayout">
-            <motion.div
-              key={page}
-              custom={direction}
-              variants={variants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={transition}
-              style={{ willChange: "transform, opacity" }}
-              className="absolute inset-0 w-full h-full p-5 sm:p-8"
-            >
-              {page === 0 ? (
-                <div className="h-full flex flex-col">
-                  <div className="flex-1 rounded-xl overflow-hidden shadow-2xl relative mb-4" style={{ background: ACCENT_BG }}>
-                    {coverUrl ? (
-                      <img
-                        src={coverUrl}
-                        alt={title}
-                        className="absolute inset-0 h-full w-full object-cover"
-                        decoding="async"
-                        loading="eager"
-                        fetchPriority="high"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <BookOpen className="h-24 w-24 text-white/40" />
-                      </div>
-                    )}
-                    <div
-                      className="absolute inset-x-0 bottom-0 p-6 pt-24"
-                      style={{ background: "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.78) 100%)" }}
-                    >
-                      <div className="h-1.5 w-16 rounded-full mb-4" style={{ background: ACCENT_BG }} />
-                      <h2 className="font-display text-xl sm:text-3xl font-bold text-white leading-tight">{title}</h2>
-                      {subtitle && <p className="mt-2 text-xs sm:text-base text-white/90">{subtitle}</p>}
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-xs font-medium uppercase tracking-widest" style={{ color: "hsl(0 0% 45%)" }}>
-                      Capa do Ebook
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <ChapterPage
-                  index={page}
-                  chapter={displayedChapters[page - 1]}
-                />
-              )}
-            </motion.div>
-          </AnimatePresence>
+          {Array.from({ length: totalPages }).map((_, i) => {
+            const active = i === page;
+            return (
+              <div
+                key={i}
+                aria-hidden={!active}
+                className="absolute inset-0 w-full h-full p-5 sm:p-8 transition-opacity duration-150 ease-out"
+                style={{
+                  opacity: active ? 1 : 0,
+                  pointerEvents: active ? "auto" : "none",
+                  zIndex: active ? 1 : 0,
+                }}
+              >
+                {i === 0 ? (
+                  <CoverPage title={title} subtitle={subtitle} coverUrl={coverUrl} />
+                ) : (
+                  <ChapterPage index={i} chapter={displayedChapters[i - 1]} />
+                )}
+              </div>
+            );
+          })}
         </div>
+
 
         <div className="p-4 border-t flex items-center justify-center" style={{ background: "hsl(0 0% 100%)", borderColor: "hsl(0 0% 90%)" }}>
           <div className="flex gap-1.5 px-4 overflow-x-auto no-scrollbar">
