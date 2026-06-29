@@ -432,7 +432,7 @@ export function LibraryView({ onCreateNew }: Props) {
                      <div className="p-1 rounded bg-primary/10">
                        <Link2 className="h-3.5 w-3.5 text-primary" />
                      </div>
-                     <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Configurações</span>
+                     <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Integração</span>
                    </div>
 
                    <div>
@@ -440,7 +440,7 @@ export function LibraryView({ onCreateNew }: Props) {
                        URL de Checkout
                      </label>
                      <Input
-                       placeholder="https://pay.cakto.com.br/..."
+                       placeholder="Link do seu Checkout"
                        value={checkoutUrlDrafts[eb.id] ?? (eb as any).cakto_checkout_url ?? ""}
                        onChange={(e) =>
                          setCheckoutUrlDrafts((p) => ({ ...p, [eb.id]: e.target.value }))
