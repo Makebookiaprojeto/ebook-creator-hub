@@ -452,7 +452,7 @@ const ENTRIES: Entry[] = [
         "Sincronicidades e Intuição: Lendo os Sinais do Caminho",
       ],
       chapterQueries: [
-        "chakra meditation illustration colorful rainbow seven centers spiritual",
+        "meditation woman lotus colorful light spiritual energy",
         "person sage smudge cleansing ritual home calm peaceful sunset",
         "woman meditation home cushion candle calm peaceful soft light",
         "crystals incense altar spiritual home practice peaceful mystical",
