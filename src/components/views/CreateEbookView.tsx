@@ -1068,7 +1068,7 @@ export function CreateEbookView() {
             {step === 4 && (
               <div>
                 <div className="flex flex-col items-center text-center -mt-8">
-                  <Megaphone className="h-7 w-7 text-[#FFFF00]" />
+                  <Rocket className="h-7 w-7 text-[#FFFF00]" />
                   <h2 className="font-display text-xl font-semibold mt-0 mb-2">Divulgação e Venda</h2>
                 </div>
 
