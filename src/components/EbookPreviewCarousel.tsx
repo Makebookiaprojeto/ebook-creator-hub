@@ -162,9 +162,9 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
 
   // Preload all images aggressively as soon as sources are known
   useEffect(() => {
-    const urls = [coverUrl, ...displayedChapters.map((c) => c.image_url)].filter(
-      (u): u is string => !!u,
-    );
+    const cover = optimizePexels(coverUrl, 1200);
+    const chapterUrls = displayedChapters.map((c) => optimizePexels(c.image_url, 600));
+    const urls = [cover, ...chapterUrls].filter((u): u is string => !!u);
     const imgs = urls.map((src) => {
       const img = new Image();
       img.decoding = "async";
