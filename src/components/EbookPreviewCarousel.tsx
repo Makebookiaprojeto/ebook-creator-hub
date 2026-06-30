@@ -25,6 +25,21 @@ type Block =
   | { type: "ul"; items: { check: boolean; text: string }[] }
   | { type: "p"; text: string };
 
+function optimizePexels(url: string | null | undefined, w: number): string | null | undefined {
+  if (!url) return url;
+  try {
+    if (!/images\.pexels\.com/i.test(url)) return url;
+    const u = new URL(url);
+    u.searchParams.set("auto", "compress");
+    u.searchParams.set("cs", "tinysrgb");
+    u.searchParams.set("w", String(w));
+    u.searchParams.set("dpr", "2");
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
 function parseContent(content: string): Block[] {
   const blocks = content.split(/\n\s*\n/).filter((b) => b.trim().length > 0);
   return blocks.map<Block>((block) => {
