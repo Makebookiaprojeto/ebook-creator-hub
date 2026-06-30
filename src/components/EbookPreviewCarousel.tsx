@@ -25,6 +25,21 @@ type Block =
   | { type: "ul"; items: { check: boolean; text: string }[] }
   | { type: "p"; text: string };
 
+function optimizePexels(url: string | null | undefined, w: number): string | null | undefined {
+  if (!url) return url;
+  try {
+    if (!/images\.pexels\.com/i.test(url)) return url;
+    const u = new URL(url);
+    u.searchParams.set("auto", "compress");
+    u.searchParams.set("cs", "tinysrgb");
+    u.searchParams.set("w", String(w));
+    u.searchParams.set("dpr", "2");
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
 function parseContent(content: string): Block[] {
   const blocks = content.split(/\n\s*\n/).filter((b) => b.trim().length > 0);
   return blocks.map<Block>((block) => {
@@ -109,7 +124,7 @@ const CoverPage = memo(function CoverPage({
       <div className="flex-1 rounded-xl overflow-hidden shadow-2xl relative mb-4" style={{ background: ACCENT_BG }}>
         {coverUrl ? (
           <img
-            src={coverUrl}
+            src={optimizePexels(coverUrl, 1200) ?? coverUrl}
             alt={title}
             className="absolute inset-0 h-full w-full object-cover"
             decoding="async"
@@ -147,9 +162,9 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
 
   // Preload all images aggressively as soon as sources are known
   useEffect(() => {
-    const urls = [coverUrl, ...displayedChapters.map((c) => c.image_url)].filter(
-      (u): u is string => !!u,
-    );
+    const cover = optimizePexels(coverUrl, 1200);
+    const chapterUrls = displayedChapters.map((c) => optimizePexels(c.image_url, 600));
+    const urls = [cover, ...chapterUrls].filter((u): u is string => !!u);
     const imgs = urls.map((src) => {
       const img = new Image();
       img.decoding = "async";
@@ -291,7 +306,7 @@ const ChapterPage = memo(function ChapterPage({
         {chapter?.image_url && (
           <div className="sm:col-span-5 rounded-xl overflow-hidden shadow-md max-h-[240px] sm:max-h-none" style={{ background: "hsl(0 0% 96%)" }}>
             <img
-              src={chapter.image_url}
+              src={optimizePexels(chapter.image_url, 600) ?? chapter.image_url}
               alt={chapter.title}
               className="w-full h-full object-cover"
               decoding="async"
