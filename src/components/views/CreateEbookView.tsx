@@ -462,6 +462,25 @@ export function CreateEbookView() {
       setTitle(newEbook.title || "");
       setSubtitle(newEbook.subtitle || "");
       setCoverUrl(newEbook.cover_url);
+      // Preload antecipado da capa (otimizado se for Pexels) durante a transição Passo 2 → Passo 3
+      if (newEbook.cover_url) {
+        try {
+          let preUrl: string = newEbook.cover_url;
+          if (/images\.pexels\.com/i.test(preUrl)) {
+            const u = new URL(preUrl);
+            u.searchParams.set("auto", "compress");
+            u.searchParams.set("cs", "tinysrgb");
+            u.searchParams.set("w", "1200");
+            u.searchParams.set("dpr", "2");
+            preUrl = u.toString();
+          }
+          const img = new Image();
+          img.decoding = "async";
+          (img as HTMLImageElement & { fetchPriority?: string }).fetchPriority = "high";
+          img.src = preUrl;
+          img.decode?.().catch(() => {});
+        } catch {}
+      }
       setPdfUrl(newEbook.pdf_url);
       
       if (newEbook.slug) {
