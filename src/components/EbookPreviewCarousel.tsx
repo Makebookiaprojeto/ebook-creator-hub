@@ -306,7 +306,7 @@ const ChapterPage = memo(function ChapterPage({
         {chapter?.image_url && (
           <div className="sm:col-span-5 rounded-xl overflow-hidden shadow-md max-h-[240px] sm:max-h-none" style={{ background: "hsl(0 0% 96%)" }}>
             <img
-              src={chapter.image_url}
+              src={optimizePexels(chapter.image_url, 600) ?? chapter.image_url}
               alt={chapter.title}
               className="w-full h-full object-cover"
               decoding="async"
