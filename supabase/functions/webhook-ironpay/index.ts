@@ -206,10 +206,22 @@ Deno.serve(async (req) => {
     let payload: any = {};
     try { payload = JSON.parse(rawBody); } catch { payload = {}; }
 
-    const { email, status, transactionId, amountCents, metadataPlan } = extractIronPayFields(payload);
+    // Log temporário — apenas os NOMES dos campos recebidos, para mapear
+    // a estrutura real da IronPay. Remover após confirmar o payload oficial.
+    try {
+      console.log("IronPay payload keys:", JSON.stringify(collectKeys(payload)));
+    } catch { /* noop */ }
+
+    const {
+      email, status, transactionId, amountCents,
+      metadataPlan, productIdentifiers, productNames,
+    } = extractIronPayFields(payload);
     const mapped = mapStatus(status);
 
-    console.log("IronPay parsed:", { email, status, mapped, transactionId, amountCents, metadataPlan });
+    console.log("IronPay parsed:", {
+      email, status, mapped, transactionId, amountCents,
+      metadataPlan, productIdentifiers, productNames,
+    });
 
     if (!email) {
       return new Response(JSON.stringify({ ok: false, error: "Email ausente" }), {
@@ -217,18 +229,21 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Só ativa/cria assinatura para status aprovado. Outros status são
-    // apenas registrados no log até que o vocabulário oficial seja
-    // definido.
     if (mapped !== "approved") {
       return new Response(JSON.stringify({ ok: true, ignored_status: status, mapped }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const planType = inferPlanType(amountCents, metadataPlan);
+    const { plan: planType, source: planSource } = inferPlanType(
+      amountCents, metadataPlan, productIdentifiers, productNames,
+    );
+    console.log("IronPay plan inference:", { planType, planSource });
+
     if (!planType) {
-      console.warn("IronPay: não foi possível inferir plan_type", { amountCents, metadataPlan });
+      console.warn("IronPay: não foi possível inferir plan_type", {
+        amountCents, metadataPlan, productIdentifiers, productNames,
+      });
       return new Response(JSON.stringify({ ok: false, error: "plan_type não identificado" }), {
         status: 422, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
