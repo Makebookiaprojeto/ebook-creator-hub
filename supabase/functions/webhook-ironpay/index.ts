@@ -34,15 +34,18 @@ const corsHeaders = {
 const MONTHLY_PRICE_BRL = 147.9;
 const LIFETIME_PRICE_BRL = 247.9;
 
-// Vocabulário provisório de status. Ajustar conforme observado.
-function mapStatus(raw: string): "approved" | "pending" | "refused" | "refunded" | "unknown" {
+// Status reais observados nos webhooks da IronPay.
+// IMPORTANTE: usar SEMPRE `payload.status` (raiz), nunca `transaction.status`.
+function mapStatus(raw: string): "approved" | "pending" | "refused" | "refunded" | "chargeback" | "unknown" {
   const s = (raw || "").toString().toLowerCase().trim();
-  if (["paid", "approved", "completed", "success", "succeeded", "authorized", "aprovado", "pago"].includes(s)) return "approved";
-  if (["pending", "waiting_payment", "pending_payment", "created", "processing", "pendente"].includes(s)) return "pending";
-  if (["refused", "declined", "failed", "canceled", "cancelled", "recusado", "cancelado"].includes(s)) return "refused";
-  if (["refunded", "chargeback", "estornado", "reembolsado"].includes(s)) return "refunded";
+  if (s === "pad_approved" || s === "paid") return "approved";
+  if (s === "pending") return "pending";
+  if (s === "refused") return "refused";
+  if (s === "refunded") return "refunded";
+  if (s === "chargeback") return "chargeback";
   return "unknown";
 }
+
 
 // Extração baseada na estrutura real do payload IronPay.
 function extractIronPayFields(payload: any) {
