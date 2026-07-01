@@ -311,6 +311,7 @@ const ChapterPage = memo(function ChapterPage({
               className="w-full h-full object-cover"
               decoding="async"
               loading="eager"
+              {...({ fetchpriority: "high" } as any)}
             />
           </div>
         )}
