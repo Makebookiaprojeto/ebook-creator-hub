@@ -47,6 +47,17 @@ Deno.serve(async (req) => {
       console.log(`Parse JSON: Failed (${parseError})`);
     }
 
+    // Guard: ignore IronPay payloads — handled by webhook-ironpay
+    const platformField = String(payload?.platform ?? payload?.data?.platform ?? "").toLowerCase();
+    if (platformField === "ironpay") {
+      console.log("Ignored: payload belongs to IronPay (platform=IronPay). No processing performed.");
+      return new Response(
+        JSON.stringify({ ignored: true, reason: "IronPay payload ignored by webhook-payment" }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
+
     const data = payload?.data || payload;
     console.log("Fields Found:", {
       product_id: data?.product_id,
