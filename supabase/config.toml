@@ -9,6 +9,9 @@ verify_jwt = false
 [functions.webhook-payment]
 verify_jwt = false
 
+[functions.webhook-ironpay]
+verify_jwt = false
+
 [functions.generate-template-draft]
 verify_jwt = false
 
