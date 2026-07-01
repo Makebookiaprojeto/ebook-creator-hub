@@ -233,7 +233,66 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Revogação de acesso: refunded / chargeback removem o acesso ao SaaS
+    // imediatamente, independentemente do plano (mensal ou vitalício).
+    if (mapped === "refunded" || mapped === "chargeback") {
+      const reason = mapped;
+
+      // 1) Localizar assinatura prioritariamente por transaction.id
+      //    (cakto_transaction_id é reutilizado como platform_transaction_id).
+      let sub: any = null;
+      if (transactionId) {
+        const { data } = await supabase
+          .from("subscriptions")
+          .select("id, user_id, buyer_email, plan_type, status")
+          .eq("cakto_transaction_id", transactionId)
+          .maybeSingle();
+        if (data) sub = data;
+      }
+
+      // 2) Fallback por customer.email.
+      if (!sub && email) {
+        const { data } = await supabase
+          .from("subscriptions")
+          .select("id, user_id, buyer_email, plan_type, status")
+          .eq("buyer_email", email)
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        if (data) sub = data;
+      }
+
+      if (!sub) {
+        console.warn(`IronPay ${reason}: assinatura não encontrada`, { transactionId, email });
+        return new Response(JSON.stringify({ ok: true, revoked: false, reason: "subscription_not_found" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      // 3) Marca assinatura como cancelada (status != 'active' já revoga
+      //    o acesso via view user_access_status). Histórico é preservado.
+      await supabase.from("subscriptions").update({
+        status: reason, // "refunded" | "chargeback"
+        updated_at: new Date().toISOString(),
+      }).eq("id", sub.id);
+
+      // 4) Se havia plano vitalício no perfil, remover a flag para que o
+      //    acesso seja efetivamente revogado (view considera is_lifetime).
+      if (sub.user_id) {
+        await supabase.from("profiles").update({ is_lifetime: false }).eq("user_id", sub.user_id);
+      }
+
+      console.info(
+        `IronPay ${reason}: acesso revogado. user_id=${sub.user_id ?? "null"} email=${sub.buyer_email} plano=${sub.plan_type} motivo=${reason} tx=${transactionId}`,
+      );
+
+      return new Response(JSON.stringify({
+        ok: true, revoked: true, reason, plan_type: sub.plan_type, user_id: sub.user_id,
+      }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
     if (mapped !== "approved") {
+      // pending / refused / unknown -> não altera a assinatura.
       return new Response(JSON.stringify({ ok: true, ignored_status: status, mapped }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
