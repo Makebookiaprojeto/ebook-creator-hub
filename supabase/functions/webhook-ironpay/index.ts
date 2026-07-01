@@ -214,14 +214,14 @@ Deno.serve(async (req) => {
     } catch { /* noop */ }
 
     const {
-      email, status, transactionId, amountCents,
-      metadataPlan, productIdentifiers, productNames,
+      email, status, transactionId, amountCents, netAmountCents,
+      productHashes, productNames, createdAt, paidAt, refundedAt,
     } = extractIronPayFields(payload);
     const mapped = mapStatus(status);
 
     console.log("IronPay parsed:", {
-      email, status, mapped, transactionId, amountCents,
-      metadataPlan, productIdentifiers, productNames,
+      email, status, mapped, transactionId, amountCents, netAmountCents,
+      productHashes, productNames, createdAt, paidAt, refundedAt,
     });
 
     if (!email) {
@@ -237,7 +237,8 @@ Deno.serve(async (req) => {
     }
 
     const { plan: planType, source: planSource } = inferPlanType(
-      amountCents, metadataPlan, productIdentifiers, productNames,
+      amountCents, productHashes, productNames,
+
     );
     console.log("IronPay plan inference:", { planType, planSource });
 
