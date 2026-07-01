@@ -1,4 +1,4 @@
-import { LayoutDashboard, Plus, Wrench, LifeBuoy, User, Sparkles, LogOut, Library } from "lucide-react";
+import { LayoutDashboard, Plus, Wrench, LifeBuoy, User, Sparkles, LogOut, Library, Plug } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -21,7 +21,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-type View = "dashboard" | "create" | "library" | "support" | "profile";
+type View = "dashboard" | "create" | "library" | "support" | "profile" | "integrations";
 
 interface Props {
   active: View;
@@ -34,6 +34,7 @@ const items: { id: View; title: string; icon: typeof LayoutDashboard }[] = [
   { id: "library", title: "Biblioteca", icon: Library },
   { id: "support", title: "Suporte", icon: LifeBuoy },
   { id: "profile", title: "Perfil", icon: User },
+  { id: "integrations", title: "Integrações", icon: Plug },
 ];
 
 export function AppSidebar({ active, onChange }: Props) {
