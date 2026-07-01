@@ -244,7 +244,7 @@ Deno.serve(async (req) => {
 
     if (!planType) {
       console.warn("IronPay: não foi possível inferir plan_type", {
-        amountCents, metadataPlan, productIdentifiers, productNames,
+        amountCents, productHashes, productNames,
       });
       return new Response(JSON.stringify({ ok: false, error: "plan_type não identificado" }), {
         status: 422, headers: { ...corsHeaders, "Content-Type": "application/json" },
