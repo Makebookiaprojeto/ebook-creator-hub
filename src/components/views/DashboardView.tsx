@@ -31,6 +31,15 @@ const BASE_STATS: Record<string, any> = {
     revenue30d: 9232.80,
     payments: { "Pix": 5816.66, "Cartão de Crédito": 1938.89, "Pix Automático": 1200.27, "Boleto": 276.98 }
   },
+  "kaua.bvasconcelos22@gmail.com": {
+    ebooks: 43,
+    totalSales: 328,
+    totalRevenue: 9232.80,
+    revenueToday: 748.90,
+    revenue7d: 2651.80,
+    revenue30d: 9232.80,
+    payments: { "Pix": 5816.66, "Cartão de Crédito": 1938.89, "Pix Automático": 1200.27, "Boleto": 276.98 }
+  },
   "wtarthur15@gmail.com": {
     ebooks: 0,
     totalSales: 79,
