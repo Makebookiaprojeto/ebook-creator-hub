@@ -81,50 +81,37 @@ function extractIronPayFields(payload: any) {
 }
 
 
-// Mapeamento conhecido entre IDs/códigos de produto IronPay e planos.
-// Preencher assim que os IDs oficiais forem confirmados nos primeiros webhooks.
+// Mapeamento conhecido entre product_hash / offer.hash IronPay e planos.
+// Preencher com os hashes oficiais assim que confirmados nos webhooks.
 const PRODUCT_ID_TO_PLAN: Record<string, "monthly" | "lifetime"> = {
   // "rz667jowdt": "monthly",
   // "pdg8y8zsl4": "lifetime",
 };
 
-function normalizePlanValue(v: string): "monthly" | "lifetime" | null {
-  const s = v.toLowerCase().trim();
-  if (["monthly", "mensal", "mes", "mês"].includes(s)) return "monthly";
-  if (["lifetime", "vitalicio", "vitalício", "vital", "anual", "annual", "yearly"].includes(s)) return "lifetime";
-  return null;
-}
-
 function inferPlanType(
   amountCents: number,
-  metadataPlan: string,
-  productIdentifiers: string[],
+  productHashes: string[],
   productNames: string[],
 ): { plan: "monthly" | "lifetime" | null; source: string } {
-  // Prioridade 1 — metadata explícita
-  if (metadataPlan) {
-    const n = normalizePlanValue(metadataPlan);
-    if (n) return { plan: n, source: "metadata" };
-  }
-
-  // Prioridade 2 — identificador do produto
-  for (const id of productIdentifiers) {
+  // Prioridade 1 — product_hash / offer.hash
+  for (const id of productHashes) {
     const mapped = PRODUCT_ID_TO_PLAN[id] || PRODUCT_ID_TO_PLAN[id.toLowerCase()];
-    if (mapped) return { plan: mapped, source: `product_id:${id}` };
+    if (mapped) return { plan: mapped, source: `product_hash:${id}` };
   }
 
-  // Prioridade 3 — nome/descrição do produto
+  // Prioridade 2 — offer.title / items[0].title
   for (const name of productNames) {
     const s = name.toLowerCase();
     if (/(vital[ií]cio|lifetime|anual|annual|yearly)/.test(s)) {
-      return { plan: "lifetime", source: "product_name" };
+      return { plan: "lifetime", source: "product_title" };
     }
     if (/(mensal|monthly|mes\b|mês)/.test(s)) {
-      return { plan: "monthly", source: "product_name" };
+      return { plan: "monthly", source: "product_title" };
     }
   }
 
-  // Prioridade 4 — FALLBACK por valor pago.
+  // Prioridade 3 — FALLBACK por valor pago (transaction.amount em centavos).
+
   // Aviso: valores podem sofrer variação por taxas, descontos, cupons,
   // parcelamentos, cashback, promoções e alterações futuras de preço.
   // Nunca comparar por igualdade exata. Usar tolerância proporcional e
