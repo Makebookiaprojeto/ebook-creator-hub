@@ -4,7 +4,7 @@ import kiwifyLogo from "@/assets/integracao-kiwify.jpeg";
 export function IntegrationsView() {
   return (
     <div className="space-y-12 animate-fade-in -mt-6">
-      <div className="text-center">
+      <div>
         <h1 className="font-display text-3xl font-bold">Integrações</h1>
         <p className="text-muted-foreground mt-2">
           Essa ferramenta possui integração com as seguintes plataformas:
