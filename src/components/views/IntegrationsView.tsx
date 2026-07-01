@@ -1,6 +1,14 @@
 import caktoLogo from "@/assets/integracao-cakto.jpeg";
 import kiwifyLogo from "@/assets/integracao-kiwify.jpeg";
 
+// Preload logos at module load so they're cached before the view mounts
+if (typeof window !== "undefined") {
+  [caktoLogo, kiwifyLogo].forEach((src) => {
+    const img = new Image();
+    img.src = src;
+  });
+}
+
 export function IntegrationsView() {
   return (
     <div className="space-y-12 animate-fade-in -mt-6">
