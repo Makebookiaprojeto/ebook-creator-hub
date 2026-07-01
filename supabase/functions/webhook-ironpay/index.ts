@@ -44,59 +44,42 @@ function mapStatus(raw: string): "approved" | "pending" | "refused" | "refunded"
   return "unknown";
 }
 
-// Extração provisória e permissiva de campos.
+// Extração baseada na estrutura real do payload IronPay.
 function extractIronPayFields(payload: any) {
-  const data = payload?.data || payload?.transaction || payload?.order || payload || {};
-  const customer = data?.customer || data?.buyer || data?.client || payload?.customer || {};
+  const customer = payload?.customer || {};
+  const transaction = payload?.transaction || {};
+  const offer = payload?.offer || {};
+  const items = Array.isArray(payload?.items) ? payload.items : [];
+  const firstItem = items[0] || {};
 
-  const email = (customer?.email || data?.email || payload?.email || "").toString().toLowerCase().trim();
+  const email = (customer?.email || "").toString().toLowerCase().trim();
+  const status = (payload?.status || "").toString();
+  const transactionId = (transaction?.id ?? "").toString();
 
-  const status = (data?.status || payload?.status || data?.transaction_status || "").toString();
+  // transaction.amount / net_amount vêm em centavos (inteiro).
+  const rawAmount = transaction?.amount ?? 0;
+  const rawNet = transaction?.net_amount ?? 0;
+  const amountCents = typeof rawAmount === "number" ? rawAmount : parseInt(String(rawAmount), 10) || 0;
+  const netAmountCents = typeof rawNet === "number" ? rawNet : parseInt(String(rawNet), 10) || 0;
 
-  const transactionId = (
-    data?.id ??
-    data?.transaction_id ??
-    data?.order_id ??
-    payload?.id ??
-    payload?.transaction_id ??
-    ""
-  ).toString();
+  // Identificadores oficiais do produto/oferta.
+  const productHashes: string[] = [firstItem?.product_hash, offer?.hash]
+    .filter((v) => typeof v === "string" && v.length > 0);
 
-  // Valor: pode vir em reais (decimal) ou centavos (inteiro).
-  const rawAmount = data?.amount ?? data?.value ?? data?.total ?? data?.amount_cents ?? payload?.amount ?? 0;
-  let amountCents = 0;
-  if (typeof rawAmount === "number") {
-    amountCents = Number.isInteger(rawAmount) && rawAmount > 1000 ? rawAmount : Math.round(rawAmount * 100);
-  } else if (typeof rawAmount === "string") {
-    const normalized = rawAmount.replace(",", ".");
-    const parsed = parseFloat(normalized);
-    if (!isNaN(parsed)) {
-      amountCents = !normalized.includes(".") && parsed > 1000 ? Math.floor(parsed) : Math.round(parsed * 100);
-    }
-  }
+  // Títulos oficiais (offer.title / items[0].title).
+  const productNames: string[] = [offer?.title, firstItem?.title]
+    .filter((v) => typeof v === "string" && v.length > 0);
 
-  // Metadata (Prioridade 1) — várias chaves possíveis
-  const md = { ...(payload?.metadata || {}), ...(data?.metadata || {}) };
-  const metadataPlan = (
-    md?.plan_type ?? md?.plan ?? md?.type ?? md?.planType ?? ""
-  ).toString().toLowerCase().trim();
+  const createdAt = payload?.created_at ?? null;
+  const paidAt = payload?.paid_at ?? null;
+  const refundedAt = payload?.refunded_at ?? null;
 
-  // Identificadores de produto (Prioridade 2)
-  const productIdentifiers: string[] = [
-    data?.product_id, data?.product?.id, data?.product?.code,
-    data?.external_id, data?.offer_id, data?.sku,
-    payload?.product_id, payload?.product?.id, payload?.product?.code,
-    payload?.external_id, payload?.offer_id, payload?.sku,
-  ].filter((v) => v !== undefined && v !== null && v !== "").map((v) => v.toString());
-
-  // Nomes de produto (Prioridade 3)
-  const productNames: string[] = [
-    data?.product?.name, data?.product?.title, data?.description, data?.offer_name,
-    payload?.product?.name, payload?.product?.title, payload?.description, payload?.offer_name,
-  ].filter((v) => typeof v === "string" && v.length > 0);
-
-  return { email, status, transactionId, amountCents, metadataPlan, productIdentifiers, productNames };
+  return {
+    email, status, transactionId, amountCents, netAmountCents,
+    productHashes, productNames, createdAt, paidAt, refundedAt,
+  };
 }
+
 
 // Mapeamento conhecido entre IDs/códigos de produto IronPay e planos.
 // Preencher assim que os IDs oficiais forem confirmados nos primeiros webhooks.
