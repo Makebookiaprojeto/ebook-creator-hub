@@ -44,104 +44,74 @@ function mapStatus(raw: string): "approved" | "pending" | "refused" | "refunded"
   return "unknown";
 }
 
-// Extração provisória e permissiva de campos.
+// Extração baseada na estrutura real do payload IronPay.
 function extractIronPayFields(payload: any) {
-  const data = payload?.data || payload?.transaction || payload?.order || payload || {};
-  const customer = data?.customer || data?.buyer || data?.client || payload?.customer || {};
+  const customer = payload?.customer || {};
+  const transaction = payload?.transaction || {};
+  const offer = payload?.offer || {};
+  const items = Array.isArray(payload?.items) ? payload.items : [];
+  const firstItem = items[0] || {};
 
-  const email = (customer?.email || data?.email || payload?.email || "").toString().toLowerCase().trim();
+  const email = (customer?.email || "").toString().toLowerCase().trim();
+  const status = (payload?.status || "").toString();
+  const transactionId = (transaction?.id ?? "").toString();
 
-  const status = (data?.status || payload?.status || data?.transaction_status || "").toString();
+  // transaction.amount / net_amount vêm em centavos (inteiro).
+  const rawAmount = transaction?.amount ?? 0;
+  const rawNet = transaction?.net_amount ?? 0;
+  const amountCents = typeof rawAmount === "number" ? rawAmount : parseInt(String(rawAmount), 10) || 0;
+  const netAmountCents = typeof rawNet === "number" ? rawNet : parseInt(String(rawNet), 10) || 0;
 
-  const transactionId = (
-    data?.id ??
-    data?.transaction_id ??
-    data?.order_id ??
-    payload?.id ??
-    payload?.transaction_id ??
-    ""
-  ).toString();
+  // Identificadores oficiais do produto/oferta.
+  const productHashes: string[] = [firstItem?.product_hash, offer?.hash]
+    .filter((v) => typeof v === "string" && v.length > 0);
 
-  // Valor: pode vir em reais (decimal) ou centavos (inteiro).
-  const rawAmount = data?.amount ?? data?.value ?? data?.total ?? data?.amount_cents ?? payload?.amount ?? 0;
-  let amountCents = 0;
-  if (typeof rawAmount === "number") {
-    amountCents = Number.isInteger(rawAmount) && rawAmount > 1000 ? rawAmount : Math.round(rawAmount * 100);
-  } else if (typeof rawAmount === "string") {
-    const normalized = rawAmount.replace(",", ".");
-    const parsed = parseFloat(normalized);
-    if (!isNaN(parsed)) {
-      amountCents = !normalized.includes(".") && parsed > 1000 ? Math.floor(parsed) : Math.round(parsed * 100);
-    }
-  }
+  // Títulos oficiais (offer.title / items[0].title).
+  const productNames: string[] = [offer?.title, firstItem?.title]
+    .filter((v) => typeof v === "string" && v.length > 0);
 
-  // Metadata (Prioridade 1) — várias chaves possíveis
-  const md = { ...(payload?.metadata || {}), ...(data?.metadata || {}) };
-  const metadataPlan = (
-    md?.plan_type ?? md?.plan ?? md?.type ?? md?.planType ?? ""
-  ).toString().toLowerCase().trim();
+  const createdAt = payload?.created_at ?? null;
+  const paidAt = payload?.paid_at ?? null;
+  const refundedAt = payload?.refunded_at ?? null;
 
-  // Identificadores de produto (Prioridade 2)
-  const productIdentifiers: string[] = [
-    data?.product_id, data?.product?.id, data?.product?.code,
-    data?.external_id, data?.offer_id, data?.sku,
-    payload?.product_id, payload?.product?.id, payload?.product?.code,
-    payload?.external_id, payload?.offer_id, payload?.sku,
-  ].filter((v) => v !== undefined && v !== null && v !== "").map((v) => v.toString());
-
-  // Nomes de produto (Prioridade 3)
-  const productNames: string[] = [
-    data?.product?.name, data?.product?.title, data?.description, data?.offer_name,
-    payload?.product?.name, payload?.product?.title, payload?.description, payload?.offer_name,
-  ].filter((v) => typeof v === "string" && v.length > 0);
-
-  return { email, status, transactionId, amountCents, metadataPlan, productIdentifiers, productNames };
+  return {
+    email, status, transactionId, amountCents, netAmountCents,
+    productHashes, productNames, createdAt, paidAt, refundedAt,
+  };
 }
 
-// Mapeamento conhecido entre IDs/códigos de produto IronPay e planos.
-// Preencher assim que os IDs oficiais forem confirmados nos primeiros webhooks.
+
+// Mapeamento conhecido entre product_hash / offer.hash IronPay e planos.
+// Preencher com os hashes oficiais assim que confirmados nos webhooks.
 const PRODUCT_ID_TO_PLAN: Record<string, "monthly" | "lifetime"> = {
   // "rz667jowdt": "monthly",
   // "pdg8y8zsl4": "lifetime",
 };
 
-function normalizePlanValue(v: string): "monthly" | "lifetime" | null {
-  const s = v.toLowerCase().trim();
-  if (["monthly", "mensal", "mes", "mês"].includes(s)) return "monthly";
-  if (["lifetime", "vitalicio", "vitalício", "vital", "anual", "annual", "yearly"].includes(s)) return "lifetime";
-  return null;
-}
-
 function inferPlanType(
   amountCents: number,
-  metadataPlan: string,
-  productIdentifiers: string[],
+  productHashes: string[],
   productNames: string[],
 ): { plan: "monthly" | "lifetime" | null; source: string } {
-  // Prioridade 1 — metadata explícita
-  if (metadataPlan) {
-    const n = normalizePlanValue(metadataPlan);
-    if (n) return { plan: n, source: "metadata" };
-  }
-
-  // Prioridade 2 — identificador do produto
-  for (const id of productIdentifiers) {
+  // Prioridade 1 — product_hash / offer.hash
+  for (const id of productHashes) {
     const mapped = PRODUCT_ID_TO_PLAN[id] || PRODUCT_ID_TO_PLAN[id.toLowerCase()];
-    if (mapped) return { plan: mapped, source: `product_id:${id}` };
+    if (mapped) return { plan: mapped, source: `product_hash:${id}` };
   }
 
-  // Prioridade 3 — nome/descrição do produto
+  // Prioridade 2 — offer.title / items[0].title
   for (const name of productNames) {
     const s = name.toLowerCase();
     if (/(vital[ií]cio|lifetime|anual|annual|yearly)/.test(s)) {
-      return { plan: "lifetime", source: "product_name" };
+      return { plan: "lifetime", source: "product_title" };
     }
     if (/(mensal|monthly|mes\b|mês)/.test(s)) {
-      return { plan: "monthly", source: "product_name" };
+      return { plan: "monthly", source: "product_title" };
     }
   }
 
-  // Prioridade 4 — FALLBACK por valor pago.
+  // Prioridade 3 — FALLBACK por valor pago (transaction.amount em centavos).
+
   // Aviso: valores podem sofrer variação por taxas, descontos, cupons,
   // parcelamentos, cashback, promoções e alterações futuras de preço.
   // Nunca comparar por igualdade exata. Usar tolerância proporcional e
@@ -244,14 +214,14 @@ Deno.serve(async (req) => {
     } catch { /* noop */ }
 
     const {
-      email, status, transactionId, amountCents,
-      metadataPlan, productIdentifiers, productNames,
+      email, status, transactionId, amountCents, netAmountCents,
+      productHashes, productNames, createdAt, paidAt, refundedAt,
     } = extractIronPayFields(payload);
     const mapped = mapStatus(status);
 
     console.log("IronPay parsed:", {
-      email, status, mapped, transactionId, amountCents,
-      metadataPlan, productIdentifiers, productNames,
+      email, status, mapped, transactionId, amountCents, netAmountCents,
+      productHashes, productNames, createdAt, paidAt, refundedAt,
     });
 
     if (!email) {
@@ -267,13 +237,14 @@ Deno.serve(async (req) => {
     }
 
     const { plan: planType, source: planSource } = inferPlanType(
-      amountCents, metadataPlan, productIdentifiers, productNames,
+      amountCents, productHashes, productNames,
+
     );
     console.log("IronPay plan inference:", { planType, planSource });
 
     if (!planType) {
       console.warn("IronPay: não foi possível inferir plan_type", {
-        amountCents, metadataPlan, productIdentifiers, productNames,
+        amountCents, productHashes, productNames,
       });
       return new Response(JSON.stringify({ ok: false, error: "plan_type não identificado" }), {
         status: 422, headers: { ...corsHeaders, "Content-Type": "application/json" },
