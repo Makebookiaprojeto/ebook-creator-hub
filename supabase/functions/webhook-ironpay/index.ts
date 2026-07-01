@@ -84,12 +84,12 @@ function extractIronPayFields(payload: any) {
 }
 
 
-// Mapeamento conhecido entre product_hash / offer.hash IronPay e planos.
-// Preencher com os hashes oficiais assim que confirmados nos webhooks.
+// Mapeamento oficial entre product_hash / offer.hash IronPay e planos.
 const PRODUCT_ID_TO_PLAN: Record<string, "monthly" | "lifetime"> = {
-  // "rz667jowdt": "monthly",
-  // "pdg8y8zsl4": "lifetime",
+  "qhpooz4lde": "monthly",
+  "6u2ed9cjzr": "lifetime",
 };
+
 
 function inferPlanType(
   amountCents: number,
