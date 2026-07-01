@@ -206,6 +206,37 @@ Deno.serve(async (req) => {
     let payload: any = {};
     try { payload = JSON.parse(rawBody); } catch { payload = {}; }
 
+    // ---------- Validação do webhook via token compartilhado ----------
+    // O campo `payload.token` é constante para todos os webhooks da conta
+    // IronPay e funciona como segredo compartilhado. Comparação em tempo
+    // constante para mitigar timing attacks.
+    const expectedToken = Deno.env.get("IRONPAY_WEBHOOK_TOKEN") || "";
+    const receivedToken = (payload?.token ?? "").toString();
+
+    function timingSafeEqual(a: string, b: string): boolean {
+      const enc = new TextEncoder();
+      const ab = enc.encode(a);
+      const bb = enc.encode(b);
+      if (ab.length !== bb.length) return false;
+      let diff = 0;
+      for (let i = 0; i < ab.length; i++) diff |= ab[i] ^ bb[i];
+      return diff === 0;
+    }
+
+    if (!expectedToken) {
+      console.error("IronPay: IRONPAY_WEBHOOK_TOKEN não configurado.");
+      return new Response(JSON.stringify({ error: "Webhook token não configurado" }), {
+        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (!receivedToken || !timingSafeEqual(receivedToken, expectedToken)) {
+      console.warn("IronPay: token inválido ou ausente.");
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     // Log temporário — apenas os NOMES dos campos recebidos, para mapear
     // a estrutura real da IronPay. Remover após confirmar o payload oficial.
     try {
