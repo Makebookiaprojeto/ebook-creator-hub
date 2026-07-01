@@ -75,19 +75,107 @@ function extractIronPayFields(payload: any) {
     }
   }
 
-  const productId = (data?.product_id ?? data?.product?.id ?? payload?.product_id ?? "").toString();
-  const metadataPlan = (data?.metadata?.plan_type ?? payload?.metadata?.plan_type ?? "").toString().toLowerCase();
+  // Metadata (Prioridade 1) — várias chaves possíveis
+  const md = { ...(payload?.metadata || {}), ...(data?.metadata || {}) };
+  const metadataPlan = (
+    md?.plan_type ?? md?.plan ?? md?.type ?? md?.planType ?? ""
+  ).toString().toLowerCase().trim();
 
-  return { email, status, transactionId, amountCents, productId, metadataPlan };
+  // Identificadores de produto (Prioridade 2)
+  const productIdentifiers: string[] = [
+    data?.product_id, data?.product?.id, data?.product?.code,
+    data?.external_id, data?.offer_id, data?.sku,
+    payload?.product_id, payload?.product?.id, payload?.product?.code,
+    payload?.external_id, payload?.offer_id, payload?.sku,
+  ].filter((v) => v !== undefined && v !== null && v !== "").map((v) => v.toString());
+
+  // Nomes de produto (Prioridade 3)
+  const productNames: string[] = [
+    data?.product?.name, data?.product?.title, data?.description, data?.offer_name,
+    payload?.product?.name, payload?.product?.title, payload?.description, payload?.offer_name,
+  ].filter((v) => typeof v === "string" && v.length > 0);
+
+  return { email, status, transactionId, amountCents, metadataPlan, productIdentifiers, productNames };
 }
 
-function inferPlanType(amountCents: number, metadataPlan: string): "monthly" | "lifetime" | null {
-  if (metadataPlan === "monthly" || metadataPlan === "lifetime") return metadataPlan;
-  const reais = amountCents / 100;
-  // Tolerância de +/- R$ 1,00 para diferenças de arredondamento.
-  if (Math.abs(reais - MONTHLY_PRICE_BRL) <= 1) return "monthly";
-  if (Math.abs(reais - LIFETIME_PRICE_BRL) <= 1) return "lifetime";
+// Mapeamento conhecido entre IDs/códigos de produto IronPay e planos.
+// Preencher assim que os IDs oficiais forem confirmados nos primeiros webhooks.
+const PRODUCT_ID_TO_PLAN: Record<string, "monthly" | "lifetime"> = {
+  // "rz667jowdt": "monthly",
+  // "pdg8y8zsl4": "lifetime",
+};
+
+function normalizePlanValue(v: string): "monthly" | "lifetime" | null {
+  const s = v.toLowerCase().trim();
+  if (["monthly", "mensal", "mes", "mês"].includes(s)) return "monthly";
+  if (["lifetime", "vitalicio", "vitalício", "vital", "anual", "annual", "yearly"].includes(s)) return "lifetime";
   return null;
+}
+
+function inferPlanType(
+  amountCents: number,
+  metadataPlan: string,
+  productIdentifiers: string[],
+  productNames: string[],
+): { plan: "monthly" | "lifetime" | null; source: string } {
+  // Prioridade 1 — metadata explícita
+  if (metadataPlan) {
+    const n = normalizePlanValue(metadataPlan);
+    if (n) return { plan: n, source: "metadata" };
+  }
+
+  // Prioridade 2 — identificador do produto
+  for (const id of productIdentifiers) {
+    const mapped = PRODUCT_ID_TO_PLAN[id] || PRODUCT_ID_TO_PLAN[id.toLowerCase()];
+    if (mapped) return { plan: mapped, source: `product_id:${id}` };
+  }
+
+  // Prioridade 3 — nome/descrição do produto
+  for (const name of productNames) {
+    const s = name.toLowerCase();
+    if (/(vital[ií]cio|lifetime|anual|annual|yearly)/.test(s)) {
+      return { plan: "lifetime", source: "product_name" };
+    }
+    if (/(mensal|monthly|mes\b|mês)/.test(s)) {
+      return { plan: "monthly", source: "product_name" };
+    }
+  }
+
+  // Prioridade 4 — FALLBACK por valor pago.
+  // Aviso: valores podem sofrer variação por taxas, descontos, cupons,
+  // parcelamentos, cashback, promoções e alterações futuras de preço.
+  // Nunca comparar por igualdade exata. Usar tolerância proporcional e
+  // classificar pelo plano mais próximo.
+  const reais = amountCents / 100;
+  if (reais > 0) {
+    const dMonthly = Math.abs(reais - MONTHLY_PRICE_BRL);
+    const dLifetime = Math.abs(reais - LIFETIME_PRICE_BRL);
+    // Tolerância: 25% do preço de referência (cobre taxas, descontos e cupons moderados).
+    const tolMonthly = MONTHLY_PRICE_BRL * 0.25;
+    const tolLifetime = LIFETIME_PRICE_BRL * 0.25;
+    const monthlyOk = dMonthly <= tolMonthly;
+    const lifetimeOk = dLifetime <= tolLifetime;
+    if (monthlyOk && lifetimeOk) {
+      return { plan: dMonthly <= dLifetime ? "monthly" : "lifetime", source: "amount_fallback_closest" };
+    }
+    if (monthlyOk) return { plan: "monthly", source: "amount_fallback" };
+    if (lifetimeOk) return { plan: "lifetime", source: "amount_fallback" };
+  }
+
+  return { plan: null, source: "none" };
+}
+
+// Coleta recursiva das chaves do payload — usado apenas nos primeiros
+// webhooks para mapear a estrutura real da IronPay. Remover depois.
+function collectKeys(obj: any, prefix = "", out: string[] = [], depth = 0): string[] {
+  if (depth > 4 || !obj || typeof obj !== "object") return out;
+  for (const k of Object.keys(obj)) {
+    const path = prefix ? `${prefix}.${k}` : k;
+    out.push(path);
+    const v = (obj as any)[k];
+    if (v && typeof v === "object" && !Array.isArray(v)) collectKeys(v, path, out, depth + 1);
+  }
+  return out;
 }
 
 // ---------- Handler ----------
@@ -118,10 +206,22 @@ Deno.serve(async (req) => {
     let payload: any = {};
     try { payload = JSON.parse(rawBody); } catch { payload = {}; }
 
-    const { email, status, transactionId, amountCents, metadataPlan } = extractIronPayFields(payload);
+    // Log temporário — apenas os NOMES dos campos recebidos, para mapear
+    // a estrutura real da IronPay. Remover após confirmar o payload oficial.
+    try {
+      console.log("IronPay payload keys:", JSON.stringify(collectKeys(payload)));
+    } catch { /* noop */ }
+
+    const {
+      email, status, transactionId, amountCents,
+      metadataPlan, productIdentifiers, productNames,
+    } = extractIronPayFields(payload);
     const mapped = mapStatus(status);
 
-    console.log("IronPay parsed:", { email, status, mapped, transactionId, amountCents, metadataPlan });
+    console.log("IronPay parsed:", {
+      email, status, mapped, transactionId, amountCents,
+      metadataPlan, productIdentifiers, productNames,
+    });
 
     if (!email) {
       return new Response(JSON.stringify({ ok: false, error: "Email ausente" }), {
@@ -129,18 +229,21 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Só ativa/cria assinatura para status aprovado. Outros status são
-    // apenas registrados no log até que o vocabulário oficial seja
-    // definido.
     if (mapped !== "approved") {
       return new Response(JSON.stringify({ ok: true, ignored_status: status, mapped }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const planType = inferPlanType(amountCents, metadataPlan);
+    const { plan: planType, source: planSource } = inferPlanType(
+      amountCents, metadataPlan, productIdentifiers, productNames,
+    );
+    console.log("IronPay plan inference:", { planType, planSource });
+
     if (!planType) {
-      console.warn("IronPay: não foi possível inferir plan_type", { amountCents, metadataPlan });
+      console.warn("IronPay: não foi possível inferir plan_type", {
+        amountCents, metadataPlan, productIdentifiers, productNames,
+      });
       return new Response(JSON.stringify({ ok: false, error: "plan_type não identificado" }), {
         status: 422, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
