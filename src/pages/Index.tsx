@@ -8,12 +8,13 @@ import { LibraryView } from "@/components/views/LibraryView";
 // ToolsView removed
 import { SupportView } from "@/components/views/SupportView";
 import { ProfileView } from "@/components/views/ProfileView";
+import { IntegrationsView } from "@/components/views/IntegrationsView";
 import {  } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { resolveDisplayName, initialFromName } from "@/lib/userName";
 
-type View = "dashboard" | "create" | "library" | "support" | "profile";
+type View = "dashboard" | "create" | "library" | "support" | "profile" | "integrations";
 
 const Index = () => {
   const [view, setView] = useState<View>("dashboard");
@@ -95,6 +96,7 @@ const Index = () => {
             {/* tools view removed */}
             {view === "support" && <SupportView />}
             {view === "profile" && <ProfileView />}
+            {view === "integrations" && <IntegrationsView />}
           </main>
         </div>
       </div>
