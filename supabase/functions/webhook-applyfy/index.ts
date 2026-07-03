@@ -22,9 +22,10 @@ const corsHeaders = {
 // A identificação segue a ordem: offerCode → product.id → product.name.
 // Preencher com os valores reais informados pelo usuário.
 const OFFER_CODE_TO_PLAN: Record<string, "monthly" | "lifetime"> = {
-  // "OFFER_CODE_MENSAL":    "monthly",
-  // "OFFER_CODE_VITALICIO": "lifetime",
+  "UV1G6YK": "monthly",
+  "70BMKVA": "lifetime",
 };
+
 const PRODUCT_ID_TO_PLAN: Record<string, "monthly" | "lifetime"> = {
   // "APPLYFY_PRODUCT_ID_MONTHLY":  "monthly",
   // "APPLYFY_PRODUCT_ID_LIFETIME": "lifetime",
