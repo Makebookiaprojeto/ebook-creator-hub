@@ -227,13 +227,14 @@ Deno.serve(async (req) => {
     }
 
     // ---------- TRANSACTION_PAID ----------
-    const { plan: planType, source: planSource } = inferPlanType(productIds);
+    const { plan: planType, source: planSource } = inferPlanType(offerCode, productIds, productNames);
     console.log("ApplyFy plan inference:", { planType, planSource });
 
     if (!planType) {
-      console.warn("ApplyFy: não foi possível inferir plan_type (verifique PRODUCT_ID_TO_PLAN)", {
-        productIds, productNames,
+      console.warn("ApplyFy: não foi possível inferir plan_type (verifique OFFER_CODE_TO_PLAN / PRODUCT_ID_TO_PLAN / PRODUCT_NAME_TO_PLAN)", {
+        offerCode, productIds, productNames,
       });
+
       return new Response(JSON.stringify({ ok: false, error: "plan_type não identificado" }), {
         status: 422, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
