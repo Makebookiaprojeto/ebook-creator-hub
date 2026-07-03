@@ -69,7 +69,14 @@ function extractApplyFyFields(payload: any) {
       : [];
 
   const email = (client?.email || "").toString().toLowerCase().trim();
-  const transactionId = (data?.id ?? data?.transactionId ?? payload?.id ?? "").toString();
+  const transactionId = (
+    payload?.transaction?.id ??
+    payload?.data?.transaction?.id ??
+    data?.transactionId ??
+    data?.id ??
+    payload?.id ??
+    ""
+  ).toString();
   const offerCode = (data?.offerCode ?? payload?.offerCode ?? "").toString();
 
   const productIds: string[] = orderItems
