@@ -69,6 +69,7 @@ function extractApplyFyFields(payload: any) {
 
   const email = (client?.email || "").toString().toLowerCase().trim();
   const transactionId = (data?.id ?? data?.transactionId ?? payload?.id ?? "").toString();
+  const offerCode = (data?.offerCode ?? payload?.offerCode ?? "").toString();
 
   const productIds: string[] = orderItems
     .map((it) => it?.product?.id ?? it?.productId ?? it?.product_id)
@@ -78,13 +79,31 @@ function extractApplyFyFields(payload: any) {
     .map((it) => it?.product?.name ?? it?.product?.title ?? it?.name)
     .filter((v) => typeof v === "string" && v.length > 0);
 
-  return { email, transactionId, productIds, productNames };
+  return { email, transactionId, offerCode, productIds, productNames };
 }
 
-function inferPlanType(productIds: string[]): { plan: "monthly" | "lifetime" | null; source: string } {
-  for (const id of productIds) {
-    const mapped = PRODUCT_ID_TO_PLAN[id] || PRODUCT_ID_TO_PLAN[id.toLowerCase?.() ?? id];
-    if (mapped) return { plan: mapped, source: `product_id:${id}` };
+function inferPlanType(
+  offerCode: string,
+  productIds: string[],
+  productNames: string[],
+): { plan: "monthly" | "lifetime" | null; source: string } {
+  // 1) offerCode
+  if (offerCode) {
+    const mapped = OFFER_CODE_TO_PLAN[offerCode] || OFFER_CODE_TO_PLAN[offerCode.toLowerCase()];
+    if (mapped) return { plan: mapped, source: `offer_code:${offerCode}` };
+  }
+  // 2) product.id (primeiro item)
+  const firstId = productIds[0];
+  if (firstId) {
+    const mapped = PRODUCT_ID_TO_PLAN[firstId] || PRODUCT_ID_TO_PLAN[firstId.toLowerCase()];
+    if (mapped) return { plan: mapped, source: `product_id:${firstId}` };
+  }
+  // 3) product.name (primeiro item)
+  const firstName = productNames[0];
+  if (firstName) {
+    const mapped =
+      PRODUCT_NAME_TO_PLAN[firstName] || PRODUCT_NAME_TO_PLAN[firstName.toLowerCase().trim()];
+    if (mapped) return { plan: mapped, source: `product_name:${firstName}` };
   }
   return { plan: null, source: "none" };
 }
