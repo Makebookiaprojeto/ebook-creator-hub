@@ -20,8 +20,8 @@ const IRONPAY_MONTHLY = "https://go.ironpayapp.com.br/rz667jowdt";
 const IRONPAY_LIFETIME = "https://go.ironpayapp.com.br/pdg8y8zsl4";
 
 // URLs da ApplyFy (Cartão) — a preencher quando a integração for ativada.
-const APPLYFY_MONTHLY = "";
-const APPLYFY_LIFETIME = "";
+const APPLYFY_MONTHLY = "https://checkout.applyfy.com.br/checkout/cmr420tnz02eb01or9dy2rfgu?offer=UV1G6YK";
+const APPLYFY_LIFETIME = "https://checkout.applyfy.com.br/checkout/cmr41g2ie01as01psbzhiv4o1?offer=70BMKVA";
 
 // Estrutura legada mantida para compatibilidade com o fluxo atual (PIX).
 export const CHECKOUT_LINKS: Record<PlanId, string> = {
