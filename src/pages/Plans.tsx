@@ -101,11 +101,68 @@ const FAQS = [
   },
 ];
 
+type PaymentMethodValue = "pix" | "card";
+
+function PaymentMethodSelector({
+  value,
+  onChange,
+  name,
+}: {
+  value: PaymentMethodValue;
+  onChange: (v: PaymentMethodValue) => void;
+  name: string;
+}) {
+  const options: { id: PaymentMethodValue; label: string; icon: typeof DollarSign }[] = [
+    { id: "pix", label: "PIX", icon: DollarSign },
+    { id: "card", label: "Cartão de Crédito", icon: CreditCard },
+  ];
+  return (
+    <div className="mb-6" role="radiogroup" aria-label="Forma de pagamento">
+      <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
+        Forma de pagamento
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        {options.map((opt) => {
+          const active = value === opt.id;
+          const Icon = opt.icon;
+          return (
+            <label
+              key={opt.id}
+              className={`flex items-center gap-2 rounded-md border px-3 py-2 text-sm cursor-pointer transition-colors ${
+                active
+                  ? "border-primary bg-primary/10 text-foreground"
+                  : "border-border/60 text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <input
+                type="radio"
+                name={name}
+                value={opt.id}
+                checked={active}
+                onChange={() => onChange(opt.id)}
+                className="accent-primary"
+              />
+              <Icon className="h-4 w-4" />
+              <span>{opt.label}</span>
+            </label>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function Plans() {
   const navigate = useNavigate();
   const { user, loading: authLoading, signOut } = useAuth();
   const { loading: subLoading, isActive } = useSubscription();
   const [displayName, setDisplayName] = useState<string>("");
+  // Seleção visual da forma de pagamento por plano.
+  // NÃO afeta o fluxo de checkout — handleCheckout continua abrindo a IronPay
+  // (via CHECKOUT_LINKS) independentemente do valor escolhido aqui.
+  type PayMethod = "pix" | "card";
+  const [monthlyMethod, setMonthlyMethod] = useState<PayMethod>("pix");
+  const [lifetimeMethod, setLifetimeMethod] = useState<PayMethod>("pix");
 
   useEffect(() => {
     // Force CSS dark mode
@@ -334,6 +391,12 @@ export default function Plans() {
                 ))}
               </ul>
 
+              <PaymentMethodSelector
+                value={monthlyMethod}
+                onChange={setMonthlyMethod}
+                name="monthly-method"
+              />
+
               <Button
                 size="lg"
                 variant="outline"
@@ -385,6 +448,12 @@ export default function Plans() {
                   </li>
                 ))}
               </ul>
+
+              <PaymentMethodSelector
+                value={lifetimeMethod}
+                onChange={setLifetimeMethod}
+                name="lifetime-method"
+              />
 
               <Button
                 size="lg"
