@@ -250,34 +250,12 @@ Deno.serve(async (req) => {
 
 
     // ---------- TRANSACTION_PAID ----------
-    // [TEMP DEBUG] logs para investigar identificação do plano vendido pela ApplyFy.
-    try {
-      const dbg = payload?.data ?? payload ?? {};
-      const dbgOrderItems: any[] = Array.isArray(dbg?.orderItems)
-        ? dbg.orderItems
-        : Array.isArray(payload?.orderItems) ? payload.orderItems : [];
-      const dbgItem0 = dbgOrderItems[0] ?? null;
-      console.log("[APPLYFY DEBUG] full payload:", JSON.stringify(payload));
-      console.log("[APPLYFY DEBUG] event:", event);
-      console.log("[APPLYFY DEBUG] offerCode:", dbg?.offerCode ?? payload?.offerCode ?? null);
-      console.log("[APPLYFY DEBUG] orderItems:", JSON.stringify(dbgOrderItems));
-      console.log("[APPLYFY DEBUG] orderItems[0].product.id:", dbgItem0?.product?.id ?? null);
-      console.log("[APPLYFY DEBUG] orderItems[0].product.externalId:", dbgItem0?.product?.externalId ?? null);
-      console.log("[APPLYFY DEBUG] orderItems[0].product.name:", dbgItem0?.product?.name ?? null);
-      console.log("[APPLYFY DEBUG] subscription:", JSON.stringify(dbg?.subscription ?? payload?.subscription ?? null));
-      console.log("[APPLYFY DEBUG] subscription.id:", (dbg?.subscription ?? payload?.subscription)?.id ?? null);
-      console.log("[APPLYFY DEBUG] transaction.id:", (dbg?.transaction ?? payload?.transaction)?.id ?? null);
-    } catch (e) {
-      console.log("[APPLYFY DEBUG] log error:", (e as Error).message);
-    }
-
-
     const { plan: planType, source: planSource } = inferPlanType(offerCode, productIds, productNames);
     console.log("ApplyFy plan inference:", { planType, planSource });
 
     if (!planType) {
       console.warn("ApplyFy: não foi possível inferir plan_type (verifique OFFER_CODE_TO_PLAN / PRODUCT_ID_TO_PLAN / PRODUCT_NAME_TO_PLAN)", {
-        offerCode, productIds, productNames,
+        offerCode, productId: productIds[0] ?? null, productName: productNames[0] ?? null,
       });
 
       return new Response(JSON.stringify({ ok: false, error: "plan_type não identificado" }), {
@@ -294,18 +272,22 @@ Deno.serve(async (req) => {
     let page = 1;
     while (true) {
       const { data: { users }, error } = await supabase.auth.admin.listUsers({ page, perPage: 1000 });
-      if (error || !users || users.length === 0) break;
+      if (error) { console.error("ApplyFy Supabase Error:", error); throw error; }
+      if (!users || users.length === 0) break;
       user = users.find((u) => u.email?.toLowerCase() === email);
       if (user) break;
       page++;
       if (page > 10) break;
     }
 
+    let finalAction: "activated" | "pending_updated" | "pending_created" = "activated";
+
     if (user) {
       if (planType === "lifetime") {
-        await supabase.from("profiles").update({ is_lifetime: true }).eq("user_id", user.id);
+        const { error } = await supabase.from("profiles").update({ is_lifetime: true }).eq("user_id", user.id);
+        if (error) { console.error("ApplyFy Supabase Error:", error); throw error; }
       }
-      await supabase.from("subscriptions").upsert({
+      const { error } = await supabase.from("subscriptions").upsert({
         user_id: user.id,
         buyer_email: email,
         plan_type: planType,
@@ -313,35 +295,53 @@ Deno.serve(async (req) => {
         cakto_transaction_id: transactionId || null,
         expires_at: expiresAt,
       }, { onConflict: "user_id" });
-
-      console.info(`ApplyFy: assinatura ativada para ${email} (${planType})`);
+      if (error) { console.error("ApplyFy Supabase Error:", error); throw error; }
+      finalAction = "activated";
     } else {
-      const { data: existingPending } = await supabase
+      const { data: existingPending, error: selErr } = await supabase
         .from("subscriptions")
         .select("id")
         .eq("buyer_email", email)
         .is("user_id", null)
         .maybeSingle();
+      if (selErr) { console.error("ApplyFy Supabase Error:", selErr); throw selErr; }
 
       if (existingPending) {
-        await supabase.from("subscriptions").update({
+        const { error } = await supabase.from("subscriptions").update({
           plan_type: planType,
           status: "active",
           cakto_transaction_id: transactionId || null,
           expires_at: expiresAt,
           updated_at: new Date().toISOString(),
         }).eq("id", existingPending.id);
+        if (error) { console.error("ApplyFy Supabase Error:", error); throw error; }
+        finalAction = "pending_updated";
       } else {
-        await supabase.from("subscriptions").insert({
+        const { error } = await supabase.from("subscriptions").insert({
           buyer_email: email,
           plan_type: planType,
           status: "active",
           cakto_transaction_id: transactionId || null,
           expires_at: expiresAt,
         });
+        if (error) { console.error("ApplyFy Supabase Error:", error); throw error; }
+        finalAction = "pending_created";
       }
-      console.info(`ApplyFy: assinatura pré-vinculada para ${email} (${planType})`);
     }
+
+    console.info("ApplyFy result:", {
+      event,
+      transactionId,
+      offerCode,
+      productId: productIds[0] ?? null,
+      productName: productNames[0] ?? null,
+      email: maskEmail(email),
+      planType,
+      userFound: !!user,
+      subscription: finalAction,
+      status: "active",
+    });
+
 
     return new Response(JSON.stringify({ ok: true, plan_type: planType }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
