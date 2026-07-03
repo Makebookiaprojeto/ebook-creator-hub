@@ -160,23 +160,25 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
 
   const [page, setPage] = useState(0);
 
-  // Preload all images aggressively as soon as sources are known
+  // Preload images into the browser cache. We key the effect on the URL list
+  // (not the array reference) so re-renders of the parent don't restart the
+  // preload, and we do NOT clear img.src on cleanup — that was cancelling
+  // in-flight requests and causing images to "not load" or reload on nav.
+  const preloadKey = useMemo(() => {
+    const urls = [optimizePexels(coverUrl, 1200), ...displayedChapters.map((c) => optimizePexels(c.image_url, 600))];
+    return urls.filter(Boolean).join("|");
+  }, [coverUrl, displayedChapters]);
+
   useEffect(() => {
-    const cover = optimizePexels(coverUrl, 1200);
-    const chapterUrls = displayedChapters.map((c) => optimizePexels(c.image_url, 600));
-    const urls = [cover, ...chapterUrls].filter((u): u is string => !!u);
-    const imgs = urls.map((src) => {
+    if (!preloadKey) return;
+    const urls = preloadKey.split("|");
+    urls.forEach((src) => {
       const img = new Image();
       img.decoding = "async";
-      (img as HTMLImageElement & { fetchPriority?: string }).fetchPriority = "high";
       img.src = src;
       img.decode?.().catch(() => {});
-      return img;
     });
-    return () => {
-      imgs.forEach((i) => (i.src = ""));
-    };
-  }, [coverUrl, displayedChapters]);
+  }, [preloadKey]);
 
   const paginate = useCallback(
     (newDirection: number) => {
@@ -190,6 +192,7 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
   );
 
   const goTo = useCallback((i: number) => setPage(i), []);
+
 
   return (
     <div className="relative w-full max-w-4xl mx-auto px-3 sm:px-10">
@@ -311,8 +314,8 @@ const ChapterPage = memo(function ChapterPage({
               className="w-full h-full object-cover"
               decoding="async"
               loading="eager"
-              {...({ fetchpriority: "high" } as any)}
             />
+
           </div>
         )}
         <div className={`${chapter?.image_url ? "sm:col-span-7" : "sm:col-span-12"} overflow-y-auto pr-2 custom-scrollbar`}>
