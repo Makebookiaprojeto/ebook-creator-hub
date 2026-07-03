@@ -228,6 +228,28 @@ Deno.serve(async (req) => {
     }
 
     // ---------- TRANSACTION_PAID ----------
+    // [TEMP DEBUG] logs para investigar identificação do plano vendido pela ApplyFy.
+    try {
+      const dbg = payload?.data ?? payload ?? {};
+      const dbgOrderItems: any[] = Array.isArray(dbg?.orderItems)
+        ? dbg.orderItems
+        : Array.isArray(payload?.orderItems) ? payload.orderItems : [];
+      const dbgItem0 = dbgOrderItems[0] ?? null;
+      console.log("[APPLYFY DEBUG] full payload:", JSON.stringify(payload));
+      console.log("[APPLYFY DEBUG] event:", event);
+      console.log("[APPLYFY DEBUG] offerCode:", dbg?.offerCode ?? payload?.offerCode ?? null);
+      console.log("[APPLYFY DEBUG] orderItems:", JSON.stringify(dbgOrderItems));
+      console.log("[APPLYFY DEBUG] orderItems[0].product.id:", dbgItem0?.product?.id ?? null);
+      console.log("[APPLYFY DEBUG] orderItems[0].product.externalId:", dbgItem0?.product?.externalId ?? null);
+      console.log("[APPLYFY DEBUG] orderItems[0].product.name:", dbgItem0?.product?.name ?? null);
+      console.log("[APPLYFY DEBUG] subscription:", JSON.stringify(dbg?.subscription ?? payload?.subscription ?? null));
+      console.log("[APPLYFY DEBUG] subscription.id:", (dbg?.subscription ?? payload?.subscription)?.id ?? null);
+      console.log("[APPLYFY DEBUG] transaction.id:", (dbg?.transaction ?? payload?.transaction)?.id ?? null);
+    } catch (e) {
+      console.log("[APPLYFY DEBUG] log error:", (e as Error).message);
+    }
+
+
     const { plan: planType, source: planSource } = inferPlanType(offerCode, productIds, productNames);
     console.log("ApplyFy plan inference:", { planType, planSource });
 
