@@ -199,48 +199,55 @@ Deno.serve(async (req) => {
 
       let sub: any = null;
       if (transactionId) {
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from("subscriptions")
           .select("id, user_id, buyer_email, plan_type, status")
           .eq("cakto_transaction_id", transactionId)
           .maybeSingle();
+        if (error) { console.error("ApplyFy Supabase Error:", error); throw error; }
         if (data) sub = data;
       }
       if (!sub && email) {
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from("subscriptions")
           .select("id, user_id, buyer_email, plan_type, status")
           .eq("buyer_email", email)
           .order("created_at", { ascending: false })
           .limit(1)
           .maybeSingle();
+        if (error) { console.error("ApplyFy Supabase Error:", error); throw error; }
         if (data) sub = data;
       }
 
       if (!sub) {
-        console.warn(`ApplyFy ${reason}: assinatura não encontrada`, { transactionId, email });
+        console.warn(`ApplyFy ${reason}: assinatura não encontrada`, { transactionId, email: maskEmail(email) });
         return new Response(JSON.stringify({ ok: true, revoked: false, reason: "subscription_not_found" }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
 
-      await supabase.from("subscriptions").update({
-        status: reason,
-        updated_at: new Date().toISOString(),
-      }).eq("id", sub.id);
+      {
+        const { error } = await supabase.from("subscriptions").update({
+          status: reason,
+          updated_at: new Date().toISOString(),
+        }).eq("id", sub.id);
+        if (error) { console.error("ApplyFy Supabase Error:", error); throw error; }
+      }
 
       if (sub.user_id) {
-        await supabase.from("profiles").update({ is_lifetime: false }).eq("user_id", sub.user_id);
+        const { error } = await supabase.from("profiles").update({ is_lifetime: false }).eq("user_id", sub.user_id);
+        if (error) { console.error("ApplyFy Supabase Error:", error); throw error; }
       }
 
       console.info(
-        `ApplyFy ${reason}: acesso revogado. user_id=${sub.user_id ?? "null"} email=${sub.buyer_email} plano=${sub.plan_type} tx=${transactionId}`,
+        `ApplyFy ${reason}: acesso revogado. user_id=${sub.user_id ?? "null"} email=${maskEmail(sub.buyer_email ?? "")} plano=${sub.plan_type} tx=${transactionId}`,
       );
 
       return new Response(JSON.stringify({
         ok: true, revoked: true, reason, plan_type: sub.plan_type, user_id: sub.user_id,
       }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
+
 
     // ---------- TRANSACTION_PAID ----------
     // [TEMP DEBUG] logs para investigar identificação do plano vendido pela ApplyFy.
