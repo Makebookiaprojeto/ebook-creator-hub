@@ -35,7 +35,8 @@ import {
 } from "@/components/ui/accordion";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
-import { CHECKOUT_LINKS } from "@/config/checkoutLinks";
+import { CHECKOUT_LINKS, CHECKOUT_LINKS_BY_METHOD } from "@/config/checkoutLinks";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { resolveDisplayName } from "@/lib/userName";
 
@@ -204,8 +205,12 @@ export default function Plans() {
   }, [authLoading, user, navigate]);
 
   const handleCheckout = (plan: "monthly" | "lifetime") => {
-    const baseUrl = CHECKOUT_LINKS[plan];
-    if (!baseUrl) return;
+    const selectedMethod = plan === "monthly" ? monthlyMethod : lifetimeMethod;
+    const baseUrl = CHECKOUT_LINKS_BY_METHOD[plan]?.[selectedMethod];
+    if (!baseUrl) {
+      toast.error("Forma de pagamento indisponível.");
+      return;
+    }
     const url = new URL(baseUrl);
     if (user?.email) url.searchParams.set("email", user.email);
     window.location.href = url.toString();
