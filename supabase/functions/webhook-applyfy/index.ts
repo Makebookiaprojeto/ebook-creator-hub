@@ -167,7 +167,6 @@ Deno.serve(async (req) => {
     // ---------- Evento ----------
     const event = (payload?.event ?? payload?.type ?? payload?.eventName ?? "").toString();
     console.log("ApplyFy event:", event);
-    try { console.log("ApplyFy payload keys:", JSON.stringify(collectKeys(payload))); } catch {}
 
     const HANDLED = new Set(["TRANSACTION_PAID", "TRANSACTION_REFUNDED", "TRANSACTION_CHARGED_BACK"]);
     if (!HANDLED.has(event)) {
@@ -177,7 +176,15 @@ Deno.serve(async (req) => {
     }
 
     const { email, transactionId, offerCode, productIds, productNames } = extractApplyFyFields(payload);
-    console.log("ApplyFy parsed:", { event, email, transactionId, offerCode, productIds, productNames });
+    console.log("ApplyFy parsed:", {
+      event,
+      email: maskEmail(email),
+      transactionId,
+      offerCode,
+      productId: productIds[0] ?? null,
+      productName: productNames[0] ?? null,
+    });
+
 
 
     if (!email) {
