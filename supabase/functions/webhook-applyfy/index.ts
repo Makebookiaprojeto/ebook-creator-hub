@@ -19,13 +19,21 @@ const corsHeaders = {
 };
 
 // ---------- Mapeamento de plano ----------
-// TODO: Preencher com os IDs reais dos produtos ApplyFy quando forem
-// informados. A chave é o valor de orderItems[].product.id retornado
-// pelo webhook da ApplyFy.
+// A identificação segue a ordem: offerCode → product.id → product.name.
+// Preencher com os valores reais informados pelo usuário.
+const OFFER_CODE_TO_PLAN: Record<string, "monthly" | "lifetime"> = {
+  // "OFFER_CODE_MENSAL":    "monthly",
+  // "OFFER_CODE_VITALICIO": "lifetime",
+};
 const PRODUCT_ID_TO_PLAN: Record<string, "monthly" | "lifetime"> = {
   // "APPLYFY_PRODUCT_ID_MONTHLY":  "monthly",
   // "APPLYFY_PRODUCT_ID_LIFETIME": "lifetime",
 };
+const PRODUCT_NAME_TO_PLAN: Record<string, "monthly" | "lifetime"> = {
+  // "nome do produto mensal":    "monthly",
+  // "nome do produto vitalicio": "lifetime",
+};
+
 
 // ---------- Utilitários ----------
 function timingSafeEqual(a: string, b: string): boolean {
@@ -61,6 +69,7 @@ function extractApplyFyFields(payload: any) {
 
   const email = (client?.email || "").toString().toLowerCase().trim();
   const transactionId = (data?.id ?? data?.transactionId ?? payload?.id ?? "").toString();
+  const offerCode = (data?.offerCode ?? payload?.offerCode ?? "").toString();
 
   const productIds: string[] = orderItems
     .map((it) => it?.product?.id ?? it?.productId ?? it?.product_id)
@@ -70,13 +79,31 @@ function extractApplyFyFields(payload: any) {
     .map((it) => it?.product?.name ?? it?.product?.title ?? it?.name)
     .filter((v) => typeof v === "string" && v.length > 0);
 
-  return { email, transactionId, productIds, productNames };
+  return { email, transactionId, offerCode, productIds, productNames };
 }
 
-function inferPlanType(productIds: string[]): { plan: "monthly" | "lifetime" | null; source: string } {
-  for (const id of productIds) {
-    const mapped = PRODUCT_ID_TO_PLAN[id] || PRODUCT_ID_TO_PLAN[id.toLowerCase?.() ?? id];
-    if (mapped) return { plan: mapped, source: `product_id:${id}` };
+function inferPlanType(
+  offerCode: string,
+  productIds: string[],
+  productNames: string[],
+): { plan: "monthly" | "lifetime" | null; source: string } {
+  // 1) offerCode
+  if (offerCode) {
+    const mapped = OFFER_CODE_TO_PLAN[offerCode] || OFFER_CODE_TO_PLAN[offerCode.toLowerCase()];
+    if (mapped) return { plan: mapped, source: `offer_code:${offerCode}` };
+  }
+  // 2) product.id (primeiro item)
+  const firstId = productIds[0];
+  if (firstId) {
+    const mapped = PRODUCT_ID_TO_PLAN[firstId] || PRODUCT_ID_TO_PLAN[firstId.toLowerCase()];
+    if (mapped) return { plan: mapped, source: `product_id:${firstId}` };
+  }
+  // 3) product.name (primeiro item)
+  const firstName = productNames[0];
+  if (firstName) {
+    const mapped =
+      PRODUCT_NAME_TO_PLAN[firstName] || PRODUCT_NAME_TO_PLAN[firstName.toLowerCase().trim()];
+    if (mapped) return { plan: mapped, source: `product_name:${firstName}` };
   }
   return { plan: null, source: "none" };
 }
@@ -140,8 +167,9 @@ Deno.serve(async (req) => {
       });
     }
 
-    const { email, transactionId, productIds, productNames } = extractApplyFyFields(payload);
-    console.log("ApplyFy parsed:", { event, email, transactionId, productIds, productNames });
+    const { email, transactionId, offerCode, productIds, productNames } = extractApplyFyFields(payload);
+    console.log("ApplyFy parsed:", { event, email, transactionId, offerCode, productIds, productNames });
+
 
     if (!email) {
       return new Response(JSON.stringify({ ok: false, error: "Email ausente" }), {
@@ -199,13 +227,14 @@ Deno.serve(async (req) => {
     }
 
     // ---------- TRANSACTION_PAID ----------
-    const { plan: planType, source: planSource } = inferPlanType(productIds);
+    const { plan: planType, source: planSource } = inferPlanType(offerCode, productIds, productNames);
     console.log("ApplyFy plan inference:", { planType, planSource });
 
     if (!planType) {
-      console.warn("ApplyFy: não foi possível inferir plan_type (verifique PRODUCT_ID_TO_PLAN)", {
-        productIds, productNames,
+      console.warn("ApplyFy: não foi possível inferir plan_type (verifique OFFER_CODE_TO_PLAN / PRODUCT_ID_TO_PLAN / PRODUCT_NAME_TO_PLAN)", {
+        offerCode, productIds, productNames,
       });
+
       return new Response(JSON.stringify({ ok: false, error: "plan_type não identificado" }), {
         status: 422, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
