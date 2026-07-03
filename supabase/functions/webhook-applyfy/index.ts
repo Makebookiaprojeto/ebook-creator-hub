@@ -167,8 +167,9 @@ Deno.serve(async (req) => {
       });
     }
 
-    const { email, transactionId, productIds, productNames } = extractApplyFyFields(payload);
-    console.log("ApplyFy parsed:", { event, email, transactionId, productIds, productNames });
+    const { email, transactionId, offerCode, productIds, productNames } = extractApplyFyFields(payload);
+    console.log("ApplyFy parsed:", { event, email, transactionId, offerCode, productIds, productNames });
+
 
     if (!email) {
       return new Response(JSON.stringify({ ok: false, error: "Email ausente" }), {
