@@ -398,6 +398,12 @@ export default function Plans() {
                 ))}
               </ul>
 
+              <PaymentMethodSelector
+                value={lifetimeMethod}
+                onChange={setLifetimeMethod}
+                name="lifetime-method"
+              />
+
               <Button
                 size="lg"
                 className="w-full"
