@@ -58,6 +58,13 @@ function collectKeys(obj: any, prefix = "", out: string[] = [], depth = 0): stri
   return out;
 }
 
+function maskEmail(email: string): string {
+  if (!email || !email.includes("@")) return "";
+  const [u, d] = email.split("@");
+  const head = u.length <= 2 ? u : u.slice(0, 2);
+  return `${head}***@${d}`;
+}
+
 // ---------- Extração ----------
 function extractApplyFyFields(payload: any) {
   const data = payload?.data ?? payload ?? {};
