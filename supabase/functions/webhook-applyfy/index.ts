@@ -267,18 +267,16 @@ Deno.serve(async (req) => {
       ? null
       : new Date(Date.now() + 31 * 24 * 60 * 60 * 1000).toISOString();
 
-    // Localiza usuário pelo email (paginação como no IronPay).
-    let user: any = null;
-    let page = 1;
-    while (true) {
-      const { data: { users }, error } = await supabase.auth.admin.listUsers({ page, perPage: 1000 });
+    // Localiza usuário pelo email via RPC (consulta direta indexada em auth.users).
+    let user: { id: string } | null = null;
+    {
+      const { data: rpcUserId, error } = await supabase.rpc("get_user_id_by_email", {
+        email_param: email,
+      });
       if (error) { console.error("ApplyFy Supabase Error:", error); throw error; }
-      if (!users || users.length === 0) break;
-      user = users.find((u) => u.email?.toLowerCase() === email);
-      if (user) break;
-      page++;
-      if (page > 10) break;
+      if (rpcUserId) user = { id: rpcUserId as string };
     }
+
 
     let finalAction: "activated" | "pending_updated" | "pending_created" = "activated";
 
