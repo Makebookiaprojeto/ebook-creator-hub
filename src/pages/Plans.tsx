@@ -340,6 +340,12 @@ export default function Plans() {
                 ))}
               </ul>
 
+              <PaymentMethodSelector
+                value={monthlyMethod}
+                onChange={setMonthlyMethod}
+                name="monthly-method"
+              />
+
               <Button
                 size="lg"
                 variant="outline"
