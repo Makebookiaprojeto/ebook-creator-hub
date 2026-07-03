@@ -303,6 +303,7 @@ Deno.serve(async (req) => {
         .select("id")
         .eq("buyer_email", email)
         .is("user_id", null)
+        .limit(1)
         .maybeSingle();
       if (selErr) { console.error("ApplyFy Supabase Error:", selErr); throw selErr; }
 
