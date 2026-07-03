@@ -135,12 +135,6 @@ Deno.serve(async (req) => {
 
     const rawBody = await req.text();
 
-    const headersObj: Record<string, string> = {};
-    req.headers.forEach((value, key) => { headersObj[key] = value; });
-    console.log("--- APPLYFY WEBHOOK AUDIT START ---");
-    console.log(`Headers: ${JSON.stringify(headersObj)}`);
-    console.log(`Raw Body: ${rawBody}`);
-    console.log("--- APPLYFY WEBHOOK AUDIT END ---");
 
     let payload: any = {};
     try { payload = JSON.parse(rawBody); } catch { payload = {}; }
