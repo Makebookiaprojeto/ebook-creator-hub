@@ -19,13 +19,21 @@ const corsHeaders = {
 };
 
 // ---------- Mapeamento de plano ----------
-// TODO: Preencher com os IDs reais dos produtos ApplyFy quando forem
-// informados. A chave é o valor de orderItems[].product.id retornado
-// pelo webhook da ApplyFy.
+// A identificação segue a ordem: offerCode → product.id → product.name.
+// Preencher com os valores reais informados pelo usuário.
+const OFFER_CODE_TO_PLAN: Record<string, "monthly" | "lifetime"> = {
+  // "OFFER_CODE_MENSAL":    "monthly",
+  // "OFFER_CODE_VITALICIO": "lifetime",
+};
 const PRODUCT_ID_TO_PLAN: Record<string, "monthly" | "lifetime"> = {
   // "APPLYFY_PRODUCT_ID_MONTHLY":  "monthly",
   // "APPLYFY_PRODUCT_ID_LIFETIME": "lifetime",
 };
+const PRODUCT_NAME_TO_PLAN: Record<string, "monthly" | "lifetime"> = {
+  // "nome do produto mensal":    "monthly",
+  // "nome do produto vitalicio": "lifetime",
+};
+
 
 // ---------- Utilitários ----------
 function timingSafeEqual(a: string, b: string): boolean {
