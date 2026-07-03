@@ -1,29 +1,42 @@
 // Links de checkout dos planos de assinatura do SaaS.
-// Estrutura preparada para múltiplos meios de pagamento por plano:
-//   - pix  → IronPay (fluxo atual)
-//   - card → ApplyFy (a ser integrado futuramente)
 //
-// IMPORTANTE: esta reorganização é apenas estrutural. Nenhum fluxo de
-// pagamento, página, webhook ou hook foi alterado. O consumo destes links
-// continua sendo feito exclusivamente por src/pages/Plans.tsx via
-// handleCheckout, que hoje utiliza somente o gateway PIX (IronPay).
+// Reorganização preparatória para suportar múltiplos meios de pagamento por
+// plano. Nenhum fluxo, página, webhook, hook, rota ou banco foi alterado.
 //
-// A integração da Cakto (vendas de ebooks dos usuários) não é afetada.
+// - CHECKOUT_LINKS (mantido): mapa plano → URL. Continua sendo a fonte usada
+//   hoje por src/pages/Plans.tsx (handleCheckout). Aponta para as URLs atuais
+//   da IronPay (PIX).
+// - CHECKOUT_LINKS_BY_METHOD (novo): mapa plano → { pix, card } já pronto
+//   para quando a ApplyFy (Cartão) for integrada. NÃO é consumido por
+//   nenhum arquivo no momento.
+//
+// A integração da Cakto (vendas de ebooks) não é afetada.
 
 export type PlanId = "monthly" | "lifetime";
 export type PaymentMethod = "pix" | "card";
 
-export const CHECKOUT_LINKS: Record<PlanId, Record<PaymentMethod, string>> = {
+// URLs atuais em produção (IronPay / PIX).
+const IRONPAY_MONTHLY = "https://go.ironpayapp.com.br/rz667jowdt";
+const IRONPAY_LIFETIME = "https://go.ironpayapp.com.br/pdg8y8zsl4";
+
+// URLs da ApplyFy (Cartão) — a preencher quando a integração for ativada.
+const APPLYFY_MONTHLY = "";
+const APPLYFY_LIFETIME = "";
+
+// Estrutura legada mantida para compatibilidade com o fluxo atual (PIX).
+export const CHECKOUT_LINKS: Record<PlanId, string> = {
+  monthly: IRONPAY_MONTHLY,
+  lifetime: IRONPAY_LIFETIME,
+};
+
+// Nova estrutura, preparada para múltiplos meios de pagamento.
+export const CHECKOUT_LINKS_BY_METHOD: Record<PlanId, Record<PaymentMethod, string>> = {
   monthly: {
-    // IronPay (PIX) — URL atual em produção
-    pix: "https://go.ironpayapp.com.br/rz667jowdt",
-    // ApplyFy (Cartão) — a ser preenchido quando a integração for ativada
-    card: "",
+    pix: IRONPAY_MONTHLY,
+    card: APPLYFY_MONTHLY,
   },
   lifetime: {
-    // IronPay (PIX) — URL atual em produção
-    pix: "https://go.ironpayapp.com.br/pdg8y8zsl4",
-    // ApplyFy (Cartão) — a ser preenchido quando a integração for ativada
-    card: "",
+    pix: IRONPAY_LIFETIME,
+    card: APPLYFY_LIFETIME,
   },
 };
