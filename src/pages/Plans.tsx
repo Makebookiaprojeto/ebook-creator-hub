@@ -21,6 +21,7 @@ import {
   DollarSign,
   ShoppingCart,
   CreditCard,
+  QrCode,
 } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
 import { SaasJourneyPreview } from "@/components/SaasJourneyPreview";
@@ -114,13 +115,13 @@ function PaymentMethodSelector({
   name: string;
 }) {
   const options: { id: PaymentMethodValue; label: string; icon: typeof DollarSign }[] = [
-    { id: "pix", label: "PIX", icon: DollarSign },
+    { id: "pix", label: "PIX", icon: QrCode },
     { id: "card", label: "Cartão de Crédito", icon: CreditCard },
   ];
   return (
-    <div className="mb-6" role="radiogroup" aria-label="Forma de pagamento">
+    <div className="mb-6" role="radiogroup" aria-label="Método de Pagamento">
       <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
-        Forma de pagamento
+        Método de Pagamento
       </div>
       <div className="grid grid-cols-2 gap-2">
         {options.map((opt) => {
