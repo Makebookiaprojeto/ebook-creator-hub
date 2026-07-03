@@ -249,6 +249,29 @@ Deno.serve(async (req) => {
     }
 
 
+    // ---------- Idempotência: TRANSACTION_PAID duplicado ----------
+    if (event === "TRANSACTION_PAID" && transactionId) {
+      const { data: existingTx, error: dupErr } = await supabase
+        .from("subscriptions")
+        .select("id")
+        .eq("cakto_transaction_id", transactionId)
+        .maybeSingle();
+      if (dupErr) {
+        console.error("ApplyFy Supabase Error (idempotency check):", dupErr);
+        return new Response(JSON.stringify({ ok: false, error: "Idempotency check failed" }), {
+          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (existingTx) {
+        console.info("ApplyFy duplicate transaction ignored", {
+          transactionId, email: maskEmail(email), offerCode,
+        });
+        return new Response(JSON.stringify({ ok: true, duplicate: true }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
     // ---------- TRANSACTION_PAID ----------
     const { plan: planType, source: planSource } = inferPlanType(offerCode, productIds, productNames);
     console.log("ApplyFy plan inference:", { planType, planSource });
