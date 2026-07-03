@@ -429,7 +429,7 @@ export default function Plans() {
                   <span className="text-muted-foreground text-sm">à vista</span>
                 </div>
                 <div className="text-sm font-medium text-primary mt-1">
-                  ou em até 12 X de R$ 25,82
+                  ou em até 12 X de R$ 29,58
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
                   Pague uma vez e use para sempre.

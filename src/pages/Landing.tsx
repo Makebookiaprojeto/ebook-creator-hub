@@ -323,7 +323,7 @@ const Landing = () => {
                   <span className="text-muted-foreground font-medium"> única vez</span>
                 </div>
                 <div className="text-sm font-bold text-primary mt-1">
-                  ou em até 12 X de R$ 25,82
+                  ou em até 12 X de R$ 29,58
                 </div>
               </div>
               <ul className="space-y-4 mb-10 flex-1">
