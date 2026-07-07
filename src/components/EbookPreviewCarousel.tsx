@@ -189,7 +189,6 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
     return () => {
       cancelled = true;
     };
-    });
   }, [preloadKey]);
 
   const paginate = useCallback(
