@@ -166,18 +166,29 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
   // preload, and we do NOT clear img.src on cleanup — that was cancelling
   // in-flight requests and causing images to "not load" or reload on nav.
   const preloadKey = useMemo(() => {
-    const urls = [optimizePexels(coverUrl, 1200), ...displayedChapters.map((c) => optimizePexels(c.image_url, 600))];
+    const urls = [optimizePexels(coverUrl, 800), ...displayedChapters.map((c) => optimizePexels(c.image_url, 500))];
     return urls.filter(Boolean).join("|");
   }, [coverUrl, displayedChapters]);
 
   useEffect(() => {
     if (!preloadKey) return;
     const urls = preloadKey.split("|");
-    urls.forEach((src) => {
-      const img = new Image();
-      img.decoding = "async";
-      img.src = src;
-      img.decode?.().catch(() => {});
+    // Preload the cover immediately; stagger chapter preloads so they don't
+    // compete with the currently visible image for bandwidth.
+    let cancelled = false;
+    urls.forEach((src, idx) => {
+      const delay = idx === 0 ? 0 : 250 + idx * 200;
+      setTimeout(() => {
+        if (cancelled) return;
+        const img = new Image();
+        img.decoding = "async";
+        img.src = src;
+        img.decode?.().catch(() => {});
+      }, delay);
+    });
+    return () => {
+      cancelled = true;
+    };
     });
   }, [preloadKey]);
 
