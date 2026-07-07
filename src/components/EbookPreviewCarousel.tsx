@@ -33,7 +33,8 @@ function optimizePexels(url: string | null | undefined, w: number): string | nul
     u.searchParams.set("auto", "compress");
     u.searchParams.set("cs", "tinysrgb");
     u.searchParams.set("w", String(w));
-    u.searchParams.set("dpr", "2");
+    // dpr=1 keeps payload small; the visual sizes are modest so this is enough
+    u.searchParams.set("dpr", "1");
     return u.toString();
   } catch {
     return url;
@@ -124,7 +125,7 @@ const CoverPage = memo(function CoverPage({
       <div className="flex-1 rounded-xl overflow-hidden shadow-2xl relative mb-4" style={{ background: ACCENT_BG }}>
         {coverUrl ? (
           <img
-            src={optimizePexels(coverUrl, 1200) ?? coverUrl}
+            src={optimizePexels(coverUrl, 800) ?? coverUrl}
             alt={title}
             className="absolute inset-0 h-full w-full object-cover"
             decoding="async"
@@ -165,19 +166,29 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
   // preload, and we do NOT clear img.src on cleanup — that was cancelling
   // in-flight requests and causing images to "not load" or reload on nav.
   const preloadKey = useMemo(() => {
-    const urls = [optimizePexels(coverUrl, 1200), ...displayedChapters.map((c) => optimizePexels(c.image_url, 600))];
+    const urls = [optimizePexels(coverUrl, 800), ...displayedChapters.map((c) => optimizePexels(c.image_url, 500))];
     return urls.filter(Boolean).join("|");
   }, [coverUrl, displayedChapters]);
 
   useEffect(() => {
     if (!preloadKey) return;
     const urls = preloadKey.split("|");
-    urls.forEach((src) => {
-      const img = new Image();
-      img.decoding = "async";
-      img.src = src;
-      img.decode?.().catch(() => {});
+    // Preload the cover immediately; stagger chapter preloads so they don't
+    // compete with the currently visible image for bandwidth.
+    let cancelled = false;
+    urls.forEach((src, idx) => {
+      const delay = idx === 0 ? 0 : 250 + idx * 200;
+      setTimeout(() => {
+        if (cancelled) return;
+        const img = new Image();
+        img.decoding = "async";
+        img.src = src;
+        img.decode?.().catch(() => {});
+      }, delay);
     });
+    return () => {
+      cancelled = true;
+    };
   }, [preloadKey]);
 
   const paginate = useCallback(
