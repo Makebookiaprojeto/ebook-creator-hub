@@ -33,7 +33,8 @@ function optimizePexels(url: string | null | undefined, w: number): string | nul
     u.searchParams.set("auto", "compress");
     u.searchParams.set("cs", "tinysrgb");
     u.searchParams.set("w", String(w));
-    u.searchParams.set("dpr", "2");
+    // dpr=1 keeps payload small; the visual sizes are modest so this is enough
+    u.searchParams.set("dpr", "1");
     return u.toString();
   } catch {
     return url;
