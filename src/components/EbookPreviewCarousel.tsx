@@ -125,7 +125,7 @@ const CoverPage = memo(function CoverPage({
       <div className="flex-1 rounded-xl overflow-hidden shadow-2xl relative mb-4" style={{ background: ACCENT_BG }}>
         {coverUrl ? (
           <img
-            src={optimizePexels(coverUrl, 1200) ?? coverUrl}
+            src={optimizePexels(coverUrl, 800) ?? coverUrl}
             alt={title}
             className="absolute inset-0 h-full w-full object-cover"
             decoding="async"
