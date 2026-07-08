@@ -415,26 +415,38 @@ const PreviewImage = memo(function PreviewImage({
   className: string;
   fetchPriority?: "high" | "auto";
 }) {
-  const optimizedSrc = useMemo(() => optimizePreviewImageUrl(src, width) ?? src, [src, width]);
-  const safeInitialSrc = failedPreviewImages.has(optimizedSrc) ? src : optimizedSrc;
-  const [currentSrc, setCurrentSrc] = useState(safeInitialSrc);
+  const [resolvedSrc, setResolvedSrc] = useState(() => resolvePreviewSrc(src, width));
 
   useEffect(() => {
-    setCurrentSrc(failedPreviewImages.has(optimizedSrc) ? src : optimizedSrc);
-  }, [optimizedSrc, src]);
+    let cancelled = false;
+    const initial = resolvePreviewSrc(src, width);
+    setResolvedSrc(initial);
+    // Se ainda não temos blob local, aciona preload e troca quando pronto.
+    if (!initial.startsWith("blob:")) {
+      preloadPreviewUrl(src, width).then(() => {
+        if (cancelled) return;
+        const next = resolvePreviewSrc(src, width);
+        if (next !== initial) setResolvedSrc(next);
+      });
+    }
+    return () => {
+      cancelled = true;
+    };
+  }, [src, width]);
 
   return (
     <img
-      src={currentSrc}
+      src={resolvedSrc}
       alt={alt}
       className={className}
       decoding="async"
       loading="eager"
       fetchPriority={fetchPriority}
       onError={() => {
-        if (currentSrc !== src) setCurrentSrc(src);
+        if (resolvedSrc !== src) setResolvedSrc(src);
       }}
       style={{ transform: "translateZ(0)" }}
     />
   );
 });
+
