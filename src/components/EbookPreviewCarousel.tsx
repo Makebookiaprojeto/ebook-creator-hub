@@ -23,6 +23,7 @@ const COVER_PREVIEW_WIDTH = 800;
 const CHAPTER_PREVIEW_WIDTH = 500;
 const previewImageCache = new Map<string, Promise<boolean>>();
 const decodedPreviewImages = new Map<string, HTMLImageElement>();
+const failedPreviewImages = new Set<string>();
 
 type Block =
   | { type: "h"; text: string }
@@ -53,6 +54,7 @@ export function optimizePreviewImageUrl(url: string | null | undefined, w: numbe
 }
 
 function loadPreviewImage(src: string, priority: "high" | "auto" = "auto"): Promise<boolean> {
+  if (failedPreviewImages.has(src)) return Promise.resolve(false);
   const cached = previewImageCache.get(src);
   if (cached) return cached;
 
@@ -74,6 +76,7 @@ function loadPreviewImage(src: string, priority: "high" | "auto" = "auto"): Prom
     img.onerror = () => {
       decodedPreviewImages.delete(src);
       previewImageCache.delete(src);
+      failedPreviewImages.add(src);
       resolve(false);
     };
     img.src = src;
@@ -405,11 +408,12 @@ const PreviewImage = memo(function PreviewImage({
   fetchPriority?: "high" | "auto";
 }) {
   const optimizedSrc = useMemo(() => optimizePreviewImageUrl(src, width) ?? src, [src, width]);
-  const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
+  const safeInitialSrc = failedPreviewImages.has(optimizedSrc) ? src : optimizedSrc;
+  const [currentSrc, setCurrentSrc] = useState(safeInitialSrc);
 
   useEffect(() => {
-    setCurrentSrc(optimizedSrc);
-  }, [optimizedSrc]);
+    setCurrentSrc(failedPreviewImages.has(optimizedSrc) ? src : optimizedSrc);
+  }, [optimizedSrc, src]);
 
   return (
     <img
