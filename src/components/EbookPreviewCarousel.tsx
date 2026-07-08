@@ -283,17 +283,19 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
         <div className="flex-1 relative overflow-hidden">
           {Array.from({ length: totalPages }).map((_, i) => {
             const active = i === page;
+            const near = Math.abs(i - page) <= 1;
             return (
               <div
                 key={i}
                 aria-hidden={!active}
-                className="absolute inset-0 w-full h-full p-5 sm:p-8 transition-opacity duration-150 ease-out"
+                className="absolute inset-0 w-full h-full p-5 sm:p-8"
                 style={{
                   opacity: active ? 1 : 0,
                   pointerEvents: active ? "auto" : "none",
                   visibility: active ? "visible" : "hidden",
+                  display: near ? "block" : "none",
                   zIndex: active ? 1 : 0,
-                  willChange: "opacity",
+                  contain: "layout paint",
                 }}
               >
                 {i === 0 ? (
@@ -305,6 +307,7 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
             );
           })}
         </div>
+
 
 
         <div className="p-4 border-t flex items-center justify-center" style={{ background: "hsl(0 0% 100%)", borderColor: "hsl(0 0% 90%)" }}>
