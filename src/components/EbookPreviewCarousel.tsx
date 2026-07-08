@@ -19,26 +19,91 @@ type Props = {
 
 const ACCENT = "hsl(150 75% 32%)";
 const ACCENT_BG = "hsl(150 75% 35%)";
+const COVER_PREVIEW_WIDTH = 800;
+const CHAPTER_PREVIEW_WIDTH = 500;
+const previewImageCache = new Map<string, Promise<boolean>>();
+const decodedPreviewImages = new Map<string, HTMLImageElement>();
 
 type Block =
   | { type: "h"; text: string }
   | { type: "ul"; items: { check: boolean; text: string }[] }
   | { type: "p"; text: string };
 
-function optimizePexels(url: string | null | undefined, w: number): string | null | undefined {
+export function optimizePreviewImageUrl(url: string | null | undefined, w: number): string | null | undefined {
   if (!url) return url;
   try {
-    if (!/images\.pexels\.com/i.test(url)) return url;
     const u = new URL(url);
-    u.searchParams.set("auto", "compress");
-    u.searchParams.set("cs", "tinysrgb");
-    u.searchParams.set("w", String(w));
-    // dpr=1 keeps payload small; the visual sizes are modest so this is enough
-    u.searchParams.set("dpr", "1");
+    if (/images\.pexels\.com/i.test(url)) {
+      u.searchParams.set("auto", "compress");
+      u.searchParams.set("cs", "tinysrgb");
+      u.searchParams.set("w", String(w));
+      u.searchParams.set("dpr", "1");
+    } else if (u.pathname.includes("/storage/v1/object/public/") && /\.(jpe?g|png|webp)$/i.test(u.pathname)) {
+      u.pathname = u.pathname.replace("/storage/v1/object/public/", "/storage/v1/render/image/public/");
+      u.searchParams.set("width", String(w));
+      u.searchParams.set("quality", "72");
+      u.searchParams.set("resize", "cover");
+    } else {
+      return url;
+    }
     return u.toString();
   } catch {
     return url;
   }
+}
+
+function loadPreviewImage(src: string, priority: "high" | "auto" = "auto"): Promise<boolean> {
+  const cached = previewImageCache.get(src);
+  if (cached) return cached;
+
+  const promise = new Promise<boolean>((resolve) => {
+    const img = new Image();
+    img.decoding = "async";
+    (img as HTMLImageElement & { fetchPriority?: "high" | "auto" }).fetchPriority = priority;
+    img.onload = () => {
+      decodedPreviewImages.set(src, img);
+      if (img.decode) {
+        img.decode().then(
+          () => resolve(true),
+          () => resolve(true),
+        );
+        return;
+      }
+      resolve(true);
+    };
+    img.onerror = () => {
+      decodedPreviewImages.delete(src);
+      previewImageCache.delete(src);
+      resolve(false);
+    };
+    img.src = src;
+  });
+
+  previewImageCache.set(src, promise);
+  return promise;
+}
+
+async function preloadPreviewUrl(url: string | null | undefined, width: number, priority: "high" | "auto") {
+  if (!url) return;
+  const optimizedUrl = optimizePreviewImageUrl(url, width) ?? url;
+  const loaded = await loadPreviewImage(optimizedUrl, priority);
+  if (!loaded && optimizedUrl !== url) {
+    await loadPreviewImage(url, priority);
+  }
+}
+
+export async function preloadEbookPreviewImages({
+  coverUrl,
+  chapters,
+}: {
+  coverUrl?: string | null;
+  chapters: Chapter[];
+}) {
+  const displayedChapters = chapters.slice(0, 5);
+  await preloadPreviewUrl(coverUrl, COVER_PREVIEW_WIDTH, "high");
+  await Promise.all(
+    displayedChapters.map((chapter) => preloadPreviewUrl(chapter.image_url, CHAPTER_PREVIEW_WIDTH, "auto")),
+  );
 }
 
 function parseContent(content: string): Block[] {
@@ -124,12 +189,11 @@ const CoverPage = memo(function CoverPage({
     <div className="h-full flex flex-col">
       <div className="flex-1 rounded-xl overflow-hidden shadow-2xl relative mb-4" style={{ background: ACCENT_BG }}>
         {coverUrl ? (
-          <img
-            src={optimizePexels(coverUrl, 800) ?? coverUrl}
+          <PreviewImage
+            src={coverUrl}
+            width={COVER_PREVIEW_WIDTH}
             alt={title}
             className="absolute inset-0 h-full w-full object-cover"
-            decoding="async"
-            loading="eager"
             fetchPriority="high"
           />
         ) : (
@@ -161,30 +225,19 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
 
   const [page, setPage] = useState(0);
 
-  // Preload images into the browser cache. We key the effect on the URL list
-  // (not the array reference) so re-renders of the parent don't restart the
-  // preload, and we do NOT clear img.src on cleanup — that was cancelling
-  // in-flight requests and causing images to "not load" or reload on nav.
   const preloadKey = useMemo(() => {
-    const urls = [optimizePexels(coverUrl, 800), ...displayedChapters.map((c) => optimizePexels(c.image_url, 500))];
+    const urls = [
+      optimizePreviewImageUrl(coverUrl, COVER_PREVIEW_WIDTH),
+      ...displayedChapters.map((c) => optimizePreviewImageUrl(c.image_url, CHAPTER_PREVIEW_WIDTH)),
+    ];
     return urls.filter(Boolean).join("|");
   }, [coverUrl, displayedChapters]);
 
   useEffect(() => {
     if (!preloadKey) return;
-    const urls = preloadKey.split("|");
-    // Preload the cover immediately; stagger chapter preloads so they don't
-    // compete with the currently visible image for bandwidth.
     let cancelled = false;
-    urls.forEach((src, idx) => {
-      const delay = idx === 0 ? 0 : 250 + idx * 200;
-      setTimeout(() => {
-        if (cancelled) return;
-        const img = new Image();
-        img.decoding = "async";
-        img.src = src;
-        img.decode?.().catch(() => {});
-      }, delay);
+    preloadEbookPreviewImages({ coverUrl, chapters: displayedChapters }).then(() => {
+      if (cancelled) return;
     });
     return () => {
       cancelled = true;
@@ -227,7 +280,9 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
                 style={{
                   opacity: active ? 1 : 0,
                   pointerEvents: active ? "auto" : "none",
+                  visibility: active ? "visible" : "hidden",
                   zIndex: active ? 1 : 0,
+                  willChange: "opacity",
                 }}
               >
                 {i === 0 ? (
@@ -319,12 +374,11 @@ const ChapterPage = memo(function ChapterPage({
       <div className="flex-1 grid grid-cols-1 sm:grid-cols-12 gap-4 min-h-0">
         {chapter?.image_url && (
           <div className="sm:col-span-5 rounded-xl overflow-hidden shadow-md max-h-[240px] sm:max-h-none" style={{ background: "hsl(0 0% 96%)" }}>
-            <img
-              src={optimizePexels(chapter.image_url, 600) ?? chapter.image_url}
+            <PreviewImage
+              src={chapter.image_url}
+              width={CHAPTER_PREVIEW_WIDTH}
               alt={chapter.title}
               className="w-full h-full object-cover"
-              decoding="async"
-              loading="eager"
             />
 
           </div>
@@ -334,5 +388,41 @@ const ChapterPage = memo(function ChapterPage({
         </div>
       </div>
     </div>
+  );
+});
+
+const PreviewImage = memo(function PreviewImage({
+  src,
+  width,
+  alt,
+  className,
+  fetchPriority = "auto",
+}: {
+  src: string;
+  width: number;
+  alt: string;
+  className: string;
+  fetchPriority?: "high" | "auto";
+}) {
+  const optimizedSrc = useMemo(() => optimizePreviewImageUrl(src, width) ?? src, [src, width]);
+  const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
+
+  useEffect(() => {
+    setCurrentSrc(optimizedSrc);
+  }, [optimizedSrc]);
+
+  return (
+    <img
+      src={currentSrc}
+      alt={alt}
+      className={className}
+      decoding="async"
+      loading="eager"
+      fetchPriority={fetchPriority}
+      onError={() => {
+        if (currentSrc !== src) setCurrentSrc(src);
+      }}
+      style={{ transform: "translateZ(0)" }}
+    />
   );
 });
