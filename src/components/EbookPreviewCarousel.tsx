@@ -378,14 +378,19 @@ const ChapterPage = memo(function ChapterPage({
 
       <div className="flex-1 grid grid-cols-1 sm:grid-cols-12 gap-4 min-h-0">
         {chapter?.image_url && (
-          <div className="sm:col-span-5 rounded-xl overflow-hidden shadow-md h-56 sm:h-full flex items-center justify-center" style={{ background: "hsl(0 0% 96%)" }}>
+          <div className="sm:col-span-5 rounded-xl overflow-hidden shadow-md h-56 sm:h-full relative" style={{ background: "hsl(0 0% 96%)" }}>
+            <PreviewImage
+              src={chapter.image_url}
+              width={CHAPTER_PREVIEW_WIDTH}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-60"
+            />
             <PreviewImage
               src={chapter.image_url}
               width={CHAPTER_PREVIEW_WIDTH}
               alt={chapter.title}
-              className="w-full h-full object-contain"
+              className="absolute inset-0 w-full h-full object-contain"
             />
-
           </div>
         )}
         <div className={`${chapter?.image_url ? "sm:col-span-7" : "sm:col-span-12"} overflow-y-auto pr-2 custom-scrollbar`}>
