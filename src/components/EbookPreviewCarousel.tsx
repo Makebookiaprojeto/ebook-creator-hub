@@ -392,7 +392,7 @@ const ChapterPage = memo(function ChapterPage({
               src={chapter.image_url}
               width={CHAPTER_PREVIEW_WIDTH}
               alt={chapter.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
 
           </div>
