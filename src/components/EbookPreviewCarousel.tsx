@@ -21,8 +21,8 @@ const ACCENT = "hsl(150 75% 32%)";
 const ACCENT_BG = "hsl(150 75% 35%)";
 const COVER_PREVIEW_WIDTH = 800;
 const CHAPTER_PREVIEW_WIDTH = 500;
-const previewImageCache = new Map<string, Promise<string | null>>();
-const previewBlobUrls = new Map<string, string>();
+const previewImageCache = new Map<string, Promise<boolean>>();
+const decodedPreviewImages = new Map<string, HTMLImageElement>();
 const failedPreviewImages = new Set<string>();
 
 type Block =
@@ -53,47 +53,45 @@ export function optimizePreviewImageUrl(url: string | null | undefined, w: numbe
   }
 }
 
-function fetchAndDecodePreviewImage(src: string): Promise<string | null> {
-  if (failedPreviewImages.has(src)) return Promise.resolve(null);
-  const existingBlob = previewBlobUrls.get(src);
-  if (existingBlob) return Promise.resolve(existingBlob);
+function loadPreviewImage(src: string, priority: "high" | "auto" = "auto"): Promise<boolean> {
+  if (failedPreviewImages.has(src)) return Promise.resolve(false);
   const cached = previewImageCache.get(src);
   if (cached) return cached;
 
-  const promise = (async () => {
-    try {
-      const res = await fetch(src, { credentials: "omit", mode: "cors" });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const blob = await res.blob();
-      const objectUrl = URL.createObjectURL(blob);
-      // pré-decodifica para que o próximo paint seja instantâneo
-      const img = new Image();
-      img.decoding = "async";
-      img.src = objectUrl;
-      try {
-        await (img.decode ? img.decode() : new Promise<void>((r) => { img.onload = () => r(); img.onerror = () => r(); }));
-      } catch {
-        /* ignore decode errors, blob ainda serve */
+  const promise = new Promise<boolean>((resolve) => {
+    const img = new Image();
+    img.decoding = "async";
+    (img as HTMLImageElement & { fetchPriority?: "high" | "auto" }).fetchPriority = priority;
+    img.onload = () => {
+      decodedPreviewImages.set(src, img);
+      if (img.decode) {
+        img.decode().then(
+          () => resolve(true),
+          () => resolve(true),
+        );
+        return;
       }
-      previewBlobUrls.set(src, objectUrl);
-      return objectUrl;
-    } catch {
-      failedPreviewImages.add(src);
+      resolve(true);
+    };
+    img.onerror = () => {
+      decodedPreviewImages.delete(src);
       previewImageCache.delete(src);
-      return null;
-    }
-  })();
+      failedPreviewImages.add(src);
+      resolve(false);
+    };
+    img.src = src;
+  });
 
   previewImageCache.set(src, promise);
   return promise;
 }
 
-async function preloadPreviewUrl(url: string | null | undefined, width: number) {
+async function preloadPreviewUrl(url: string | null | undefined, width: number, priority: "high" | "auto") {
   if (!url) return;
   const optimizedUrl = optimizePreviewImageUrl(url, width) ?? url;
-  const result = await fetchAndDecodePreviewImage(optimizedUrl);
-  if (!result && optimizedUrl !== url) {
-    await fetchAndDecodePreviewImage(url);
+  const loaded = await loadPreviewImage(optimizedUrl, priority);
+  if (!loaded && optimizedUrl !== url) {
+    await loadPreviewImage(url, priority);
   }
 }
 
@@ -105,17 +103,11 @@ export async function preloadEbookPreviewImages({
   chapters: Chapter[];
 }) {
   const displayedChapters = chapters.slice(0, 5);
-  await Promise.all([
-    preloadPreviewUrl(coverUrl, COVER_PREVIEW_WIDTH),
-    ...displayedChapters.map((chapter) => preloadPreviewUrl(chapter.image_url, CHAPTER_PREVIEW_WIDTH)),
-  ]);
+  await preloadPreviewUrl(coverUrl, COVER_PREVIEW_WIDTH, "high");
+  await Promise.all(
+    displayedChapters.map((chapter) => preloadPreviewUrl(chapter.image_url, CHAPTER_PREVIEW_WIDTH, "auto")),
+  );
 }
-
-function resolvePreviewSrc(src: string, width: number): string {
-  const optimized = optimizePreviewImageUrl(src, width) ?? src;
-  return previewBlobUrls.get(optimized) ?? (failedPreviewImages.has(optimized) ? src : optimized);
-}
-
 
 function parseContent(content: string): Block[] {
   const blocks = content.split(/\n\s*\n/).filter((b) => b.trim().length > 0);
@@ -283,19 +275,17 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
         <div className="flex-1 relative overflow-hidden">
           {Array.from({ length: totalPages }).map((_, i) => {
             const active = i === page;
-            const near = Math.abs(i - page) <= 1;
             return (
               <div
                 key={i}
                 aria-hidden={!active}
-                className="absolute inset-0 w-full h-full p-5 sm:p-8"
+                className="absolute inset-0 w-full h-full p-5 sm:p-8 transition-opacity duration-150 ease-out"
                 style={{
                   opacity: active ? 1 : 0,
                   pointerEvents: active ? "auto" : "none",
                   visibility: active ? "visible" : "hidden",
-                  display: near ? "block" : "none",
                   zIndex: active ? 1 : 0,
-                  contain: "layout paint",
+                  willChange: "opacity",
                 }}
               >
                 {i === 0 ? (
@@ -307,7 +297,6 @@ export function EbookPreviewCarousel({ title, subtitle, coverUrl, chapters }: Pr
             );
           })}
         </div>
-
 
 
         <div className="p-4 border-t flex items-center justify-center" style={{ background: "hsl(0 0% 100%)", borderColor: "hsl(0 0% 90%)" }}>
@@ -418,38 +407,26 @@ const PreviewImage = memo(function PreviewImage({
   className: string;
   fetchPriority?: "high" | "auto";
 }) {
-  const [resolvedSrc, setResolvedSrc] = useState(() => resolvePreviewSrc(src, width));
+  const optimizedSrc = useMemo(() => optimizePreviewImageUrl(src, width) ?? src, [src, width]);
+  const safeInitialSrc = failedPreviewImages.has(optimizedSrc) ? src : optimizedSrc;
+  const [currentSrc, setCurrentSrc] = useState(safeInitialSrc);
 
   useEffect(() => {
-    let cancelled = false;
-    const initial = resolvePreviewSrc(src, width);
-    setResolvedSrc(initial);
-    // Se ainda não temos blob local, aciona preload e troca quando pronto.
-    if (!initial.startsWith("blob:")) {
-      preloadPreviewUrl(src, width).then(() => {
-        if (cancelled) return;
-        const next = resolvePreviewSrc(src, width);
-        if (next !== initial) setResolvedSrc(next);
-      });
-    }
-    return () => {
-      cancelled = true;
-    };
-  }, [src, width]);
+    setCurrentSrc(failedPreviewImages.has(optimizedSrc) ? src : optimizedSrc);
+  }, [optimizedSrc, src]);
 
   return (
     <img
-      src={resolvedSrc}
+      src={currentSrc}
       alt={alt}
       className={className}
       decoding="async"
       loading="eager"
       fetchPriority={fetchPriority}
       onError={() => {
-        if (resolvedSrc !== src) setResolvedSrc(src);
+        if (currentSrc !== src) setCurrentSrc(src);
       }}
       style={{ transform: "translateZ(0)" }}
     />
   );
 });
-
