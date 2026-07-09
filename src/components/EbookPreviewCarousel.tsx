@@ -191,13 +191,22 @@ const CoverPage = memo(function CoverPage({
   return (
     <div className="h-full rounded-xl overflow-hidden shadow-2xl relative" style={{ background: ACCENT_BG }}>
       {coverUrl ? (
-        <PreviewImage
-          src={coverUrl}
-          width={COVER_PREVIEW_WIDTH}
-          alt={title}
-          className="absolute inset-0 h-full w-full object-contain"
-          fetchPriority="high"
-        />
+        <>
+          <PreviewImage
+            src={coverUrl}
+            width={COVER_PREVIEW_WIDTH}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover scale-110 blur-2xl opacity-60"
+            fetchPriority="high"
+          />
+          <PreviewImage
+            src={coverUrl}
+            width={COVER_PREVIEW_WIDTH}
+            alt={title}
+            className="absolute inset-0 h-full w-full object-contain"
+            fetchPriority="high"
+          />
+        </>
       ) : (
         <div className="absolute inset-0 flex items-center justify-center">
           <BookOpen className="h-24 w-24 text-white/40" />
