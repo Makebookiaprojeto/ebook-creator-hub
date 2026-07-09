@@ -19,8 +19,8 @@ type Props = {
 
 const ACCENT = "hsl(150 75% 32%)";
 const ACCENT_BG = "hsl(150 75% 35%)";
-const COVER_PREVIEW_WIDTH = 800;
-const CHAPTER_PREVIEW_WIDTH = 500;
+const COVER_PREVIEW_WIDTH = 1200;
+const CHAPTER_PREVIEW_WIDTH = 800;
 const previewImageCache = new Map<string, Promise<boolean>>();
 const decodedPreviewImages = new Map<string, HTMLImageElement>();
 const failedPreviewImages = new Set<string>();
@@ -38,11 +38,11 @@ export function optimizePreviewImageUrl(url: string | null | undefined, w: numbe
       u.searchParams.set("auto", "compress");
       u.searchParams.set("cs", "tinysrgb");
       u.searchParams.set("w", String(w));
-      u.searchParams.set("dpr", "1");
+      u.searchParams.set("dpr", "2");
     } else if (u.pathname.includes("/storage/v1/object/public/") && /\.(jpe?g|png|webp)$/i.test(u.pathname)) {
       u.pathname = u.pathname.replace("/storage/v1/object/public/", "/storage/v1/render/image/public/");
       u.searchParams.set("width", String(w));
-      u.searchParams.set("quality", "72");
+      u.searchParams.set("quality", "85");
       u.searchParams.set("resize", "contain");
     } else {
       return url;
