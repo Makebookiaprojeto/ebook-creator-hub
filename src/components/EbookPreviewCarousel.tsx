@@ -204,7 +204,7 @@ const CoverPage = memo(function CoverPage({
             src={coverUrl}
             width={COVER_PREVIEW_WIDTH}
             alt={title}
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-contain"
             fetchPriority="high"
           />
         ) : (
