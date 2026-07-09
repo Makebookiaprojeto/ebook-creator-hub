@@ -191,22 +191,13 @@ const CoverPage = memo(function CoverPage({
   return (
     <div className="h-full rounded-xl overflow-hidden shadow-2xl relative" style={{ background: ACCENT_BG }}>
       {coverUrl ? (
-        <>
-          <PreviewImage
-            src={coverUrl}
-            width={COVER_PREVIEW_WIDTH}
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover scale-110 blur-2xl opacity-60"
-            fetchPriority="high"
-          />
-          <PreviewImage
-            src={coverUrl}
-            width={COVER_PREVIEW_WIDTH}
-            alt={title}
-            className="absolute inset-0 h-full w-full object-contain"
-            fetchPriority="high"
-          />
-        </>
+        <PreviewImage
+          src={coverUrl}
+          width={COVER_PREVIEW_WIDTH}
+          alt={title}
+          className="absolute inset-0 h-full w-full object-contain"
+          fetchPriority="high"
+        />
       ) : (
         <div className="absolute inset-0 flex items-center justify-center">
           <BookOpen className="h-24 w-24 text-white/40" />
@@ -378,18 +369,12 @@ const ChapterPage = memo(function ChapterPage({
 
       <div className="flex-1 grid grid-cols-1 sm:grid-cols-12 gap-4 min-h-0">
         {chapter?.image_url && (
-          <div className="sm:col-span-5 rounded-xl overflow-hidden shadow-md h-56 sm:h-full relative" style={{ background: "hsl(0 0% 96%)" }}>
-            <PreviewImage
-              src={chapter.image_url}
-              width={CHAPTER_PREVIEW_WIDTH}
-              alt=""
-              className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-60"
-            />
+          <div className="sm:col-span-5 rounded-xl overflow-hidden shadow-md h-56 sm:h-full flex items-center justify-center" style={{ background: "hsl(0 0% 96%)" }}>
             <PreviewImage
               src={chapter.image_url}
               width={CHAPTER_PREVIEW_WIDTH}
               alt={chapter.title}
-              className="absolute inset-0 w-full h-full object-contain"
+              className="max-w-full max-h-full w-auto h-auto object-contain"
             />
           </div>
         )}
