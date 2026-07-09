@@ -195,7 +195,7 @@ const CoverPage = memo(function CoverPage({
           src={coverUrl}
           width={COVER_PREVIEW_WIDTH}
           alt={title}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-contain"
           fetchPriority="high"
         />
       ) : (
@@ -369,12 +369,12 @@ const ChapterPage = memo(function ChapterPage({
 
       <div className="flex-1 grid grid-cols-1 sm:grid-cols-12 gap-4 min-h-0">
         {chapter?.image_url && (
-          <div className="sm:col-span-5 rounded-xl overflow-hidden shadow-md h-56 sm:h-full" style={{ background: "hsl(0 0% 96%)" }}>
+          <div className="sm:col-span-5 rounded-xl overflow-hidden shadow-md h-56 sm:h-full flex items-center justify-center" style={{ background: "hsl(0 0% 96%)" }}>
             <PreviewImage
               src={chapter.image_url}
               width={CHAPTER_PREVIEW_WIDTH}
               alt={chapter.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
 
           </div>
