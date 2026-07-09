@@ -189,34 +189,27 @@ const CoverPage = memo(function CoverPage({
   coverUrl?: string | null;
 }) {
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex-1 rounded-xl overflow-hidden shadow-2xl relative mb-4" style={{ background: ACCENT_BG }}>
-        {coverUrl ? (
-          <PreviewImage
-            src={coverUrl}
-            width={COVER_PREVIEW_WIDTH}
-            alt={title}
-            className="absolute inset-0 h-full w-full object-cover"
-            fetchPriority="high"
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <BookOpen className="h-24 w-24 text-white/40" />
-          </div>
-        )}
-        <div
-          className="absolute inset-x-0 bottom-0 p-6 pt-24"
-          style={{ background: "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.78) 100%)" }}
-        >
-          <div className="h-1.5 w-16 rounded-full mb-4" style={{ background: ACCENT_BG }} />
-          <h2 className="font-display text-xl sm:text-3xl font-bold text-white leading-tight">{title}</h2>
-          {subtitle && <p className="mt-2 text-xs sm:text-base text-white/90">{subtitle}</p>}
+    <div className="h-full rounded-xl overflow-hidden shadow-2xl relative" style={{ background: ACCENT_BG }}>
+      {coverUrl ? (
+        <PreviewImage
+          src={coverUrl}
+          width={COVER_PREVIEW_WIDTH}
+          alt={title}
+          className="absolute inset-0 h-full w-full object-cover"
+          fetchPriority="high"
+        />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <BookOpen className="h-24 w-24 text-white/40" />
         </div>
-      </div>
-      <div className="text-center">
-        <p className="text-xs font-medium uppercase tracking-widest" style={{ color: "hsl(0 0% 45%)" }}>
-          Capa do Ebook
-        </p>
+      )}
+      <div
+        className="absolute inset-x-0 bottom-0 p-6 pt-24"
+        style={{ background: "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.78) 100%)" }}
+      >
+        <div className="h-1.5 w-16 rounded-full mb-4" style={{ background: ACCENT_BG }} />
+        <h2 className="font-display text-xl sm:text-3xl font-bold text-white leading-tight">{title}</h2>
+        {subtitle && <p className="mt-2 text-xs sm:text-base text-white/90">{subtitle}</p>}
       </div>
     </div>
   );
@@ -376,7 +369,7 @@ const ChapterPage = memo(function ChapterPage({
 
       <div className="flex-1 grid grid-cols-1 sm:grid-cols-12 gap-4 min-h-0">
         {chapter?.image_url && (
-          <div className="sm:col-span-5 rounded-xl overflow-hidden shadow-md max-h-[240px] sm:max-h-none" style={{ background: "hsl(0 0% 96%)" }}>
+          <div className="sm:col-span-5 rounded-xl overflow-hidden shadow-md h-56 sm:h-full" style={{ background: "hsl(0 0% 96%)" }}>
             <PreviewImage
               src={chapter.image_url}
               width={CHAPTER_PREVIEW_WIDTH}
