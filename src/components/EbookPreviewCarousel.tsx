@@ -43,7 +43,7 @@ export function optimizePreviewImageUrl(url: string | null | undefined, w: numbe
       u.pathname = u.pathname.replace("/storage/v1/object/public/", "/storage/v1/render/image/public/");
       u.searchParams.set("width", String(w));
       u.searchParams.set("quality", "72");
-      u.searchParams.set("resize", "cover");
+      u.searchParams.set("resize", "contain");
     } else {
       return url;
     }
