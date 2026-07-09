@@ -43,7 +43,7 @@ export function optimizePreviewImageUrl(url: string | null | undefined, w: numbe
       u.pathname = u.pathname.replace("/storage/v1/object/public/", "/storage/v1/render/image/public/");
       u.searchParams.set("width", String(w));
       u.searchParams.set("quality", "72");
-      u.searchParams.set("resize", "cover");
+      u.searchParams.set("resize", "contain");
     } else {
       return url;
     }
@@ -188,42 +188,28 @@ const CoverPage = memo(function CoverPage({
   subtitle?: string;
   coverUrl?: string | null;
 }) {
-  const [aspect, setAspect] = useState<number | null>(null);
   return (
-    <div className="h-full w-full flex items-center justify-center">
-      <div
-        className="rounded-xl overflow-hidden shadow-2xl relative"
-        style={{
-          background: ACCENT_BG,
-          aspectRatio: aspect ?? undefined,
-          maxHeight: "100%",
-          maxWidth: "100%",
-          height: aspect ? "100%" : "100%",
-          width: aspect ? "auto" : "100%",
-        }}
-      >
-        {coverUrl ? (
-          <PreviewImage
-            src={coverUrl}
-            width={COVER_PREVIEW_WIDTH}
-            alt={title}
-            className="absolute inset-0 h-full w-full object-cover"
-            fetchPriority="high"
-            onNaturalSize={setAspect}
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <BookOpen className="h-24 w-24 text-white/40" />
-          </div>
-        )}
-        <div
-          className="absolute inset-x-0 bottom-0 p-6 pt-24"
-          style={{ background: "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.78) 100%)" }}
-        >
-          <div className="h-1.5 w-16 rounded-full mb-4" style={{ background: ACCENT_BG }} />
-          <h2 className="font-display text-xl sm:text-3xl font-bold text-white leading-tight">{title}</h2>
-          {subtitle && <p className="mt-2 text-xs sm:text-base text-white/90">{subtitle}</p>}
+    <div className="h-full w-full rounded-xl overflow-hidden shadow-2xl relative" style={{ background: ACCENT_BG }}>
+      {coverUrl ? (
+        <PreviewImage
+          src={coverUrl}
+          width={COVER_PREVIEW_WIDTH}
+          alt={title}
+          className="absolute inset-0 h-full w-full object-contain"
+          fetchPriority="high"
+        />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <BookOpen className="h-24 w-24 text-white/40" />
         </div>
+      )}
+      <div
+        className="absolute inset-x-0 bottom-0 p-6 pt-24"
+        style={{ background: "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.78) 100%)" }}
+      >
+        <div className="h-1.5 w-16 rounded-full mb-4" style={{ background: ACCENT_BG }} />
+        <h2 className="font-display text-xl sm:text-3xl font-bold text-white leading-tight">{title}</h2>
+        {subtitle && <p className="mt-2 text-xs sm:text-base text-white/90">{subtitle}</p>}
       </div>
     </div>
   );
@@ -364,7 +350,6 @@ const ChapterPage = memo(function ChapterPage({
   index: number;
   chapter: Chapter;
 }) {
-  const [imgAspect, setImgAspect] = useState<number | null>(null);
   return (
     <div className="h-full flex flex-col">
       <div className="mb-4 shrink-0">
@@ -384,24 +369,18 @@ const ChapterPage = memo(function ChapterPage({
 
       <div className="flex-1 grid grid-cols-1 sm:grid-cols-12 gap-4 min-h-0">
         {chapter?.image_url && (
-          <div className="sm:col-span-5 h-56 sm:h-full flex items-start justify-center">
+          <div className="sm:col-span-5 h-56 sm:h-full flex items-center justify-center">
             <div
-              className="rounded-xl overflow-hidden shadow-md relative"
+              className="w-full h-full rounded-xl overflow-hidden shadow-md"
               style={{
                 background: "hsl(0 0% 96%)",
-                aspectRatio: imgAspect ?? undefined,
-                maxHeight: "100%",
-                maxWidth: "100%",
-                height: imgAspect ? "100%" : "100%",
-                width: imgAspect ? "auto" : "100%",
               }}
             >
               <PreviewImage
                 src={chapter.image_url}
                 width={CHAPTER_PREVIEW_WIDTH}
                 alt={chapter.title}
-                className="absolute inset-0 w-full h-full object-cover"
-                onNaturalSize={setImgAspect}
+                className="w-full h-full object-contain"
               />
             </div>
           </div>
@@ -420,14 +399,12 @@ const PreviewImage = memo(function PreviewImage({
   alt,
   className,
   fetchPriority = "auto",
-  onNaturalSize,
 }: {
   src: string;
   width: number;
   alt: string;
   className: string;
   fetchPriority?: "high" | "auto";
-  onNaturalSize?: (aspect: number) => void;
 }) {
   const optimizedSrc = useMemo(() => optimizePreviewImageUrl(src, width) ?? src, [src, width]);
   const safeInitialSrc = failedPreviewImages.has(optimizedSrc) ? src : optimizedSrc;
@@ -445,13 +422,6 @@ const PreviewImage = memo(function PreviewImage({
       decoding="async"
       loading="eager"
       fetchPriority={fetchPriority}
-      onLoad={(e) => {
-        if (!onNaturalSize) return;
-        const img = e.currentTarget;
-        if (img.naturalWidth && img.naturalHeight) {
-          onNaturalSize(img.naturalWidth / img.naturalHeight);
-        }
-      }}
       onError={() => {
         if (currentSrc !== src) setCurrentSrc(src);
       }}
