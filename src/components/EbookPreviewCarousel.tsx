@@ -364,6 +364,7 @@ const ChapterPage = memo(function ChapterPage({
   index: number;
   chapter: Chapter;
 }) {
+  const [imgAspect, setImgAspect] = useState<number | null>(null);
   return (
     <div className="h-full flex flex-col">
       <div className="mb-4 shrink-0">
@@ -383,13 +384,26 @@ const ChapterPage = memo(function ChapterPage({
 
       <div className="flex-1 grid grid-cols-1 sm:grid-cols-12 gap-4 min-h-0">
         {chapter?.image_url && (
-          <div className="sm:col-span-5 rounded-xl overflow-hidden shadow-md h-56 sm:h-full flex items-center justify-center" style={{ background: "hsl(0 0% 96%)" }}>
-            <PreviewImage
-              src={chapter.image_url}
-              width={CHAPTER_PREVIEW_WIDTH}
-              alt={chapter.title}
-              className="max-w-full max-h-full w-auto h-auto object-contain"
-            />
+          <div className="sm:col-span-5 h-56 sm:h-full flex items-start justify-center">
+            <div
+              className="rounded-xl overflow-hidden shadow-md relative"
+              style={{
+                background: "hsl(0 0% 96%)",
+                aspectRatio: imgAspect ?? undefined,
+                maxHeight: "100%",
+                maxWidth: "100%",
+                height: imgAspect ? "100%" : "100%",
+                width: imgAspect ? "auto" : "100%",
+              }}
+            >
+              <PreviewImage
+                src={chapter.image_url}
+                width={CHAPTER_PREVIEW_WIDTH}
+                alt={chapter.title}
+                className="absolute inset-0 w-full h-full object-cover"
+                onNaturalSize={setImgAspect}
+              />
+            </div>
           </div>
         )}
         <div className={`${chapter?.image_url ? "sm:col-span-7" : "sm:col-span-12"} overflow-y-auto pr-2 custom-scrollbar`}>
