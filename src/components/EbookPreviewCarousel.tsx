@@ -43,7 +43,7 @@ export function optimizePreviewImageUrl(url: string | null | undefined, w: numbe
       u.pathname = u.pathname.replace("/storage/v1/object/public/", "/storage/v1/render/image/public/");
       u.searchParams.set("width", String(w));
       u.searchParams.set("quality", "72");
-      u.searchParams.set("resize", "contain");
+      u.searchParams.set("resize", "cover");
     } else {
       return url;
     }
@@ -204,7 +204,7 @@ const CoverPage = memo(function CoverPage({
             src={coverUrl}
             width={COVER_PREVIEW_WIDTH}
             alt={title}
-            className="absolute inset-0 h-full w-full object-contain"
+            className="absolute inset-0 h-full w-full object-cover"
             fetchPriority="high"
           />
         ) : (
@@ -392,7 +392,7 @@ const ChapterPage = memo(function ChapterPage({
               src={chapter.image_url}
               width={CHAPTER_PREVIEW_WIDTH}
               alt={chapter.title}
-              className="w-full h-full object-contain"
+              className="w-full h-full object-cover"
             />
 
           </div>
