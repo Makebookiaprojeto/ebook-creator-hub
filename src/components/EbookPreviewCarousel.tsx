@@ -188,28 +188,42 @@ const CoverPage = memo(function CoverPage({
   subtitle?: string;
   coverUrl?: string | null;
 }) {
+  const [aspect, setAspect] = useState<number | null>(null);
   return (
-    <div className="h-full rounded-xl overflow-hidden shadow-2xl relative" style={{ background: ACCENT_BG }}>
-      {coverUrl ? (
-        <PreviewImage
-          src={coverUrl}
-          width={COVER_PREVIEW_WIDTH}
-          alt={title}
-          className="absolute inset-0 h-full w-full object-contain"
-          fetchPriority="high"
-        />
-      ) : (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <BookOpen className="h-24 w-24 text-white/40" />
-        </div>
-      )}
+    <div className="h-full w-full flex items-center justify-center">
       <div
-        className="absolute inset-x-0 bottom-0 p-6 pt-24"
-        style={{ background: "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.78) 100%)" }}
+        className="rounded-xl overflow-hidden shadow-2xl relative"
+        style={{
+          background: ACCENT_BG,
+          aspectRatio: aspect ?? undefined,
+          maxHeight: "100%",
+          maxWidth: "100%",
+          height: aspect ? "100%" : "100%",
+          width: aspect ? "auto" : "100%",
+        }}
       >
-        <div className="h-1.5 w-16 rounded-full mb-4" style={{ background: ACCENT_BG }} />
-        <h2 className="font-display text-xl sm:text-3xl font-bold text-white leading-tight">{title}</h2>
-        {subtitle && <p className="mt-2 text-xs sm:text-base text-white/90">{subtitle}</p>}
+        {coverUrl ? (
+          <PreviewImage
+            src={coverUrl}
+            width={COVER_PREVIEW_WIDTH}
+            alt={title}
+            className="absolute inset-0 h-full w-full object-cover"
+            fetchPriority="high"
+            onNaturalSize={setAspect}
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <BookOpen className="h-24 w-24 text-white/40" />
+          </div>
+        )}
+        <div
+          className="absolute inset-x-0 bottom-0 p-6 pt-24"
+          style={{ background: "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.78) 100%)" }}
+        >
+          <div className="h-1.5 w-16 rounded-full mb-4" style={{ background: ACCENT_BG }} />
+          <h2 className="font-display text-xl sm:text-3xl font-bold text-white leading-tight">{title}</h2>
+          {subtitle && <p className="mt-2 text-xs sm:text-base text-white/90">{subtitle}</p>}
+        </div>
       </div>
     </div>
   );
