@@ -392,12 +392,14 @@ const PreviewImage = memo(function PreviewImage({
   alt,
   className,
   fetchPriority = "auto",
+  onNaturalSize,
 }: {
   src: string;
   width: number;
   alt: string;
   className: string;
   fetchPriority?: "high" | "auto";
+  onNaturalSize?: (aspect: number) => void;
 }) {
   const optimizedSrc = useMemo(() => optimizePreviewImageUrl(src, width) ?? src, [src, width]);
   const safeInitialSrc = failedPreviewImages.has(optimizedSrc) ? src : optimizedSrc;
@@ -415,6 +417,13 @@ const PreviewImage = memo(function PreviewImage({
       decoding="async"
       loading="eager"
       fetchPriority={fetchPriority}
+      onLoad={(e) => {
+        if (!onNaturalSize) return;
+        const img = e.currentTarget;
+        if (img.naturalWidth && img.naturalHeight) {
+          onNaturalSize(img.naturalWidth / img.naturalHeight);
+        }
+      }}
       onError={() => {
         if (currentSrc !== src) setCurrentSrc(src);
       }}
