@@ -6,8 +6,9 @@ import {
   Sparkles, BookOpen, Wand2, TrendingUp, ArrowRight, Check, 
   ShieldCheck, Zap, Star, Users, MessageSquare, Timer,
   Target, Rocket, Heart, Crown, Clock,
-  LayoutDashboard, Plus, Library, LifeBuoy, User, Bell, DollarSign, ShoppingCart, CreditCard
+  LayoutDashboard, Plus, Library, LifeBuoy, User, Bell, DollarSign, ShoppingCart, CreditCard, QrCode
 } from "lucide-react";
+import { CHECKOUT_LINKS_BY_METHOD, type PaymentMethod } from "@/config/checkoutLinks";
 import saasLogo from "@/assets/saas-logo.jpg";
 import { SaasJourneyPreview } from "@/components/SaasJourneyPreview";
 import { DashboardMockupMain } from "@/components/DashboardMockupMain";
