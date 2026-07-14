@@ -225,14 +225,10 @@ const Landing = () => {
 
         {/* Pricing */}
         <section className="py-24 mx-auto max-w-6xl px-4">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-4xl font-bold mb-4 italic text-primary">O investimento que se paga em 1 venda.</h2>
-            <p className="text-muted-foreground">Escolha o seu passaporte para a liberdade digital.</p>
-          </div>
           <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto items-stretch">
             {/* Mensal */}
-            <div className="px-8 py-10 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm shadow-md hover:shadow-lg hover:border-border transition-all flex flex-col">
-              <div className="mb-6">
+            <div className="px-6 py-8 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm shadow-md hover:shadow-lg hover:border-border transition-all flex flex-col md:scale-[0.96]">
+              <div className="mb-5">
                 <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">
                   Mensal
                 </div>
