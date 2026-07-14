@@ -320,13 +320,10 @@ export function DashboardView() {
         <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-gradient-to-br from-[#0b1220] via-card to-card/60 p-5 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
           <div className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-24 -left-16 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl" />
-          <div className="relative flex items-start justify-between">
-            <div className="flex-1">
+          <div className="relative">
+            <div className="flex items-start justify-between gap-3">
               <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Lucro</p>
-              <p className="mt-1 font-display text-6xl font-bold tracking-tight text-foreground">
-                R$ {(profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-              </p>
-              <div className="mt-3 flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5">
                 {[
                   { v: "today", label: "Hoje" },
                   { v: "7d", label: "7 Dias" },
@@ -349,8 +346,13 @@ export function DashboardView() {
                 })}
               </div>
             </div>
-            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.35)]">
-              <DollarSign className="h-5 w-5" />
+            <div className="mt-1 flex items-end justify-between gap-3">
+              <p className="font-display text-6xl font-bold tracking-tight text-foreground">
+                R$ {(profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+              </p>
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.35)]">
+                <DollarSign className="h-5 w-5" />
+              </div>
             </div>
           </div>
         </div>
