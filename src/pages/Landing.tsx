@@ -13,6 +13,36 @@ import saasLogo from "@/assets/saas-logo.jpg";
 import { SaasJourneyPreview } from "@/components/SaasJourneyPreview";
 import { DashboardMockupMain } from "@/components/DashboardMockupMain";
 
+function PlanPaymentButtons({ plan, emphasis = false }: { plan: "monthly" | "lifetime"; emphasis?: boolean }) {
+  const go = (method: PaymentMethod) => {
+    const url = CHECKOUT_LINKS_BY_METHOD[plan]?.[method];
+    if (url) window.location.href = url;
+  };
+  return (
+    <div className="mb-2">
+      <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3 text-center">
+        Método de Pagamento
+      </div>
+      <div className="flex flex-col gap-3">
+        <button
+          type="button"
+          onClick={() => go("pix")}
+          className={`w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.02] active:scale-[0.98] ${emphasis ? "h-14 text-base" : ""}`}
+        >
+          <QrCode className="h-5 w-5" /> PIX Instantâneo
+        </button>
+        <button
+          type="button"
+          onClick={() => go("card")}
+          className={`w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black shadow-lg shadow-yellow-400/30 transition-all hover:scale-[1.02] active:scale-[0.98] ${emphasis ? "h-14 text-base" : ""}`}
+        >
+          <CreditCard className="h-5 w-5" /> Cartão de Crédito
+        </button>
+      </div>
+    </div>
+  );
+}
+
 const Landing = () => {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
