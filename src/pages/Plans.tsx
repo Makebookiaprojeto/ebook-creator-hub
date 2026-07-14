@@ -105,50 +105,37 @@ const FAQS = [
 
 type PaymentMethodValue = "pix" | "card";
 
-function PaymentMethodSelector({
-  value,
-  onChange,
-  name,
+function PaymentMethodButtons({
+  onSelect,
+  emphasis = false,
 }: {
-  value: PaymentMethodValue;
-  onChange: (v: PaymentMethodValue) => void;
-  name: string;
+  onSelect: (m: PaymentMethodValue) => void;
+  emphasis?: boolean;
 }) {
-  const options: { id: PaymentMethodValue; label: string; icon: typeof DollarSign }[] = [
-    { id: "pix", label: "PIX", icon: QrCode },
-    { id: "card", label: "Cartão de Crédito", icon: CreditCard },
-  ];
   return (
-    <div className="mb-6" role="radiogroup" aria-label="Método de Pagamento">
-      <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
+    <div className="mb-2">
+      <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3 text-center">
         Método de Pagamento
       </div>
-      <div className="grid grid-cols-2 gap-2">
-        {options.map((opt) => {
-          const active = value === opt.id;
-          const Icon = opt.icon;
-          return (
-            <label
-              key={opt.id}
-              className={`flex items-center gap-2 rounded-md border px-3 py-2 text-sm cursor-pointer transition-colors ${
-                active
-                  ? "border-primary bg-primary/10 text-foreground"
-                  : "border-border/60 text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <input
-                type="radio"
-                name={name}
-                value={opt.id}
-                checked={active}
-                onChange={() => onChange(opt.id)}
-                className="accent-primary"
-              />
-              <Icon className="h-4 w-4" />
-              <span>{opt.label}</span>
-            </label>
-          );
-        })}
+      <div className="flex flex-col gap-3">
+        <button
+          type="button"
+          onClick={() => onSelect("pix")}
+          className={`w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.02] active:scale-[0.98] ${
+            emphasis ? "h-14 text-base" : ""
+          }`}
+        >
+          <QrCode className="h-5 w-5" /> PIX Instantâneo
+        </button>
+        <button
+          type="button"
+          onClick={() => onSelect("card")}
+          className={`w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black shadow-lg shadow-yellow-400/30 transition-all hover:scale-[1.02] active:scale-[0.98] ${
+            emphasis ? "h-14 text-base" : ""
+          }`}
+        >
+          <CreditCard className="h-5 w-5" /> Cartão de Crédito
+        </button>
       </div>
     </div>
   );
@@ -159,12 +146,6 @@ export default function Plans() {
   const { user, loading: authLoading, signOut } = useAuth();
   const { loading: subLoading, isActive } = useSubscription();
   const [displayName, setDisplayName] = useState<string>("");
-  // Seleção visual da forma de pagamento por plano.
-  // NÃO afeta o fluxo de checkout — handleCheckout continua abrindo a IronPay
-  // (via CHECKOUT_LINKS) independentemente do valor escolhido aqui.
-  type PayMethod = "pix" | "card";
-  const [monthlyMethod, setMonthlyMethod] = useState<PayMethod>("pix");
-  const [lifetimeMethod, setLifetimeMethod] = useState<PayMethod>("pix");
 
   useEffect(() => {
     // Force CSS dark mode
@@ -205,9 +186,8 @@ export default function Plans() {
     if (!authLoading && !user) navigate("/auth", { replace: true });
   }, [authLoading, user, navigate]);
 
-  const handleCheckout = (plan: "monthly" | "lifetime") => {
-    const selectedMethod = plan === "monthly" ? monthlyMethod : lifetimeMethod;
-    const baseUrl = CHECKOUT_LINKS_BY_METHOD[plan]?.[selectedMethod];
+  const handleCheckout = (plan: "monthly" | "lifetime", method: PaymentMethodValue) => {
+    const baseUrl = CHECKOUT_LINKS_BY_METHOD[plan]?.[method];
     if (!baseUrl) {
       toast.error("Forma de pagamento indisponível.");
       return;
@@ -367,11 +347,11 @@ export default function Plans() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto items-stretch">
             {/* Mensal */}
-            <Card className="px-10 py-12 border-border/60 flex flex-col">
+            <Card className="px-8 py-10 border-border/60 flex flex-col rounded-2xl bg-card/60 backdrop-blur-sm shadow-md hover:shadow-lg hover:border-border transition-all">
               <div className="mb-6">
-                <div className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
+                <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">
                   Mensal
                 </div>
                 <div className="flex items-baseline gap-1">
@@ -397,38 +377,25 @@ export default function Plans() {
                 ))}
               </ul>
 
-              <PaymentMethodSelector
-                value={monthlyMethod}
-                onChange={setMonthlyMethod}
-                name="monthly-method"
-              />
-
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full"
-                onClick={() => handleCheckout("monthly")}
-              >
-                ASSINAR AGORA
-              </Button>
+              <PaymentMethodButtons onSelect={(m) => handleCheckout("monthly", m)} />
             </Card>
 
             {/* Vitalício */}
-            <Card className="px-10 py-9 border-primary bg-primary/5 flex flex-col relative ring-2 ring-primary/40 plan-glow-animated">
-              <div className="absolute top-4 right-4 flex items-center gap-1 text-xs font-medium bg-primary text-primary-foreground px-2 py-1 rounded-full">
+            <Card className="px-8 py-10 border-2 border-primary bg-gradient-to-b from-primary/10 to-primary/5 flex flex-col relative rounded-2xl ring-2 ring-primary/40 plan-glow-animated shadow-2xl shadow-primary/20 md:scale-[1.03]">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 text-[10px] font-black bg-primary text-primary-foreground px-4 py-1.5 rounded-full tracking-widest uppercase shadow-lg whitespace-nowrap">
                 <Crown className="h-3 w-3" /> Mais escolhido
               </div>
 
-              <div className="mb-6">
-                <div className="text-sm font-medium text-primary uppercase tracking-wide mb-2">
+              <div className="mb-6 mt-2">
+                <div className="text-xs font-bold text-primary uppercase tracking-widest mb-3">
                   Vitalício
                 </div>
                 <div className="flex items-baseline gap-1">
                   <span className="text-sm font-bold align-top">R$</span>
-                  <span className="text-5xl font-bold">247,90</span>
+                  <span className="text-6xl font-black">247,90</span>
                   <span className="text-muted-foreground text-sm">à vista</span>
                 </div>
-                <div className="text-sm font-medium text-primary mt-1">
+                <div className="text-sm font-bold text-primary mt-1">
                   ou em até 12 X de R$ 29,58
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
@@ -445,7 +412,6 @@ export default function Plans() {
                   "Checkout integrado",
                   "Suporte prioritário",
                   "Pagamento único",
-                  
                   "Atualizações vitalícias inclusas",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm font-medium">
@@ -455,19 +421,7 @@ export default function Plans() {
                 ))}
               </ul>
 
-              <PaymentMethodSelector
-                value={lifetimeMethod}
-                onChange={setLifetimeMethod}
-                name="lifetime-method"
-              />
-
-              <Button
-                size="lg"
-                className="w-full"
-                onClick={() => handleCheckout("lifetime")}
-              >
-                GARANTIR VITALÍCIO
-              </Button>
+              <PaymentMethodButtons emphasis onSelect={(m) => handleCheckout("lifetime", m)} />
             </Card>
           </div>
 

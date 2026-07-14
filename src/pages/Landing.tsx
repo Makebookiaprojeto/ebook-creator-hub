@@ -286,8 +286,8 @@ const Landing = () => {
           </div>
           <div className="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
             {/* Mensal */}
-            <div className="px-12 py-14 rounded-3xl border bg-card/30 flex flex-col hover:border-white/20 transition-all">
-              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4"></p>
+            <div className="px-10 py-12 rounded-3xl border border-border/60 bg-card/40 backdrop-blur-sm flex flex-col hover:border-white/30 hover:shadow-xl transition-all">
+              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Plano</p>
               <h3 className="text-2xl font-bold mb-2">Mensal</h3>
               <div className="flex items-baseline gap-1 mb-6">
                 <span className="text-base font-bold align-top">R$</span>
@@ -302,24 +302,24 @@ const Landing = () => {
                 ))}
               </ul>
               <Link to="/auth" className="block">
-                <Button variant="outline" className="w-full h-12 border-primary/20 hover:bg-primary/5">ASSINAR AGORA</Button>
+                <Button variant="outline" className="w-full h-12 border-primary/30 hover:bg-primary/10 hover:border-primary/60 transition-all">ASSINAR AGORA</Button>
               </Link>
             </div>
 
             {/* Vitalício */}
-            <div className="px-12 py-10 rounded-3xl border-2 border-primary bg-primary/5 flex flex-col relative plan-glow-animated">
+            <div className="px-10 py-12 rounded-3xl border-2 border-primary bg-gradient-to-b from-primary/15 via-primary/5 to-transparent flex flex-col relative plan-glow-animated shadow-2xl shadow-primary/30 md:scale-[1.04]">
               <div className="absolute top-0 right-0 p-6">
-                <Crown className="h-12 w-12 text-primary/10" />
+                <Crown className="h-14 w-14 text-primary/15" />
               </div>
               <div className="absolute -top-4 left-1/2 -translate-x-1/2 gradient-primary px-6 py-2 text-[10px] font-black text-primary-foreground rounded-full tracking-widest uppercase whitespace-nowrap shadow-xl z-20 border border-white/10">
                 OFERTA VITALÍCIA
               </div>
-              <p className="text-xs font-bold uppercase tracking-widest text-primary mb-4"></p>
-              <h3 className="text-2xl font-bold mb-2">Vitalício</h3>
+              <p className="text-xs font-bold uppercase tracking-widest text-primary mb-4">Recomendado</p>
+              <h3 className="text-3xl font-black mb-2">Vitalício</h3>
               <div className="flex flex-col mb-6">
                 <div className="flex items-baseline gap-1">
                   <span className="text-base font-bold align-top">R$</span>
-                  <span className="text-6xl font-black">247,90</span>
+                  <span className="text-7xl font-black">247,90</span>
                   <span className="text-muted-foreground font-medium"> única vez</span>
                 </div>
                 <div className="text-sm font-bold text-primary mt-1">
@@ -334,7 +334,7 @@ const Landing = () => {
                 ))}
               </ul>
               <Link to="/auth" className="block">
-                <Button className="w-full h-12 text-base font-black gradient-primary text-primary-foreground shadow-glow hover:scale-105 transition-all">GARANTIR MINHA VAGA</Button>
+                <Button className="w-full h-14 text-base font-black gradient-primary text-primary-foreground shadow-glow hover:scale-105 transition-all">GARANTIR MINHA VAGA</Button>
               </Link>
             </div>
           </div>
