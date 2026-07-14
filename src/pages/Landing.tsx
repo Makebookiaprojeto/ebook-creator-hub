@@ -117,7 +117,7 @@ const Landing = () => {
               src={heroShowcase.url}
               alt="EbookAI Builder — ebook pronto, página de vendas e grupos de divulgação"
               loading="lazy"
-              className="relative mx-auto w-full max-w-5xl rounded-2xl shadow-2xl shadow-black/40 ring-1 ring-border/40"
+              className="relative mx-auto w-full max-w-5xl rounded-2xl shadow-[0_25px_80px_-15px_rgba(234,179,8,0.35)] ring-1 ring-yellow-400/30"
             />
           </div>
         </section>
