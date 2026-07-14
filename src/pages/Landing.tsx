@@ -111,7 +111,7 @@ const Landing = () => {
                 </Button>
               </Link>
             </div>
-            <div className="mt-16 relative animate-fade-in animation-delay-300">
+            <div className="mt-24 sm:mt-32 relative animate-fade-in animation-delay-300">
               <div className="absolute inset-0 bg-primary/20 blur-[100px] rounded-full pointer-events-none" />
               <img
                 src={heroShowcase.url}
