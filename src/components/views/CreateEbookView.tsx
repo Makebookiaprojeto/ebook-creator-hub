@@ -7,7 +7,7 @@ import {
   TrendingUp, ExternalLink, Video, Play, Megaphone,
   Dumbbell, Utensils, Baby, Dog, Sparkle, GraduationCap, Laptop, Palette, Briefcase, Languages, Map, Home, Shirt,
   Heart, Wallet, Brain, HeartPulse, DollarSign, BadgeDollarSign,
-  SquareStack, SquareDollarSign, SquareMousePointer, SquareArrowOutUpRight
+  SquareStack, SquareMousePointer, SquareArrowOutUpRight, Square
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
