@@ -115,134 +115,62 @@ const Landing = () => {
         </section>
 
         {/* The Pain vs Solution */}
-        <section className="py-20 bg-card/20 border-y border-border/10">
+        <section className="py-24 bg-card/20 border-y border-border/10">
           <div className="mx-auto max-w-6xl px-4">
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
-              <div>
-                <h2 className="font-display text-3xl font-bold mb-6 italic">O caminho antigo era doloroso...</h2>
-                <ul className="space-y-4">
-                  {[
-                    "Semanas de bloqueio criativo",
-                    "Gastar R$ 500+ com designers de capa",
-                    "Aprender a programar páginas de vendas",
-                    "Ter que configurar checkouts complexos"
-                  ].map(item => (
-                    <li key={item} className="flex items-center gap-3 text-muted-foreground/60 line-through">
-                      <Check className="h-5 w-5 opacity-20" /> {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="p-8 rounded-3xl bg-primary/5 border border-primary/20 relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-4">
-                  <Zap className="h-12 w-12 text-primary/20 group-hover:scale-110 transition-transform" />
-                </div>
-                <h2 className="font-display text-3xl font-bold mb-6 text-primary">Com a EbookAI Builder:</h2>
-                <ul className="space-y-4">
-                  {[
-                    "Estrutura completa em 30 segundos",
-                    "Conteúdo profundo escrito por IA especialista",
-                    "Capas fotorealistas que vendem sozinhas",
-                    "Página de vendas pronta para receber PIX/Cartão"
-                  ].map(item => (
-                    <li key={item} className="flex items-center gap-3 text-foreground font-medium">
-                      <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center">
-                        <Check className="h-4 w-4 text-primary" />
-                      </div>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div className="text-center mb-14">
+              <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold mb-3">Antes e depois</p>
+              <h2 className="font-display text-4xl font-bold">Do processo travado ao lançamento em minutos</h2>
+              <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">Compare o método tradicional com a experiência EbookAI Builder e veja por que criadores estão migrando.</p>
             </div>
-
-            {/* App Preview Mockup — replica fiel do dashboard real */}
-            <div className="mt-20">
-              <div className="text-center mb-8">
-                <p className="text-sm uppercase tracking-widest text-primary font-semibold mb-2">Veja por dentro</p>
-                <h3 className="font-display text-3xl font-bold">Uma plataforma feita para você criar sem fricção</h3>
-              </div>
-              <div className="relative mx-auto max-w-6xl rounded-2xl border border-border/40 bg-card/60 shadow-2xl overflow-hidden backdrop-blur">
-                {/* Window chrome */}
-                <div className="flex items-center gap-2 px-4 py-3 border-b border-border/40 bg-background/60">
-                  <div className="flex gap-1.5">
-                    <span className="h-3 w-3 rounded-full bg-red-500/70" />
-                    <span className="h-3 w-3 rounded-full bg-yellow-500/70" />
-                    <span className="h-3 w-3 rounded-full bg-green-500/70" />
+            <div className="grid lg:grid-cols-2 gap-8 items-stretch">
+              <div className="p-10 rounded-3xl border border-border/40 bg-background/40 backdrop-blur-sm">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="h-10 w-10 rounded-xl bg-muted/40 flex items-center justify-center">
+                    <Clock className="h-5 w-5 text-muted-foreground" />
                   </div>
-                  <div className="mx-auto text-xs text-muted-foreground">app.ebookaibuilder.com</div>
+                  <h3 className="font-display text-2xl font-bold text-muted-foreground">O método tradicional</h3>
                 </div>
-                <div className="grid grid-cols-12 min-h-[480px]">
-                  {/* Sidebar real */}
-                  <aside className="col-span-3 lg:col-span-2 border-r border-border/40 bg-background/50 flex flex-col">
-                    <div className="border-b border-border/40 px-3 py-3 flex items-center gap-2">
-                      <div className="h-9 w-9 rounded-xl overflow-hidden shadow-glow shrink-0">
-                        <img src={saasLogo} alt="EbookAI" className="h-full w-full object-cover" />
+                <ul className="space-y-4">
+                  {[
+                    "Semanas de bloqueio criativo até estruturar o conteúdo",
+                    "Investimento de R$ 500+ com designers para uma capa profissional",
+                    "Curva de aprendizado para construir páginas de vendas",
+                    "Configuração técnica de checkouts e integrações de pagamento",
+                  ].map(item => (
+                    <li key={item} className="flex items-start gap-3 text-muted-foreground/70">
+                      <span className="mt-2 h-1.5 w-1.5 rounded-full bg-muted-foreground/40 shrink-0" />
+                      <span className="leading-relaxed">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="p-10 rounded-3xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/30 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4">
+                  <Zap className="h-10 w-10 text-primary/25" />
+                </div>
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="h-10 w-10 rounded-xl bg-primary/20 flex items-center justify-center shadow-glow">
+                    <Sparkles className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="font-display text-2xl font-bold text-primary">Com a EbookAI Builder</h3>
+                </div>
+                <ul className="space-y-4">
+                  {[
+                    "Estrutura completa gerada em menos de 30 segundos",
+                    "Conteúdo aprofundado escrito por uma IA especialista",
+                    "Capas fotorrealistas prontas para conversão",
+                    "Página de vendas integrada a PIX e cartão de crédito",
+                  ].map(item => (
+                    <li key={item} className="flex items-start gap-3 text-foreground">
+                      <div className="h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center mt-0.5 shrink-0">
+                        <Check className="h-3 w-3 text-primary" />
                       </div>
-                    </div>
-                    <div className="p-2 pt-3">
-                      <button className="w-full flex items-center gap-2 px-3 py-2 rounded-md bg-primary text-background font-bold text-xs shadow-md">
-                        <Plus className="h-4 w-4" /> <span style={{ textShadow: "0 1px 2px rgba(0,0,0,0.35)" }}>Nova Estrutura</span>
-                      </button>
-                    </div>
-                    <div className="px-3 pt-3 pb-1 text-[10px] uppercase tracking-wider text-muted-foreground">Menu</div>
-                    <div className="px-2 space-y-0.5 flex-1">
-                      {[
-                        { label: "Dashboard", icon: LayoutDashboard, active: true },
-                        { label: "Biblioteca", icon: Library, active: false },
-                        { label: "Suporte", icon: LifeBuoy, active: false },
-                        { label: "Perfil", icon: User, active: false },
-                      ].map(item => (
-                        <div
-                          key={item.label}
-                          className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs ${
-                            item.active
-                              ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-                              : "text-muted-foreground"
-                          }`}
-                        >
-                          <item.icon className="h-3.5 w-3.5" /> {item.label}
-                        </div>
-                      ))}
-                    </div>
-                    <div className="border-t border-border/40 m-2 p-2 rounded-lg bg-card flex items-center gap-2">
-                      <div className="h-6 w-6 rounded-full gradient-primary text-[9px] font-bold text-primary-foreground flex items-center justify-center shadow-glow">U</div>
-                      <span className="text-[10px] text-muted-foreground truncate">usuario@email.com</span>
-                    </div>
-                  </aside>
-
-                  {/* Main content — Dashboard real (atual) */}
-                  <DashboardMockupMain />
-                </div>
+                      <span className="leading-relaxed font-medium">{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <SaasJourneyPreview />
             </div>
-          </div>
-        </section>
-
-        {/* Feature Grid */}
-        <section className="py-24 mx-auto max-w-6xl px-4">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-4xl font-bold mb-4">Sua máquina de imprimir ebooks</h2>
-            <p className="text-muted-foreground">Tudo o que você precisa em uma única plataforma.</p>
-          </div>
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              { icon: Wand2, title: "Escrita Inteligente", desc: "A IA não apenas escreve, ela cria uma jornada de aprendizado para seu cliente." },
-              { icon: BookOpen, title: "Venda no Automático", desc: "Nós geramos o link que você envia para o cliente e ele compra direto de você." },
-              { icon: TrendingUp, title: "Divulgação smart", desc: "Saiba exatamente onde divulgar com nossas ferramentas de busca de grupos." },
-              { icon: ShieldCheck, title: "Segurança Total", desc: "Seus dados e seus ebooks estão protegidos com tecnologia de ponta." },
-              { icon: Timer, title: "Velocidade Recorde", desc: "O que levava 30 dias agora leva 30 minutos. Multiplique sua produção." },
-              { icon: Rocket, title: "Escala Infinita", desc: "Crie ebooks de forma ilimitada e domine múltiplos nichos." },
-            ].map((f, i) => (
-              <div key={f.title} className="p-8 rounded-2xl border bg-card/50 hover:bg-card hover:-translate-y-2 transition-all duration-300">
-                <div className="h-12 w-12 rounded-xl gradient-primary flex items-center justify-center mb-6 shadow-glow">
-                  <f.icon className="h-6 w-6 text-primary-foreground" />
-                </div>
-                <h3 className="font-display text-xl font-bold mb-3">{f.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{f.desc}</p>
-              </div>
-            ))}
           </div>
         </section>
 
