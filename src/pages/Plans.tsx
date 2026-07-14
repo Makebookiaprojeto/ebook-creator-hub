@@ -186,9 +186,8 @@ export default function Plans() {
     if (!authLoading && !user) navigate("/auth", { replace: true });
   }, [authLoading, user, navigate]);
 
-  const handleCheckout = (plan: "monthly" | "lifetime") => {
-    const selectedMethod = plan === "monthly" ? monthlyMethod : lifetimeMethod;
-    const baseUrl = CHECKOUT_LINKS_BY_METHOD[plan]?.[selectedMethod];
+  const handleCheckout = (plan: "monthly" | "lifetime", method: PaymentMethodValue) => {
+    const baseUrl = CHECKOUT_LINKS_BY_METHOD[plan]?.[method];
     if (!baseUrl) {
       toast.error("Forma de pagamento indisponível.");
       return;
