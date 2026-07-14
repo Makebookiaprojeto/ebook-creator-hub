@@ -325,50 +325,57 @@ export function DashboardView() {
             tint="from-primary/10 to-primary/5"
             large
             action={
-              <Select value={profitPeriod} onValueChange={(v: any) => setProfitPeriod(v)}>
-                <SelectTrigger className="h-7 w-[130px] text-xs -mt-2">
-                  <SelectValue placeholder="Período" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="today" className="text-sm">Hoje</SelectItem>
-                  <SelectItem value="7d" className="text-sm">Últimos 7 dias</SelectItem>
-                  <SelectItem value="30d" className="text-sm">Últimos 30 dias</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex items-center gap-1.5 -mt-2">
+                {[
+                  { v: "today", label: "Hoje" },
+                  { v: "7d", label: "7 Dias" },
+                  { v: "30d", label: "30 Dias" },
+                ].map((opt) => {
+                  const active = profitPeriod === opt.v;
+                  return (
+                    <button
+                      key={opt.v}
+                      onClick={() => setProfitPeriod(opt.v as any)}
+                      className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all border ${
+                        active
+                          ? "bg-blue-500 text-white border-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+                          : "bg-blue-500/10 text-blue-400 border-blue-500/30 hover:bg-blue-500/20"
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  );
+                })}
+              </div>
             }
           />
         </div>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="shadow-[0_0_18px_rgba(255,255,0,0.22)] rounded-2xl">
-            <div className="rounded-2xl border bg-card px-3 py-2 flex items-center justify-between">
-              <div>
-                <p className="text-[11px] text-muted-foreground">Ebooks</p>
-                <p className="font-display text-lg font-bold tracking-tight">{totalEbooks}</p>
-              </div>
-              <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 text-primary">
-                <BookOpen className="h-3 w-3" />
-              </div>
+
+        <div className="mt-4">
+          <SalesByHourChart total={stats.revenue30d} />
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 pt-1">
+          <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-card to-card/40 px-4 py-3 flex items-center justify-between shadow-soft">
+            <div>
+              <p className="text-[11px] text-muted-foreground">Ebooks</p>
+              <p className="font-display text-2xl font-bold tracking-tight">{totalEbooks}</p>
+            </div>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400">
+              <BookOpen className="h-4 w-4" />
             </div>
           </div>
-          <div className="shadow-[0_0_18px_rgba(255,255,0,0.22)] rounded-2xl">
-            <div className="rounded-2xl border bg-card px-3 py-2 flex items-center justify-between">
-              <div>
-                <p className="text-[11px] text-muted-foreground">Vendas</p>
-                <p className="font-display text-lg font-bold tracking-tight">{stats.totalSales}</p>
-              </div>
-              <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 text-primary">
-                <ShoppingCart className="h-3 w-3" />
-              </div>
+          <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-card to-card/40 px-4 py-3 flex items-center justify-between shadow-soft">
+            <div>
+              <p className="text-[11px] text-muted-foreground">Vendas</p>
+              <p className="font-display text-2xl font-bold tracking-tight">{stats.totalSales}</p>
+            </div>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400">
+              <ShoppingCart className="h-4 w-4" />
             </div>
           </div>
         </div>
       </div>
-
-      <div className="mt-6">
-        <SalesByHourChart total={stats.revenue30d} />
-      </div>
-
-
     </div>
   );
 }
@@ -391,31 +398,34 @@ function SalesByHourChart({ total }: { total: number }) {
   }, [total]);
 
   return (
-    <div className="rounded-2xl border border-border/60 bg-gradient-to-b from-card to-card/40 p-5 shadow-[0_0_32px_rgba(212,175,55,0.18)]">
-      <div className="mb-4 flex items-center justify-end">
-        <div className="flex items-center gap-2 rounded-full border border-border/60 bg-background/40 px-3 py-1">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#D4AF37] shadow-[0_0_8px_#D4AF37]" />
-          <span className="text-[11px] font-medium text-muted-foreground">Últimos 30 dias</span>
+    <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-gradient-to-br from-[#0b1220] via-card to-card/60 p-5 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
+      <div className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-24 -left-16 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl" />
+
+      <div className="mb-4 flex items-center justify-end relative">
+        <div className="flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1">
+          <span className="h-1.5 w-1.5 rounded-full bg-blue-400 shadow-[0_0_8px_#60a5fa]" />
+          <span className="text-[11px] font-medium text-blue-300">Últimos 30 dias</span>
         </div>
       </div>
 
-      <div className="h-48 w-full">
+      <div className="h-56 w-full relative">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id="lineStroke" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#B8860B" stopOpacity={1} />
-                <stop offset="50%" stopColor="#D4AF37" stopOpacity={1} />
-                <stop offset="100%" stopColor="#F5D27A" stopOpacity={1} />
+                <stop offset="0%" stopColor="#3b82f6" stopOpacity={1} />
+                <stop offset="50%" stopColor="#60a5fa" stopOpacity={1} />
+                <stop offset="100%" stopColor="#93c5fd" stopOpacity={1} />
               </linearGradient>
               <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#D4AF37" stopOpacity={0.35} />
-                <stop offset="60%" stopColor="#D4AF37" stopOpacity={0.08} />
-                <stop offset="100%" stopColor="#D4AF37" stopOpacity={0} />
+                <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.45} />
+                <stop offset="60%" stopColor="#3b82f6" stopOpacity={0.12} />
+                <stop offset="100%" stopColor="#3b82f6" stopOpacity={0} />
               </linearGradient>
             </defs>
 
-            <CartesianGrid stroke="hsl(var(--border))" strokeOpacity={0.35} strokeDasharray="3 6" vertical={false} />
+            <CartesianGrid stroke="hsl(var(--border))" strokeOpacity={0.25} strokeDasharray="3 6" vertical={false} />
 
             <XAxis
               dataKey="hora"
@@ -437,14 +447,14 @@ function SalesByHourChart({ total }: { total: number }) {
               tickFormatter={(v) => `R$${v >= 1000 ? `${(v / 1000).toFixed(1)}k` : v}`}
             />
             <RTooltip
-              cursor={{ stroke: "#D4AF37", strokeOpacity: 0.4, strokeDasharray: "4 4" }}
+              cursor={{ stroke: "#60a5fa", strokeOpacity: 0.5, strokeDasharray: "4 4" }}
               contentStyle={{
                 background: "hsl(var(--popover))",
-                border: "1px solid rgba(212,175,55,0.35)",
-                borderRadius: 10,
+                border: "1px solid rgba(59,130,246,0.4)",
+                borderRadius: 12,
                 color: "hsl(var(--popover-foreground))",
                 fontSize: 12,
-                boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
               }}
               labelStyle={{ color: "hsl(var(--muted-foreground))", fontSize: 11, marginBottom: 4 }}
               formatter={(v: any) => [`R$ ${Number(v).toFixed(2)}`, "Vendas"]}
@@ -454,10 +464,10 @@ function SalesByHourChart({ total }: { total: number }) {
               type="monotone"
               dataKey="valor"
               stroke="url(#lineStroke)"
-              strokeWidth={2.25}
+              strokeWidth={2.75}
               fill="url(#areaFill)"
               dot={false}
-              activeDot={{ r: 5, fill: "#D4AF37", stroke: "hsl(var(--background))", strokeWidth: 2 }}
+              activeDot={{ r: 5, fill: "#60a5fa", stroke: "hsl(var(--background))", strokeWidth: 2 }}
             />
           </AreaChart>
         </ResponsiveContainer>
