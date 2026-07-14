@@ -722,19 +722,19 @@ export function CreateEbookView() {
 
       {/* Progress */}
       <div className="px-5 -mt-6 pb-8">
-        <div className="mx-auto grid max-w-2xl grid-cols-5 rounded-2xl border border-border bg-card/40 px-6 py-5 shadow-gold">
+        <div className="mx-auto grid max-w-2xl grid-cols-5 rounded-2xl border border-border bg-card/40 px-6 py-5">
           {steps.map((label, i) => (
             <div key={label} className="relative flex flex-col items-center gap-1.5">
               {i < steps.length - 1 && (
                 <div className="absolute left-1/2 top-[18px] h-0.5 w-full -translate-y-1/2 rounded-full bg-zinc-600">
                   <div
-                    style={i < step ? { backgroundColor: "#FFFF00" } : undefined}
+                    style={i < step ? { backgroundColor: "#22c55e" } : undefined}
                     className={`h-full rounded-full transition-all duration-500 ${i < step ? "w-full" : "w-0"}`}
                   />
                 </div>
               )}
               <div
-                style={i < step ? { backgroundColor: "#FFFF00", color: "#000000" } : undefined}
+                style={i < step ? { backgroundColor: "#22c55e", color: "#000000" } : undefined}
                 className={`relative z-10 flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium transition ${
                   i < step
                     ? ""
