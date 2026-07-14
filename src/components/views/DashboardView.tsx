@@ -422,7 +422,7 @@ function SalesByHourChart({ total }: { total: number }) {
         </div>
       </div>
 
-      <div className="h-56 w-full relative">
+      <div className="h-44 w-full relative">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
             <defs>
