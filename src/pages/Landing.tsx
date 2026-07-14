@@ -111,15 +111,14 @@ const Landing = () => {
                 </Button>
               </Link>
             </div>
-            <div className="mt-24 sm:mt-32 relative animate-fade-in animation-delay-300">
-              <div className="absolute inset-0 bg-primary/20 blur-[100px] rounded-full pointer-events-none" />
-              <img
-                src={heroShowcase.url}
-                alt="EbookAI Builder — ebook pronto, página de vendas e grupos de divulgação"
-                loading="lazy"
-                className="relative mx-auto w-full max-w-5xl rounded-2xl shadow-2xl shadow-primary/20 ring-1 ring-primary/10"
-              />
-            </div>
+          </div>
+          <div className="relative mx-auto max-w-5xl px-4 mt-40 sm:mt-56 animate-fade-in animation-delay-300">
+            <img
+              src={heroShowcase.url}
+              alt="EbookAI Builder — ebook pronto, página de vendas e grupos de divulgação"
+              loading="lazy"
+              className="relative mx-auto w-full max-w-5xl rounded-2xl shadow-2xl shadow-black/40 ring-1 ring-border/40"
+            />
           </div>
         </section>
 
