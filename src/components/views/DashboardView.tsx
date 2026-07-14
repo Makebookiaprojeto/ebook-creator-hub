@@ -356,62 +356,6 @@ export function DashboardView() {
         </div>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-3 mt-6">
-
-        <div className="md:col-span-2 rounded-2xl border bg-card p-3 shadow-[0_0_18px_rgba(255,255,0,0.22)]">
-          <div className="mb-2">
-            <h2 className="font-display text-sm font-semibold flex items-center gap-2">
-              <CreditCard className="h-3.5 w-3.5 text-primary" />
-              Meios de pagamento
-            </h2>
-          </div>
-
-          <div className="overflow-hidden rounded-xl border">
-            <Table>
-              <TableHeader className="bg-muted/50">
-                <TableRow>
-                  <TableHead className="h-7 text-[11px] font-semibold">Método</TableHead>
-                  <TableHead className="h-7 text-[11px] font-semibold">Conversão</TableHead>
-                  <TableHead className="h-7 text-right text-[11px] font-semibold">Valor</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {paymentStats.map((method) => (
-                  <TableRow key={method.name} className="hover:bg-muted/30">
-                    <TableCell className="py-1.5 font-medium">
-                      <span className="text-[11px]">{method.name}</span>
-                    </TableCell>
-                    <TableCell className="py-1.5">
-                      <span className="inline-flex items-center rounded-full bg-[#D4AF37]/10 px-2 py-0.5 text-[10px] font-medium text-[#D4AF37] shadow-[0_0_10px_rgba(212,175,55,0.45)]">
-                        {method.conversion}
-                      </span>
-                    </TableCell>
-                    <TableCell className="py-1.5 text-right text-[11px] font-semibold text-foreground/80">
-                      {method.value}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
-
-        <div className="rounded-2xl border bg-card p-3 shadow-[0_0_18px_rgba(255,255,0,0.22)]">
-          <div className="flex flex-col divide-y">
-            {[
-              { label: "Abandono C.", value: "0" },
-              { label: "Reembolso", value: "0%" },
-              { label: "Charge Back", value: "0%" },
-              { label: "MED", value: "0%" },
-            ].map((m) => (
-              <div key={m.label} className="flex items-center justify-between py-1.5 first:pt-0 last:pb-0">
-                <p className="text-[11px] text-muted-foreground">{m.label}</p>
-                <p className="font-display text-sm font-bold tracking-tight text-foreground">{m.value}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
 
 
       <div className="mt-6">
