@@ -396,10 +396,10 @@ function SalesByHourChart({ total }: { total: number }) {
   const data = useMemo(() => {
     // Realistic distribution weights per hour (peaks at lunch and evening)
     const weights = [
-      2.2, 3.4, 1.8, 3.8, 2.4, 4.2,
-      3.0, 4.8, 3.6, 5.4, 4.0, 5.8,
-      4.4, 6.2, 4.6, 6.6, 5.0, 6.8,
-      5.4, 7.2, 5.6, 6.4, 4.8, 5.2,
+      3.6, 4.2, 3.4, 4.4, 3.8, 4.6,
+      4.0, 4.8, 4.2, 5.0, 4.4, 5.2,
+      4.6, 5.4, 4.7, 5.6, 4.9, 5.7,
+      5.0, 5.9, 5.1, 5.5, 4.8, 5.0,
     ];
     const sum = weights.reduce((a, b) => a + b, 0);
     const base = total > 0 ? total : 1000;
@@ -415,7 +415,7 @@ function SalesByHourChart({ total }: { total: number }) {
       <div className="pointer-events-none absolute -bottom-24 -left-16 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl" />
 
       <div className="mb-4 flex items-center justify-between relative">
-        <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-300">Receita</h3>
+        <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-300">Receita</h3>
         <div className="flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1">
           <span className="h-1.5 w-1.5 rounded-full bg-blue-400 shadow-[0_0_8px_#60a5fa]" />
           <span className="text-[11px] font-medium text-blue-300">Últimos 30 dias</span>
