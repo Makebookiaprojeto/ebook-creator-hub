@@ -317,15 +317,16 @@ export function DashboardView() {
     <div className="space-y-3 animate-fade-in py-1 -mt-6">
 
       <div className="space-y-3">
-        <div className="shadow-[0_0_18px_rgba(255,255,0,0.22)] rounded-2xl">
-          <StatCard
-            label="Lucro"
-            value={`R$ ${(profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`}
-            icon={DollarSign}
-            tint="from-primary/10 to-primary/5"
-            large
-            action={
-              <div className="flex items-center gap-1.5 -mt-2">
+        <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-gradient-to-br from-[#0b1220] via-card to-card/60 p-5 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
+          <div className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 -left-16 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl" />
+          <div className="relative flex items-start justify-between">
+            <div className="flex-1">
+              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Lucro</p>
+              <p className="mt-1 font-display text-6xl font-bold tracking-tight text-foreground">
+                R$ {(profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+              </p>
+              <div className="mt-3 flex items-center gap-1.5">
                 {[
                   { v: "today", label: "Hoje" },
                   { v: "7d", label: "7 Dias" },
@@ -339,7 +340,7 @@ export function DashboardView() {
                       className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all border ${
                         active
                           ? "bg-blue-500 text-white border-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
-                          : "bg-blue-500/10 text-blue-400 border-blue-500/30 hover:bg-blue-500/20"
+                          : "bg-blue-500/10 text-blue-300 border-blue-500/30 hover:bg-blue-500/20"
                       }`}
                     >
                       {opt.label}
@@ -347,8 +348,11 @@ export function DashboardView() {
                   );
                 })}
               </div>
-            }
-          />
+            </div>
+            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.35)]">
+              <DollarSign className="h-5 w-5" />
+            </div>
+          </div>
         </div>
 
         <div className="mt-4">
@@ -356,22 +360,28 @@ export function DashboardView() {
         </div>
 
         <div className="grid grid-cols-2 gap-3 pt-1">
-          <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-card to-card/40 px-4 py-3 flex items-center justify-between shadow-soft">
-            <div>
-              <p className="text-[11px] text-muted-foreground">Ebooks</p>
-              <p className="font-display text-2xl font-bold tracking-tight">{totalEbooks}</p>
-            </div>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400">
-              <BookOpen className="h-4 w-4" />
+          <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-gradient-to-br from-[#0b1220] via-card to-card/60 px-4 py-3 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
+            <div className="pointer-events-none absolute -top-16 -right-16 h-32 w-32 rounded-full bg-blue-500/20 blur-3xl" />
+            <div className="relative flex items-center justify-between">
+              <div>
+                <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Ebooks</p>
+                <p className="font-display text-2xl font-bold tracking-tight">{totalEbooks}</p>
+              </div>
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.3)]">
+                <BookOpen className="h-4 w-4" />
+              </div>
             </div>
           </div>
-          <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-card to-card/40 px-4 py-3 flex items-center justify-between shadow-soft">
-            <div>
-              <p className="text-[11px] text-muted-foreground">Vendas</p>
-              <p className="font-display text-2xl font-bold tracking-tight">{stats.totalSales}</p>
-            </div>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400">
-              <ShoppingCart className="h-4 w-4" />
+          <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-gradient-to-br from-[#0b1220] via-card to-card/60 px-4 py-3 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
+            <div className="pointer-events-none absolute -top-16 -right-16 h-32 w-32 rounded-full bg-blue-500/20 blur-3xl" />
+            <div className="relative flex items-center justify-between">
+              <div>
+                <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Vendas</p>
+                <p className="font-display text-2xl font-bold tracking-tight">{stats.totalSales}</p>
+              </div>
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.3)]">
+                <ShoppingCart className="h-4 w-4" />
+              </div>
             </div>
           </div>
         </div>
