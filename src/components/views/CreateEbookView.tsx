@@ -765,7 +765,7 @@ export function CreateEbookView() {
             {step === 0 && (
              <div className="-mt-6">
                  <div className="flex flex-col items-center text-center">
-                   <Sparkles className="h-6 w-6" style={{ color: "#FFFF00" }} />
+                   <SquareStack className="h-6 w-6" style={{ color: "#FFFF00" }} />
                    <h2 className="font-display text-lg font-semibold mt-2 mb-4">Selecione um nicho</h2>
                  </div>
                  <div className="mt-5 mx-auto max-w-3xl grid grid-cols-5 gap-2.5">
