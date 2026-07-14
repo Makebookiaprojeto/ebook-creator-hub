@@ -311,7 +311,7 @@ const Landing = () => {
                 { q: "O pagamento é seguro?", a: "Totalmente. Usamos tecnologia de criptografia de ponta e processadores de pagamento líderes de mercado para garantir sua total segurança." },
                 { q: "Posso vender os ebooks onde quiser?", a: "Sim! O conteúdo é seu. Você pode vender na Hotmart, Kiwify, Amazon ou até diretamente pelo link que nós geramos para você." }
               ].map((faq, i) => (
-                <div key={i} className="p-6 rounded-xl border bg-background/50">
+                <div key={i} className="p-6 rounded-xl border border-yellow-400/30 bg-background/50 shadow-[0_10px_40px_-10px_rgba(234,179,8,0.25)]">
                   <p className="font-bold mb-2 flex items-center gap-2">
                     <Target className="h-4 w-4 text-primary" /> {faq.q}
                   </p>
