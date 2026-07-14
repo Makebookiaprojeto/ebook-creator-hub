@@ -102,7 +102,7 @@ const Landing = () => {
               <span className="text-gradient-primary">Império Digital</span> em minutos.
             </h1>
             <p className="mx-auto max-w-2xl text-lg text-muted-foreground sm:text-xl mb-10 animate-slide-up animation-delay-200">
-              Não perca semanas escrevendo. Nossa IA cria o conteúdo, gera a capa, monta a página de vendas e te entrega tudo pronto para lucrar.
+              Transforme uma simples ideia em um Ebook pronto para vender em poucos minutos. Nossa IA cria o conteúdo, desenvolve uma capa profissional, monta sua página de vendas e entrega tudo preparado para você começar a faturar.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up animation-delay-300">
               <Link to="/auth" className="w-full sm:w-auto">
@@ -110,21 +110,6 @@ const Landing = () => {
                   Criar meu Ebook agora <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <div className="flex items-center gap-4">
-                <div className="flex -space-x-2">
-                  {[1,2,3,4].map(i => (
-                    <div key={i} className="h-8 w-8 rounded-full border-2 border-background bg-muted overflow-hidden">
-                      <img src={`https://i.pravatar.cc/150?u=${i+10}`} alt="User" className="h-full w-full object-cover" />
-                    </div>
-                  ))}
-                </div>
-                <div className="text-left">
-                  <div className="flex items-center">
-                    {[1,2,3,4,5].map(i => <Star key={i} className="h-3 w-3 fill-yellow-500 text-yellow-500" />)}
-                  </div>
-                  <p className="text-[10px] font-medium text-muted-foreground">+2.000 criadores lucrando</p>
-                </div>
-              </div>
             </div>
           </div>
         </section>
