@@ -227,7 +227,7 @@ const Landing = () => {
         <section className="py-24 mx-auto max-w-6xl px-4">
           <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto items-stretch">
             {/* Mensal */}
-            <div className="px-8 py-10 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm shadow-lg hover:shadow-xl hover:border-border transition-all flex flex-col md:scale-[0.94]">
+            <div className="px-8 py-10 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm shadow-lg hover:shadow-xl hover:border-border transition-all flex flex-col">
               <div className="mb-6 mt-2">
                 <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">
                   Mensal
