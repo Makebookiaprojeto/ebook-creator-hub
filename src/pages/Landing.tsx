@@ -285,58 +285,61 @@ const Landing = () => {
             <h2 className="font-display text-4xl font-bold mb-4 italic text-primary">O investimento que se paga em 1 venda.</h2>
             <p className="text-muted-foreground">Escolha o seu passaporte para a liberdade digital.</p>
           </div>
-          <div className="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
+          <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto items-stretch">
             {/* Mensal */}
-            <div className="px-10 py-12 rounded-3xl border border-border/60 bg-card/40 backdrop-blur-sm flex flex-col hover:border-white/30 hover:shadow-xl transition-all">
-              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Plano</p>
-              <h3 className="text-2xl font-bold mb-2">Mensal</h3>
-              <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-base font-bold align-top">R$</span>
-                <span className="text-6xl font-black">147,90</span>
-                <span className="text-muted-foreground font-medium">/mês</span>
+            <div className="px-8 py-10 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm shadow-md hover:shadow-lg hover:border-border transition-all flex flex-col">
+              <div className="mb-6">
+                <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">
+                  Mensal
+                </div>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-sm font-bold align-top">R$</span>
+                  <span className="text-5xl font-bold">147,90</span>
+                  <span className="text-muted-foreground">/mês</span>
+                </div>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Renovação automática a cada 30 dias.
+                </p>
               </div>
-              <ul className="space-y-4 mb-10 flex-1">
+              <ul className="space-y-3 mb-8 flex-1">
                 {["Criação de ebooks ilimitada", "IA premium (Cérebro Criativo)", "Página de vendas de alta conversão", "Checkout integrado", "Suporte prioritário"].map(item => (
-                  <li key={item} className="flex items-center gap-3 text-sm">
-                    <Check className="h-4 w-4 text-primary shrink-0" /> {item}
+                  <li key={item} className="flex items-start gap-2 text-sm">
+                    <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" /> <span>{item}</span>
                   </li>
                 ))}
               </ul>
-              <Link to="/auth" className="block">
-                <Button variant="outline" className="w-full h-12 border-primary/30 hover:bg-primary/10 hover:border-primary/60 transition-all">ASSINAR AGORA</Button>
-              </Link>
+              <PlanPaymentButtons plan="monthly" />
             </div>
 
             {/* Vitalício */}
-            <div className="px-10 py-12 rounded-3xl border-2 border-primary bg-gradient-to-b from-primary/15 via-primary/5 to-transparent flex flex-col relative plan-glow-animated shadow-2xl shadow-primary/30 md:scale-[1.04]">
-              <div className="absolute top-0 right-0 p-6">
-                <Crown className="h-14 w-14 text-primary/15" />
+            <div className="px-8 py-10 rounded-2xl border-2 border-primary bg-gradient-to-b from-primary/10 to-primary/5 flex flex-col relative ring-2 ring-primary/40 plan-glow-animated shadow-2xl shadow-primary/20 md:scale-[1.03]">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 text-[10px] font-black bg-primary text-primary-foreground px-4 py-1.5 rounded-full tracking-widest uppercase shadow-lg whitespace-nowrap">
+                <Crown className="h-3 w-3" /> Mais escolhido
               </div>
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 gradient-primary px-6 py-2 text-[10px] font-black text-primary-foreground rounded-full tracking-widest uppercase whitespace-nowrap shadow-xl z-20 border border-white/10">
-                OFERTA VITALÍCIA
-              </div>
-              <p className="text-xs font-bold uppercase tracking-widest text-primary mb-4">Recomendado</p>
-              <h3 className="text-3xl font-black mb-2">Vitalício</h3>
-              <div className="flex flex-col mb-6">
+              <div className="mb-6 mt-2">
+                <div className="text-xs font-bold text-primary uppercase tracking-widest mb-3">
+                  Vitalício
+                </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-base font-bold align-top">R$</span>
-                  <span className="text-7xl font-black">247,90</span>
-                  <span className="text-muted-foreground font-medium"> única vez</span>
+                  <span className="text-sm font-bold align-top">R$</span>
+                  <span className="text-6xl font-black">247,90</span>
+                  <span className="text-muted-foreground text-sm">à vista</span>
                 </div>
                 <div className="text-sm font-bold text-primary mt-1">
                   ou em até 12 X de R$ 29,58
                 </div>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Pague uma vez e use para sempre.
+                </p>
               </div>
-              <ul className="space-y-4 mb-10 flex-1">
+              <ul className="space-y-3 mb-8 flex-1">
                 {["Criação de ebooks ilimitada", "IA premium (Cérebro Criativo)", "Página de vendas de alta conversão", "Checkout integrado", "Suporte prioritário", "Pagamento único", "Atualizações vitalícias inclusas"].map(item => (
-                  <li key={item} className="flex items-center gap-3 text-sm font-semibold">
-                    <Check className="h-4 w-4 text-primary shrink-0" /> {item}
+                  <li key={item} className="flex items-start gap-2 text-sm font-medium">
+                    <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" /> <span>{item}</span>
                   </li>
                 ))}
               </ul>
-              <Link to="/auth" className="block">
-                <Button className="w-full h-14 text-base font-black gradient-primary text-primary-foreground shadow-glow hover:scale-105 transition-all">GARANTIR MINHA VAGA</Button>
-              </Link>
+              <PlanPaymentButtons plan="lifetime" emphasis />
             </div>
           </div>
           <div className="mt-12 flex items-center justify-center gap-8 flex-wrap opacity-50 grayscale hover:grayscale-0 transition-all">
