@@ -320,13 +320,10 @@ export function DashboardView() {
         <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-gradient-to-br from-[#0b1220] via-card to-card/60 p-5 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
           <div className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-24 -left-16 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl" />
-          <div className="relative flex items-start justify-between">
-            <div className="flex-1">
+          <div className="relative">
+            <div className="flex items-start justify-between gap-3">
               <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Lucro</p>
-              <p className="mt-1 font-display text-6xl font-bold tracking-tight text-foreground">
-                R$ {(profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-              </p>
-              <div className="mt-3 flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5">
                 {[
                   { v: "today", label: "Hoje" },
                   { v: "7d", label: "7 Dias" },
@@ -349,8 +346,13 @@ export function DashboardView() {
                 })}
               </div>
             </div>
-            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.35)]">
-              <DollarSign className="h-5 w-5" />
+            <div className="mt-1 flex items-end justify-between gap-3">
+              <p className="font-display text-6xl font-bold tracking-tight text-foreground">
+                R$ {(profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+              </p>
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.35)]">
+                <DollarSign className="h-5 w-5" />
+              </div>
             </div>
           </div>
         </div>
@@ -394,10 +396,10 @@ function SalesByHourChart({ total }: { total: number }) {
   const data = useMemo(() => {
     // Realistic distribution weights per hour (peaks at lunch and evening)
     const weights = [
-      0.3, 0.2, 0.1, 0.1, 0.2, 0.5,
-      1.0, 1.6, 2.2, 2.8, 3.4, 4.0,
-      4.6, 4.2, 3.8, 4.0, 4.6, 5.2,
-      5.8, 6.4, 5.6, 3.2, 0, 0,
+      2.2, 3.4, 1.8, 3.8, 2.4, 4.2,
+      3.0, 4.8, 3.6, 5.4, 4.0, 5.8,
+      4.4, 6.2, 4.6, 6.6, 5.0, 6.8,
+      5.4, 7.2, 5.6, 6.4, 4.8, 5.2,
     ];
     const sum = weights.reduce((a, b) => a + b, 0);
     const base = total > 0 ? total : 1000;
@@ -412,7 +414,8 @@ function SalesByHourChart({ total }: { total: number }) {
       <div className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 -left-16 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl" />
 
-      <div className="mb-4 flex items-center justify-end relative">
+      <div className="mb-4 flex items-center justify-between relative">
+        <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-300">Receita</h3>
         <div className="flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1">
           <span className="h-1.5 w-1.5 rounded-full bg-blue-400 shadow-[0_0_8px_#60a5fa]" />
           <span className="text-[11px] font-medium text-blue-300">Últimos 30 dias</span>
