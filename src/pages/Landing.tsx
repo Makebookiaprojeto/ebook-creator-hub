@@ -90,7 +90,8 @@ const Landing = () => {
       <main>
         {/* Hero Section */}
         <section className="relative pt-20 pb-24 overflow-hidden">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[680px] bg-primary/30 blur-[130px] rounded-full pointer-events-none" />
+          <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-primary/25 blur-[100px] rounded-full pointer-events-none" />
           <div className="relative mx-auto max-w-5xl px-4 text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-semibold text-primary mb-8 animate-fade-in">
               <Sparkles className="h-3.5 w-3.5" /> A nova era da criação digital chegou
@@ -201,18 +202,19 @@ const Landing = () => {
                   rating: 5
                 }
               ].map((t, i) => (
-                <div key={i} className="p-8 rounded-2xl bg-background border border-white/5 relative">
+                <div key={i} className="group relative p-8 rounded-2xl bg-gradient-to-br from-card/80 to-background border border-primary/10 hover:border-primary/40 shadow-lg hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300">
+                  <div className="absolute -top-4 left-6 text-6xl leading-none text-primary/40 font-serif select-none">"</div>
                   <div className="flex gap-1 mb-4">
                     {[1,2,3,4,5].map(star => <Star key={star} className="h-4 w-4 fill-yellow-500 text-yellow-500" />)}
                   </div>
-                  <p className="italic text-muted-foreground mb-6">"{t.text}"</p>
-                  <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary">
+                  <p className="text-foreground/90 mb-6 leading-relaxed">{t.text}</p>
+                  <div className="flex items-center gap-4 pt-4 border-t border-border/30">
+                    <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center font-bold text-primary-foreground shadow-md shadow-primary/30">
                       {t.name[0]}
                     </div>
                     <div>
                       <p className="font-bold">{t.name}</p>
-                      <p className="text-xs text-muted-foreground">{t.role}</p>
+                      <p className="text-xs text-primary/80 font-medium">{t.role}</p>
                     </div>
                   </div>
                 </div>
@@ -225,15 +227,15 @@ const Landing = () => {
         <section className="py-24 mx-auto max-w-6xl px-4">
           <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto items-stretch">
             {/* Mensal */}
-            <div className="px-6 py-8 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm shadow-md hover:shadow-lg hover:border-border transition-all flex flex-col md:scale-[0.96]">
-              <div className="mb-5">
+            <div className="px-8 py-10 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm shadow-lg hover:shadow-xl hover:border-border transition-all flex flex-col md:scale-[0.94]">
+              <div className="mb-6 mt-2">
                 <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">
                   Mensal
                 </div>
                 <div className="flex items-baseline gap-1">
                   <span className="text-sm font-bold align-top">R$</span>
-                  <span className="text-5xl font-bold">147,90</span>
-                  <span className="text-muted-foreground">/mês</span>
+                  <span className="text-6xl font-black">147,90</span>
+                  <span className="text-muted-foreground text-sm">/mês</span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
                   Renovação automática a cada 30 dias.
@@ -241,7 +243,7 @@ const Landing = () => {
               </div>
               <ul className="space-y-3 mb-8 flex-1">
                 {["Criação de ebooks ilimitada", "IA premium (Cérebro Criativo)", "Página de vendas de alta conversão", "Checkout integrado", "Suporte prioritário"].map(item => (
-                  <li key={item} className="flex items-start gap-2 text-sm">
+                  <li key={item} className="flex items-start gap-2 text-sm font-medium">
                     <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" /> <span>{item}</span>
                   </li>
                 ))}
