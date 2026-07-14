@@ -347,11 +347,11 @@ export default function Plans() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto items-stretch">
             {/* Mensal */}
-            <Card className="px-10 py-12 border-border/60 flex flex-col">
+            <Card className="px-8 py-10 border-border/60 flex flex-col rounded-2xl bg-card/60 backdrop-blur-sm shadow-md hover:shadow-lg hover:border-border transition-all">
               <div className="mb-6">
-                <div className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
+                <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">
                   Mensal
                 </div>
                 <div className="flex items-baseline gap-1">
@@ -377,38 +377,25 @@ export default function Plans() {
                 ))}
               </ul>
 
-              <PaymentMethodSelector
-                value={monthlyMethod}
-                onChange={setMonthlyMethod}
-                name="monthly-method"
-              />
-
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full"
-                onClick={() => handleCheckout("monthly")}
-              >
-                ASSINAR AGORA
-              </Button>
+              <PaymentMethodButtons onSelect={(m) => handleCheckout("monthly", m)} />
             </Card>
 
             {/* Vitalício */}
-            <Card className="px-10 py-9 border-primary bg-primary/5 flex flex-col relative ring-2 ring-primary/40 plan-glow-animated">
-              <div className="absolute top-4 right-4 flex items-center gap-1 text-xs font-medium bg-primary text-primary-foreground px-2 py-1 rounded-full">
+            <Card className="px-8 py-10 border-2 border-primary bg-gradient-to-b from-primary/10 to-primary/5 flex flex-col relative rounded-2xl ring-2 ring-primary/40 plan-glow-animated shadow-2xl shadow-primary/20 md:scale-[1.03]">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 text-[10px] font-black bg-primary text-primary-foreground px-4 py-1.5 rounded-full tracking-widest uppercase shadow-lg whitespace-nowrap">
                 <Crown className="h-3 w-3" /> Mais escolhido
               </div>
 
-              <div className="mb-6">
-                <div className="text-sm font-medium text-primary uppercase tracking-wide mb-2">
+              <div className="mb-6 mt-2">
+                <div className="text-xs font-bold text-primary uppercase tracking-widest mb-3">
                   Vitalício
                 </div>
                 <div className="flex items-baseline gap-1">
                   <span className="text-sm font-bold align-top">R$</span>
-                  <span className="text-5xl font-bold">247,90</span>
+                  <span className="text-6xl font-black">247,90</span>
                   <span className="text-muted-foreground text-sm">à vista</span>
                 </div>
-                <div className="text-sm font-medium text-primary mt-1">
+                <div className="text-sm font-bold text-primary mt-1">
                   ou em até 12 X de R$ 29,58
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
@@ -425,7 +412,6 @@ export default function Plans() {
                   "Checkout integrado",
                   "Suporte prioritário",
                   "Pagamento único",
-                  
                   "Atualizações vitalícias inclusas",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm font-medium">
@@ -435,19 +421,7 @@ export default function Plans() {
                 ))}
               </ul>
 
-              <PaymentMethodSelector
-                value={lifetimeMethod}
-                onChange={setLifetimeMethod}
-                name="lifetime-method"
-              />
-
-              <Button
-                size="lg"
-                className="w-full"
-                onClick={() => handleCheckout("lifetime")}
-              >
-                GARANTIR VITALÍCIO
-              </Button>
+              <PaymentMethodButtons emphasis onSelect={(m) => handleCheckout("lifetime", m)} />
             </Card>
           </div>
 
