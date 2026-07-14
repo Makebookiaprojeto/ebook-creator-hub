@@ -377,10 +377,10 @@ function SalesByHourChart({ total }: { total: number }) {
   const data = useMemo(() => {
     // Realistic distribution weights per hour (peaks at lunch and evening)
     const weights = [
-      0.4, 0.2, 0.1, 0.1, 0.1, 0.2,
-      0.5, 0.9, 1.4, 1.8, 2.2, 2.6,
-      3.0, 2.7, 2.4, 2.6, 3.1, 3.6,
-      4.4, 5.2, 6.0, 5.6, 4.2, 2.4,
+      0.3, 0.2, 0.1, 0.1, 0.2, 0.5,
+      1.0, 1.6, 2.2, 2.8, 3.4, 4.0,
+      4.6, 4.2, 3.8, 4.0, 4.6, 5.2,
+      5.8, 6.4, 5.6, 3.2, 0, 0,
     ];
     const sum = weights.reduce((a, b) => a + b, 0);
     const base = total > 0 ? total : 1000;
@@ -392,16 +392,13 @@ function SalesByHourChart({ total }: { total: number }) {
 
   return (
     <div className="rounded-2xl border border-border/60 bg-gradient-to-b from-card to-card/40 p-5 shadow-[0_0_32px_rgba(212,175,55,0.18)]">
-      <div className="mb-4 flex items-end justify-between">
-        <div>
-          <h3 className="text-sm font-semibold tracking-tight text-foreground">Receita por hora</h3>
-          <p className="text-[11px] text-muted-foreground">Distribuição de vendas nas últimas 24h</p>
-        </div>
+      <div className="mb-4 flex items-center justify-end">
         <div className="flex items-center gap-2 rounded-full border border-border/60 bg-background/40 px-3 py-1">
           <span className="h-1.5 w-1.5 rounded-full bg-[#D4AF37] shadow-[0_0_8px_#D4AF37]" />
           <span className="text-[11px] font-medium text-muted-foreground">Últimos 30 dias</span>
         </div>
       </div>
+
       <div className="h-48 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
