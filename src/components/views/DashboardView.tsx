@@ -325,50 +325,57 @@ export function DashboardView() {
             tint="from-primary/10 to-primary/5"
             large
             action={
-              <Select value={profitPeriod} onValueChange={(v: any) => setProfitPeriod(v)}>
-                <SelectTrigger className="h-7 w-[130px] text-xs -mt-2">
-                  <SelectValue placeholder="Período" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="today" className="text-sm">Hoje</SelectItem>
-                  <SelectItem value="7d" className="text-sm">Últimos 7 dias</SelectItem>
-                  <SelectItem value="30d" className="text-sm">Últimos 30 dias</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex items-center gap-1.5 -mt-2">
+                {[
+                  { v: "today", label: "Hoje" },
+                  { v: "7d", label: "7 Dias" },
+                  { v: "30d", label: "30 Dias" },
+                ].map((opt) => {
+                  const active = profitPeriod === opt.v;
+                  return (
+                    <button
+                      key={opt.v}
+                      onClick={() => setProfitPeriod(opt.v as any)}
+                      className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all border ${
+                        active
+                          ? "bg-blue-500 text-white border-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+                          : "bg-blue-500/10 text-blue-400 border-blue-500/30 hover:bg-blue-500/20"
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  );
+                })}
+              </div>
             }
           />
         </div>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="shadow-[0_0_18px_rgba(255,255,0,0.22)] rounded-2xl">
-            <div className="rounded-2xl border bg-card px-3 py-2 flex items-center justify-between">
-              <div>
-                <p className="text-[11px] text-muted-foreground">Ebooks</p>
-                <p className="font-display text-lg font-bold tracking-tight">{totalEbooks}</p>
-              </div>
-              <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 text-primary">
-                <BookOpen className="h-3 w-3" />
-              </div>
+
+        <div className="mt-4">
+          <SalesByHourChart total={stats.revenue30d} />
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 pt-1">
+          <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-card to-card/40 px-4 py-3 flex items-center justify-between shadow-soft">
+            <div>
+              <p className="text-[11px] text-muted-foreground">Ebooks</p>
+              <p className="font-display text-2xl font-bold tracking-tight">{totalEbooks}</p>
+            </div>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400">
+              <BookOpen className="h-4 w-4" />
             </div>
           </div>
-          <div className="shadow-[0_0_18px_rgba(255,255,0,0.22)] rounded-2xl">
-            <div className="rounded-2xl border bg-card px-3 py-2 flex items-center justify-between">
-              <div>
-                <p className="text-[11px] text-muted-foreground">Vendas</p>
-                <p className="font-display text-lg font-bold tracking-tight">{stats.totalSales}</p>
-              </div>
-              <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 text-primary">
-                <ShoppingCart className="h-3 w-3" />
-              </div>
+          <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-card to-card/40 px-4 py-3 flex items-center justify-between shadow-soft">
+            <div>
+              <p className="text-[11px] text-muted-foreground">Vendas</p>
+              <p className="font-display text-2xl font-bold tracking-tight">{stats.totalSales}</p>
+            </div>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400">
+              <ShoppingCart className="h-4 w-4" />
             </div>
           </div>
         </div>
       </div>
-
-      <div className="mt-6">
-        <SalesByHourChart total={stats.revenue30d} />
-      </div>
-
-
     </div>
   );
 }
