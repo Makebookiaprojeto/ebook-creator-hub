@@ -117,7 +117,7 @@ const Landing = () => {
               src={heroShowcase.url}
               alt="EbookAI Builder — ebook pronto, página de vendas e grupos de divulgação"
               loading="lazy"
-              className="relative mx-auto w-full max-w-5xl rounded-2xl shadow-2xl shadow-black/40 ring-1 ring-border/40"
+              className="relative mx-auto w-full max-w-5xl rounded-2xl shadow-[0_25px_80px_-15px_rgba(234,179,8,0.35)] ring-1 ring-yellow-400/30"
             />
           </div>
         </section>
@@ -311,7 +311,7 @@ const Landing = () => {
                 { q: "O pagamento é seguro?", a: "Totalmente. Usamos tecnologia de criptografia de ponta e processadores de pagamento líderes de mercado para garantir sua total segurança." },
                 { q: "Posso vender os ebooks onde quiser?", a: "Sim! O conteúdo é seu. Você pode vender na Hotmart, Kiwify, Amazon ou até diretamente pelo link que nós geramos para você." }
               ].map((faq, i) => (
-                <div key={i} className="p-6 rounded-xl border bg-background/50">
+                <div key={i} className="p-6 rounded-xl border border-yellow-400/30 bg-background/50 shadow-[0_10px_40px_-10px_rgba(234,179,8,0.25)]">
                   <p className="font-bold mb-2 flex items-center gap-2">
                     <Target className="h-4 w-4 text-primary" /> {faq.q}
                   </p>
@@ -319,7 +319,7 @@ const Landing = () => {
                 </div>
               ))}
             </div>
-            <div className="mt-16 p-8 rounded-3xl gradient-primary/10 border border-primary/20">
+            <div className="mt-16 p-8 rounded-3xl gradient-primary/10 border border-yellow-400/30 shadow-[0_15px_50px_-10px_rgba(234,179,8,0.3)]">
               <Heart className="h-10 w-10 text-primary mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-4">Teste sem risco por 7 dias.</h3>
               <p className="text-muted-foreground text-sm mb-8">Se em uma semana você não tiver criado seu primeiro ebook de sucesso, nós devolvemos cada centavo do seu investimento.</p>
