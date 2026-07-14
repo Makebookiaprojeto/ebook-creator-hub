@@ -110,8 +110,18 @@ const Landing = () => {
                 </Button>
               </Link>
             </div>
+            <div className="mt-16 relative animate-fade-in animation-delay-300">
+              <div className="absolute inset-0 bg-primary/20 blur-[100px] rounded-full pointer-events-none" />
+              <img
+                src={heroShowcase.url}
+                alt="EbookAI Builder — ebook pronto, página de vendas e grupos de divulgação"
+                loading="lazy"
+                className="relative mx-auto w-full max-w-5xl rounded-2xl shadow-2xl shadow-primary/20 ring-1 ring-primary/10"
+              />
+            </div>
           </div>
         </section>
+
 
         {/* The Pain vs Solution */}
         <section className="py-24 bg-card/20 border-y border-border/10">
