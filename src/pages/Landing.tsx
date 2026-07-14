@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { CHECKOUT_LINKS_BY_METHOD, type PaymentMethod } from "@/config/checkoutLinks";
 import saasLogo from "@/assets/saas-logo.jpg";
+import heroShowcase from "@/assets/hero-showcase.png.asset.json";
 
 function PlanPaymentButtons({ plan, emphasis = false }: { plan: "monthly" | "lifetime"; emphasis?: boolean }) {
   const go = (method: PaymentMethod) => {
