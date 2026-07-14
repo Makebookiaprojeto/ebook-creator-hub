@@ -6,7 +6,8 @@ import {
   BookOpen, MousePointer2, Target, Layout, Award, Lock as LockIcon, ArrowRight as ArrowRightIcon,
   TrendingUp, ExternalLink, Video, Play, Megaphone,
   Dumbbell, Utensils, Baby, Dog, Sparkle, GraduationCap, Laptop, Palette, Briefcase, Languages, Map, Home, Shirt,
-  Heart, Wallet, Brain, HeartPulse, DollarSign, BadgeDollarSign
+  Heart, Wallet, Brain, HeartPulse, DollarSign, BadgeDollarSign,
+  SquareStack, SquareMousePointer, SquareArrowOutUpRight, Square
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -764,7 +765,7 @@ export function CreateEbookView() {
             {step === 0 && (
              <div className="-mt-6">
                  <div className="flex flex-col items-center text-center">
-                   <Sparkles className="h-6 w-6" style={{ color: "#FFFF00" }} />
+                   <SquareStack className="h-6 w-6" style={{ color: "#FFFF00" }} />
                    <h2 className="font-display text-lg font-semibold mt-2 mb-4">Selecione um nicho</h2>
                  </div>
                  <div className="mt-5 mx-auto max-w-3xl grid grid-cols-5 gap-2.5">
@@ -797,7 +798,10 @@ export function CreateEbookView() {
             {step === 1 && (
               <div className="max-w-xl mx-auto -mt-4">
                 <div className="flex flex-col items-center text-center">
-                  <BadgeDollarSign className="h-7 w-7" style={{ color: "#FFFF00" }} strokeWidth={2.2} />
+                  <span className="relative inline-flex h-7 w-7 items-center justify-center" style={{ color: "#FFFF00" }}>
+                    <Square className="h-7 w-7" strokeWidth={2.2} />
+                    <DollarSign className="absolute h-4 w-4" strokeWidth={2.6} />
+                  </span>
                   <h2 className="font-display text-xl font-semibold mt-2 mb-4">Defina o preço</h2>
                 </div>
 
@@ -922,7 +926,7 @@ export function CreateEbookView() {
             {step === 3 && (
               <div key="step3-container" className="space-y-6 -mt-4">
                 <div className="flex flex-col items-center mb-6">
-                  <Rocket className="h-7 w-7 mb-2" style={{ color: "#FFFF00" }} />
+                  <SquareMousePointer className="h-7 w-7 mb-2" style={{ color: "#FFFF00" }} />
                   <h2 className="font-display text-xl font-semibold text-center">Configure sua Página de Vendas</h2>
                 </div>
 
@@ -1072,7 +1076,7 @@ export function CreateEbookView() {
             {step === 4 && (
               <div>
                 <div className="flex flex-col items-center text-center -mt-8">
-                  <Rocket className="h-7 w-7 text-[#FFFF00]" />
+                  <SquareArrowOutUpRight className="h-7 w-7 text-[#FFFF00]" />
                   <h2 className="font-display text-xl font-semibold mt-0 mb-2">Divulgação e Venda</h2>
                 </div>
 
