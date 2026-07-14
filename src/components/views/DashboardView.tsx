@@ -316,13 +316,14 @@ export function DashboardView() {
   return (
     <div className="space-y-3 animate-fade-in py-1 -mt-6">
 
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-3 items-start">
+      <div className="space-y-3">
         <div className="shadow-[0_0_18px_rgba(255,255,0,0.22)] rounded-2xl">
-          <StatCard 
-            label="Lucro" 
-            value={`R$ ${(profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`} 
-            icon={DollarSign} 
+          <StatCard
+            label="Lucro"
+            value={`R$ ${(profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`}
+            icon={DollarSign}
             tint="from-primary/10 to-primary/5"
+            large
             action={
               <Select value={profitPeriod} onValueChange={(v: any) => setProfitPeriod(v)}>
                 <SelectTrigger className="h-7 w-[130px] text-xs -mt-2">
@@ -337,30 +338,36 @@ export function DashboardView() {
             }
           />
         </div>
-        <div className="shadow-[0_0_18px_rgba(255,255,0,0.22)] rounded-2xl">
-          <StatCard 
-            label="Ebooks" 
-            value={String(totalEbooks)} 
-            icon={BookOpen} 
-            tint="from-primary/10 to-primary/5" 
-          />
-        </div>
-        <div className="shadow-[0_0_18px_rgba(255,255,0,0.22)] rounded-2xl">
-          <StatCard 
-            label="Vendas" 
-            value={String(stats.totalSales)} 
-            delta={stats.totalSales > 0 ? `+${stats.totalSales}` : "0"} 
-            icon={ShoppingCart} 
-            tint="from-primary/10 to-primary/5" 
-          />
+        <div className="grid grid-cols-2 gap-3">
+          <div className="shadow-[0_0_18px_rgba(255,255,0,0.22)] rounded-2xl">
+            <div className="rounded-2xl border bg-card px-3 py-2 flex items-center justify-between">
+              <div>
+                <p className="text-[11px] text-muted-foreground">Ebooks</p>
+                <p className="font-display text-lg font-bold tracking-tight">{totalEbooks}</p>
+              </div>
+              <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 text-primary">
+                <BookOpen className="h-3 w-3" />
+              </div>
+            </div>
+          </div>
+          <div className="shadow-[0_0_18px_rgba(255,255,0,0.22)] rounded-2xl">
+            <div className="rounded-2xl border bg-card px-3 py-2 flex items-center justify-between">
+              <div>
+                <p className="text-[11px] text-muted-foreground">Vendas</p>
+                <p className="font-display text-lg font-bold tracking-tight">{stats.totalSales}</p>
+              </div>
+              <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 text-primary">
+                <ShoppingCart className="h-3 w-3" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
-
 
       <div className="mt-6">
         <SalesByHourChart total={stats.revenue30d} />
       </div>
+
 
     </div>
   );
