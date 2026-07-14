@@ -90,7 +90,8 @@ const Landing = () => {
       <main>
         {/* Hero Section */}
         <section className="relative pt-20 pb-24 overflow-hidden">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[680px] bg-primary/30 blur-[130px] rounded-full pointer-events-none" />
+          <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-primary/25 blur-[100px] rounded-full pointer-events-none" />
           <div className="relative mx-auto max-w-5xl px-4 text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-semibold text-primary mb-8 animate-fade-in">
               <Sparkles className="h-3.5 w-3.5" /> A nova era da criação digital chegou
