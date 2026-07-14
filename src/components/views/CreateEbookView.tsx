@@ -926,7 +926,7 @@ export function CreateEbookView() {
             {step === 3 && (
               <div key="step3-container" className="space-y-6 -mt-4">
                 <div className="flex flex-col items-center mb-6">
-                  <Rocket className="h-7 w-7 mb-2" style={{ color: "#FFFF00" }} />
+                  <SquareMousePointer className="h-7 w-7 mb-2" style={{ color: "#FFFF00" }} />
                   <h2 className="font-display text-xl font-semibold text-center">Configure sua Página de Vendas</h2>
                 </div>
 
