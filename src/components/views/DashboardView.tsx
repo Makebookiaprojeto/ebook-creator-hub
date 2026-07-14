@@ -396,10 +396,10 @@ function SalesByHourChart({ total }: { total: number }) {
   const data = useMemo(() => {
     // Realistic distribution weights per hour (peaks at lunch and evening)
     const weights = [
-      0.3, 0.2, 0.1, 0.1, 0.2, 0.5,
-      1.0, 1.6, 2.2, 2.8, 3.4, 4.0,
-      4.6, 4.2, 3.8, 4.0, 4.6, 5.2,
-      5.8, 6.4, 5.6, 3.2, 0, 0,
+      2.2, 3.4, 1.8, 3.8, 2.4, 4.2,
+      3.0, 4.8, 3.6, 5.4, 4.0, 5.8,
+      4.4, 6.2, 4.6, 6.6, 5.0, 6.8,
+      5.4, 7.2, 5.6, 6.4, 4.8, 5.2,
     ];
     const sum = weights.reduce((a, b) => a + b, 0);
     const base = total > 0 ? total : 1000;
