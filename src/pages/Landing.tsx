@@ -178,8 +178,9 @@ const Landing = () => {
         <section className="py-24 bg-primary/5">
           <div className="mx-auto max-w-6xl px-4">
             <div className="text-center mb-16">
-              <h2 className="font-display text-4xl font-bold mb-4">Quem já mudou de vida</h2>
-              <p className="text-muted-foreground">Relatos reais de pessoas comuns que viraram infoprodutores.</p>
+              <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold mb-3">Cases de sucesso</p>
+              <h2 className="font-display text-4xl font-bold mb-4">Histórias reais de quem transformou conhecimento em receita</h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">Profissionais de diferentes áreas utilizam a EbookAI Builder para escalar seus infoprodutos com consistência.</p>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
               {[
