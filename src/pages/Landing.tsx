@@ -226,15 +226,15 @@ const Landing = () => {
         <section className="py-24 mx-auto max-w-6xl px-4">
           <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto items-stretch">
             {/* Mensal */}
-            <div className="px-6 py-8 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm shadow-md hover:shadow-lg hover:border-border transition-all flex flex-col md:scale-[0.96]">
-              <div className="mb-5">
+            <div className="px-8 py-10 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm shadow-lg hover:shadow-xl hover:border-border transition-all flex flex-col md:scale-[0.94]">
+              <div className="mb-6 mt-2">
                 <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">
                   Mensal
                 </div>
                 <div className="flex items-baseline gap-1">
                   <span className="text-sm font-bold align-top">R$</span>
-                  <span className="text-5xl font-bold">147,90</span>
-                  <span className="text-muted-foreground">/mês</span>
+                  <span className="text-6xl font-black">147,90</span>
+                  <span className="text-muted-foreground text-sm">/mês</span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
                   Renovação automática a cada 30 dias.
@@ -242,7 +242,7 @@ const Landing = () => {
               </div>
               <ul className="space-y-3 mb-8 flex-1">
                 {["Criação de ebooks ilimitada", "IA premium (Cérebro Criativo)", "Página de vendas de alta conversão", "Checkout integrado", "Suporte prioritário"].map(item => (
-                  <li key={item} className="flex items-start gap-2 text-sm">
+                  <li key={item} className="flex items-start gap-2 text-sm font-medium">
                     <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" /> <span>{item}</span>
                   </li>
                 ))}
