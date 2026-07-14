@@ -146,12 +146,6 @@ export default function Plans() {
   const { user, loading: authLoading, signOut } = useAuth();
   const { loading: subLoading, isActive } = useSubscription();
   const [displayName, setDisplayName] = useState<string>("");
-  // Seleção visual da forma de pagamento por plano.
-  // NÃO afeta o fluxo de checkout — handleCheckout continua abrindo a IronPay
-  // (via CHECKOUT_LINKS) independentemente do valor escolhido aqui.
-  type PayMethod = "pix" | "card";
-  const [monthlyMethod, setMonthlyMethod] = useState<PayMethod>("pix");
-  const [lifetimeMethod, setLifetimeMethod] = useState<PayMethod>("pix");
 
   useEffect(() => {
     // Force CSS dark mode
