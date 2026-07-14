@@ -319,7 +319,7 @@ const Landing = () => {
                 </div>
               ))}
             </div>
-            <div className="mt-16 p-8 rounded-3xl gradient-primary/10 border border-primary/20">
+            <div className="mt-16 p-8 rounded-3xl gradient-primary/10 border border-yellow-400/30 shadow-[0_15px_50px_-10px_rgba(234,179,8,0.3)]">
               <Heart className="h-10 w-10 text-primary mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-4">Teste sem risco por 7 dias.</h3>
               <p className="text-muted-foreground text-sm mb-8">Se em uma semana você não tiver criado seu primeiro ebook de sucesso, nós devolvemos cada centavo do seu investimento.</p>
