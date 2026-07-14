@@ -402,11 +402,7 @@ function SalesByHourChart({ total }: { total: number }) {
       <div className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 -left-16 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl" />
 
-      <div className="mb-4 flex items-center justify-between relative">
-        <div>
-          <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Receita por hora</p>
-          <p className="font-display text-lg font-semibold text-foreground">Distribuição diária</p>
-        </div>
+      <div className="mb-4 flex items-center justify-end relative">
         <div className="flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1">
           <span className="h-1.5 w-1.5 rounded-full bg-blue-400 shadow-[0_0_8px_#60a5fa]" />
           <span className="text-[11px] font-medium text-blue-300">Últimos 30 dias</span>
