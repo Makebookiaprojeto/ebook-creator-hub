@@ -202,18 +202,19 @@ const Landing = () => {
                   rating: 5
                 }
               ].map((t, i) => (
-                <div key={i} className="p-8 rounded-2xl bg-background border border-white/5 relative">
+                <div key={i} className="group relative p-8 rounded-2xl bg-gradient-to-br from-card/80 to-background border border-primary/10 hover:border-primary/40 shadow-lg hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300">
+                  <div className="absolute -top-4 left-6 text-6xl leading-none text-primary/40 font-serif select-none">"</div>
                   <div className="flex gap-1 mb-4">
                     {[1,2,3,4,5].map(star => <Star key={star} className="h-4 w-4 fill-yellow-500 text-yellow-500" />)}
                   </div>
-                  <p className="italic text-muted-foreground mb-6">"{t.text}"</p>
-                  <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary">
+                  <p className="text-foreground/90 mb-6 leading-relaxed">{t.text}</p>
+                  <div className="flex items-center gap-4 pt-4 border-t border-border/30">
+                    <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center font-bold text-primary-foreground shadow-md shadow-primary/30">
                       {t.name[0]}
                     </div>
                     <div>
                       <p className="font-bold">{t.name}</p>
-                      <p className="text-xs text-muted-foreground">{t.role}</p>
+                      <p className="text-xs text-primary/80 font-medium">{t.role}</p>
                     </div>
                   </div>
                 </div>
