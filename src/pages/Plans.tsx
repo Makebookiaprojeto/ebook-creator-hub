@@ -105,50 +105,37 @@ const FAQS = [
 
 type PaymentMethodValue = "pix" | "card";
 
-function PaymentMethodSelector({
-  value,
-  onChange,
-  name,
+function PaymentMethodButtons({
+  onSelect,
+  emphasis = false,
 }: {
-  value: PaymentMethodValue;
-  onChange: (v: PaymentMethodValue) => void;
-  name: string;
+  onSelect: (m: PaymentMethodValue) => void;
+  emphasis?: boolean;
 }) {
-  const options: { id: PaymentMethodValue; label: string; icon: typeof DollarSign }[] = [
-    { id: "pix", label: "PIX", icon: QrCode },
-    { id: "card", label: "Cartão de Crédito", icon: CreditCard },
-  ];
   return (
-    <div className="mb-6" role="radiogroup" aria-label="Método de Pagamento">
-      <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
+    <div className="mb-2">
+      <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3 text-center">
         Método de Pagamento
       </div>
-      <div className="grid grid-cols-2 gap-2">
-        {options.map((opt) => {
-          const active = value === opt.id;
-          const Icon = opt.icon;
-          return (
-            <label
-              key={opt.id}
-              className={`flex items-center gap-2 rounded-md border px-3 py-2 text-sm cursor-pointer transition-colors ${
-                active
-                  ? "border-primary bg-primary/10 text-foreground"
-                  : "border-border/60 text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <input
-                type="radio"
-                name={name}
-                value={opt.id}
-                checked={active}
-                onChange={() => onChange(opt.id)}
-                className="accent-primary"
-              />
-              <Icon className="h-4 w-4" />
-              <span>{opt.label}</span>
-            </label>
-          );
-        })}
+      <div className="flex flex-col gap-3">
+        <button
+          type="button"
+          onClick={() => onSelect("pix")}
+          className={`w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.02] active:scale-[0.98] ${
+            emphasis ? "h-14 text-base" : ""
+          }`}
+        >
+          <QrCode className="h-5 w-5" /> PIX Instantâneo
+        </button>
+        <button
+          type="button"
+          onClick={() => onSelect("card")}
+          className={`w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black shadow-lg shadow-yellow-400/30 transition-all hover:scale-[1.02] active:scale-[0.98] ${
+            emphasis ? "h-14 text-base" : ""
+          }`}
+        >
+          <CreditCard className="h-5 w-5" /> Cartão de Crédito
+        </button>
       </div>
     </div>
   );
