@@ -1,0 +1,530 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Loader2,
+  Check,
+  Crown,
+  Sparkles,
+  LogOut,
+  Shield,
+  Star,
+  TrendingUp,
+  Users,
+  Zap,
+  BookOpen,
+  LayoutDashboard,
+  Plus,
+  Library,
+  LifeBuoy,
+  User,
+  Bell,
+  DollarSign,
+  ShoppingCart,
+  CreditCard,
+  QrCode,
+} from "lucide-react";
+import saasLogo from "@/assets/saas-logo.jpg";
+import { SaasJourneyPreview } from "@/components/SaasJourneyPreview";
+import { DashboardMockupMain } from "@/components/DashboardMockupMain";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { useAuth } from "@/hooks/useAuth";
+import { useSubscription } from "@/hooks/useSubscription";
+import { CHECKOUT_LINKS, CHECKOUT_LINKS_BY_METHOD } from "@/config/checkoutLinks";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { resolveDisplayName } from "@/lib/userName";
+
+const BENEFITS = [
+  "Editor com IA integrada",
+  "Capa profissional automática",
+  "Página de vendas pronta",
+  "Receba pagamentos diretamente",
+  "Suporte prioritário",
+];
+
+const TESTIMONIALS = [
+  {
+    name: "Mariana Costa",
+    role: "Coach de carreira",
+    text: "Em 2 semanas lancei meu primeiro eBook e já fiz R$ 4.300. A IA escreve do meu jeito, parece mágica.",
+    rating: 5,
+  },
+  {
+    name: "Rafael Almeida",
+    role: "Nutricionista",
+    text: "Tentei várias plataformas e nenhuma era tão simples. Aqui eu publico, vendo e recebo no mesmo lugar.",
+    rating: 5,
+  },
+  {
+    name: "Juliana Reis",
+    role: "Professora de inglês",
+    text: "Já tinha o conteúdo, faltava transformar em produto. Em uma tarde estava tudo pronto pra vender.",
+    rating: 5,
+  },
+  {
+    name: "Diego Martins",
+    role: "Empreendedor digital",
+    text: "Paguei o vitalício e em 1 mês já tinha recuperado o investimento. Melhor decisão do ano.",
+    rating: 5,
+  },
+];
+
+const FAQS = [
+  {
+    q: "Como funciona o pagamento?",
+    a: "Você paga uma única vez no plano vitalício, ou mensalmente no plano mensal. O pagamento é processado de forma segura pela Cakto e você recebe o acesso liberado automaticamente.",
+  },
+  {
+    q: "E se eu não gostar?",
+    a: "Você tem 7 dias de garantia. Se não gostar por qualquer motivo, devolvemos 100% do seu dinheiro, sem perguntas.",
+  },
+  {
+    q: "Preciso saber escrever para usar?",
+    a: "Não. A IA da plataforma escreve o eBook a partir das suas ideias. Você só precisa revisar e personalizar do seu jeito.",
+  },
+  {
+    q: "Posso vender os eBooks que criar?",
+    a: "Sim! Todo eBook criado é 100% seu. Você recebe sua própria página de vendas e os pagamentos vão direto pra você.",
+  },
+  {
+    q: "Qual a diferença entre mensal e vitalício?",
+    a: "No mensal você paga R$ 147,90 todo mês. No vitalício você paga R$ 247,90 uma única vez e usa pra sempre, sem renovação.",
+  },
+  {
+    q: "O acesso é liberado em quanto tempo?",
+    a: "Imediatamente após a confirmação do pagamento. Use o mesmo e-mail do seu cadastro no checkout para liberação automática.",
+  },
+];
+
+type PaymentMethodValue = "pix" | "card";
+
+function PaymentMethodButtons({
+  onSelect,
+  emphasis = false,
+}: {
+  onSelect: (m: PaymentMethodValue) => void;
+  emphasis?: boolean;
+}) {
+  return (
+    <div className="mb-2">
+      <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3 text-center">
+        Método de Pagamento
+      </div>
+      <div className="flex flex-col gap-3">
+        <button
+          type="button"
+          onClick={() => onSelect("pix")}
+          className={`w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.02] active:scale-[0.98] ${
+            emphasis ? "h-14 text-base" : ""
+          }`}
+        >
+          <QrCode className="h-5 w-5" /> PIX Instantâneo
+        </button>
+        <button
+          type="button"
+          onClick={() => onSelect("card")}
+          className={`w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black shadow-lg shadow-yellow-400/30 transition-all hover:scale-[1.02] active:scale-[0.98] ${
+            emphasis ? "h-14 text-base" : ""
+          }`}
+        >
+          <CreditCard className="h-5 w-5" /> Cartão de Crédito
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default function Plans() {
+  const navigate = useNavigate();
+  const { user, loading: authLoading, signOut } = useAuth();
+  const { loading: subLoading, isActive } = useSubscription();
+  const [displayName, setDisplayName] = useState<string>("");
+
+  useEffect(() => {
+    // Force CSS dark mode
+    document.documentElement.classList.add("dark");
+    
+    // Cache buster: force refresh if version mismatch
+    const version = "v1.0.2";
+    const stored = localStorage.getItem("plans_v");
+    if (stored !== version) {
+      localStorage.setItem("plans_v", version);
+      window.location.reload();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("display_name")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (cancelled) return;
+      const name = resolveDisplayName((data as any)?.display_name, user);
+      setDisplayName(name);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
+
+  useEffect(() => {
+    if (!subLoading && isActive) navigate("/app", { replace: true });
+  }, [subLoading, isActive, navigate]);
+
+  useEffect(() => {
+    if (!authLoading && !user) navigate("/auth", { replace: true });
+  }, [authLoading, user, navigate]);
+
+  const handleCheckout = (plan: "monthly" | "lifetime", method: PaymentMethodValue) => {
+    const baseUrl = CHECKOUT_LINKS_BY_METHOD[plan]?.[method];
+    if (!baseUrl) {
+      toast.error("Forma de pagamento indisponível.");
+      return;
+    }
+    const url = new URL(baseUrl);
+    if (user?.email) url.searchParams.set("email", user.email);
+    window.location.href = url.toString();
+  };
+
+  const scrollToPlans = () => {
+    document.getElementById("planos")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  if (authLoading || subLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      <header className="border-b border-border/40 sticky top-0 bg-background/80 backdrop-blur z-50">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg overflow-hidden shadow-glow">
+              <img src={saasLogo} alt="Logo" className="h-full w-full object-cover" />
+            </div>
+            <span className="font-semibold">{displayName || "Carregando..."}</span>
+          </div>
+          <Button variant="ghost" size="sm" onClick={signOut}>
+            <LogOut className="h-4 w-4 mr-2" /> Sair
+          </Button>
+        </div>
+      </header>
+
+      <main>
+        {/* HERO */}
+        <section className="max-w-4xl mx-auto px-6 pt-16 pb-10 text-center">
+          <div className="inline-flex items-center gap-2 text-xs font-medium bg-primary/10 text-primary px-3 py-1.5 rounded-full mb-6">
+            <Zap className="h-3.5 w-3.5" />
+            Acesso liberado imediatamente
+          </div>
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5">
+            Comece a vender seu primeiro eBook ainda <span className="text-primary">esta semana</span>
+          </h1>
+          <p className="text-muted-foreground text-xl md:text-2xl mb-6 max-w-3xl mx-auto">
+            Crie, publique e venda eBooks profissionais com IA. Sem precisar
+            saber escrever, designer ou programador.
+          </p>
+
+          {/* Rating + social proof */}
+          <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground mb-8">
+            <div className="flex items-center gap-1">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+              ))}
+              <span className="ml-1 font-medium text-foreground">4.9</span>
+              <span>· +2.000 criadores</span>
+            </div>
+          </div>
+
+          <Button size="lg" onClick={scrollToPlans} className="text-base">
+            Ver planos
+          </Button>
+
+          {/* App Preview Mockup — replica fiel do dashboard real */}
+          <div className="mt-16 relative left-1/2 -translate-x-1/2 w-screen max-w-[1200px] px-6">
+            <div className="text-center mb-8">
+              <p className="text-sm uppercase tracking-widest text-primary font-semibold mb-2">Veja por dentro</p>
+              <h3 className="font-display text-3xl font-bold">Uma plataforma feita para você criar sem fricção</h3>
+            </div>
+            <div className="relative mx-auto max-w-6xl rounded-2xl border border-border/40 bg-card/60 shadow-2xl overflow-hidden backdrop-blur text-left">
+              {/* Window chrome */}
+              <div className="flex items-center gap-2 px-4 py-3 border-b border-border/40 bg-background/60">
+                <div className="flex gap-1.5">
+                  <span className="h-3 w-3 rounded-full bg-red-500/70" />
+                  <span className="h-3 w-3 rounded-full bg-yellow-500/70" />
+                  <span className="h-3 w-3 rounded-full bg-green-500/70" />
+                </div>
+                <div className="mx-auto text-xs text-muted-foreground">app.ebookaibuilder.com</div>
+              </div>
+              <div className="grid grid-cols-12 min-h-[480px]">
+                {/* Sidebar real */}
+                <aside className="col-span-3 lg:col-span-2 border-r border-border/40 bg-background/50 flex flex-col">
+                  <div className="border-b border-border/40 px-3 py-3 flex items-center gap-2">
+                    <div className="h-9 w-9 rounded-xl overflow-hidden shadow-glow shrink-0">
+                      <img src={saasLogo} alt="EbookAI" className="h-full w-full object-cover" />
+                    </div>
+                  </div>
+                  <div className="p-2 pt-3">
+                    <button className="w-full flex items-center gap-2 px-3 py-2 rounded-md bg-primary text-background font-bold text-xs shadow-md">
+                      <Plus className="h-4 w-4" /> <span style={{ textShadow: "0 1px 2px rgba(0,0,0,0.35)" }}>Nova Estrutura</span>
+                    </button>
+                  </div>
+                  <div className="px-3 pt-3 pb-1 text-[10px] uppercase tracking-wider text-muted-foreground">Menu</div>
+                  <div className="px-2 space-y-0.5 flex-1">
+                    {[
+                      { label: "Dashboard", icon: LayoutDashboard, active: true },
+                      { label: "Biblioteca", icon: Library, active: false },
+                      { label: "Suporte", icon: LifeBuoy, active: false },
+                      { label: "Perfil", icon: User, active: false },
+                    ].map((item) => (
+                      <div
+                        key={item.label}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs ${
+                          item.active
+                            ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                            : "text-muted-foreground"
+                        }`}
+                      >
+                        <item.icon className="h-3.5 w-3.5" /> {item.label}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="border-t border-border/40 m-2 p-2 rounded-lg bg-card flex items-center gap-2">
+                    <div className="h-6 w-6 rounded-full gradient-primary text-[9px] font-bold text-primary-foreground flex items-center justify-center shadow-glow">U</div>
+                    <span className="text-[10px] text-muted-foreground truncate">usuario@email.com</span>
+                  </div>
+                </aside>
+
+                {/* Main content — Dashboard real (atual) */}
+                <DashboardMockupMain />
+              </div>
+            </div>
+            <SaasJourneyPreview />
+          </div>
+        </section>
+
+        {/* NÚMEROS DE IMPACTO */}
+        <section className="max-w-5xl mx-auto px-6 py-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { icon: Users, value: "2.300+", label: "Criadores ativos" },
+              { icon: BookOpen, value: "8.700+", label: "eBooks publicados" },
+              { icon: TrendingUp, value: "R$ 1,2M", label: "Faturado pelos usuários" },
+              { icon: Star, value: "4.9/5", label: "Nota média" },
+            ].map((s) => (
+              <Card key={s.label} className="p-5 text-center border-border/60">
+                <s.icon className="h-5 w-5 text-primary mx-auto mb-2" />
+                <div className="text-2xl font-bold">{s.value}</div>
+                <div className="text-xs text-muted-foreground mt-1">{s.label}</div>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        {/* PLANOS */}
+        <section id="planos" className="max-w-5xl mx-auto px-6 py-12 scroll-mt-20">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-4xl font-bold mb-3">
+              Escolha o plano ideal para você
+            </h2>
+            <p className="text-muted-foreground">
+              Garantia incondicional de 7 dias. Cancele quando quiser.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto items-stretch">
+            {/* Mensal */}
+            <Card className="px-8 py-10 border-border/60 flex flex-col rounded-2xl bg-card/60 backdrop-blur-sm shadow-md hover:shadow-lg hover:border-border transition-all">
+              <div className="mb-6">
+                <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">
+                  Mensal
+                </div>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-sm font-bold align-top">R$</span>
+                  <span className="text-5xl font-bold">147,90</span>
+                  <span className="text-muted-foreground">/mês</span>
+                </div>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Renovação automática a cada 30 dias.
+                </p>
+              </div>
+
+              <ul className="space-y-3 mb-8 flex-1">
+                <li className="flex items-start gap-2 text-sm">
+                  <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                  <span>Criação de ebooks ilimitada</span>
+                </li>
+                {BENEFITS.map((b) => (
+                  <li key={b} className="flex items-start gap-2 text-sm">
+                    <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <PaymentMethodButtons onSelect={(m) => handleCheckout("monthly", m)} />
+            </Card>
+
+            {/* Vitalício */}
+            <Card className="px-8 py-10 border-2 border-primary bg-gradient-to-b from-primary/10 to-primary/5 flex flex-col relative rounded-2xl ring-2 ring-primary/40 plan-glow-animated shadow-2xl shadow-primary/20 md:scale-[1.03]">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 text-[10px] font-black bg-primary text-primary-foreground px-4 py-1.5 rounded-full tracking-widest uppercase shadow-lg whitespace-nowrap">
+                <Crown className="h-3 w-3" /> Mais escolhido
+              </div>
+
+              <div className="mb-6 mt-2">
+                <div className="text-xs font-bold text-primary uppercase tracking-widest mb-3">
+                  Vitalício
+                </div>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-sm font-bold align-top">R$</span>
+                  <span className="text-6xl font-black">247,90</span>
+                  <span className="text-muted-foreground text-sm">à vista</span>
+                </div>
+                <div className="text-sm font-bold text-primary mt-1">
+                  ou em até 12 X de R$ 29,58
+                </div>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Pague uma vez e use para sempre.
+                </p>
+              </div>
+
+
+              <ul className="space-y-3 mb-8 flex-1">
+                {[
+                  "Criação de ebooks ilimitada",
+                  "IA premium (Cérebro Criativo)",
+                  "Página de vendas de alta conversão",
+                  "Checkout integrado",
+                  "Suporte prioritário",
+                  "Pagamento único",
+                  "Atualizações vitalícias inclusas",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-sm font-medium">
+                    <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <PaymentMethodButtons emphasis onSelect={(m) => handleCheckout("lifetime", m)} />
+            </Card>
+          </div>
+
+          {/* COMPARATIVO ECONOMIA */}
+          <Card className="mt-8 p-6 max-w-2xl mx-auto bg-muted/30 border-border/60">
+            <div className="flex items-start gap-3">
+              <TrendingUp className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+              <div className="text-sm">
+                <p className="font-semibold mb-1">Faz as contas com a gente:</p>
+                <p className="text-muted-foreground">
+                  Mensal por 1 ano = <span className="line-through">R$ 1.798,80</span>{" "}
+                  · Vitalício = <span className="font-semibold text-foreground">R$ 247,90</span>{" "}
+                  para sempre. Você economiza{" "}
+                  <span className="font-semibold text-primary">R$ 1.548,90</span> só
+                  no primeiro ano.
+                </p>
+              </div>
+            </div>
+          </Card>
+
+        </section>
+
+        {/* DEPOIMENTOS */}
+        <section className="max-w-5xl mx-auto px-6 py-16">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-4xl font-bold mb-3">
+              Quem já usa, recomenda
+            </h2>
+            <p className="text-muted-foreground">
+              Histórias reais de quem transformou conhecimento em renda.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-5">
+            {TESTIMONIALS.map((t) => (
+              <Card key={t.name} className="p-6 border-border/60">
+                <div className="flex items-center gap-1 mb-3">
+                  {[...Array(t.rating)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                    />
+                  ))}
+                </div>
+                <p className="text-sm mb-4 leading-relaxed">"{t.text}"</p>
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary/40 to-primary/10 flex items-center justify-center text-sm font-semibold">
+                    {t.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .slice(0, 2)
+                      .join("")}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">{t.name}</p>
+                    <p className="text-xs text-muted-foreground">{t.role}</p>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="max-w-3xl mx-auto px-6 py-16">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-4xl font-bold mb-3">
+              Perguntas frequentes
+            </h2>
+            <p className="text-muted-foreground">
+              Tirou todas as dúvidas? Bora começar.
+            </p>
+          </div>
+
+          <Accordion type="single" collapsible className="w-full">
+            {FAQS.map((f, i) => (
+              <AccordionItem key={i} value={`item-${i}`}>
+                <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  {f.a}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </section>
+
+        {/* CTA FINAL */}
+        <section className="max-w-3xl mx-auto px-6 py-16 text-center">
+          <h2 className="text-2xl md:text-4xl font-bold mb-4">
+            Pronto para publicar seu primeiro eBook?
+          </h2>
+          <p className="text-muted-foreground mb-8">
+            Junte-se a mais de 2.000 criadores que já estão faturando com a plataforma.
+          </p>
+          <Button size="lg" onClick={scrollToPlans} className="text-base">
+            Escolher meu plano
+          </Button>
+          <p className="text-xs text-muted-foreground mt-6 max-w-md mx-auto">
+            ⚠️ Importante: use o mesmo e-mail do seu cadastro ({user?.email}) na
+            hora de pagar, para liberarmos seu acesso automaticamente.
+          </p>
+        </section>
+      </main>
+    </div>
+  );
+}

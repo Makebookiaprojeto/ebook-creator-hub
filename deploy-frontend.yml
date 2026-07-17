@@ -1,0 +1,41 @@
+name: Build e Deploy do Frontend na Hostinger
+
+# Roda automaticamente toda vez que você enviar uma mudança pra branch "main"
+# no GitHub (fora da pasta supabase/). Builda o site (npm run build) e envia
+# o resultado pra Hostinger via FTP — tudo nos servidores do GitHub.
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "supabase/**"
+      - "*.md"
+  workflow_dispatch: {}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Build do site
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
+
+      - name: Enviar para a Hostinger via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.HOSTINGER_FTP_HOST }}
+          username: ${{ secrets.HOSTINGER_FTP_USER }}
+          password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          local-dir: ./dist/
+          server-dir: ${{ secrets.HOSTINGER_FTP_TARGET_DIR }}
