@@ -37,19 +37,23 @@ async function main() {
 
     const { error } = await supabase
       .from("ebook_templates")
-      .update({
-        title: template.title,
-        subtitle: template.subtitle,
-        cover_prompt: template.coverPrompt,
-        cover_url: images.cover,
-        chapters,
-        tags: [template.slug, "premium", "pexels-4k"],
-        is_active: true,
-      })
-      .eq("id", template.id);
+      .upsert(
+        {
+          id: template.id,
+          niche: template.niche,
+          title: template.title,
+          subtitle: template.subtitle,
+          cover_prompt: template.coverPrompt,
+          cover_url: images.cover,
+          chapters,
+          tags: [template.slug, "premium", "pexels-4k"],
+          is_active: true,
+        },
+        { onConflict: "id" },
+      );
 
-    if (error) throw new Error(`Update failed for ${template.slug}: ${error.message}`);
-    console.log(`UPDATED ${template.slug}`);
+    if (error) throw new Error(`Upsert failed for ${template.slug}: ${error.message}`);
+    console.log(`UPSERTED ${template.slug}`);
   }
 }
 
