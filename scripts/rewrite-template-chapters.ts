@@ -1,11 +1,11 @@
 // Rewrites all ebook_templates chapters: 400+ word content per chapter.
 // Keeps existing chapter titles and image_url. Removes any TOC notion.
-// Uses Lovable AI Gateway (google/gemini-2.5-flash).
+// Usa a API oficial e gratuita do Gemini (google/gemini-2.5-flash).
 import { createClient } from "@supabase/supabase-js";
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SRK = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const LOVABLE_API_KEY = process.env.LOVABLE_API_KEY!;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY!;
 
 const supabase = createClient(SUPABASE_URL, SRK);
 
@@ -38,14 +38,14 @@ Reescreva o CONTEÚDO de cada capítulo abaixo. Responda APENAS JSON válido no 
 Capítulos:
 ${chaptersInput.map(c => `${c.index}. ${c.title}${c.subtitle ? ` — ${c.subtitle}` : ""}`).join("\n")}`;
 
-  const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+  const resp = await fetch("https://generativelanguage.googleapis.com/v1beta/openai/chat/completions", {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+      "Authorization": `Bearer ${GEMINI_API_KEY}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "google/gemini-2.5-flash",
+      model: "gemini-2.5-flash",
       messages: [
         { role: "system", content: sys },
         { role: "user", content: user },
