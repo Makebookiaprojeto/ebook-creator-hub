@@ -1,0 +1,34 @@
+project_id = "qbksltxsnpkeaijfihug"
+
+[functions.generate-ebook]
+verify_jwt = true
+
+[functions.verify-payment]
+verify_jwt = false
+
+[functions.webhook-payment]
+verify_jwt = false
+
+[functions.webhook-ironpay]
+verify_jwt = false
+
+[functions.webhook-applyfy]
+verify_jwt = false
+
+[functions.generate-template-draft]
+verify_jwt = false
+
+[functions.personalize-template]
+verify_jwt = false
+
+[functions.download-ebook]
+verify_jwt = false
+
+[functions.send-ebook-email]
+verify_jwt = false
+
+[functions.send-support-email]
+verify_jwt = false
+
+[functions.verify-captcha]
+verify_jwt = false
