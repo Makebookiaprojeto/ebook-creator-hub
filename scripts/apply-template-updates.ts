@@ -20,6 +20,24 @@ async function main() {
   const supabase = createClient(SUPABASE_URL, SERVICE_ROLE);
   const state = loadState();
 
+  // Remove qualquer linha antiga (ex: seeds de migration anteriores) que
+  // ocupe o mesmo nicho + variante 1 mas com um ID diferente do curado,
+  // pra evitar colisão com a constraint única (niche, variant_index).
+  const curatedIds = TEMPLATES.map((t) => t.id);
+  const curatedNiches = TEMPLATES.map((t) => t.niche);
+  const { data: stale, error: staleError } = await supabase
+    .from("ebook_templates")
+    .select("id, niche")
+    .in("niche", curatedNiches)
+    .not("id", "in", `(${curatedIds.join(",")})`);
+  if (staleError) throw new Error(`Failed to check stale rows: ${staleError.message}`);
+  if (stale && stale.length > 0) {
+    const staleIds = stale.map((r) => r.id);
+    const { error: deleteError } = await supabase.from("ebook_templates").delete().in("id", staleIds);
+    if (deleteError) throw new Error(`Failed to delete stale rows: ${deleteError.message}`);
+    console.log(`Removidas ${staleIds.length} linha(s) antiga(s) duplicada(s): ${stale.map((r) => r.niche).join(", ")}`);
+  }
+
   for (const template of TEMPLATES) {
     const images = state[template.slug];
     if (!images?.cover) throw new Error(`Missing cover image for ${template.slug}`);
