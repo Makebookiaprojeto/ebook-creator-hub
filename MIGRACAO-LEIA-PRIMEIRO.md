@@ -123,7 +123,7 @@ para apontar para:
 - **Usuários já cadastrados e dados gerados durante o período em que o site
   esteve no ar** (ebooks que clientes geraram, histórico de compras) — isso
   vivia só no banco antigo e você confirmou não ter mais nenhum acesso a ele.
-  O catálogo de templates (o produto em si) está 100% recuperável pelo passo 6; 
+  O catálogo de templates (o produto em si) está 100% recuperável pelo passo 6;
   o que se perde é o histórico de uso/vendas anteriores.
 - Chaves de API de terceiros (Stripe etc.) que só a empresa antiga tinha.
 
