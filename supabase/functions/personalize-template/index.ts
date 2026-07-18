@@ -1,3 +1,4 @@
+// force-redeploy-2026-07-18
 // Personaliza um ebook gerado a partir de um template:
 // - Reescreve título e subtítulo para o público específico (1 chamada curta)
 // - Adapta a INTRODUÇÃO de cada capítulo (1 chamada curta no total, batch)
