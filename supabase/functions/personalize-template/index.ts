@@ -11,12 +11,12 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
 const PEXELS_API_KEY = Deno.env.get("PEXELS_API_KEY");
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-const GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
-const TEXT_MODEL = "google/gemini-2.5-flash-lite";
+const GATEWAY = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions";
+const TEXT_MODEL = "gemini-2.5-flash-lite";
 
 function jsonResponse(payload: unknown, status = 200) {
   return new Response(JSON.stringify(payload), {
@@ -28,7 +28,7 @@ function jsonResponse(payload: unknown, status = 200) {
 async function callAI(body: Record<string, unknown>) {
   const resp = await fetch(GATEWAY, {
     method: "POST",
-    headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+    headers: { Authorization: `Bearer ${GEMINI_API_KEY}`, "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
   if (!resp.ok) {
@@ -62,7 +62,7 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    if (!LOVABLE_API_KEY) return jsonResponse({ error: "LOVABLE_API_KEY não configurada" }, 500);
+    if (!GEMINI_API_KEY) return jsonResponse({ error: "GEMINI_API_KEY não configurada" }, 500);
 
     const auth = req.headers.get("Authorization");
     if (!auth) return jsonResponse({ error: "Não autenticado" }, 401);
