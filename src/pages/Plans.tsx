@@ -24,8 +24,7 @@ import {
   QrCode,
 } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
-import { SaasJourneyPreview } from "@/components/SaasJourneyPreview";
-import { DashboardMockupMain } from "@/components/DashboardMockupMain";
+import heroShowcase from "@/assets/hero-showcase.png";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -255,66 +254,14 @@ export default function Plans() {
             Ver planos
           </Button>
 
-          {/* App Preview Mockup — replica fiel do dashboard real */}
-          <div className="mt-16 relative left-1/2 -translate-x-1/2 w-screen max-w-[1200px] px-6">
-            <div className="text-center mb-8">
-              <p className="text-sm uppercase tracking-widest text-primary font-semibold mb-2">Veja por dentro</p>
-              <h3 className="font-display text-3xl font-bold">Uma plataforma feita para você criar sem fricção</h3>
-            </div>
-            <div className="relative mx-auto max-w-6xl rounded-2xl border border-border/40 bg-card/60 shadow-2xl overflow-hidden backdrop-blur text-left">
-              {/* Window chrome */}
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-border/40 bg-background/60">
-                <div className="flex gap-1.5">
-                  <span className="h-3 w-3 rounded-full bg-red-500/70" />
-                  <span className="h-3 w-3 rounded-full bg-yellow-500/70" />
-                  <span className="h-3 w-3 rounded-full bg-green-500/70" />
-                </div>
-                <div className="mx-auto text-xs text-muted-foreground">app.ebookaibuilder.com</div>
-              </div>
-              <div className="grid grid-cols-12 min-h-[480px]">
-                {/* Sidebar real */}
-                <aside className="col-span-3 lg:col-span-2 border-r border-border/40 bg-background/50 flex flex-col">
-                  <div className="border-b border-border/40 px-3 py-3 flex items-center gap-2">
-                    <div className="h-9 w-9 rounded-xl overflow-hidden shadow-glow shrink-0">
-                      <img src={saasLogo} alt="EbookAI" className="h-full w-full object-cover" />
-                    </div>
-                  </div>
-                  <div className="p-2 pt-3">
-                    <button className="w-full flex items-center gap-2 px-3 py-2 rounded-md bg-primary text-background font-bold text-xs shadow-md">
-                      <Plus className="h-4 w-4" /> <span style={{ textShadow: "0 1px 2px rgba(0,0,0,0.35)" }}>Nova Estrutura</span>
-                    </button>
-                  </div>
-                  <div className="px-3 pt-3 pb-1 text-[10px] uppercase tracking-wider text-muted-foreground">Menu</div>
-                  <div className="px-2 space-y-0.5 flex-1">
-                    {[
-                      { label: "Dashboard", icon: LayoutDashboard, active: true },
-                      { label: "Biblioteca", icon: Library, active: false },
-                      { label: "Suporte", icon: LifeBuoy, active: false },
-                      { label: "Perfil", icon: User, active: false },
-                    ].map((item) => (
-                      <div
-                        key={item.label}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs ${
-                          item.active
-                            ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-                            : "text-muted-foreground"
-                        }`}
-                      >
-                        <item.icon className="h-3.5 w-3.5" /> {item.label}
-                      </div>
-                    ))}
-                  </div>
-                  <div className="border-t border-border/40 m-2 p-2 rounded-lg bg-card flex items-center gap-2">
-                    <div className="h-6 w-6 rounded-full gradient-primary text-[9px] font-bold text-primary-foreground flex items-center justify-center shadow-glow">U</div>
-                    <span className="text-[10px] text-muted-foreground truncate">usuario@email.com</span>
-                  </div>
-                </aside>
-
-                {/* Main content — Dashboard real (atual) */}
-                <DashboardMockupMain />
-              </div>
-            </div>
-            <SaasJourneyPreview />
+          {/* Imagem de exibição do EbookAI Builder — mesma imagem da tela inicial */}
+          <div className="mt-16 relative mx-auto max-w-5xl px-4">
+            <img
+              src={heroShowcase}
+              alt="EbookAI Builder — ebook pronto, página de vendas e grupos de divulgação"
+              loading="lazy"
+              className="relative mx-auto w-full max-w-5xl rounded-2xl shadow-[0_25px_80px_-15px_rgba(234,179,8,0.35)] ring-1 ring-yellow-400/30"
+            />
           </div>
         </section>
 
