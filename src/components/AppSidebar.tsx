@@ -1,4 +1,4 @@
-import { LayoutDashboard, Plus, Wrench, LifeBuoy, User, Sparkles, LogOut, Library, Plug } from "lucide-react";
+import { LayoutDashboard, Plus, Wrench, LifeBuoy, User, Sparkles, LogOut, Library, Plug, Sliders } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -20,6 +20,11 @@ import {
   SidebarFooter,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { isAdminUser, getTestSaleConfig, setTestSaleConfig } from "@/lib/adminTestSales";
 
 type View = "dashboard" | "create" | "library" | "support" | "profile" | "integrations";
 
@@ -45,6 +50,24 @@ export function AppSidebar({ active, onChange }: Props) {
   const [displayName, setDisplayName] = useState<string>("");
   const navigate = useNavigate();
   const [_, setSearchParams] = useSearchParams();
+
+  const [testModalOpen, setTestModalOpen] = useState(false);
+  const [testNiche, setTestNiche] = useState("");
+  const [testPrice, setTestPrice] = useState("");
+
+  const handleOpenTestModal = () => {
+    const { niche, price } = getTestSaleConfig();
+    setTestNiche(niche);
+    setTestPrice(price.toString());
+    setTestModalOpen(true);
+  };
+
+  const handleSaveTestConfig = () => {
+    const numPrice = parseFloat(testPrice.replace(",", ".")) || 97;
+    setTestSaleConfig(testNiche || "Ebook High Ticket", numPrice);
+    toast.success("Configurações de teste salvas!");
+    setTestModalOpen(false);
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -171,17 +194,71 @@ export function AppSidebar({ active, onChange }: Props) {
                   </div>
                   <span className="truncate text-[11px] text-muted-foreground">{display}</span>
                 </div>
-                <button
-                  onClick={handleSignOut}
-                  title="Sair"
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md hover:bg-muted transition"
-                >
-                  <LogOut className="h-3.5 w-3.5" />
-                </button>
+                <div className="flex items-center gap-1">
+                  {isAdminUser(user?.email) && (
+                    <button
+                      onClick={handleOpenTestModal}
+                      title="Configurar Nicho e Preço de Teste"
+                      className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md hover:bg-muted transition text-[#D4AF37]"
+                    >
+                      <Sliders className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                  <button
+                    onClick={handleSignOut}
+                    title="Sair"
+                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md hover:bg-muted transition"
+                  >
+                    <LogOut className="h-3.5 w-3.5" />
+                  </button>
+                </div>
               </div>
               );
             })()}
           </>
+        )}
+
+        {/* Modal de Configuração de Teste de Venda */}
+        {isAdminUser(user?.email) && (
+          <Dialog open={testModalOpen} onOpenChange={setTestModalOpen}>
+            <DialogContent className="sm:max-w-[425px] border-[#D4AF37]/30 bg-card text-foreground">
+              <DialogHeader>
+                <DialogTitle className="text-lg font-bold text-[#D4AF37] flex items-center gap-2">
+                  <Sliders className="h-5 w-5" /> Configurar Venda de Teste
+                </DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="testNiche">Nicho do Ebook</Label>
+                  <Input
+                    id="testNiche"
+                    value={testNiche}
+                    onChange={(e) => setTestNiche(e.target.value)}
+                    placeholder="Ex: Receitas Fitness, Marketing..."
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="testPrice">Preço da Venda (R$)</Label>
+                  <Input
+                    id="testPrice"
+                    type="number"
+                    step="0.01"
+                    value={testPrice}
+                    onChange={(e) => setTestPrice(e.target.value)}
+                    placeholder="Ex: 97.00"
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button
+                  onClick={handleSaveTestConfig}
+                  className="bg-[#D4AF37] text-black font-semibold hover:bg-[#D4AF37]/90"
+                >
+                  Salvar Configurações
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         )}
       </SidebarFooter>
     </Sidebar>
