@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { CHECKOUT_LINKS_BY_METHOD, type PaymentMethod } from "@/config/checkoutLinks";
 import saasLogo from "@/assets/saas-logo.jpg";
-import heroShowcase from "@/assets/hero-showcase.png.asset.json";
+import heroShowcase from "@/assets/hero-showcase.png";
 
 function PlanPaymentButtons({ plan, emphasis = false }: { plan: "monthly" | "lifetime"; emphasis?: boolean }) {
   const go = (method: PaymentMethod) => {
@@ -114,7 +114,7 @@ const Landing = () => {
           </div>
           <div className="relative mx-auto max-w-5xl px-4 mt-40 sm:mt-56 animate-fade-in animation-delay-300">
             <img
-              src={heroShowcase.url}
+              src={heroShowcase}
               alt="EbookAI Builder — ebook pronto, página de vendas e grupos de divulgação"
               loading="lazy"
               className="relative mx-auto w-full max-w-5xl rounded-2xl shadow-[0_25px_80px_-15px_rgba(234,179,8,0.35)] ring-1 ring-yellow-400/30"
