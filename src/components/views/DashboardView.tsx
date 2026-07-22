@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { StatCard } from "@/components/StatCard";
 import { useEbooks } from "@/hooks/useEbooks";
 import { useAuth } from "@/hooks/useAuth";
+import { isAdminUser, triggerTestSale } from "@/lib/adminTestSales";
 import {
   Table,
   TableBody,
@@ -322,7 +323,17 @@ export function DashboardView() {
           <div className="pointer-events-none absolute -bottom-24 -left-16 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl" />
           <div className="relative">
             <div className="flex items-start justify-between gap-3">
-              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Lucro</p>
+              <div className="relative inline-block">
+                <p className="text-[11px] uppercase tracking-wider text-muted-foreground select-none">Lucro</p>
+                {isAdminUser(authUser?.email) && (
+                  <button
+                    type="button"
+                    onClick={() => authUser && triggerTestSale(authUser.id)}
+                    className="absolute inset-0 z-20 cursor-pointer opacity-0"
+                    title="Simular Venda"
+                  />
+                )}
+              </div>
               <div className="flex items-center gap-1.5">
                 {[
                   { v: "today", label: "Hoje" },
