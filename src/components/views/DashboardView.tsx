@@ -314,90 +314,97 @@ export function DashboardView() {
   const baseEbooks = BASE_STATS[userEmail]?.ebooks || 0;
   const totalEbooks = baseEbooks + (ebooks?.length || 0);
 
+  function SalesByHourChart({ total }: { total: number }) {
+  const data = useMemo(() => {
+    // Realistic distribution weights per hour (peaks at lunch and evening)
+    const weights = [
+      1.5, 1.8, 2.2, 3.0, 4.5, 6.5,
+      8.2, 9.0, 8.4, 6.8, 4.8, 3.2,
+      2.4, 2.8, 4.0, 6.0, 8.0, 9.5,
+      9.8, 8.6, 6.4, 4.2, 2.6, 1.8,
+    ];
+    const sum = weights.reduce((a, b) => a + b, 0);
+    const base = total > 0 ? total : 1000;
+    return weights.map((w, h) => ({
+      hora: `${String(h).padStart(2, "0")}h`,
+      valor: Number(((w / sum) * base).toFixed(2)),
+    }));
+  }, [total]);
+
   return (
-    <div className="space-y-3 animate-fade-in py-1 -mt-6">
+    <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-5">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
 
-      <div className="space-y-3">
-        <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-gradient-to-br from-[#0b1220] via-card to-card/60 px-7 pt-3 pb-7 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
-          <div className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-16 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl" />
-          <div className="relative">
-            <div className="flex items-start justify-between gap-3">
-              <div className="relative inline-block">
-                <p className="text-[11px] uppercase tracking-wider text-muted-foreground select-none">Lucro</p>
-                {isAdminUser(authUser?.email) && (
-                  <button
-                    type="button"
-                    onClick={() => authUser && triggerTestSale(authUser.id)}
-                    className="absolute inset-0 z-20 cursor-pointer opacity-0"
-                    title="Simular Venda"
-                  />
-                )}
-              </div>
-              <div className="flex items-center gap-1.5">
-                {[
-                  { v: "today", label: "Hoje" },
-                  { v: "7d", label: "7 Dias" },
-                  { v: "30d", label: "30 Dias" },
-                ].map((opt) => {
-                  const active = profitPeriod === opt.v;
-                  return (
-                    <button
-                      key={opt.v}
-                      onClick={() => setProfitPeriod(opt.v as any)}
-                      className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all border ${
-                        active
-                          ? "bg-blue-500 text-white border-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
-                          : "bg-blue-500/10 text-blue-300 border-blue-500/30 hover:bg-blue-500/20"
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="mt-1 flex items-end justify-between gap-3">
-              <p className="font-display text-7xl font-bold tracking-tight text-foreground">
-                R$ {(profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-              </p>
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.35)]">
-                <DollarSign className="h-5 w-5" />
-              </div>
-            </div>
-          </div>
+      <div className="mb-4 flex items-center justify-between relative">
+        <h3 className="text-xs font-semibold uppercase tracking-[0.25em] text-accent-foreground/80">Receita</h3>
+        <div className="flex items-center gap-2 rounded-full border border-primary/30 px-3 py-1">
+          <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+          <span className="text-[11px] font-medium tracking-wide text-muted-foreground">Últimos 30 dias</span>
         </div>
+      </div>
 
-        <div className="mt-4">
-          <SalesByHourChart total={stats.revenue30d} />
-        </div>
+      <div className="h-44 w-full relative">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
+            <defs>
+              <linearGradient id="lineStroke" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#8A6E2F" stopOpacity={1} />
+                <stop offset="50%" stopColor="#C6A253" stopOpacity={1} />
+                <stop offset="100%" stopColor="#E8C87A" stopOpacity={1} />
+              </linearGradient>
+              <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#C6A253" stopOpacity={0.35} />
+                <stop offset="60%" stopColor="#C6A253" stopOpacity={0.08} />
+                <stop offset="100%" stopColor="#C6A253" stopOpacity={0} />
+              </linearGradient>
+            </defs>
 
-        <div className="grid grid-cols-2 gap-3 pt-1">
-          <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-gradient-to-br from-[#0b1220] via-card to-card/60 px-4 py-3 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
-            <div className="pointer-events-none absolute -top-16 -right-16 h-32 w-32 rounded-full bg-blue-500/20 blur-3xl" />
-            <div className="relative flex items-center justify-between">
-              <div>
-                <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Ebooks</p>
-                <p className="font-display text-2xl font-bold tracking-tight">{totalEbooks}</p>
-              </div>
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.3)]">
-                <BookOpen className="h-4 w-4" />
-              </div>
-            </div>
-          </div>
-          <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-gradient-to-br from-[#0b1220] via-card to-card/60 px-4 py-3 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
-            <div className="pointer-events-none absolute -top-16 -right-16 h-32 w-32 rounded-full bg-blue-500/20 blur-3xl" />
-            <div className="relative flex items-center justify-between">
-              <div>
-                <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Vendas</p>
-                <p className="font-display text-2xl font-bold tracking-tight">{stats.totalSales}</p>
-              </div>
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.3)]">
-                <ShoppingCart className="h-4 w-4" />
-              </div>
-            </div>
-          </div>
-        </div>
+            <CartesianGrid stroke="hsl(var(--border))" strokeOpacity={0.5} strokeDasharray="3 6" vertical={false} />
+
+            <XAxis
+              dataKey="hora"
+              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }}
+              tickLine={false}
+              axisLine={false}
+              interval={2}
+              dy={6}
+            />
+            <YAxis
+              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }}
+              tickLine={false}
+              axisLine={false}
+              ticks={[0, 300, 600, 900, 1200]}
+              domain={[0, 1200]}
+              interval={0}
+              allowDecimals={false}
+              width={48}
+              tickFormatter={(v) => `R$${v >= 1000 ? `${(v / 1000).toFixed(1)}k` : v}`}
+            />
+            <RTooltip
+              cursor={{ stroke: "#C6A253", strokeOpacity: 0.5, strokeDasharray: "4 4" }}
+              contentStyle={{
+                background: "hsl(var(--popover))",
+                border: "1px solid hsl(var(--primary) / 0.35)",
+                borderRadius: 12,
+                color: "hsl(var(--popover-foreground))",
+                fontSize: 12,
+                boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
+              }}
+              labelStyle={{ color: "hsl(var(--muted-foreground))", fontSize: 11, marginBottom: 4 }}
+              formatter={(v: any) => [`R$ ${Number(v).toFixed(2)}`, "Vendas"]}
+              labelFormatter={(l) => `Horário: ${l}`}
+            />
+            <Area
+              type="monotone"
+              dataKey="valor"
+              stroke="url(#lineStroke)"
+              strokeWidth={2.75}
+              fill="url(#areaFill)"
+              dot={false}
+              activeDot={{ r: 5, fill: "#C6A253", stroke: "hsl(var(--background))", strokeWidth: 2 }}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
