@@ -9,55 +9,89 @@
 /* Premium dark-only theme — inspired by Vercel / Linear */
 @layer base {
   :root {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
-
-    --card: 0 0% 0%;
-    --card-foreground: 0 0% 100%;
-
-    --popover: 0 0% 0%;
-    --popover-foreground: 0 0% 100%;
-
+    --background: 0 0% 98%;
+    --foreground: 0 0% 4%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 4%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 4%;
     --primary: 240 100% 25%;
     --primary-foreground: 0 0% 100%;
     --primary-glow: 240 100% 35%;
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 240 6% 10%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
+    --accent: 240 5% 96%;
+    --accent-foreground: 240 5% 10%;
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 48 96% 89%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 240 100% 25%;
+    --radius: 0.75rem;
 
+    --gradient-primary: linear-gradient(135deg, hsl(240 100% 45%), hsl(240 100% 35%));
+    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 98%), hsl(0 0% 96%));
+    --gradient-hero: hsl(0 0% 98%);
+    --gradient-conversion: linear-gradient(135deg, hsl(240 100% 45%), hsl(240 100% 35%));
+    --gradient-conversion-soft: hsl(0 0% 98%);
+
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-glow: 0 0 0 1px hsl(0 0% 0% / 0.05);
+    --shadow-conversion: 0 0 0 1px hsl(0 0% 0% / 0.05);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5% 26%;
+    --sidebar-primary: 240 100% 25%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 5% 96%;
+    --sidebar-accent-foreground: 240 100% 25%;
+    --sidebar-border: 240 6% 90%;
+    --sidebar-ring: 240 100% 25%;
+  }
+
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 240 100% 25%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 240 100% 35%;
     --secondary: 0 0% 0%;
     --secondary-foreground: 0 0% 100%;
-
     --muted: 0 0% 0%;
     --muted-foreground: 215 14% 78%;
-
     --accent: 0 0% 6%;
     --accent-foreground: 240 100% 88%;
-
     --success: 240 100% 25%;
     --success-foreground: 0 0% 100%;
-
     --warning: 38 95% 60%;
     --warning-foreground: 0 0% 10%;
-
     --destructive: 4 90% 58%;
     --destructive-foreground: 0 0% 100%;
-
     --border: 0 0% 12%;
     --input: 0 0% 12%;
     --ring: 240 100% 25%;
-
-    --radius: 0.75rem;
-
     --gradient-primary: linear-gradient(135deg, hsl(240 100% 25%), hsl(240 100% 20%));
     --gradient-subtle: linear-gradient(180deg, hsl(0 0% 0%), hsl(0 0% 0%));
     --gradient-hero: hsl(0 0% 0%);
     --gradient-conversion: linear-gradient(135deg, hsl(240 100% 25%), hsl(240 100% 20%));
     --gradient-conversion-soft: hsl(0 0% 0%);
-
     --shadow-sm: 0 0 0 1px hsl(0 0% 100% / 0.04);
     --shadow-md: 0 0 0 1px hsl(0 0% 100% / 0.05);
     --shadow-lg: 0 0 0 1px hsl(0 0% 100% / 0.06);
     --shadow-glow: 0 0 0 1px hsl(0 0% 100% / 0.06);
     --shadow-conversion: 0 0 0 1px hsl(0 0% 100% / 0.06);
-
     --sidebar-background: 0 0% 0%;
     --sidebar-foreground: 215 14% 84%;
     --sidebar-primary: 240 100% 25%;
@@ -66,10 +100,6 @@
     --sidebar-accent-foreground: 240 100% 25%;
     --sidebar-border: 0 0% 12%;
     --sidebar-ring: 240 100% 25%;
-  }
-
-  /* Force dark — light mode disabled */
-  .dark {
     color-scheme: dark;
   }
 }
@@ -82,7 +112,6 @@
   body {
     @apply bg-background text-foreground text-base antialiased;
     font-feature-settings: "cv11", "ss01", "ss03";
-    background-color: #000000;
     background-image: none;
     background-attachment: fixed;
   }
