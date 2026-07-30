@@ -5,7 +5,7 @@ import { NotificationBell } from "@/components/NotificationBell";
 import { DashboardView } from "@/components/views/DashboardView";
 import { CreateEbookView } from "@/components/views/CreateEbookView";
 import { LibraryView } from "@/components/views/LibraryView";
-// ToolsView removed
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { SupportView } from "@/components/views/SupportView";
 import { ProfileView } from "@/components/views/ProfileView";
 import { IntegrationsView } from "@/components/views/IntegrationsView";
@@ -57,11 +57,7 @@ const Index = () => {
     };
   }, [user]);
 
-  useEffect(() => {
-    document.documentElement.classList.add("dark");
-    localStorage.setItem("theme", "dark");
-  }, []);
-
+  // Theme is handled by ThemeToggle now
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
@@ -73,6 +69,7 @@ const Index = () => {
             <div className="flex-1" />
             {view === "dashboard" && (
               <div className="ml-auto flex items-center gap-3">
+                <ThemeToggle />
                 <NotificationBell />
                 <button
                   onClick={() => setView("profile")}
