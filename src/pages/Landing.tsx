@@ -25,14 +25,7 @@ function PlanPaymentButtons({ plan, emphasis = false }: { plan: "monthly" | "lif
           onClick={() => go("pix")}
           className={`w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.02] active:scale-[0.98] ${emphasis ? "h-14 text-base" : ""}`}
         >
-          Pix Instantâneo
-        </button>
-        <button
-          type="button"
-          onClick={() => go("card")}
-          className={`w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black shadow-lg shadow-yellow-400/30 transition-all hover:scale-[1.02] active:scale-[0.98] ${emphasis ? "h-14 text-base" : ""}`}
-        >
-          <CreditCard className="h-5 w-5" /> Cartão de Crédito
+          <CreditCard className="h-5 w-5" /> GARANTA SEU ACESSO
         </button>
       </div>
     </div>
