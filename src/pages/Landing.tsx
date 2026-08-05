@@ -8,24 +8,33 @@ import {
   Target, Rocket, Heart, Crown, Clock,
   LayoutDashboard, Plus, Library, LifeBuoy, User, Bell, DollarSign, ShoppingCart, CreditCard
 } from "lucide-react";
-import { CHECKOUT_LINKS } from "@/config/checkoutLinks";
+import { CHECKOUT_LINKS_BY_METHOD } from "@/config/checkoutLinks";
 import saasLogo from "@/assets/saas-logo.jpg";
 import heroShowcase from "@/assets/hero-showcase.png";
 
 function PlanPaymentButtons({ plan, emphasis = false }: { plan: "monthly" | "lifetime"; emphasis?: boolean }) {
-  const go = () => {
-    const url = CHECKOUT_LINKS[plan];
+  const go = (method: "pix" | "card") => {
+    const url = CHECKOUT_LINKS_BY_METHOD[plan]?.[method];
     if (url) window.location.href = url;
   };
   return (
     <div className="mb-2">
-      <button
-        type="button"
-        onClick={go}
-        className={`w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black shadow-lg shadow-yellow-400/30 transition-all hover:scale-[1.02] active:scale-[0.98] ${emphasis ? "h-14 text-base" : ""}`}
-      >
-        <CreditCard className="h-5 w-5" /> Garanta seu Acesso
-      </button>
+      <div className="flex flex-col gap-3">
+        <button
+          type="button"
+          onClick={() => go("pix")}
+          className={`w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.02] active:scale-[0.98] ${emphasis ? "h-14 text-base" : ""}`}
+        >
+          Pix Instantâneo
+        </button>
+        <button
+          type="button"
+          onClick={() => go("card")}
+          className={`w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black shadow-lg shadow-yellow-400/30 transition-all hover:scale-[1.02] active:scale-[0.98] ${emphasis ? "h-14 text-base" : ""}`}
+        >
+          <CreditCard className="h-5 w-5" /> Cartão de Crédito
+        </button>
+      </div>
     </div>
   );
 }
