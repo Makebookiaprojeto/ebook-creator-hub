@@ -5,7 +5,7 @@
 //
 // - CHECKOUT_LINKS (mantido): mapa plano → URL. Continua sendo a fonte usada
 //   hoje por src/pages/Plans.tsx (handleCheckout). Aponta para as URLs atuais
-//   da IronPay (PIX).
+//   da ApplyFy (PIX).
 // - CHECKOUT_LINKS_BY_METHOD (novo): mapa plano → { pix, card } já pronto
 //   para quando a ApplyFy (Cartão) for integrada. NÃO é consumido por
 //   nenhum arquivo no momento.
@@ -15,9 +15,9 @@
 export type PlanId = "monthly" | "lifetime";
 export type PaymentMethod = "pix" | "card";
 
-// URLs atuais em produção (IronPay / PIX).
-const IRONPAY_MONTHLY = "https://go.ironpayapp.com.br/rz667jowdt";
-const IRONPAY_LIFETIME = "https://go.ironpayapp.com.br/pdg8y8zsl4";
+// URLs atuais em produção (ApplyFy / PIX).
+const APPLYFY_MONTHLY = "https://checkout.applyfy.com.br/checkout/cmr420tnz02eb01or9dy2rfgu?offer=UV1G6YK";
+const APPLYFY_LIFETIME = "https://checkout.applyfy.com.br/checkout/cmr41g2ie01as01psbzhiv4o1?offer=70BMKVA";
 
 // URLs da ApplyFy (Cartão) — a preencher quando a integração for ativada.
 const APPLYFY_MONTHLY = "https://checkout.applyfy.com.br/checkout/cmr420tnz02eb01or9dy2rfgu?offer=UV1G6YK";
@@ -25,18 +25,18 @@ const APPLYFY_LIFETIME = "https://checkout.applyfy.com.br/checkout/cmr41g2ie01as
 
 // Estrutura legada mantida para compatibilidade com o fluxo atual (PIX).
 export const CHECKOUT_LINKS: Record<PlanId, string> = {
-  monthly: IRONPAY_MONTHLY,
-  lifetime: IRONPAY_LIFETIME,
+  monthly: APPLYFY_MONTHLY,
+  lifetime: APPLYFY_LIFETIME,
 };
 
 // Nova estrutura, preparada para múltiplos meios de pagamento.
 export const CHECKOUT_LINKS_BY_METHOD: Record<PlanId, Record<PaymentMethod, string>> = {
   monthly: {
-    pix: IRONPAY_MONTHLY,
+    pix: APPLYFY_MONTHLY,
     card: APPLYFY_MONTHLY,
   },
   lifetime: {
-    pix: IRONPAY_LIFETIME,
+    pix: APPLYFY_LIFETIME,
     card: APPLYFY_LIFETIME,
   },
 };
