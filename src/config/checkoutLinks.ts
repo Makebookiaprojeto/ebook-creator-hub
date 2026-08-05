@@ -1,36 +1,28 @@
 // Links de checkout dos planos de assinatura do SaaS.
-//
-// Reorganização preparatória para suportar múltiplos meios de pagamento por
-// plano. Nenhum fluxo, página, webhook, hook, rota ou banco foi alterado.
-//
-// - CHECKOUT_LINKS (mantido): mapa plano → URL. Continua sendo a fonte usada
-//   hoje por src/pages/Plans.tsx (handleCheckout). Aponta para as URLs atuais
-//   da ApplyFy (PIX).
-// - CHECKOUT_LINKS_BY_METHOD (novo): mapa plano → { pix, card } já pronto
-//   para quando a ApplyFy (Cartão) for integrada. NÃO é consumido por
-//   nenhum arquivo no momento.
-//
-// A integração da Cakto (vendas de ebooks) não é afetada.
+// Todos os pagamentos (PIX e Cartão) utilizam exclusivamente a ApplyFy.
 
 export type PlanId = "monthly" | "lifetime";
 export type PaymentMethod = "pix" | "card";
 
-// URLs atuais em produção (ApplyFy / PIX).
-const APPLYFY_MONTHLY = "https://checkout.applyfy.com.br/checkout/cmr420tnz02eb01or9dy2rfgu?offer=UV1G6YK";
-const APPLYFY_LIFETIME = "https://checkout.applyfy.com.br/checkout/cmr41g2ie01as01psbzhiv4o1?offer=70BMKVA";
+// Checkout da ApplyFy
+const APPLYFY_MONTHLY =
+  "https://checkout.applyfy.com.br/checkout/cmr420tnz02eb01or9dy2rfgu?offer=UV1G6YK";
 
-// URLs da ApplyFy (Cartão) — a preencher quando a integração for ativada.
-const APPLYFY_MONTHLY = "https://checkout.applyfy.com.br/checkout/cmr420tnz02eb01or9dy2rfgu?offer=UV1G6YK";
-const APPLYFY_LIFETIME = "https://checkout.applyfy.com.br/checkout/cmr41g2ie01as01psbzhiv4o1?offer=70BMKVA";
+const APPLYFY_LIFETIME =
+  "https://checkout.applyfy.com.br/checkout/cmr41g2ie01as01psbzhiv4o1?offer=70BMKVA";
 
-// Estrutura legada mantida para compatibilidade com o fluxo atual (PIX).
+// Compatibilidade com código legado
 export const CHECKOUT_LINKS: Record<PlanId, string> = {
   monthly: APPLYFY_MONTHLY,
   lifetime: APPLYFY_LIFETIME,
 };
 
-// Nova estrutura, preparada para múltiplos meios de pagamento.
-export const CHECKOUT_LINKS_BY_METHOD: Record<PlanId, Record<PaymentMethod, string>> = {
+// Múltiplos métodos de pagamento.
+// Atualmente PIX e Cartão apontam para o mesmo checkout da ApplyFy.
+export const CHECKOUT_LINKS_BY_METHOD: Record<
+  PlanId,
+  Record<PaymentMethod, string>
+> = {
   monthly: {
     pix: APPLYFY_MONTHLY,
     card: APPLYFY_MONTHLY,
