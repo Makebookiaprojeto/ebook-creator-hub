@@ -35,7 +35,7 @@ import {
 } from "@/components/ui/accordion";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
-import { CHECKOUT_LINKS, CHECKOUT_LINKS_BY_METHOD } from "@/config/checkoutLinks";
+import { CHECKOUT_LINKS } from "@/config/checkoutLinks";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { resolveDisplayName } from "@/lib/userName";
@@ -102,43 +102,7 @@ const FAQS = [
   },
 ];
 
-type PaymentMethodValue = "pix" | "card";
 
-function PaymentMethodButtons({
-  onSelect,
-  emphasis = false,
-}: {
-  onSelect: (m: PaymentMethodValue) => void;
-  emphasis?: boolean;
-}) {
-  return (
-    <div className="mb-2">
-      <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3 text-center">
-        Método de Pagamento
-      </div>
-      <div className="flex flex-col gap-3">
-        <button
-          type="button"
-          onClick={() => onSelect("pix")}
-          className={`w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.02] active:scale-[0.98] ${
-            emphasis ? "h-14 text-base" : ""
-          }`}
-        >
-          <QrCode className="h-5 w-5" /> PIX Instantâneo
-        </button>
-        <button
-          type="button"
-          onClick={() => onSelect("card")}
-          className={`w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black shadow-lg shadow-yellow-400/30 transition-all hover:scale-[1.02] active:scale-[0.98] ${
-            emphasis ? "h-14 text-base" : ""
-          }`}
-        >
-          <CreditCard className="h-5 w-5" /> Cartão de Crédito
-        </button>
-      </div>
-    </div>
-  );
-}
 
 export default function Plans() {
   const navigate = useNavigate();
@@ -185,8 +149,8 @@ export default function Plans() {
     if (!authLoading && !user) navigate("/auth", { replace: true });
   }, [authLoading, user, navigate]);
 
-  const handleCheckout = (plan: "monthly" | "lifetime", method: PaymentMethodValue) => {
-    const baseUrl = CHECKOUT_LINKS_BY_METHOD[plan]?.[method];
+  const handleCheckout = (plan: "monthly" | "lifetime") => {
+    const baseUrl = CHECKOUT_LINKS[plan];
     if (!baseUrl) {
       toast.error("Forma de pagamento indisponível.");
       return;
@@ -296,7 +260,7 @@ export default function Plans() {
 
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto items-stretch">
             {/* Mensal */}
-            <Card className="px-8 py-10 border-border/60 flex flex-col rounded-2xl bg-card/60 backdrop-blur-sm shadow-md hover:shadow-lg hover:border-border transition-all">
+            <Card className="px-8 py-8 border-border/60 flex flex-col rounded-2xl bg-card/60 backdrop-blur-sm shadow-md hover:shadow-lg hover:border-border transition-all">
               <div className="mb-6">
                 <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">
                   Mensal
@@ -324,11 +288,17 @@ export default function Plans() {
                 ))}
               </ul>
 
-              <PaymentMethodButtons onSelect={(m) => handleCheckout("monthly", m)} />
+              <button
+                type="button"
+                onClick={() => handleCheckout("monthly")}
+                className="w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black shadow-lg shadow-yellow-400/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                Garanta seu Acesso
+              </button>
             </Card>
 
             {/* Vitalício */}
-            <Card className="px-8 py-10 border-2 border-primary bg-gradient-to-b from-primary/10 to-primary/5 flex flex-col relative rounded-2xl ring-2 ring-primary/40 plan-glow-animated shadow-2xl shadow-primary/20 md:scale-[1.03]">
+            <Card className="px-8 py-8 border-2 border-primary bg-gradient-to-b from-primary/10 to-primary/5 flex flex-col relative rounded-2xl ring-2 ring-primary/40 plan-glow-animated shadow-2xl shadow-primary/20 md:scale-[1.03]">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 text-[10px] font-black bg-primary text-primary-foreground px-4 py-1.5 rounded-full tracking-widest uppercase shadow-lg whitespace-nowrap">
                 <Crown className="h-3 w-3" /> Mais escolhido
               </div>
@@ -338,12 +308,11 @@ export default function Plans() {
                   Vitalício
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-sm font-bold align-top">R$</span>
-                  <span className="text-6xl font-black">247,90</span>
-                  <span className="text-muted-foreground text-sm">à vista</span>
+                  <span className="text-sm font-bold align-top">12x de</span>
+                  <span className="text-6xl font-black">29,58</span>
                 </div>
-                <div className="text-sm font-bold text-primary mt-1">
-                  ou em até 12 X de R$ 29,58
+                <div className="text-sm font-bold text-muted-foreground mt-1">
+                  ou 247,90 à vista
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
                   Pague uma vez e use para sempre.
@@ -368,7 +337,13 @@ export default function Plans() {
                 ))}
               </ul>
 
-              <PaymentMethodButtons emphasis onSelect={(m) => handleCheckout("lifetime", m)} />
+              <button
+                type="button"
+                onClick={() => handleCheckout("lifetime")}
+                className="w-full h-14 rounded-xl font-bold text-base flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black shadow-lg shadow-yellow-400/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                Garanta seu Acesso
+              </button>
             </Card>
           </div>
 
