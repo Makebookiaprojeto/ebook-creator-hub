@@ -173,18 +173,18 @@ Por fim, gere termos de pesquisa EXCLUSIVAMENTE EM INGLÊS otimizados para um ba
       }
     }
 
-    // Busca imagens dinâmicas e altamente relevantes no Pexels usando as queries em INGLÊS geradas pela IA
+    // Busca imagens: prioriza banco de dados, senão faz fallback pro Pexels com queries em INGLÊS geradas pela IA
     const coverQuery = personalized.cover_image_query_en || template.cover_prompt || template.title || niche;
-    const coverUrl = await searchPexels(coverQuery, "portrait") || template.cover_url;
+    const coverUrl = template.cover_url || await searchPexels(coverQuery, "portrait");
     
-    // Monta capítulos: intro personalizada + corpo do template + imagem buscada dinamicamente em inglês
+    // Monta capítulos: intro personalizada + corpo do template + imagem
     const finalChapters = await Promise.all(baseChapters.map(async (c, i) => {
       const intro = personalized.chapter_intros[i]?.trim();
       const content = intro ? `${intro}\n\n${c.content}` : c.content;
       
-      // Busca a imagem no Pexels usando a query visual em inglês. Fallback para DB caso Pexels falhe.
+      // Busca a imagem: prioriza banco de dados, senão fallback pro Pexels usando a query visual em inglês
       const chapterQuery = personalized.chapter_image_queries_en[i] || (c.title + " " + niche);
-      const imageUrl = await searchPexels(chapterQuery, "landscape") || c.image_url;
+      const imageUrl = c.image_url || await searchPexels(chapterQuery, "landscape");
       
       return { title: c.title, subtitle: c.subtitle, content, image_url: imageUrl };
     }));
