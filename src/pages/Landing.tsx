@@ -6,31 +6,13 @@ import {
   Sparkles, BookOpen, Wand2, TrendingUp, ArrowRight, Check, 
   ShieldCheck, Zap, Star, Users, MessageSquare, Timer,
   Target, Rocket, Heart, Crown, Clock,
-  LayoutDashboard, Plus, Library, LifeBuoy, User, Bell, DollarSign, ShoppingCart, CreditCard
+  LayoutDashboard, Plus, Library, LifeBuoy, User, Bell, DollarSign, ShoppingCart, CreditCard, QrCode
 } from "lucide-react";
-import { CHECKOUT_LINKS_BY_METHOD } from "@/config/checkoutLinks";
+import { CHECKOUT_LINKS } from "@/config/checkoutLinks";
 import saasLogo from "@/assets/saas-logo.jpg";
 import heroShowcase from "@/assets/hero-showcase.png";
 
-function PlanPaymentButtons({ plan, emphasis = false }: { plan: "monthly" | "lifetime"; emphasis?: boolean }) {
-  const go = (method: "pix" | "card") => {
-    const url = CHECKOUT_LINKS_BY_METHOD[plan]?.[method];
-    if (url) window.location.href = url;
-  };
-  return (
-    <div className="mb-2">
-      <div className="flex flex-col gap-3">
-        <button
-          type="button"
-          onClick={() => go("pix")}
-          className={`w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.02] active:scale-[0.98] ${emphasis ? "h-14 text-base" : ""}`}
-        >
-          <CreditCard className="h-5 w-5" /> GARANTA SEU ACESSO
-        </button>
-      </div>
-    </div>
-  );
-}
+
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -227,7 +209,7 @@ const Landing = () => {
         <section className="py-24 mx-auto max-w-6xl px-4">
           <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto items-stretch">
             {/* Mensal */}
-            <div className="px-8 py-10 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm shadow-lg hover:shadow-xl hover:border-border transition-all flex flex-col">
+            <div className="px-8 py-8 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm shadow-lg hover:shadow-xl hover:border-border transition-all flex flex-col">
               <div className="mb-6 mt-2">
                 <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">
                   Mensal
@@ -248,11 +230,17 @@ const Landing = () => {
                   </li>
                 ))}
               </ul>
-              <PlanPaymentButtons plan="monthly" />
+              <button
+                type="button"
+                onClick={() => window.location.href = CHECKOUT_LINKS.monthly}
+                className="w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black shadow-lg shadow-yellow-400/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                Garanta seu Acesso
+              </button>
             </div>
 
             {/* Vitalício */}
-            <div className="px-8 py-10 rounded-2xl border-2 border-primary bg-gradient-to-b from-primary/10 to-primary/5 flex flex-col relative ring-2 ring-primary/40 plan-glow-animated shadow-2xl shadow-primary/20 md:scale-[1.03]">
+            <div className="px-8 py-8 rounded-2xl border-2 border-primary bg-gradient-to-b from-primary/10 to-primary/5 flex flex-col relative ring-2 ring-primary/40 plan-glow-animated shadow-2xl shadow-primary/20 md:scale-[1.03]">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 text-[10px] font-black bg-primary text-primary-foreground px-4 py-1.5 rounded-full tracking-widest uppercase shadow-lg whitespace-nowrap">
                 <Crown className="h-3 w-3" /> Mais escolhido
               </div>
@@ -261,12 +249,11 @@ const Landing = () => {
                   Vitalício
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-sm font-bold align-top">R$</span>
-                  <span className="text-6xl font-black">247,90</span>
-                  <span className="text-muted-foreground text-sm">à vista</span>
+                  <span className="text-sm font-bold align-top">12x de</span>
+                  <span className="text-6xl font-black">29,58</span>
                 </div>
-                <div className="text-sm font-bold text-primary mt-1">
-                  ou em até 12 X de R$ 29,58
+                <div className="text-sm font-bold text-muted-foreground mt-1">
+                  ou 247,90 à vista
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
                   Pague uma vez e use para sempre.
@@ -279,7 +266,13 @@ const Landing = () => {
                   </li>
                 ))}
               </ul>
-              <PlanPaymentButtons plan="lifetime" emphasis />
+              <button
+                type="button"
+                onClick={() => window.location.href = CHECKOUT_LINKS.lifetime}
+                className="w-full h-14 rounded-xl font-bold text-base flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black shadow-lg shadow-yellow-400/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                Garanta seu Acesso
+              </button>
             </div>
           </div>
           <div className="mt-12 flex items-center justify-center gap-8 flex-wrap opacity-50 grayscale hover:grayscale-0 transition-all">
