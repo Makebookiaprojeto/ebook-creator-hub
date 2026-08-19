@@ -107,7 +107,9 @@ ${baseChapters.map((c, i) => `${i + 1}. ${c.title} — ${c.subtitle}`).join("\n"
 
 Gere: novo título magnético adaptado ao público (≤60 chars), novo subtítulo (≤120 chars), e para cada capítulo um parágrafo de ABERTURA (80-120 palavras) que conecta o tema do capítulo ao público "${audience || "geral"}". Não reescreva o capítulo inteiro, só a abertura.
 
-Além disso, gere exatamente 6 tópicos curtos de aprendizado para a seção "O que você vai aprender" da página de vendas. Cada tópico deve ter um título curto e impactante (até 40 caracteres) e uma descrição curta e persuasiva (até 120 caracteres) destacando benefícios reais do ebook para este público.`,
+Além disso, gere exatamente 6 tópicos curtos de aprendizado para a seção "O que você vai aprender" da página de vendas. Cada tópico deve ter um título curto e impactante (até 40 caracteres) e uma descrição curta e persuasiva (até 120 caracteres) destacando benefícios reais do ebook para este público.
+
+Por fim, gere termos de pesquisa EXCLUSIVAMENTE EM INGLÊS otimizados para um banco de imagens (como Pexels) para a CAPA (cover_image_query_en) e para CADA CAPÍTULO (chapter_image_queries_en). Os termos devem ser curtos (2-4 palavras no máximo), focados no visual e altamente representativos do nicho/tema (ex: "healthy fresh food", "woman fitness gym", "calm peaceful mind"). Nunca use palavras soltas sem sentido visual.`,
         },
       ],
       tools: [{
@@ -140,8 +142,15 @@ Além disso, gere exatamente 6 tópicos curtos de aprendizado para a seção "O 
                 minItems: 6,
                 maxItems: 6,
               },
+              cover_image_query_en: { type: "string" },
+              chapter_image_queries_en: {
+                type: "array",
+                items: { type: "string" },
+                minItems: baseChapters.length,
+                maxItems: baseChapters.length,
+              },
             },
-            required: ["title", "subtitle", "chapter_intros", "learning_topics"],
+            required: ["title", "subtitle", "chapter_intros", "learning_topics", "cover_image_query_en", "chapter_image_queries_en"],
             additionalProperties: false,
           },
         },
@@ -154,6 +163,8 @@ Além disso, gere exatamente 6 tópicos curtos de aprendizado para a seção "O 
       subtitle: template.subtitle,
       chapter_intros: baseChapters.map(() => ""),
       learning_topics: [] as { title: string; description: string }[],
+      cover_image_query_en: "",
+      chapter_image_queries_en: baseChapters.map(() => ""),
     };
     if (!("error" in personalizationRes) || !personalizationRes.error) {
       const args = personalizationRes.data?.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
@@ -162,16 +173,18 @@ Além disso, gere exatamente 6 tópicos curtos de aprendizado para a seção "O 
       }
     }
 
-    // Busca imagens dinâmicas e altamente relevantes no Pexels (ignorando as salvas no DB para garantir relevância)
-    const coverUrl = await searchPexels(template.cover_prompt || template.title || niche, "portrait") || template.cover_url;
+    // Busca imagens dinâmicas e altamente relevantes no Pexels usando as queries em INGLÊS geradas pela IA
+    const coverQuery = personalized.cover_image_query_en || template.cover_prompt || template.title || niche;
+    const coverUrl = await searchPexels(coverQuery, "portrait") || template.cover_url;
     
-    // Monta capítulos: intro personalizada + corpo do template + imagem buscada dinamicamente
+    // Monta capítulos: intro personalizada + corpo do template + imagem buscada dinamicamente em inglês
     const finalChapters = await Promise.all(baseChapters.map(async (c, i) => {
       const intro = personalized.chapter_intros[i]?.trim();
       const content = intro ? `${intro}\n\n${c.content}` : c.content;
       
-      // Busca a imagem no Pexels usando o título do capítulo + nicho. Fallback para DB caso Pexels falhe.
-      const imageUrl = await searchPexels(c.title + " " + niche, "landscape") || c.image_url;
+      // Busca a imagem no Pexels usando a query visual em inglês. Fallback para DB caso Pexels falhe.
+      const chapterQuery = personalized.chapter_image_queries_en[i] || (c.title + " " + niche);
+      const imageUrl = await searchPexels(chapterQuery, "landscape") || c.image_url;
       
       return { title: c.title, subtitle: c.subtitle, content, image_url: imageUrl };
     }));
