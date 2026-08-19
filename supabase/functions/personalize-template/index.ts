@@ -51,7 +51,7 @@ async function searchPexels(query: string, orientation: "landscape" | "portrait"
     const data = await resp.json();
     const photos = data.photos ?? [];
     if (!photos.length) return null;
-    const pick = photos[Math.floor(Math.random() * photos.length)];
+    const pick = photos[0];
     return pick.src?.large2x || pick.src?.large || pick.src?.original;
   } catch (e) {
     console.error("Pexels error:", e);
@@ -162,17 +162,16 @@ Além disso, gere exatamente 6 tópicos curtos de aprendizado para a seção "O 
       }
     }
 
-    // Busca imagens: Prioriza as que estão no template (fixas/profissionais)
-    // Se não houver no template, faz o fallback para o searchPexels (manteve a lógica para flexibilidade futura)
-    const coverUrl = template.cover_url || await searchPexels(template.cover_prompt || template.title || niche, "portrait");
+    // Busca imagens dinâmicas e altamente relevantes no Pexels (ignorando as salvas no DB para garantir relevância)
+    const coverUrl = await searchPexels(template.cover_prompt || template.title || niche, "portrait") || template.cover_url;
     
-    // Monta capítulos: intro personalizada + corpo do template + imagem do template (ou busca se faltar)
+    // Monta capítulos: intro personalizada + corpo do template + imagem buscada dinamicamente
     const finalChapters = await Promise.all(baseChapters.map(async (c, i) => {
       const intro = personalized.chapter_intros[i]?.trim();
       const content = intro ? `${intro}\n\n${c.content}` : c.content;
       
-      // Usa a imagem do template se disponível, senão busca
-      const imageUrl = c.image_url || await searchPexels(c.title + " " + niche, "landscape");
+      // Busca a imagem no Pexels usando o título do capítulo + nicho. Fallback para DB caso Pexels falhe.
+      const imageUrl = await searchPexels(c.title + " " + niche, "landscape") || c.image_url;
       
       return { title: c.title, subtitle: c.subtitle, content, image_url: imageUrl };
     }));
