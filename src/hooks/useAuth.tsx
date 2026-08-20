@@ -6,6 +6,7 @@ interface AuthContextValue {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  isAdmin: boolean;
   signOut: () => Promise<void>;
 }
 
@@ -14,6 +15,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,8 +26,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (!mounted) return;
 
+      let adminCheck = false;
+      if (data.session?.user) {
+        const { data: roleData } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", data.session.user.id)
+          .maybeSingle();
+        if (roleData?.role === "admin") {
+          adminCheck = true;
+        }
+      }
+
       setSession(data.session);
       setUser(data.session?.user ?? null);
+      setIsAdmin(adminCheck);
       setLoading(false);
     };
 
@@ -33,10 +48,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      let adminCheck = false;
+      if (session?.user) {
+        const { data: roleData } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", session.user.id)
+          .maybeSingle();
+        if (roleData?.role === "admin") {
+          adminCheck = true;
+        }
+      }
+      if (mounted) {
+        setSession(session);
+        setUser(session?.user ?? null);
+        setIsAdmin(adminCheck);
+        setLoading(false);
+      }
     });
 
     return () => {
@@ -49,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut();
   };
 
-  return <AuthContext.Provider value={{ user, session, loading, signOut }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, session, loading, isAdmin, signOut }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
