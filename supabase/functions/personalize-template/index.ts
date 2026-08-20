@@ -17,7 +17,7 @@ const PEXELS_API_KEY = Deno.env.get("PEXELS_API_KEY");
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const GATEWAY = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions";
-const TEXT_MODEL = "gemini-2.5-flash-lite";
+const TEXT_MODEL = "gemini-3.5-flash-lite";
 
 function jsonResponse(payload: unknown, status = 200) {
   return new Response(JSON.stringify(payload), {
