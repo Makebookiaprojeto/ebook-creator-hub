@@ -327,13 +327,13 @@ export function DashboardView() {
     <div className="space-y-3 animate-fade-in py-1 -mt-6">
 
       <div className="space-y-3">
-        <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-gradient-to-br dark:from-[#0b1220] dark:via-card dark:to-card/60 px-7 pt-3 pb-7 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
+        <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-black dark:bg-none px-7 pt-3 pb-7 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
           <div className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-24 -left-16 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl" />
           <div className="relative">
             <div className="flex items-start justify-between gap-3">
               <div className="relative inline-block">
-                <p className="text-[11px] uppercase tracking-wider text-muted-foreground select-none">Lucro</p>
+                <p className="text-[11px] uppercase tracking-wider text-muted-foreground dark:text-white/80 select-none">Lucro</p>
                 {isAdminUser(authUser?.email) && (
                   <button
                     type="button"
@@ -382,11 +382,11 @@ export function DashboardView() {
         </div>
 
         <div className="grid grid-cols-2 gap-3 pt-1">
-          <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-gradient-to-br dark:from-[#0b1220] dark:via-card dark:to-card/60 px-4 py-3 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
+          <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-black dark:bg-none px-4 py-3 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
             <div className="pointer-events-none absolute -top-16 -right-16 h-32 w-32 rounded-full bg-blue-500/20 blur-3xl" />
             <div className="relative flex items-center justify-between">
               <div>
-                <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Ebooks</p>
+                <p className="text-[11px] uppercase tracking-wider text-muted-foreground dark:text-white/80">Ebooks</p>
                 <p className="font-display text-2xl font-bold tracking-tight">{totalEbooks}</p>
               </div>
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.3)]">
@@ -394,11 +394,11 @@ export function DashboardView() {
               </div>
             </div>
           </div>
-          <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-gradient-to-br dark:from-[#0b1220] dark:via-card dark:to-card/60 px-4 py-3 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
+          <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-black dark:bg-none px-4 py-3 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
             <div className="pointer-events-none absolute -top-16 -right-16 h-32 w-32 rounded-full bg-blue-500/20 blur-3xl" />
             <div className="relative flex items-center justify-between">
               <div>
-                <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Vendas</p>
+                <p className="text-[11px] uppercase tracking-wider text-muted-foreground dark:text-white/80">Vendas</p>
                 <p className="font-display text-2xl font-bold tracking-tight">{stats.totalSales}</p>
               </div>
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.3)]">
@@ -430,7 +430,7 @@ function SalesByHourChart({ total }: { total: number }) {
   }, [total]);
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-gradient-to-br dark:from-[#0b1220] dark:via-card dark:to-card/60 p-5 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
+    <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-black dark:bg-none p-5 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
       <div className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 -left-16 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl" />
 
