@@ -76,9 +76,6 @@ export function NotificationBell() {
           });
           
           if (newNotif.type === "sale" || newNotif.type === "pending_sale") {
-            console.log("Notificação de venda detectada. Disparando Toast e Som.");
-            playSaleSound();
-            
             const { data: purchaseData } = await supabase
               .from("purchases")
               .select("amount_paid_cents, ebooks(title)")
@@ -87,25 +84,30 @@ export function NotificationBell() {
               .limit(1)
               .maybeSingle();
 
-            let displayDescription = "";
+            // Only show toast and play sound if it's a real sale with purchase data.
+            // Test sales are already handled by adminTestSales.ts
             if (purchaseData) {
+              console.log("Notificação de venda detectada. Disparando Toast e Som.");
+              playSaleSound();
+              
               const amount = purchaseData.amount_paid_cents / 100;
               const formattedAmount = amount.toLocaleString('pt-BR', { 
                 style: 'currency', 
                 currency: 'BRL' 
               });
               const ebookTitle = (purchaseData.ebooks as any)?.title || "Ebook";
-              displayDescription = `${ebookTitle} - ${formattedAmount}`;
-            }
+              const displayDescription = `${ebookTitle} - ${formattedAmount}`;
 
-            console.log("Disparando toast.success...");
-            toast.success("VENDA REALIZADA !!!", {
-              description: displayDescription,
-              duration: 5000,
-              position: "top-right",
-              icon: <ShoppingCart className="h-4 w-4 text-primary" />,
-            });
-            console.log("Toast disparado com sucesso.");
+              console.log("Disparando toast.success...");
+              toast.success("VENDA REALIZADA !!!", {
+                description: displayDescription,
+                duration: 5000,
+                position: "top-right",
+                icon: <ShoppingCart className="h-4 w-4 text-primary" />,
+              });
+              console.log("Toast disparado com sucesso.");
+            }
+            
             window.dispatchEvent(new CustomEvent("refresh-dashboard"));
           }
         }
