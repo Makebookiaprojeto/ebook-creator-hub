@@ -126,7 +126,9 @@ export function DashboardView() {
   const [salesHistory, setSalesHistory] = useState<any[]>([]);
   const [loadingStats, setLoadingStats] = useState(true);
   const [paymentStats, setPaymentStats] = useState<any[]>([]);
-  const [profitPeriod, setProfitPeriod] = useState<"today" | "7d" | "30d">("today");
+  const [profitPeriod, setProfitPeriod] = useState<"today" | "7d" | "30d">(() => {
+    return (localStorage.getItem("dashboard_profit_period") as any) || "today";
+  });
   
   const [simulatedRevenue, setSimulatedRevenue] = useState(() => {
     return parseFloat(localStorage.getItem("admin_simulated_revenue") || "0");
@@ -373,7 +375,10 @@ export function DashboardView() {
                   return (
                     <button
                       key={opt.v}
-                      onClick={() => setProfitPeriod(opt.v as any)}
+                      onClick={() => {
+                        setProfitPeriod(opt.v as any);
+                        localStorage.setItem("dashboard_profit_period", opt.v);
+                      }}
                       className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all border ${
                         active
                           ? "bg-blue-500 text-white border-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
