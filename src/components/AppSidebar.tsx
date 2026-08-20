@@ -24,7 +24,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { isAdminUser, getTestSaleConfig, setTestSaleConfig } from "@/lib/adminTestSales";
+import { getTestSaleConfig, setTestSaleConfig } from "@/lib/adminTestSales";
 
 type View = "dashboard" | "create" | "library" | "support" | "profile" | "integrations";
 
@@ -45,7 +45,7 @@ const items: { id: View; title: string; icon: typeof LayoutDashboard }[] = [
 export function AppSidebar({ active, onChange }: Props) {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
-  const { user, signOut } = useAuth();
+  const { user, isAdmin, signOut } = useAuth();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [displayName, setDisplayName] = useState<string>("");
   const navigate = useNavigate();
@@ -195,7 +195,7 @@ export function AppSidebar({ active, onChange }: Props) {
                   <span className="truncate text-[11px] text-muted-foreground">{display}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  {isAdminUser(user?.email) && (
+                  {isAdmin && (
                     <button
                       onClick={handleOpenTestModal}
                       title="Configurar Nicho e Preço de Teste"
@@ -219,7 +219,7 @@ export function AppSidebar({ active, onChange }: Props) {
         )}
 
         {/* Modal de Configuração de Teste de Venda */}
-        {isAdminUser(user?.email) && (
+        {isAdmin && (
           <Dialog open={testModalOpen} onOpenChange={setTestModalOpen}>
             <DialogContent className="sm:max-w-[425px] border-[#D4AF37]/30 bg-card text-foreground">
               <DialogHeader>
