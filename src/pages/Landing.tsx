@@ -61,35 +61,54 @@ const Landing = () => {
       </header>
 
       <main>
-        {/* Hero Section */}
-        <section className="relative pt-20 pb-24 overflow-hidden">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[680px] bg-primary/30 blur-[130px] rounded-full pointer-events-none" />
-          <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-primary/25 blur-[100px] rounded-full pointer-events-none" />
-          <div className="relative mx-auto max-w-5xl px-4 text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-semibold text-primary mb-8 animate-fade-in">
-              <Sparkles className="h-3.5 w-3.5" /> A nova era da criação digital chegou
+        {/* Modern Hero Section */}
+        <section className="relative pt-24 pb-32 overflow-hidden bg-black">
+          {/* Animated Background Effects */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-primary/20 blur-[150px] rounded-full pointer-events-none" />
+          <div className="absolute -top-20 right-0 w-[500px] h-[500px] bg-yellow-400/10 blur-[120px] rounded-full pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary/15 blur-[100px] rounded-full pointer-events-none" />
+
+          <div className="relative mx-auto max-w-5xl px-4 text-center z-10">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary mb-10 animate-fade-in backdrop-blur-sm shadow-[0_0_20px_rgba(var(--primary-rgb),0.2)]">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+              </span>
+              A nova era da criação digital chegou
             </div>
-            <h1 className="font-display text-5xl font-black tracking-tight sm:text-7xl leading-[1.1] mb-8 animate-slide-up">
+            
+            <h1 className="font-display text-5xl sm:text-7xl font-black tracking-tight leading-[1.1] mb-8 animate-slide-up text-white">
               Transforme uma ideia em um <br />
-              <span className="text-gradient-primary">Império Digital</span> em minutos.
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-blue-400 to-yellow-400">Império Digital</span> em minutos.
             </h1>
-            <p className="mx-auto max-w-2xl text-lg text-muted-foreground sm:text-xl mb-10 animate-slide-up animation-delay-200">
+            
+            <p className="mx-auto max-w-2xl text-lg sm:text-xl mb-12 animate-slide-up animation-delay-200 text-slate-300">
               Transforme uma simples ideia em um Ebook pronto para vender em poucos minutos. Nossa IA cria o conteúdo, desenvolve uma capa profissional, monta sua página de vendas e entrega tudo preparado para você começar a faturar.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up animation-delay-300">
+            
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 animate-slide-up animation-delay-300">
               <Link to="/auth" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full h-14 px-8 text-lg font-bold gradient-primary text-primary-foreground shadow-glow hover:scale-105 transition-all">
-                  Criar meu Ebook agora <ArrowRight className="ml-2 h-5 w-5" />
+                <Button size="lg" className="w-full sm:w-auto h-16 px-10 text-lg font-black bg-yellow-400 hover:bg-yellow-300 text-black shadow-[0_0_40px_rgba(250,204,21,0.4)] hover:shadow-[0_0_60px_rgba(250,204,21,0.6)] hover:scale-105 transition-all duration-300 rounded-2xl border-b-4 border-yellow-600 active:border-b-0 active:translate-y-1">
+                  Criar meu Ebook agora <ArrowRight className="ml-2 h-6 w-6" />
+                </Button>
+              </Link>
+              <Link to="#planos" className="w-full sm:w-auto">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto h-16 px-10 text-lg font-bold border-primary/50 hover:bg-primary/10 text-white shadow-[0_0_20px_rgba(var(--primary-rgb),0.1)] hover:scale-105 transition-all duration-300 rounded-2xl">
+                  Ver Planos
                 </Button>
               </Link>
             </div>
           </div>
-          <div className="relative mx-auto max-w-5xl px-4 mt-40 sm:mt-56 animate-fade-in animation-delay-300">
+
+          <div className="relative mx-auto max-w-5xl px-4 mt-32 sm:mt-40 animate-fade-in animation-delay-300 z-10 [perspective:1000px]">
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black z-20 pointer-events-none" />
             <img
               src={heroShowcase}
-              alt="EbookAI Builder — ebook pronto, página de vendas e grupos de divulgação"
+              alt="EbookAI Builder Showcase"
               loading="lazy"
-              className="relative mx-auto w-full max-w-5xl rounded-2xl shadow-[0_25px_80px_-15px_rgba(234,179,8,0.35)] ring-1 ring-yellow-400/30"
+              className="relative mx-auto w-full max-w-5xl rounded-t-2xl shadow-[0_0_80px_rgba(var(--primary-rgb),0.3)] ring-1 ring-primary/40 [transform:rotateX(-12deg)_translateY(40px)_scale(1.02)] hover:[transform:rotateX(0deg)_translateY(0px)_scale(1)] transition-all duration-700 ease-out"
+              style={{ transformOrigin: "bottom" }}
             />
           </div>
         </section>
