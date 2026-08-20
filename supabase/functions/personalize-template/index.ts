@@ -109,7 +109,7 @@ Gere: novo título magnético adaptado ao público (≤60 chars), novo subtítul
 
 Além disso, gere exatamente 6 tópicos curtos de aprendizado para a seção "O que você vai aprender" da página de vendas. Cada tópico deve ter um título curto e impactante (até 40 caracteres) e uma descrição curta e persuasiva (até 120 caracteres) destacando benefícios reais do ebook para este público.
 
-Por fim, gere termos de pesquisa EXCLUSIVAMENTE EM INGLÊS otimizados para um banco de imagens (como Pexels) para a CAPA (cover_image_query_en) e para CADA CAPÍTULO (chapter_image_queries_en). Os termos devem ser curtos (2-4 palavras no máximo), focados no visual e altamente representativos do nicho/tema (ex: "healthy fresh food", "woman fitness gym", "calm peaceful mind"). Nunca use palavras soltas sem sentido visual.`,
+Por fim, gere termos de pesquisa EXCLUSIVAMENTE EM INGLÊS otimizados para um banco de imagens (como Pexels) para a CAPA (cover_image_query_en) e para CADA CAPÍTULO (chapter_image_queries_en). REGRA CRÍTICA: Os termos DEVEM TER EXATAMENTE 1 ÚNICA PALAVRA genérica e ampla (ex: "gym", "office", "salad", "money", "couple"). É estritamente proibido usar frases, adjetivos ou mais de uma palavra, pois a busca falha com termos longos.`,
         },
       ],
       tools: [{
