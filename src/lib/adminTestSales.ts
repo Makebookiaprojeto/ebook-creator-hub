@@ -64,5 +64,5 @@ export async function triggerTestSale(userId: string): Promise<void> {
   }
 
   // 4. Notifica o Dashboard para atualizar métricas
-  window.dispatchEvent(new CustomEvent("refresh-dashboard"));
+  window.dispatchEvent(new CustomEvent("refresh-dashboard", { detail: { isTestSale: true, price: price } }));
 }
