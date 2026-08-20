@@ -3,14 +3,8 @@ import { toast } from "sonner";
 import React from "react";
 import { ShoppingCart } from "lucide-react";
 
-const ADMIN_EMAILS = ["tr8200774@gmail.com", "morraessleleo@gmail.com"];
 const NICHE_KEY = "admin_test_sale_niche";
 const PRICE_KEY = "admin_test_sale_price";
-
-export function isAdminUser(email?: string | null): boolean {
-  if (!email) return false;
-  return ADMIN_EMAILS.includes(email.toLowerCase());
-}
 
 export function getTestSaleConfig(): { niche: string; price: number } {
   const niche = localStorage.getItem(NICHE_KEY) || "Ebook High Ticket";
