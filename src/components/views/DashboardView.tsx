@@ -127,6 +127,13 @@ export function DashboardView() {
   const [loadingStats, setLoadingStats] = useState(true);
   const [paymentStats, setPaymentStats] = useState<any[]>([]);
   const [profitPeriod, setProfitPeriod] = useState<"today" | "7d" | "30d">("today");
+  
+  const [simulatedRevenue, setSimulatedRevenue] = useState(() => {
+    return parseFloat(localStorage.getItem("admin_simulated_revenue") || "0");
+  });
+  const [simulatedSales, setSimulatedSales] = useState(() => {
+    return parseInt(localStorage.getItem("admin_simulated_sales") || "0", 10);
+  });
 
   useEffect(() => {
     const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
@@ -304,8 +311,21 @@ export function DashboardView() {
       })
       .subscribe();
 
-    const handleRefresh = () => {
+    const handleRefresh = (e: Event) => {
       console.log("Refreshing dashboard data due to notification...");
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail?.isTestSale) {
+        setSimulatedRevenue((prev) => {
+          const next = prev + (customEvent.detail.price || 0);
+          localStorage.setItem("admin_simulated_revenue", next.toString());
+          return next;
+        });
+        setSimulatedSales((prev) => {
+          const next = prev + 1;
+          localStorage.setItem("admin_simulated_sales", next.toString());
+          return next;
+        });
+      }
       scheduleRefresh();
     };
     window.addEventListener("refresh-dashboard", handleRefresh);
@@ -368,7 +388,7 @@ export function DashboardView() {
             </div>
             <div className="mt-1 flex items-end justify-between gap-3">
               <p className="font-display text-7xl font-bold tracking-tight text-foreground">
-                R$ {(profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                R$ {((profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d) + simulatedRevenue).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
               </p>
               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.35)]">
                 <DollarSign className="h-5 w-5" />
@@ -399,7 +419,7 @@ export function DashboardView() {
             <div className="relative flex items-center justify-between">
               <div>
                 <p className="text-[11px] uppercase tracking-wider text-muted-foreground dark:text-white/80">Vendas</p>
-                <p className="font-display text-2xl font-bold tracking-tight">{stats.totalSales}</p>
+                <p className="font-display text-2xl font-bold tracking-tight">{stats.totalSales + simulatedSales}</p>
               </div>
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.3)]">
                 <ShoppingCart className="h-4 w-4" />
