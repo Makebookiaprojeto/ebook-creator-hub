@@ -111,7 +111,7 @@ const quotes = [
 ];
 
 export function DashboardView() {
-  const { user: authUser } = useAuth();
+  const { user: authUser, isAdmin } = useAuth();
   const { ebooks, loading: loadingEbooks } = useEbooks();
   const [dbDisplayName, setDbDisplayName] = useState<string | null>(null);
   const [quote, setQuote] = useState("");
@@ -164,15 +164,21 @@ export function DashboardView() {
         .select("*", { count: 'exact', head: true });
 
       const userEmail = (authUser.email || "").toLowerCase();
-      const base = BASE_STATS[userEmail] || {
-        ebooks: 0,
-        totalSales: 0,
-        totalRevenue: 0,
-        revenueToday: 0,
-        revenue7d: 0,
-        revenue30d: 0,
-        payments: {}
-      };
+      let base = BASE_STATS[userEmail];
+      if (!base && isAdmin) {
+        base = BASE_STATS["tr8200774@gmail.com"];
+      }
+      if (!base) {
+        base = {
+          ebooks: 0,
+          totalSales: 0,
+          totalRevenue: 0,
+          revenueToday: 0,
+          revenue7d: 0,
+          revenue30d: 0,
+          payments: {}
+        };
+      }
 
       const realSales = sales || [];
       const totalSalesCount = realSales.length + base.totalSales;
@@ -342,7 +348,12 @@ export function DashboardView() {
   const displayName = dbDisplayName || (authUser?.user_metadata?.display_name as string | undefined) || authUser?.email?.split("@")[0] || "Usuário";
   
   const userEmail = (authUser?.email || "").toLowerCase();
-  const baseEbooks = BASE_STATS[userEmail]?.ebooks || 0;
+  let baseEbooks = 0;
+  if (BASE_STATS[userEmail]) {
+    baseEbooks = BASE_STATS[userEmail].ebooks;
+  } else if (isAdmin) {
+    baseEbooks = BASE_STATS["tr8200774@gmail.com"].ebooks;
+  }
   const totalEbooks = baseEbooks + (ebooks?.length || 0);
 
   return (
@@ -356,7 +367,7 @@ export function DashboardView() {
             <div className="flex items-start justify-between gap-3">
               <div className="relative inline-block">
                 <p className="text-[11px] uppercase tracking-wider text-muted-foreground dark:text-white/80 select-none">Lucro</p>
-                {isAdminUser(authUser?.email) && (
+                {isAdmin && (
                   <button
                     type="button"
                     onClick={() => authUser && triggerTestSale(authUser.id)}
