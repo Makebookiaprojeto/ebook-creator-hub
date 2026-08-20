@@ -36,23 +36,17 @@ export async function triggerTestSale(userId: string): Promise<void> {
     console.warn("Erro ao inicializar áudio de teste:", e);
   }
 
-  toast.custom((t) => (
-    <div className="relative flex w-full items-center gap-4 overflow-hidden rounded-2xl border border-green-500/30 bg-white p-4 shadow-[0_8px_30px_rgba(34,197,94,0.15)] dark:border-green-500/30 dark:bg-black dark:shadow-[0_8px_30px_rgba(34,197,94,0.15)]">
-      <div className="absolute -left-4 -top-4 h-16 w-16 rounded-full bg-green-500/20 blur-xl dark:bg-green-500/10"></div>
-      
-      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-400">
-        <ShoppingCart className="h-6 w-6" />
-      </div>
-      
-      <div className="flex flex-col gap-0.5 z-10">
-        <p className="text-[13px] font-bold uppercase tracking-wider text-green-600 dark:text-green-400">
-          Venda Realizada !!!
-        </p>
-        <p className="text-[14px] font-medium text-slate-600 dark:text-slate-300">
-          {displayDescription}
-        </p>
-      </div>
-    </div>
+  toast.custom((t) => React.createElement("div", {
+    className: "relative flex w-full items-center gap-4 overflow-hidden rounded-2xl border border-green-500/30 bg-white p-4 shadow-[0_8px_30px_rgba(34,197,94,0.15)] dark:border-green-500/30 dark:bg-black dark:shadow-[0_8px_30px_rgba(34,197,94,0.15)]"
+  },
+    React.createElement("div", { className: "absolute -left-4 -top-4 h-16 w-16 rounded-full bg-green-500/20 blur-xl dark:bg-green-500/10" }),
+    React.createElement("div", { className: "flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-400" },
+      React.createElement(ShoppingCart, { className: "h-6 w-6" })
+    ),
+    React.createElement("div", { className: "flex flex-col gap-0.5 z-10" },
+      React.createElement("p", { className: "text-[13px] font-bold uppercase tracking-wider text-green-600 dark:text-green-400" }, "Venda Realizada !!!"),
+      React.createElement("p", { className: "text-[14px] font-medium text-slate-600 dark:text-slate-300" }, displayDescription)
+    )
   ), {
     duration: 5000,
     position: "top-right",
