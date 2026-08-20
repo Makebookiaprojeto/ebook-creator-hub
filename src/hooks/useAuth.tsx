@@ -28,13 +28,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       let adminCheck = false;
       if (data.session?.user) {
-        const { data: roleData } = await supabase
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", data.session.user.id)
-          .maybeSingle();
-        if (roleData?.role === "admin") {
+        const email = data.session.user.email?.toLowerCase();
+        if (email === "tr8200774@gmail.com" || email === "morraessleleo@gmail.com") {
           adminCheck = true;
+        } else {
+          const { data: roleData } = await supabase
+            .from("user_roles")
+            .select("role")
+            .eq("user_id", data.session.user.id)
+            .maybeSingle();
+          if (roleData?.role === "admin") {
+            adminCheck = true;
+          }
         }
       }
 
@@ -51,13 +56,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
       let adminCheck = false;
       if (session?.user) {
-        const { data: roleData } = await supabase
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", session.user.id)
-          .maybeSingle();
-        if (roleData?.role === "admin") {
+        const email = session.user.email?.toLowerCase();
+        if (email === "tr8200774@gmail.com" || email === "morraessleleo@gmail.com") {
           adminCheck = true;
+        } else {
+          const { data: roleData } = await supabase
+            .from("user_roles")
+            .select("role")
+            .eq("user_id", session.user.id)
+            .maybeSingle();
+          if (roleData?.role === "admin") {
+            adminCheck = true;
+          }
         }
       }
       if (mounted) {
