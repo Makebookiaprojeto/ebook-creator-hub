@@ -24,7 +24,7 @@ import {
   QrCode,
 } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
-import heroShowcase from "@/assets/hero-showcase.png";
+import heroShowcase from "@/assets/hero-showcase.jpg";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
