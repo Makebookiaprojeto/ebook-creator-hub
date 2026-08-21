@@ -96,14 +96,12 @@ const Landing = () => {
             </div>
           </div>
 
-          <div className="relative mx-auto max-w-5xl px-4 mt-32 sm:mt-40 animate-fade-in animation-delay-300 z-10 [perspective:1000px]">
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black z-20 pointer-events-none" />
+          <div className="relative mx-auto max-w-5xl px-4 mt-32 sm:mt-40 animate-fade-in animation-delay-300 z-10">
             <img
               src={heroShowcase}
               alt="EbookAI Builder Showcase"
               loading="lazy"
-              className="relative mx-auto w-full max-w-5xl rounded-t-2xl shadow-[0_0_80px_rgba(var(--primary-rgb),0.3)] ring-1 ring-primary/40 [transform:rotateX(-12deg)_translateY(40px)_scale(1.02)] hover:[transform:rotateX(0deg)_translateY(0px)_scale(1)] transition-all duration-700 ease-out"
-              style={{ transformOrigin: "bottom" }}
+              className="relative mx-auto w-full max-w-5xl rounded-2xl shadow-[0_25px_80px_-15px_rgba(234,179,8,0.35)] ring-1 ring-yellow-400/30"
             />
           </div>
         </section>
@@ -221,6 +219,9 @@ const Landing = () => {
 
         {/* Pricing */}
         <section className="py-24 mx-auto max-w-6xl px-4" id="planos">
+          <div className="text-center mb-16">
+            <h2 className="font-display text-4xl font-bold mb-4">Escolha o Plano Ideal Para Você</h2>
+          </div>
           <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto items-stretch">
             {/* Mensal */}
             <div className="px-8 py-8 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm shadow-lg hover:shadow-xl hover:border-border transition-all flex flex-col">
