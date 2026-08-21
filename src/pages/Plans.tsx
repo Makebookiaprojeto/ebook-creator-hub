@@ -78,7 +78,7 @@ const TESTIMONIALS = [
 const FAQS = [
   {
     q: "Como funciona o pagamento?",
-    a: "Você paga uma única vez no plano vitalício, ou mensalmente no plano mensal. O pagamento é processado de forma segura pela Cakto e você recebe o acesso liberado automaticamente.",
+    a: "Você paga uma única vez no plano vitalício, ou mensalmente no plano mensal. O pagamento é processado de forma segura e você recebe o acesso liberado automaticamente.",
   },
   {
     q: "E se eu não gostar?",
