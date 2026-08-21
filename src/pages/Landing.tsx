@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { CHECKOUT_LINKS } from "@/config/checkoutLinks";
 import saasLogo from "@/assets/saas-logo.jpg";
-import heroShowcase from "@/assets/hero-showcase.png";
+import heroShowcase from "@/assets/hero-showcase.jpg";
 
 
 
@@ -91,11 +91,6 @@ const Landing = () => {
               <Link to="/auth" className="w-full sm:w-auto">
                 <Button size="lg" className="w-full sm:w-auto h-16 px-10 text-lg font-black bg-yellow-400 hover:bg-yellow-300 text-black shadow-[0_0_40px_rgba(250,204,21,0.4)] hover:shadow-[0_0_60px_rgba(250,204,21,0.6)] hover:scale-105 transition-all duration-300 rounded-2xl border-b-4 border-yellow-600 active:border-b-0 active:translate-y-1">
                   Criar meu Ebook agora <ArrowRight className="ml-2 h-6 w-6" />
-                </Button>
-              </Link>
-              <Link to="#planos" className="w-full sm:w-auto">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto h-16 px-10 text-lg font-bold border-primary/50 hover:bg-primary/10 text-white shadow-[0_0_20px_rgba(var(--primary-rgb),0.1)] hover:scale-105 transition-all duration-300 rounded-2xl">
-                  Ver Planos
                 </Button>
               </Link>
             </div>
@@ -225,7 +220,7 @@ const Landing = () => {
         </section>
 
         {/* Pricing */}
-        <section className="py-24 mx-auto max-w-6xl px-4">
+        <section className="py-24 mx-auto max-w-6xl px-4" id="planos">
           <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto items-stretch">
             {/* Mensal */}
             <div className="px-8 py-8 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm shadow-lg hover:shadow-xl hover:border-border transition-all flex flex-col">
@@ -302,53 +297,97 @@ const Landing = () => {
           </div>
         </section>
 
-        {/* FAQ Section simplified */}
-        <section className="py-24 border-t border-border/10 bg-card/5">
-          <div className="mx-auto max-w-3xl px-4 text-center">
+        {/* FAQ Section and Guarantee */}
+        <section className="py-24 border-t border-border/10 bg-card/5 relative">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-50" />
+          
+          <div className="mx-auto max-w-4xl px-4 text-center">
             <MessageSquare className="h-12 w-12 text-primary/40 mx-auto mb-6" />
-            <h2 className="font-display text-4xl font-bold mb-10 text-gradient-primary">Ainda com dúvida?</h2>
-            <div className="text-left space-y-6">
+            <h2 className="font-display text-4xl md:text-5xl font-bold mb-12 text-gradient-primary">Perguntas Frequentes</h2>
+            
+            <div className="text-left space-y-6 max-w-3xl mx-auto">
               {[
                 { q: "Preciso de experiência?", a: "Absolutamente nenhuma. A nossa IA faz o trabalho pesado de escrita e design. Você só precisa ter uma ideia de tema." },
                 { q: "O pagamento é seguro?", a: "Totalmente. Usamos tecnologia de criptografia de ponta e processadores de pagamento líderes de mercado para garantir sua total segurança." },
                 { q: "Posso vender os ebooks onde quiser?", a: "Sim! O conteúdo é seu. Você pode vender na Hotmart, Kiwify, Amazon ou até diretamente pelo link que nós geramos para você." }
               ].map((faq, i) => (
-                <div key={i} className="p-6 rounded-xl border border-yellow-400/30 bg-background/50 shadow-[0_10px_40px_-10px_rgba(234,179,8,0.25)]">
-                  <p className="font-bold mb-2 flex items-center gap-2">
-                    <Target className="h-4 w-4 text-primary" /> {faq.q}
+                <div key={i} className="p-8 rounded-2xl border border-primary/20 bg-background/60 shadow-lg hover:shadow-primary/5 transition-all duration-300 hover:border-primary/40">
+                  <p className="text-xl font-bold mb-3 flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-primary/10">
+                      <Target className="h-5 w-5 text-primary" />
+                    </div>
+                    {faq.q}
                   </p>
-                  <p className="text-sm text-muted-foreground">{faq.a}</p>
+                  <p className="text-base text-muted-foreground ml-12 leading-relaxed">{faq.a}</p>
                 </div>
               ))}
             </div>
-            <div className="mt-16 p-8 rounded-3xl gradient-primary/10 border border-yellow-400/30 shadow-[0_15px_50px_-10px_rgba(234,179,8,0.3)]">
-              <Heart className="h-10 w-10 text-primary mx-auto mb-4" />
-              <h3 className="text-2xl font-bold mb-4">Teste sem risco por 7 dias.</h3>
-              <p className="text-muted-foreground text-sm mb-8">Se em uma semana você não tiver criado seu primeiro ebook de sucesso, nós devolvemos cada centavo do seu investimento.</p>
-              <Link to="/auth">
-                <Button size="lg" className="gradient-primary text-primary-foreground px-10">QUERO COMEÇAR AGORA</Button>
-              </Link>
+
+            {/* Redesigned Guarantee Section */}
+            <div className="mt-20 relative p-[1px] rounded-3xl bg-gradient-to-br from-yellow-400 via-yellow-600/50 to-primary/50 shadow-[0_20px_80px_-15px_rgba(234,179,8,0.2)] hover:shadow-[0_20px_100px_-10px_rgba(234,179,8,0.3)] transition-all duration-500 overflow-hidden transform hover:-translate-y-1">
+              <div className="bg-background/95 backdrop-blur-3xl rounded-[23px] p-10 md:p-16 relative z-10 border border-black/20 flex flex-col items-center">
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[2px] bg-gradient-to-r from-transparent via-yellow-400 to-transparent opacity-60"></div>
+                
+                <div className="h-24 w-24 rounded-full bg-gradient-to-tr from-yellow-400 to-yellow-200 flex items-center justify-center shadow-[0_0_40px_rgba(250,204,21,0.5)] mb-8 animate-pulse">
+                  <ShieldCheck className="h-12 w-12 text-black" />
+                </div>
+                
+                <h3 className="text-3xl md:text-5xl font-display font-black mb-6 text-center tracking-tight">Garantia Incondicional de 7 Dias</h3>
+                <p className="text-muted-foreground text-center text-lg md:text-xl mb-12 max-w-2xl leading-relaxed">
+                  Se em uma semana você não tiver criado seu primeiro ebook de sucesso e não estiver completamente maravilhado com a plataforma, nós devolvemos <strong className="text-foreground">cada centavo</strong> do seu investimento. <span className="text-yellow-400 font-bold">Risco zero.</span>
+                </p>
+                
+                <Link to="/auth" className="w-full sm:w-auto relative z-20">
+                  <Button size="lg" className="w-full sm:w-auto h-16 px-12 text-xl font-black bg-yellow-400 hover:bg-yellow-300 text-black shadow-[0_0_40px_rgba(250,204,21,0.5)] hover:shadow-[0_0_60px_rgba(250,204,21,0.7)] hover:scale-[1.03] transition-all duration-300 rounded-2xl border-b-4 border-yellow-600 active:border-b-0 active:translate-y-1">
+                    QUERO COMEÇAR AGORA
+                  </Button>
+                </Link>
+              </div>
             </div>
+
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-white/5 py-12">
-        <div className="mx-auto max-w-6xl px-4 text-center">
-          <p className="text-sm font-bold mb-4">EbookAI Builder</p>
-          <p className="text-[10px] text-muted-foreground/60 leading-relaxed max-w-2xl mx-auto">
-            Disclaimer: Os resultados podem variar de pessoa para pessoa. Não garantimos faturamento imediato, 
-            pois o sucesso depende da aplicação das estratégias de marketing e qualidade do nicho escolhido. 
-            Todas as imagens geradas pela IA são de propriedade do criador.
-          </p>
-          <div className="mt-8 flex justify-center gap-6 text-[10px] text-muted-foreground">
-            <Link to="#" className="hover:text-primary transition">Termos de Uso</Link>
-            <Link to="#" className="hover:text-primary transition">Privacidade</Link>
-            <Link to="/suporte" className="hover:text-primary transition">Suporte</Link>
+      {/* Redesigned Footer */}
+      <footer className="relative bg-black pt-20 pb-12 overflow-hidden border-t border-white/5">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/5 blur-[150px] rounded-full pointer-events-none" />
+        
+        <div className="mx-auto max-w-7xl px-4 flex flex-col items-center relative z-10">
+          <Link to="/" className="flex items-center gap-4 mb-10 hover:scale-105 transition-transform duration-300">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(var(--primary-rgb),0.3)] border border-primary/30">
+              <img src={saasLogo} alt="EbookAI Builder" className="h-full w-full object-cover" />
+            </div>
+            <span className="font-display text-3xl font-black tracking-tight text-white">EbookAI <span className="text-primary">Builder</span></span>
+          </Link>
+          
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 mb-14 text-sm font-medium">
+            <Link to="#" className="text-muted-foreground hover:text-white transition-colors duration-200">Termos de Uso</Link>
+            <Link to="#" className="text-muted-foreground hover:text-white transition-colors duration-200">Políticas de Privacidade</Link>
+            <Link to="/suporte" className="text-muted-foreground hover:text-white transition-colors duration-200 flex items-center gap-2">
+              <LifeBuoy className="h-4 w-4" /> Central de Suporte
+            </Link>
           </div>
-          <p className="mt-8 text-[10px] text-muted-foreground/40">
-            © {new Date().getFullYear()} EbookAI Builder. Feito para criadores digitais.
-          </p>
+          
+          <div className="max-w-4xl text-center p-8 rounded-3xl bg-white/[0.02] border border-white/5 mb-14 shadow-2xl backdrop-blur-md">
+            <p className="text-xs md:text-sm text-muted-foreground/70 leading-relaxed font-light">
+              <strong className="text-muted-foreground font-semibold">Aviso Legal:</strong> Os resultados apresentados variam de pessoa para pessoa. A EbookAI Builder fornece tecnologia e ferramentas para criação e diagramação de ebooks, mas não garante faturamento ou ganhos imediatos, pois o sucesso depende da aplicação das estratégias de vendas, marketing e qualidade do nicho escolhido pelo autor. Todas as imagens e conteúdos gerados pela inteligência artificial na plataforma são de total propriedade do usuário criador.
+            </p>
+          </div>
+          
+          <div className="flex flex-col md:flex-row items-center justify-between w-full pt-8 border-t border-white/10 gap-6">
+            <p className="text-sm text-muted-foreground font-medium">
+              © {new Date().getFullYear()} <span className="text-white font-bold tracking-wide">EbookAI Builder</span>. Todos os direitos reservados.
+            </p>
+            <div className="flex items-center gap-6 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+               <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                 <ShieldCheck className="h-5 w-5 text-green-500" />
+                 Ambiente 100% Seguro
+               </div>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
