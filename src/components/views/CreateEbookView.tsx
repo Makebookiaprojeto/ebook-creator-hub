@@ -1124,13 +1124,13 @@ export function CreateEbookView() {
                     <p className="text-sm text-muted-foreground mb-4">Use esta mensagem persuasiva para aumentar sua conversão.</p>
                     <div className="relative">
                       <pre className="whitespace-pre-wrap font-sans text-sm bg-muted/50 p-4 pb-14 rounded-xl border border-dashed border-primary/20 leading-relaxed">
-                        {`Comprei sem grandes expectativas e me surpreendi, o conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava, em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação. Clique no link abaixo para saber mais !!!!\n\nLink: ${ebookLink}`}
+                        {`Já comecei a ler esse e-book e estou gostando bastante! 📚🔥\nConteúdo direto, fácil de entender e cheio de informações.\nSe tiver interesse, vale a pena conferir 👇\n\nLink: ${ebookLink}`}
                       </pre>
                       <Button
                         size="sm"
                         className="absolute bottom-3 right-3 bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm gap-2"
                         onClick={() => {
-                          const text = `Comprei sem grandes expectativas e me surpreendi, o conteúdo é direto ao ponto, fácil de aplicar e entregou exatamente o que eu procurava, em poucos dias já consegui colocar várias dicas em prática. Recomendo para quem quer aprender de forma rápida e sem complicação. Clique no link abaixo para saber mais !!!!\n\nLink: ${ebookLink}`;
+                          const text = `Já comecei a ler esse e-book e estou gostando bastante! 📚🔥\nConteúdo direto, fácil de entender e cheio de informações.\nSe tiver interesse, vale a pena conferir 👇\n\nLink: ${ebookLink}`;
                           navigator.clipboard.writeText(text);
                           toast.success("Mensagem copiada!");
                         }}
