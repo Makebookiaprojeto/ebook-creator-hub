@@ -96,12 +96,12 @@ const Landing = () => {
             </div>
           </div>
 
-          <div className="relative mx-auto max-w-5xl px-4 mt-32 sm:mt-40 animate-fade-in animation-delay-300 z-10">
+          <div className="relative mx-auto max-w-4xl px-4 mt-32 sm:mt-40 animate-fade-in animation-delay-300 z-10">
             <img
               src={heroShowcase}
               alt="EbookAI Builder Showcase"
               loading="lazy"
-              className="relative mx-auto w-full max-w-5xl rounded-2xl shadow-[0_25px_80px_-15px_rgba(234,179,8,0.35)] ring-1 ring-yellow-400/30"
+              className="relative mx-auto w-full max-w-4xl rounded-2xl shadow-[0_25px_80px_-15px_rgba(234,179,8,0.35)] ring-1 ring-yellow-400/30"
             />
           </div>
         </section>
