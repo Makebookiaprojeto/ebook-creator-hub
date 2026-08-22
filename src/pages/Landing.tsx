@@ -8,6 +8,7 @@ import {
   Target, Rocket, Heart, Crown, Clock,
   LayoutDashboard, Plus, Library, LifeBuoy, User, Bell, DollarSign, ShoppingCart, CreditCard, QrCode
 } from "lucide-react";
+import { PreviewCarousel } from "@/components/PreviewCarousel";
 import { CHECKOUT_LINKS } from "@/config/checkoutLinks";
 import saasLogo from "@/assets/saas-logo.jpg";
 import heroShowcase from "@/assets/hero-showcase.jpg";
@@ -93,12 +94,7 @@ const Landing = () => {
           </div>
 
           <div className="relative mx-auto max-w-4xl px-4 mt-32 sm:mt-40 animate-fade-in animation-delay-300 z-10">
-            <img
-              src={heroShowcase}
-              alt="EbookAI Builder Showcase"
-              loading="lazy"
-              className="relative mx-auto w-full max-w-4xl rounded-2xl shadow-[0_25px_80px_-15px_rgba(234,179,8,0.35)] ring-1 ring-yellow-400/30"
-            />
+            <PreviewCarousel />
           </div>
         </section>
 
