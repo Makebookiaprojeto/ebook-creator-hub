@@ -63,11 +63,7 @@ const Landing = () => {
       <main>
         {/* Modern Hero Section */}
         <section className="relative pt-24 pb-32 overflow-hidden bg-black">
-          {/* Animated Background Effects */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-primary/20 blur-[150px] rounded-full pointer-events-none" />
-          <div className="absolute -top-20 right-0 w-[500px] h-[500px] bg-yellow-400/10 blur-[120px] rounded-full pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary/15 blur-[100px] rounded-full pointer-events-none" />
+          {/* Background Effects Removed */}
 
           <div className="relative mx-auto max-w-5xl px-4 text-center z-10">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary mb-10 animate-fade-in backdrop-blur-sm shadow-[0_0_20px_rgba(var(--primary-rgb),0.2)]">
