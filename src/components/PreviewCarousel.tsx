@@ -40,7 +40,7 @@ export function PreviewCarousel() {
           alt={slide.alt}
           loading={index === 0 ? "eager" : "lazy"}
           className={cn(
-            "absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out",
+            "absolute inset-0 w-full h-full object-contain transition-opacity duration-1000 ease-in-out",
             currentSlide === index ? "opacity-100 z-10" : "opacity-0 z-0"
           )}
         />
