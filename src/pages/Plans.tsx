@@ -24,7 +24,7 @@ import {
   QrCode,
 } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
-import heroShowcase from "@/assets/hero-showcase.jpg";
+import { PreviewCarousel } from "@/components/PreviewCarousel";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -219,13 +219,8 @@ export default function Plans() {
           </Button>
 
           {/* Imagem de exibição do EbookAI Builder — mesma imagem da tela inicial */}
-          <div className="mt-16 relative mx-auto max-w-5xl px-4">
-            <img
-              src={heroShowcase}
-              alt="EbookAI Builder — ebook pronto, página de vendas e grupos de divulgação"
-              loading="lazy"
-              className="relative mx-auto w-full max-w-5xl rounded-2xl shadow-[0_25px_80px_-15px_rgba(234,179,8,0.35)] ring-1 ring-yellow-400/30"
-            />
+          <div className="mt-16 relative mx-auto max-w-4xl px-4">
+            <PreviewCarousel />
           </div>
         </section>
 
