@@ -52,7 +52,7 @@ const TESTIMONIALS = [
   {
     name: "Mariana Costa",
     role: "Coach de carreira",
-    text: "Em 2 semanas lancei meu primeiro eBook e já fiz R$ 4.300. A IA escreve do meu jeito, parece mágica.",
+    text: "Em 2 semanas lancei meu primeiro E-Book e já fiz R$ 4.300. A IA escreve do meu jeito, parece mágica.",
     rating: 5,
   },
   {
@@ -86,11 +86,11 @@ const FAQS = [
   },
   {
     q: "Preciso saber escrever para usar?",
-    a: "Não. A IA da plataforma escreve o eBook a partir das suas ideias. Você só precisa revisar e personalizar do seu jeito.",
+    a: "Não. A IA da plataforma escreve o E-Book a partir das suas ideias. Você só precisa revisar e personalizar do seu jeito.",
   },
   {
-    q: "Posso vender os eBooks que criar?",
-    a: "Sim! Todo eBook criado é 100% seu. Você recebe sua própria página de vendas e os pagamentos vão direto pra você.",
+    q: "Posso vender os E-Books que criar?",
+    a: "Sim! Todo E-Book criado é 100% seu. Você recebe sua própria página de vendas e os pagamentos vão direto pra você.",
   },
   {
     q: "Qual a diferença entre mensal e vitalício?",
@@ -196,10 +196,10 @@ export default function Plans() {
             Acesso liberado imediatamente
           </div>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5">
-            Comece a vender seu primeiro eBook ainda <span className="text-primary">esta semana</span>
+            Comece a vender seu primeiro E-Book ainda <span className="text-primary">esta semana</span>
           </h1>
           <p className="text-muted-foreground text-xl md:text-2xl mb-6 max-w-3xl mx-auto">
-            Crie, publique e venda eBooks profissionais com IA. Sem precisar
+            Crie, publique e venda E-Books profissionais com IA. Sem precisar
             saber escrever, designer ou programador.
           </p>
 
@@ -233,7 +233,7 @@ export default function Plans() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { icon: Users, value: "2.300+", label: "Criadores ativos" },
-              { icon: BookOpen, value: "8.700+", label: "eBooks publicados" },
+              { icon: BookOpen, value: "8.700+", label: "E-Books publicados" },
               { icon: TrendingUp, value: "R$ 1,2M", label: "Faturado pelos usuários" },
               { icon: Star, value: "4.9/5", label: "Nota média" },
             ].map((s) => (
@@ -277,7 +277,7 @@ export default function Plans() {
               <ul className="space-y-3 mb-8 flex-1">
                 <li className="flex items-start gap-2 text-sm">
                   <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                  <span>Criação de ebooks ilimitada</span>
+                  <span>Criação de E-Books ilimitada</span>
                 </li>
                 {BENEFITS.map((b) => (
                   <li key={b} className="flex items-start gap-2 text-sm">
@@ -307,11 +307,11 @@ export default function Plans() {
                   Vitalício
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-sm font-bold align-top">12x de</span>
+                  <span className="text-sm font-bold align-top">12x de R$</span>
                   <span className="text-6xl font-black">29,58</span>
                 </div>
                 <div className="text-sm font-bold text-muted-foreground mt-1">
-                  ou 247,90 à vista
+                  ou R$ 247,90 à vista
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
                   Pague uma vez e use para sempre.
@@ -321,7 +321,7 @@ export default function Plans() {
 
               <ul className="space-y-3 mb-8 flex-1">
                 {[
-                  "Criação de ebooks ilimitada",
+                  "Criação de E-Books ilimitada",
                   "IA premium (Cérebro Criativo)",
                   "Página de vendas de alta conversão",
                   "Checkout integrado",
@@ -432,7 +432,7 @@ export default function Plans() {
         {/* CTA FINAL */}
         <section className="max-w-3xl mx-auto px-6 py-16 text-center">
           <h2 className="text-2xl md:text-4xl font-bold mb-4">
-            Pronto para publicar seu primeiro eBook?
+            Pronto para publicar seu primeiro E-Book?
           </h2>
           <p className="text-muted-foreground mb-8">
             Junte-se a mais de 2.000 criadores que já estão faturando com a plataforma.
