@@ -218,9 +218,13 @@ export default function Plans() {
             Ver planos
           </Button>
 
-          {/* Imagem de exibição do EbookAI Builder — mesma imagem da tela inicial */}
-          <div className="mt-16 relative mx-auto max-w-4xl px-4">
-            <PreviewCarousel />
+          <div className="mt-16 relative mx-auto max-w-4xl px-4 flex flex-col items-center">
+            <h2 className="text-3xl sm:text-4xl font-black text-white mb-6 animate-slide-up">
+              Veja Por Dentro
+            </h2>
+            <div className="w-full">
+              <PreviewCarousel />
+            </div>
           </div>
         </section>
 
