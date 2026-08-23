@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 // Imagens (serão enviadas e substituídas pelo usuário em breve)
-import dashImg from "@/assets/preview-dashboard.png";
+import dashImg from "@/assets/preview-dashboard.jpg";
 import step1Img from "@/assets/preview-step1.png";
 import step2Img from "@/assets/preview-step2.png";
 import step3Img from "@/assets/preview-step3.png";
@@ -26,7 +26,7 @@ export function PreviewCarousel() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 2500); // 2.5 seconds per slide
+    }, 1700); // 1.7 seconds per slide
 
     return () => clearInterval(timer);
   }, []);
