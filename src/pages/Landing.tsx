@@ -94,7 +94,7 @@ const Landing = () => {
           </div>
 
           <div className="relative mx-auto max-w-4xl px-4 mt-32 sm:mt-40 animate-fade-in animation-delay-300 z-10 flex flex-col items-center">
-            <h2 className="text-3xl sm:text-4xl font-black text-white mb-6 animate-slide-up">
+            <h2 className="text-3xl sm:text-4xl font-black text-white mb-10 animate-slide-up">
               Veja Por Dentro
             </h2>
             <div className="w-full">
