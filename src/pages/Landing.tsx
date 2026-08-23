@@ -261,11 +261,11 @@ const Landing = () => {
                   Vitalício
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-sm font-bold align-top">12x de</span>
+                  <span className="text-sm font-bold align-top">12x de R$</span>
                   <span className="text-6xl font-black">29,58</span>
                 </div>
                 <div className="text-sm font-bold text-muted-foreground mt-1">
-                  ou 247,90 à vista
+                  ou R$ 247,90 à vista
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
                   Pague uma vez e use para sempre.
