@@ -417,10 +417,10 @@ export function DashboardView() {
         </div>
 
         <div className="grid grid-cols-2 gap-3 pt-1">
-          <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-black dark:bg-none px-4 py-3 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
-            <div className="relative flex items-center justify-between">
-              <div>
-                <p className="text-[11px] uppercase tracking-wider text-muted-foreground dark:text-white/80">E-Books</p>
+          <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-black dark:bg-none px-4 py-5 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
+              <div className="relative flex items-center justify-between">
+                <div>
+                  <p className="text-[11px] uppercase tracking-wider text-muted-foreground dark:text-white/80">E-Books</p>
                 <p className="font-display text-2xl font-bold tracking-tight">{totalEbooks}</p>
               </div>
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.3)]">
@@ -428,10 +428,10 @@ export function DashboardView() {
               </div>
             </div>
           </div>
-          <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-black dark:bg-none px-4 py-3 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
-            <div className="relative flex items-center justify-between">
-              <div>
-                <p className="text-[11px] uppercase tracking-wider text-muted-foreground dark:text-white/80">Vendas</p>
+          <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-black dark:bg-none px-4 py-5 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
+              <div className="relative flex items-center justify-between">
+                <div>
+                  <p className="text-[11px] uppercase tracking-wider text-muted-foreground dark:text-white/80">Vendas</p>
                 <p className="font-display text-2xl font-bold tracking-tight">{stats.totalSales + simulatedSales}</p>
               </div>
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.3)]">
@@ -466,7 +466,7 @@ function SalesByHourChart({ total }: { total: number }) {
     <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-black dark:bg-none p-5 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
       
       <div className="mb-4 flex items-center justify-between relative">
-        <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-300">Receita</h3>
+        <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-black dark:text-white">Receita</h3>
         <div className="flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1">
           <span className="h-1.5 w-1.5 rounded-full bg-blue-400 shadow-[0_0_8px_#60a5fa]" />
           <span className="text-[11px] font-medium text-blue-600 dark:text-blue-300">Últimos 30 dias</span>
