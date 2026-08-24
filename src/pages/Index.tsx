@@ -93,12 +93,12 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col w-full bg-background relative">
-      <header className="sticky top-0 z-10 flex h-14 items-center gap-3 bg-background/80 backdrop-blur-md px-4 sm:px-6 border-b border-border">
+      <header className="sticky top-0 z-10 flex h-14 items-center gap-3 bg-background/80 backdrop-blur-md px-4 sm:px-6">
         {/* Logo at top left */}
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl overflow-hidden shadow-glow">
           <img src={saasLogo} alt="EbookAI Builder" className="h-full w-full object-cover" />
         </div>
-        <span className="font-bold text-lg hidden sm:block">EbookAI Builder</span>
+        
         
         <div className="flex-1" />
         {view === "dashboard" && (
@@ -119,7 +119,7 @@ const Index = () => {
 
       {/* Dock Menu */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
-        <div className="flex items-center gap-2 sm:gap-6 bg-card/80 backdrop-blur-xl border border-border px-5 py-3 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+        <div className="flex items-center gap-2 sm:gap-6 bg-card/80 backdrop-blur-xl border border-border px-5 py-2 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
           <button onClick={() => setView("dashboard")} className={`flex flex-col items-center justify-center w-12 h-12 rounded-full transition-all ${view === "dashboard" ? "text-primary bg-primary/15" : "text-muted-foreground hover:text-foreground hover:bg-muted"}`} title="Dashboard">
             <LayoutDashboard className="h-5 w-5" />
           </button>
@@ -127,7 +127,7 @@ const Index = () => {
             <Library className="h-5 w-5" />
           </button>
           
-          <button onClick={() => setView("create")} className="flex items-center justify-center w-16 h-16 rounded-full transition-all bg-gradient-to-tr from-blue-600 to-blue-400 border border-blue-400/50 shadow-[0_0_25px_rgba(37,99,235,0.6)] hover:scale-105 active:scale-95 text-white -mt-8 relative" title="Nova Estrutura">
+          <button onClick={() => setView("create")} className="flex items-center justify-center w-16 h-16 rounded-full transition-all bg-black border-2 border-primary shadow-[0_0_15px_rgba(59,130,246,0.4)] hover:scale-105 active:scale-95 text-primary -mt-8 relative" title="Nova Estrutura">
             <Plus className="h-8 w-8" />
           </button>
           
