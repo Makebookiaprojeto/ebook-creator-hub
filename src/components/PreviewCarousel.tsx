@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 // Imagens (serão enviadas e substituídas pelo usuário em breve)
-import dashImg from "@/assets/preview-dashboard.jpg";
+import dashImg from "@/assets/preview-dashboard.png";
 import step1Img from "@/assets/preview-step1.png";
 import step2Img from "@/assets/preview-step2.png";
 import step3Img from "@/assets/preview-step3.png";
