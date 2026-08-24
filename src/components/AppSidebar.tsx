@@ -26,21 +26,14 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { getTestSaleConfig, setTestSaleConfig } from "@/lib/adminTestSales";
 
-type View = "dashboard" | "create" | "library" | "support" | "profile" | "integrations";
+type View = "dashboard" | "create" | "library" | "support" | "profile";
 
 interface Props {
   active: View;
   onChange: (v: View) => void;
 }
 
-const items: { id: View; title: string; icon: typeof LayoutDashboard }[] = [
-  { id: "dashboard", title: "Dashboard", icon: LayoutDashboard },
-  { id: "create", title: "Nova Estrutura", icon: Plus },
-  { id: "library", title: "Biblioteca", icon: Library },
-  { id: "support", title: "Suporte", icon: LifeBuoy },
-  { id: "profile", title: "Perfil", icon: User },
-  { id: "integrations", title: "Integrações", icon: Plug },
-];
+
 
 export function AppSidebar({ active, onChange }: Props) {
   const { state } = useSidebar();
@@ -119,62 +112,7 @@ export function AppSidebar({ active, onChange }: Props) {
         </div>
       </SidebarHeader>
 
-      <SidebarContent>
-        <SidebarGroup className="pt-6 pb-0">
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items
-                .filter((i) => i.id === "create")
-                .map((item) => {
-                  const isActive = active === item.id;
-                  return (
-                    <SidebarMenuItem key={item.id}>
-                      <SidebarMenuButton
-                        onClick={() => onChange(item.id)}
-                        style={{ color: "#D4AF37", boxShadow: "0 0 14px rgba(212,175,55,0.6)" }}
-                        className="bg-black hover:bg-black/90 font-bold text-[14px] h-10 py-2 border border-[#D4AF37]/40 justify-center"
-                      >
-                        {collapsed && <item.icon className="h-3.5 w-3.5" />}
-                        {!collapsed && <span className="text-[14px] -ml-2" style={{ color: "#D4AF37" }}><span className="text-[18px] leading-none align-middle relative -top-[2px]">+</span> NOVA ESTRUTURA</span>}
-
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarGroup className="pt-0">
-
-          <SidebarGroupLabel className="text-[13px]">Menu</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items
-                .filter((i) => i.id !== "create")
-                .map((item) => {
-                  const isActive = active === item.id;
-                  return (
-                    <SidebarMenuItem key={item.id}>
-                      <SidebarMenuButton
-                        onClick={() => onChange(item.id)}
-                        className={
-                          (isActive
-                            ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-                            : "hover:bg-sidebar-accent/60") + " text-[15px]"
-                        }
-                      >
-                        <item.icon className="h-4 w-4" />
-                        {!collapsed && <span className="text-[15px]">{item.title}</span>}
-
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
+      
 
       <SidebarFooter className="border-t border-sidebar-border">
         {!collapsed && (
