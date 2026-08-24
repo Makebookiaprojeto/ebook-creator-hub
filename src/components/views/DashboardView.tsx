@@ -24,13 +24,13 @@ import {
 
 const BASE_STATS: Record<string, any> = {
   "tr8200774@gmail.com": {
-    ebooks: 0,
-    totalSales: 0,
-    totalRevenue: 0,
-    revenueToday: 0,
-    revenue7d: 0,
-    revenue30d: 0,
-    payments: { "Pix": 0, "Cartão de Crédito": 0, "Pix Automático": 0, "Boleto": 0 }
+    ebooks: 43,
+    totalSales: 328,
+    totalRevenue: 9232.80,
+    revenueToday: 748.90,
+    revenue7d: 2651.80,
+    revenue30d: 9232.80,
+    payments: { "Pix": 5816.66, "Cartão de Crédito": 1938.89, "Pix Automático": 1200.27, "Boleto": 276.98 }
   },
   "morraessleleo@gmail.com": {
     ebooks: 43,
@@ -180,8 +180,7 @@ export function DashboardView() {
         };
       }
 
-      let realSales = sales || [];
-      if (userEmail === "tr8200774@gmail.com") realSales = [];
+      const realSales = sales || [];
       const totalSalesCount = realSales.length + base.totalSales;
       const realTotalRevenue = realSales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
       const totalRevenueValue = realTotalRevenue + base.totalRevenue;
@@ -204,12 +203,12 @@ export function DashboardView() {
         .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
 
       setStats({
-        totalSales: (userEmail === "tr8200774@gmail.com" || isAdmin) ? 0 : totalSalesCount,
-        totalRevenue: (userEmail === "tr8200774@gmail.com" || isAdmin) ? 0 : totalRevenueValue,
-        revenueToday: (userEmail === "tr8200774@gmail.com" || isAdmin) ? 0 : realRevenueToday + base.revenueToday,
-        revenue7d: (userEmail === "tr8200774@gmail.com" || isAdmin) ? 0 : realRevenue7d + base.revenue7d,
-        revenue30d: (userEmail === "tr8200774@gmail.com" || isAdmin) ? 0 : realRevenue30d + base.revenue30d,
-        views: (userEmail === "tr8200774@gmail.com" || isAdmin) ? "0" : String(viewsCount || 0)
+        totalSales: totalSalesCount,
+        totalRevenue: totalRevenueValue,
+        revenueToday: realRevenueToday + base.revenueToday,
+        revenue7d: realRevenue7d + base.revenue7d,
+        revenue30d: realRevenue30d + base.revenue30d,
+        views: String(viewsCount || 0)
       });
 
       const last6Months = Array.from({ length: 6 }, (_, i) => {
@@ -230,7 +229,7 @@ export function DashboardView() {
         if (m) m.vendas += 1;
       });
 
-      setSalesHistory((userEmail === "tr8200774@gmail.com" || isAdmin) ? last6Months.map(m => ({ ...m, vendas: 0 })) : last6Months);
+      setSalesHistory(last6Months);
 
       const methods = ["Pix", "Cartão de Crédito", "Boleto", "Pix Automático"];
 
@@ -250,7 +249,7 @@ export function DashboardView() {
         };
       });
 
-      setPaymentStats((userEmail === "tr8200774@gmail.com" || isAdmin) ? methods.map(m => ({ name: m, conversion: "0%", value: "R$ 0,00" })) : calculatedPaymentStats);
+      setPaymentStats(calculatedPaymentStats);
     } catch (error) {
       console.error("Error fetching dashboard stats:", error);
     } finally {
@@ -355,7 +354,7 @@ export function DashboardView() {
   } else if (isAdmin) {
     baseEbooks = BASE_STATS["tr8200774@gmail.com"].ebooks;
   }
-  const totalEbooks = (userEmail === "tr8200774@gmail.com" || isAdmin) ? 0 : baseEbooks + (ebooks?.length || 0);
+  const totalEbooks = baseEbooks + (ebooks?.length || 0);
 
   return (
     <div className="space-y-3 animate-fade-in py-1 -mt-6">
@@ -404,7 +403,7 @@ export function DashboardView() {
             </div>
             <div className="mt-1 flex items-end justify-between gap-3">
               <p className="font-display text-7xl font-bold tracking-tight text-foreground">
-                R$ {((profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d) + ((userEmail === "tr8200774@gmail.com" || isAdmin) ? 0 : simulatedRevenue)).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                R$ {((profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d) + simulatedRevenue).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
               </p>
               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.35)]">
                 <DollarSign className="h-5 w-5" />
@@ -433,7 +432,7 @@ export function DashboardView() {
             <div className="relative flex items-center justify-between">
               <div>
                 <p className="text-[11px] uppercase tracking-wider text-muted-foreground dark:text-white/80">Vendas</p>
-                <p className="font-display text-2xl font-bold tracking-tight">{stats.totalSales + ((userEmail === "tr8200774@gmail.com" || isAdmin) ? 0 : simulatedSales)}</p>
+                <p className="font-display text-2xl font-bold tracking-tight">{stats.totalSales + simulatedSales}</p>
               </div>
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.3)]">
                 <ShoppingCart className="h-4 w-4" />
