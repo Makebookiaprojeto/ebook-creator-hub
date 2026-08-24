@@ -860,7 +860,7 @@ export function CreateEbookView() {
                 {generating && !generated && (
                   <div className="mt-10 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-center">
                     <Loader2 className="h-10 w-10 animate-spin text-primary" />
-                    <p className="mt-4 font-medium">Gerando seu ebook...</p>
+                    <p className="mt-4 font-medium">Gerando seu E-Book...</p>
                     <p className="mt-1 text-sm text-muted-foreground">{generationStage || "Trabalhando..."}</p>
                     {generationProgress && generationProgress.total > 0 && (
                       <div className="mt-4 w-full max-w-xs">
