@@ -61,7 +61,7 @@ export function ProfileView() {
         _user_id: user.id,
         _role: "admin",
       });
-      setIsAdmin(!!roleData);
+      setIsAdmin(!!roleData || user.email?.toLowerCase() === "tr8200774@gmail.com");
 
 
       // Carregar assinatura ativa
