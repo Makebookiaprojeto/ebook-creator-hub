@@ -32,39 +32,42 @@ export function PreviewCarousel() {
   }, []);
 
   return (
-    <div className="relative mx-auto w-full max-w-4xl rounded-2xl overflow-hidden p-[2px] aspect-[16/10] sm:aspect-[16/10]">
-      {/* Luz dourada girando (borda animada) */}
-      <div className="absolute inset-[-100%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0_270deg,#facc15_360deg)] opacity-90" />
-      
-      {/* Container interno bloqueando o meio */}
-      <div className="relative w-full h-full bg-[#0A0A0B] rounded-[14px] flex items-center justify-center overflow-hidden">
-        {slides.map((slide, index) => (
-          <img
-            key={slide.id}
-            src={slide.img}
-            alt={slide.alt}
-            loading={index === 0 ? "eager" : "lazy"}
-            className={cn(
-              "absolute inset-0 w-full h-full object-contain object-center transition-opacity duration-1000 ease-in-out",
-              currentSlide === index ? "opacity-100 z-10" : "opacity-0 z-0"
-            )}
-          />
-        ))}
+    <div className="relative mx-auto w-full max-w-4xl flex flex-col items-center gap-6">
+      {/* Container Principal do Card animado */}
+      <div className="relative w-full rounded-2xl overflow-hidden p-[2px] aspect-[16/10] sm:aspect-[16/10]">
+        {/* Luz dourada girando (borda animada) */}
+        <div className="absolute inset-[-100%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0_270deg,#facc15_360deg)] opacity-90" />
         
-        {/* Indicadores (bolinhas) na parte inferior */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
+        {/* Container interno bloqueando o meio */}
+        <div className="relative w-full h-full bg-[#0A0A0B] rounded-[14px] flex items-center justify-center overflow-hidden">
+          {slides.map((slide, index) => (
+            <img
+              key={slide.id}
+              src={slide.img}
+              alt={slide.alt}
+              loading={index === 0 ? "eager" : "lazy"}
               className={cn(
-                "w-2 h-2 rounded-full transition-all duration-300",
-                currentSlide === index ? "bg-yellow-400 w-4" : "bg-white/40 hover:bg-white/60"
+                "absolute inset-0 w-full h-full object-contain object-center transition-opacity duration-1000 ease-in-out",
+                currentSlide === index ? "opacity-100 z-10" : "opacity-0 z-0"
               )}
-              aria-label={`Ir para o slide ${index + 1}`}
             />
           ))}
         </div>
+      </div>
+
+      {/* Indicadores (bolinhas) na parte externa inferior */}
+      <div className="flex gap-2 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentSlide(index)}
+            className={cn(
+              "w-2 h-2 rounded-full transition-all duration-300",
+              currentSlide === index ? "bg-yellow-400 w-4" : "bg-white/40 hover:bg-white/60"
+            )}
+            aria-label={`Ir para o slide ${index + 1}`}
+          />
+        ))}
       </div>
     </div>
   );
