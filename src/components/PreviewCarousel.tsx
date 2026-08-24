@@ -32,7 +32,7 @@ export function PreviewCarousel() {
   }, []);
 
   return (
-    <div className="relative mx-auto w-full max-w-4xl rounded-2xl shadow-[0_25px_80px_-15px_rgba(234,179,8,0.35)] ring-1 ring-yellow-400/30 overflow-hidden bg-[#0A0A0B] aspect-[16/8] sm:aspect-[16/9] flex items-center justify-center">
+    <div className="relative mx-auto w-full max-w-4xl rounded-2xl shadow-[0_25px_80px_-15px_rgba(234,179,8,0.35)] ring-1 ring-yellow-400/30 overflow-hidden bg-[#0A0A0B] aspect-[16/8] sm:aspect-[16/9] flex items-center justify-center transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_30px_100px_-15px_rgba(234,179,8,0.5)]">
       {slides.map((slide, index) => (
         <img
           key={slide.id}
