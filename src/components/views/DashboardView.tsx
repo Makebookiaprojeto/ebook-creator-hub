@@ -204,12 +204,12 @@ export function DashboardView() {
         .reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
 
       setStats({
-        totalSales: totalSalesCount,
-        totalRevenue: totalRevenueValue,
-        revenueToday: realRevenueToday + base.revenueToday,
-        revenue7d: realRevenue7d + base.revenue7d,
-        revenue30d: realRevenue30d + base.revenue30d,
-        views: String(userEmail === "tr8200774@gmail.com" ? 0 : (viewsCount || 0))
+        totalSales: (userEmail === "tr8200774@gmail.com" || isAdmin) ? 0 : totalSalesCount,
+        totalRevenue: (userEmail === "tr8200774@gmail.com" || isAdmin) ? 0 : totalRevenueValue,
+        revenueToday: (userEmail === "tr8200774@gmail.com" || isAdmin) ? 0 : realRevenueToday + base.revenueToday,
+        revenue7d: (userEmail === "tr8200774@gmail.com" || isAdmin) ? 0 : realRevenue7d + base.revenue7d,
+        revenue30d: (userEmail === "tr8200774@gmail.com" || isAdmin) ? 0 : realRevenue30d + base.revenue30d,
+        views: (userEmail === "tr8200774@gmail.com" || isAdmin) ? "0" : String(viewsCount || 0)
       });
 
       const last6Months = Array.from({ length: 6 }, (_, i) => {
@@ -230,7 +230,7 @@ export function DashboardView() {
         if (m) m.vendas += 1;
       });
 
-      setSalesHistory(last6Months);
+      setSalesHistory((userEmail === "tr8200774@gmail.com" || isAdmin) ? last6Months.map(m => ({ ...m, vendas: 0 })) : last6Months);
 
       const methods = ["Pix", "Cartão de Crédito", "Boleto", "Pix Automático"];
 
@@ -250,7 +250,7 @@ export function DashboardView() {
         };
       });
 
-      setPaymentStats(calculatedPaymentStats);
+      setPaymentStats((userEmail === "tr8200774@gmail.com" || isAdmin) ? methods.map(m => ({ name: m, conversion: "0%", value: "R$ 0,00" })) : calculatedPaymentStats);
     } catch (error) {
       console.error("Error fetching dashboard stats:", error);
     } finally {
@@ -355,7 +355,7 @@ export function DashboardView() {
   } else if (isAdmin) {
     baseEbooks = BASE_STATS["tr8200774@gmail.com"].ebooks;
   }
-  const totalEbooks = userEmail === "tr8200774@gmail.com" ? 0 : baseEbooks + (ebooks?.length || 0);
+  const totalEbooks = (userEmail === "tr8200774@gmail.com" || isAdmin) ? 0 : baseEbooks + (ebooks?.length || 0);
 
   return (
     <div className="space-y-3 animate-fade-in py-1 -mt-6">
