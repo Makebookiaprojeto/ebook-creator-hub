@@ -190,7 +190,7 @@ export function LibraryView({ onCreateNew }: Props) {
       setOpenChapters(chapters);
     } catch (err) {
       console.error(err);
-      toast.error("Não foi possível carregar o eBook.");
+      toast.error("Não foi possível carregar o E-Book.");
       setOpenEbook(null);
     } finally {
       setLoadingPreview(false);
@@ -245,7 +245,7 @@ export function LibraryView({ onCreateNew }: Props) {
       const { chapters } = await getEbookWithChapters(eb.id);
       
       if (!chapters || chapters.length === 0) {
-        throw new Error("O eBook ainda não possui conteúdo para gerar o PDF.");
+        throw new Error("O E-Book ainda não possui conteúdo para gerar o PDF.");
       }
 
       const pdfUrl = await generateEbookPDF(
@@ -273,7 +273,7 @@ export function LibraryView({ onCreateNew }: Props) {
     if (!confirmDelete) return;
     try {
       await deleteEbook(confirmDelete.id);
-      toast.success("eBook deletado.");
+      toast.success("E-Book deletado.");
     } catch {
       toast.error("Erro ao deletar.");
     } finally {
@@ -287,7 +287,7 @@ export function LibraryView({ onCreateNew }: Props) {
         <div>
           <h1 className="font-display text-3xl font-bold">Biblioteca</h1>
           <p className="mt-1 text-muted-foreground">
-            Todos os seus eBooks gerados.
+            Todos os seus E-Books gerados.
           </p>
         </div>
         {onCreateNew && (
@@ -304,9 +304,9 @@ export function LibraryView({ onCreateNew }: Props) {
       ) : ebooks.length === 0 ? (
         <div className="rounded-2xl border border-dashed bg-card/40 p-12 text-center">
           <BookOpen className="mx-auto h-12 w-12 text-muted-foreground/50" />
-          <h2 className="mt-4 font-display text-lg font-semibold">Nenhum eBook ainda</h2>
+          <h2 className="mt-4 font-display text-lg font-semibold">Nenhum E-Book ainda</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Crie seu primeiro eBook para vê-lo aqui.
+            Crie seu primeiro E-Book para vê-lo aqui.
           </p>
           {onCreateNew && (
             <Button onClick={onCreateNew} className="mt-5 gradient-primary text-primary-foreground">
@@ -355,7 +355,7 @@ export function LibraryView({ onCreateNew }: Props) {
                     variant="secondary"
                     className="flex-1 min-w-[70px]"
                     onClick={() => handlePreview(eb)}
-                    title="Ver eBook"
+                    title="Ver E-Book"
                   >
                     <Eye className="h-3.5 w-3.5" /> Ver
                   </Button>
@@ -378,7 +378,7 @@ export function LibraryView({ onCreateNew }: Props) {
                     variant="ghost"
                     onClick={() => setConfirmDelete(eb)}
                     className="w-9 h-9 p-0 shrink-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                    title="Deletar eBook"
+                    title="Deletar E-Book"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </Button>
@@ -545,7 +545,7 @@ export function LibraryView({ onCreateNew }: Props) {
             <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
               <Trash2 className="h-6 w-6 text-destructive" />
             </div>
-            <AlertDialogTitle className="text-center">Deletar eBook?</AlertDialogTitle>
+            <AlertDialogTitle className="text-center">Deletar E-Book?</AlertDialogTitle>
             <AlertDialogDescription className="text-center">
               Tem certeza que deseja deletar permanentemente:
               <span className="mt-2 block rounded-lg border bg-muted/50 p-3 font-semibold text-foreground">
