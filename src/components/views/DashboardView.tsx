@@ -422,7 +422,7 @@ export function DashboardView() {
             <div className="pointer-events-none absolute -top-16 -right-16 h-32 w-32 rounded-full bg-blue-500/20 blur-3xl" />
             <div className="relative flex items-center justify-between">
               <div>
-                <p className="text-[11px] uppercase tracking-wider text-muted-foreground dark:text-white/80">Ebooks</p>
+                <p className="text-[11px] uppercase tracking-wider text-muted-foreground dark:text-white/80">E-Books</p>
                 <p className="font-display text-2xl font-bold tracking-tight">{totalEbooks}</p>
               </div>
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.3)]">
