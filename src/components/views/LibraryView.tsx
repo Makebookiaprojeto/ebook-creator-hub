@@ -428,53 +428,7 @@ export function LibraryView({ onCreateNew }: Props) {
 
                  {/* Integração Cakto */}
                  <div className="mt-4 pt-4 border-t space-y-3">
-                   <div className="flex items-center gap-2 mb-1">
-                     <div className="p-1 rounded bg-primary/10">
-                       <Link2 className="h-3.5 w-3.5 text-primary" />
-                     </div>
-                     <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Integração</span>
-                   </div>
-
-                   <div>
-                     <label className="mb-1 flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground uppercase">
-                       URL de Checkout
-                     </label>
-                     <Input
-                       placeholder="Link do seu Checkout"
-                       value={checkoutUrlDrafts[eb.id] ?? (eb as any).cakto_checkout_url ?? ""}
-                       onChange={(e) =>
-                         setCheckoutUrlDrafts((p) => ({ ...p, [eb.id]: e.target.value }))
-                       }
-                       className="h-8 text-xs"
-                     />
-                   </div>
-
-                   <div>
-                     <label className="mb-1 flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground uppercase">
-                       ID do Produto
-                     </label>
-                     <Input
-                       placeholder="ID do Produto"
-                       value={productIdDrafts[eb.id] ?? (eb as any).cakto_product_id ?? ""}
-                       onChange={(e) =>
-                         setProductIdDrafts((p) => ({ ...p, [eb.id]: e.target.value }))
-                       }
-                       className="h-8 text-xs font-mono"
-                     />
-                   </div>
-
-                   <Button
-                     size="sm"
-                     className="w-full h-8 text-xs font-semibold"
-                     onClick={() => saveCaktoSettings(eb)}
-                     disabled={savingCheckoutId === eb.id}
-                   >
-                     {savingCheckoutId === eb.id ? (
-                       <><Loader2 className="mr-2 h-3 w-3 animate-spin" /> Salvando...</>
-                     ) : (
-                       "Salvar Integração"
-                     )}
-                   </Button>
+                   
 
                    {eb.slug && (
                      <div className="pt-2">
