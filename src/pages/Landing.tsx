@@ -81,13 +81,13 @@ const Landing = () => {
             </h1>
             
             <p className="mx-auto max-w-2xl text-lg sm:text-xl mb-12 animate-slide-up animation-delay-200 text-slate-300">
-              Transforme uma simples ideia em um Ebook pronto para vender em poucos minutos. Nossa IA cria o conteúdo, desenvolve uma capa profissional, monta sua página de vendas e entrega tudo preparado para você começar a faturar.
+              Transforme uma simples ideia em um E-Book pronto para vender em poucos minutos. Nossa IA cria o conteúdo, desenvolve uma capa profissional, monta sua página de vendas e entrega tudo preparado para você começar a faturar.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 animate-slide-up animation-delay-300">
               <Link to="/auth" className="w-full sm:w-auto">
                 <Button size="lg" className="w-full sm:w-auto h-16 px-10 text-lg font-black bg-yellow-400 hover:bg-yellow-300 text-black shadow-[0_0_40px_rgba(250,204,21,0.4)] hover:shadow-[0_0_60px_rgba(250,204,21,0.6)] hover:scale-105 transition-all duration-300 rounded-2xl border-b-4 border-yellow-600 active:border-b-0 active:translate-y-1">
-                  Criar meu Ebook agora <ArrowRight className="ml-2 h-6 w-6" />
+                  Criar meu E-Book agora <ArrowRight className="ml-2 h-6 w-6" />
                 </Button>
               </Link>
             </div>
@@ -189,7 +189,7 @@ const Landing = () => {
                 { 
                   name: "Juliana Santos", 
                   role: "Ex-CLT", 
-                  text: "Sempre quis ter meu negócio digital. Com a criação ilimitada de ebooks, eu consigo testar vários nichos até achar o campeão. Já pedi demissão!",
+                  text: "Sempre quis ter meu negócio digital. Com a criação ilimitada de E-Books, eu consigo testar vários nichos até achar o campeão. Já pedi demissão!",
                   rating: 5
                 }
               ].map((t, i) => (
@@ -236,7 +236,7 @@ const Landing = () => {
                 </p>
               </div>
               <ul className="space-y-3 mb-8 flex-1">
-                {["Criação de ebooks ilimitada", "IA premium (Cérebro Criativo)", "Página de vendas de alta conversão", "Checkout integrado", "Suporte prioritário"].map(item => (
+                {["Criação de E-Books ilimitada", "IA premium (Cérebro Criativo)", "Página de vendas de alta conversão", "Checkout integrado", "Suporte prioritário"].map(item => (
                   <li key={item} className="flex items-start gap-2 text-sm font-medium">
                     <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" /> <span>{item}</span>
                   </li>
@@ -272,7 +272,7 @@ const Landing = () => {
                 </p>
               </div>
               <ul className="space-y-3 mb-8 flex-1">
-                {["Criação de ebooks ilimitada", "IA premium (Cérebro Criativo)", "Página de vendas de alta conversão", "Checkout integrado", "Suporte prioritário", "Pagamento único", "Atualizações vitalícias inclusas"].map(item => (
+                {["Criação de E-Books ilimitada", "IA premium (Cérebro Criativo)", "Página de vendas de alta conversão", "Checkout integrado", "Suporte prioritário", "Pagamento único", "Atualizações vitalícias inclusas"].map(item => (
                   <li key={item} className="flex items-start gap-2 text-sm font-medium">
                     <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" /> <span>{item}</span>
                   </li>
@@ -307,7 +307,7 @@ const Landing = () => {
               {[
                 { q: "Preciso de experiência?", a: "Absolutamente nenhuma. A nossa IA faz o trabalho pesado de escrita e design. Você só precisa ter uma ideia de tema." },
                 { q: "O pagamento é seguro?", a: "Totalmente. Usamos tecnologia de criptografia de ponta e processadores de pagamento líderes de mercado para garantir sua total segurança." },
-                { q: "Posso vender os ebooks onde quiser?", a: "Sim! O conteúdo é seu. Você pode vender na Hotmart, Kiwify, Amazon ou até diretamente pelo link que nós geramos para você." }
+                { q: "Posso vender os E-Books onde quiser?", a: "Sim! O conteúdo é seu. Você pode vender na Hotmart, Kiwify, Amazon ou até diretamente pelo link que nós geramos para você." }
               ].map((faq, i) => (
                 <div key={i} className="p-8 rounded-2xl border border-primary/20 bg-background/60 shadow-lg hover:shadow-primary/5 transition-all duration-300 hover:border-primary/40">
                   <p className="text-xl font-bold mb-3 flex items-center gap-3">
@@ -333,7 +333,7 @@ const Landing = () => {
                 
                 <h3 className="text-3xl md:text-5xl font-display font-black mb-6 text-center tracking-tight">Garantia Incondicional de 7 Dias</h3>
                 <p className="text-muted-foreground text-center text-lg md:text-xl mb-12 max-w-2xl leading-relaxed">
-                  Se em uma semana você não tiver criado seu primeiro ebook de sucesso e não estiver completamente maravilhado com a plataforma, nós devolvemos <strong className="text-foreground">cada centavo</strong> do seu investimento. <span className="text-yellow-400 font-bold">Risco zero.</span>
+                  Se em uma semana você não tiver criado seu primeiro E-Book de sucesso e não estiver completamente maravilhado com a plataforma, nós devolvemos <strong className="text-foreground">cada centavo</strong> do seu investimento. <span className="text-yellow-400 font-bold">Risco zero.</span>
                 </p>
                 
                 <Link to="/auth" className="w-full sm:w-auto relative z-20">
@@ -371,7 +371,7 @@ const Landing = () => {
           
           <div className="max-w-4xl text-center p-8 rounded-3xl bg-white/[0.02] border border-white/5 mb-14 shadow-2xl backdrop-blur-md">
             <p className="text-xs md:text-sm text-muted-foreground/70 leading-relaxed font-light">
-              <strong className="text-muted-foreground font-semibold">Aviso Legal:</strong> Os resultados apresentados variam de pessoa para pessoa. A EbookAI Builder fornece tecnologia e ferramentas para criação e diagramação de ebooks, mas não garante faturamento ou ganhos imediatos, pois o sucesso depende da aplicação das estratégias de vendas, marketing e qualidade do nicho escolhido pelo autor. Todas as imagens e conteúdos gerados pela inteligência artificial na plataforma são de total propriedade do usuário criador.
+              <strong className="text-muted-foreground font-semibold">Aviso Legal:</strong> Os resultados apresentados variam de pessoa para pessoa. A EbookAI Builder fornece tecnologia e ferramentas para criação e diagramação de E-Books, mas não garante faturamento ou ganhos imediatos, pois o sucesso depende da aplicação das estratégias de vendas, marketing e qualidade do nicho escolhido pelo autor. Todas as imagens e conteúdos gerados pela inteligência artificial na plataforma são de total propriedade do usuário criador.
             </p>
           </div>
           
