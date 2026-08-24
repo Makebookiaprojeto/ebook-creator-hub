@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { NotificationBell } from "@/components/NotificationBell";
 import { DashboardView } from "@/components/views/DashboardView";
 import { CreateEbookView } from "@/components/views/CreateEbookView";
@@ -6,7 +6,9 @@ import { LibraryView } from "@/components/views/LibraryView";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SupportView } from "@/components/views/SupportView";
 import { ProfileView } from "@/components/views/ProfileView";
-import { LayoutDashboard, Library, Plus, LifeBuoy, User, LogOut, Sliders } from "lucide-react";
+import { SearchView } from "@/components/views/SearchView";
+import { IntegrationsView } from "@/components/views/IntegrationsView";
+import { LayoutDashboard, Library, Plus, LifeBuoy, User, LogOut, Sliders, Search, Plug } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { resolveDisplayName, initialFromName } from "@/lib/userName";
@@ -19,7 +21,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { getTestSaleConfig, setTestSaleConfig } from "@/lib/adminTestSales";
 
-type View = "dashboard" | "create" | "library" | "support" | "profile";
+type View = "dashboard" | "create" | "library" | "support" | "profile" | "search" | "integrations";
 
 const Index = () => {
   const [view, setView] = useState<View>("dashboard");
@@ -117,6 +119,8 @@ const Index = () => {
         {view === "library" && <LibraryView onCreateNew={() => setView("create")} />}
         {view === "support" && <SupportView />}
         {view === "profile" && <ProfileView />}
+        {view === "search" && <SearchView />}
+        {view === "integrations" && <IntegrationsView />}
       </main>
 
       {/* Dock Menu */}
@@ -127,10 +131,16 @@ const Index = () => {
           </button>
           <button onClick={() => setView("library")} className={`flex flex-col items-center justify-center w-10 h-10 rounded-full transition-all ${view === "library" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Biblioteca">
             <Library className="h-4 w-4" />
+            </button>
+          <button onClick={() => setView("search")} className={`flex flex-col items-center justify-center w-10 h-10 rounded-full transition-all ${view === "search" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Buscar">
+            <Search className="h-4 w-4" />
           </button>
           
           <button onClick={() => setView("create")} className="flex items-center justify-center w-14 h-14 rounded-full transition-all bg-white dark:bg-black border-2 border-blue-600 shadow-[0_0_15px_rgba(59,130,246,0.4)] hover:scale-105 active:scale-95 text-blue-600 -mt-6 relative" title="Nova Estrutura">
             <Plus className="h-6 w-6" />
+            </button>
+          <button onClick={() => setView("integrations")} className={`flex flex-col items-center justify-center w-10 h-10 rounded-full transition-all ${view === "integrations" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Integrações">
+            <Plug className="h-4 w-4" />
           </button>
           
           <button onClick={() => setView("support")} className={`flex flex-col items-center justify-center w-10 h-10 rounded-full transition-all ${view === "support" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Suporte">
