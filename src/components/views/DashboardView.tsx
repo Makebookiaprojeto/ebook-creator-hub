@@ -362,7 +362,6 @@ export function DashboardView() {
       <div className="space-y-3">
         <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-black dark:bg-none px-7 pt-3 pb-7 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
           
-          <div className="pointer-events-none absolute -bottom-24 -left-16 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl" />
           <div className="relative">
             <div className="flex items-start justify-between gap-3">
               <div className="relative inline-block">
@@ -419,7 +418,6 @@ export function DashboardView() {
 
         <div className="grid grid-cols-2 gap-3 pt-1">
           <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-black dark:bg-none px-4 py-3 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
-            <div className="pointer-events-none absolute -top-16 -right-16 h-32 w-32 rounded-full bg-blue-500/20 blur-3xl" />
             <div className="relative flex items-center justify-between">
               <div>
                 <p className="text-[11px] uppercase tracking-wider text-muted-foreground dark:text-white/80">E-Books</p>
@@ -431,7 +429,6 @@ export function DashboardView() {
             </div>
           </div>
           <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-black dark:bg-none px-4 py-3 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
-            <div className="pointer-events-none absolute -top-16 -right-16 h-32 w-32 rounded-full bg-blue-500/20 blur-3xl" />
             <div className="relative flex items-center justify-between">
               <div>
                 <p className="text-[11px] uppercase tracking-wider text-muted-foreground dark:text-white/80">Vendas</p>
@@ -468,8 +465,6 @@ function SalesByHourChart({ total }: { total: number }) {
   return (
     <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-black dark:bg-none p-5 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
       
-      <div className="pointer-events-none absolute -bottom-24 -left-16 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl" />
-
       <div className="mb-4 flex items-center justify-between relative">
         <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-300">Receita</h3>
         <div className="flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1">
