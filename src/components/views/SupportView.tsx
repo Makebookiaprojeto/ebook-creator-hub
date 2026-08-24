@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 const faqs = [
-  { q: "Como funciona a geração de ebooks com IA?", a: "Nossa IA cria estrutura, capítulos e conteúdo a partir do seu nicho. Você edita tudo livremente antes de publicar." },
+  { q: "Como funciona a geração de E-Books com IA?", a: "Nossa IA cria estrutura, capítulos e conteúdo a partir do seu nicho. Você edita tudo livremente antes de publicar." },
   { q: "Como recebo os pagamentos das vendas?", a: "Os pagamentos são processados por algum checkout de sua preferência, garantindo segurança e rapidez." },
-  { q: "Existe limite de ebooks?", a: "Não! No nosso SaaS você tem liberdade total para criar quantos eBooks quiser e dominar múltiplos nichos." },
+  { q: "Existe limite de E-Books?", a: "Não! No nosso SaaS você tem liberdade total para criar quantos E-Books quiser e dominar múltiplos nichos." },
   { q: "Posso cancelar quando quiser?", a: "Sim, no plano mensal você pode cancelar a qualquer momento sem fidelidade ou multas." },
 ];
 import { Send, MessageSquare } from "lucide-react";
