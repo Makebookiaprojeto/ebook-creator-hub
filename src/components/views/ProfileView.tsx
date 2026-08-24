@@ -259,9 +259,11 @@ export function ProfileView() {
               <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <Crown className="h-3 w-3 text-amber-500" />
                 <span className="font-medium">
-                  {activeSubscription 
-                    ? `Plano ${activeSubscription.plan_type === 'lifetime' ? 'Premium' : 'Mensal'}` 
-                    : "Plano Gratuito"}
+                  {isAdmin 
+                    ? "Plano ADM" 
+                    : activeSubscription 
+                      ? (activeSubscription.plan_type === 'lifetime' ? 'Plano Vitalício' : 'Plano Mensal') 
+                      : "Plano Gratuito"}
 
                 </span>
               </div>
