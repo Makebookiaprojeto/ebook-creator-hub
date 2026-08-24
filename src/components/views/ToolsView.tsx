@@ -41,8 +41,8 @@ export function ToolsView() {
         membros: "45k membros"
       },
       { 
-        nome: `Ebooks e Infoprodutos: ${nicho}`, 
-        link: `https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(nicho + " ebooks")}`,
+        nome: `E-Books e Infoprodutos: ${nicho}`, 
+        link: `https://www.facebook.com/groups/search/groups/?q=${encodeURIComponent(nicho + " E-Books")}`,
         membros: "12k membros"
       },
       { 
@@ -98,7 +98,7 @@ export function ToolsView() {
     <div className="space-y-10 animate-fade-in pb-10">
       <div>
         <h1 className="font-display text-3xl font-bold">Ferramentas</h1>
-        <p className="mt-1 text-muted-foreground">Recursos extras para acelerar a criação dos seus ebooks.</p>
+        <p className="mt-1 text-muted-foreground">Recursos extras para acelerar a criação dos seus E-Books.</p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -128,14 +128,14 @@ export function ToolsView() {
           </div>
           <div>
             <h2 className="font-display text-2xl font-bold">Divulgação</h2>
-            <p className="text-muted-foreground">Encontre onde promover seu ebook para maximizar vendas.</p>
+            <p className="text-muted-foreground">Encontre onde promover seu E-Book para maximizar vendas.</p>
           </div>
         </div>
 
         <Card className="overflow-hidden border-2 border-primary/20 bg-gradient-to-br from-card to-primary/5">
           <CardHeader>
-            <CardTitle className="text-lg">Onde divulgar seu ebook?</CardTitle>
-            <CardDescription>Digite o nicho do seu ebook e encontraremos os melhores grupos no Facebook para você.</CardDescription>
+            <CardTitle className="text-lg">Onde divulgar seu E-Book?</CardTitle>
+            <CardDescription>Digite o nicho do seu E-Book e encontraremos os melhores grupos no Facebook para você.</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col sm:flex-row gap-3">
