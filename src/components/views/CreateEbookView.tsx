@@ -727,7 +727,7 @@ export function CreateEbookView() {
           {steps.map((label, i) => (
             <div key={label} className="relative flex flex-col items-center gap-1.5">
               {i < steps.length - 1 && (
-                <div className="absolute left-1/2 top-[18px] h-0.5 w-full -translate-y-1/2 rounded-full bg-zinc-600">
+                <div className="absolute left-1/2 top-[22px] h-0.5 w-full -translate-y-1/2 rounded-full bg-zinc-600">
                   <div
                     style={i < step ? { backgroundColor: "#22c55e" } : undefined}
                     className={`h-full rounded-full transition-all duration-500 ${i < step ? "w-full" : "w-0"}`}
@@ -736,7 +736,7 @@ export function CreateEbookView() {
               )}
               <div
                 style={i < step ? { backgroundColor: "#22c55e", color: "#000000" } : undefined}
-                className={`relative z-10 flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium transition ${
+                className={`relative z-10 flex h-11 w-11 items-center justify-center rounded-full text-base font-medium transition ${
                   i < step
                     ? ""
                     : i === step
@@ -744,7 +744,7 @@ export function CreateEbookView() {
                     : "bg-muted text-muted-foreground"
                 }`}
               >
-                {i < step ? <Check className="h-4 w-4" /> : i + 1}
+                {i < step ? <Check className="h-5 w-5" /> : i + 1}
               </div>
               <span className={`hidden sm:block whitespace-nowrap text-xs font-medium ${i === step ? "text-foreground" : "text-muted-foreground"}`}>{label}</span>
             </div>
