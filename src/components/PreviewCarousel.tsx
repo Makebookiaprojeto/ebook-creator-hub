@@ -34,7 +34,7 @@ export function PreviewCarousel() {
   return (
     <div className="relative mx-auto w-full max-w-4xl flex flex-col items-center gap-6">
       {/* Container Principal do Card animado */}
-      <div className="relative w-full rounded-2xl overflow-hidden p-[2px] aspect-[16/10] sm:aspect-[16/10]">
+      <div className="relative w-full rounded-2xl overflow-hidden p-[2px] aspect-[16/8] sm:aspect-[16/9]">
         {/* Luz dourada girando (borda animada) */}
         <div className="absolute inset-[-100%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0_270deg,#facc15_360deg)] opacity-90" />
         
