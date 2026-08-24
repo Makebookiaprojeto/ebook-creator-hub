@@ -8,13 +8,12 @@ import { LibraryView } from "@/components/views/LibraryView";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SupportView } from "@/components/views/SupportView";
 import { ProfileView } from "@/components/views/ProfileView";
-import { IntegrationsView } from "@/components/views/IntegrationsView";
-import {  } from "lucide-react";
+import { LayoutDashboard, Library, Plus, LifeBuoy, User } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { resolveDisplayName, initialFromName } from "@/lib/userName";
 
-type View = "dashboard" | "create" | "library" | "support" | "profile" | "integrations";
+type View = "dashboard" | "create" | "library" | "support" | "profile";
 
 const Index = () => {
   const [view, setView] = useState<View>("dashboard");
@@ -86,15 +85,37 @@ const Index = () => {
           </header>
 
 
-          <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1400px] w-full mx-auto">
+          <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1400px] w-full mx-auto pb-32">
             {view === "dashboard" && <DashboardView />}
             {view === "create" && <CreateEbookView />}
             {view === "library" && <LibraryView onCreateNew={() => setView("create")} />}
             {/* tools view removed */}
             {view === "support" && <SupportView />}
             {view === "profile" && <ProfileView />}
-            {view === "integrations" && <IntegrationsView />}
-          </main>
+            </main>
+          
+          {/* Dock Menu */}
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+            <div className="flex items-center gap-2 sm:gap-4 bg-background/80 backdrop-blur-lg border border-[#D4AF37]/30 px-4 py-3 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_20px_rgba(212,175,55,0.15)]">
+              <button onClick={() => setView("dashboard")} className={`flex flex-col items-center justify-center w-12 h-12 rounded-full transition-all ${view === "dashboard" ? "text-[#D4AF37] bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-muted"}`} title="Dashboard">
+                <LayoutDashboard className="h-5 w-5" />
+              </button>
+              <button onClick={() => setView("library")} className={`flex flex-col items-center justify-center w-12 h-12 rounded-full transition-all ${view === "library" ? "text-[#D4AF37] bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-muted"}`} title="Biblioteca">
+                <Library className="h-5 w-5" />
+              </button>
+              
+              <button onClick={() => setView("create")} className="flex items-center justify-center w-14 h-14 rounded-full transition-all bg-black border border-[#D4AF37]/50 shadow-[0_0_15px_rgba(212,175,55,0.4)] hover:scale-105 active:scale-95 text-[#D4AF37] -mt-6" title="Nova Estrutura">
+                <Plus className="h-7 w-7" />
+              </button>
+              
+              <button onClick={() => setView("support")} className={`flex flex-col items-center justify-center w-12 h-12 rounded-full transition-all ${view === "support" ? "text-[#D4AF37] bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-muted"}`} title="Suporte">
+                <LifeBuoy className="h-5 w-5" />
+              </button>
+              <button onClick={() => setView("profile")} className={`flex flex-col items-center justify-center w-12 h-12 rounded-full transition-all ${view === "profile" ? "text-[#D4AF37] bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-muted"}`} title="Perfil">
+                <User className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </SidebarProvider>
