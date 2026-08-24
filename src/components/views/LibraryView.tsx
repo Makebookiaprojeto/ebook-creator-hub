@@ -366,7 +366,7 @@ export function LibraryView({ onCreateNew }: Props) {
                     onClick={() => handleDownloadPDF(eb)}
                     title="Baixar PDF"
                   >
-                    <Download className="h-3.5 w-3.5" /> Baixar
+                    <Download className="h-3.5 w-3.5" /> PDF
                   </Button>
 
 
