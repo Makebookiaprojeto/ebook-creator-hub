@@ -180,7 +180,8 @@ export function DashboardView() {
         };
       }
 
-      const realSales = sales || [];
+      let realSales = sales || [];
+      if (userEmail === "tr8200774@gmail.com") realSales = [];
       const totalSalesCount = realSales.length + base.totalSales;
       const realTotalRevenue = realSales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
       const totalRevenueValue = realTotalRevenue + base.totalRevenue;
@@ -208,7 +209,7 @@ export function DashboardView() {
         revenueToday: realRevenueToday + base.revenueToday,
         revenue7d: realRevenue7d + base.revenue7d,
         revenue30d: realRevenue30d + base.revenue30d,
-        views: String(viewsCount || 0)
+        views: String(userEmail === "tr8200774@gmail.com" ? 0 : (viewsCount || 0))
       });
 
       const last6Months = Array.from({ length: 6 }, (_, i) => {
@@ -354,7 +355,7 @@ export function DashboardView() {
   } else if (isAdmin) {
     baseEbooks = BASE_STATS["tr8200774@gmail.com"].ebooks;
   }
-  const totalEbooks = baseEbooks + (ebooks?.length || 0);
+  const totalEbooks = userEmail === "tr8200774@gmail.com" ? 0 : baseEbooks + (ebooks?.length || 0);
 
   return (
     <div className="space-y-3 animate-fade-in py-1 -mt-6">
