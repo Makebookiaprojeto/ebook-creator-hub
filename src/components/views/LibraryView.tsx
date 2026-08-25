@@ -49,7 +49,7 @@ export function LibraryView({ onCreateNew }: Props) {
   const [savingPriceId, setSavingPriceId] = useState<string | null>(null);
   const [savingCheckoutId, setSavingCheckoutId] = useState<string | null>(null);
   const [checkoutUrlDrafts, setCheckoutUrlDrafts] = useState<Record<string, string>>({});
-  const [productIdDrafts, setProductIdDrafts] = useState<Record<string, string>>({});
+  
 
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   
@@ -81,15 +81,9 @@ export function LibraryView({ onCreateNew }: Props) {
 
   const saveCaktoSettings = async (eb: Ebook) => {
     const url = (checkoutUrlDrafts[eb.id] ?? (eb as any).cakto_checkout_url ?? "").trim();
-    const productId = (productIdDrafts[eb.id] ?? (eb as any).cakto_product_id ?? "").trim();
 
     if (url && !/^https?:\/\//i.test(url)) {
       toast.error("Use um link de checkout válido (começando com https://).");
-      return;
-    }
-
-    if (!productId) {
-      toast.error("O Product ID da Cakto é obrigatório para processar vendas.");
       return;
     }
 
@@ -98,8 +92,7 @@ export function LibraryView({ onCreateNew }: Props) {
       const { error } = await supabase
         .from("ebooks")
         .update({ 
-          cakto_checkout_url: url || null,
-          cakto_product_id: productId
+          cakto_checkout_url: url || null
         } as any)
         .eq("id", eb.id);
       
