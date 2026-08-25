@@ -435,10 +435,45 @@ export function LibraryView({ onCreateNew }: Props) {
                   )}
                 </div>
 
-                 {/* Integração Cakto */}
+                                  {/* Link de Checkout */}
                  <div className="mt-4 pt-4 border-t space-y-3">
+                   <div>
+                     <label className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
+                       <Link2 className="h-3 w-3" /> Link de Checkout
+                     </label>
+                     <div className="flex items-center gap-1.5">
+                       <Input
+                         placeholder="Ex: https://pay.kiwify.com.br/..."
+                         value={
+                           checkoutUrlDrafts[eb.id] !== undefined
+                             ? checkoutUrlDrafts[eb.id]
+                             : (eb as any).cakto_checkout_url || ""
+                         }
+                         onChange={(e) =>
+                           setCheckoutUrlDrafts((prev) => ({
+                             ...prev,
+                             [eb.id]: e.target.value,
+                           }))
+                         }
+                         className="h-8 text-xs"
+                       />
+                       <Button
+                         size="sm"
+                         variant="secondary"
+                         className="h-8 px-2"
+                         onClick={() => saveCaktoSettings(eb)}
+                         disabled={savingCheckoutId === eb.id}
+                         title="Salvar Link de Checkout"
+                       >
+                         {savingCheckoutId === eb.id ? (
+                           <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                         ) : (
+                           <Check className="h-3.5 w-3.5" />
+                         )}
+                       </Button>
+                     </div>
+                   </div>
                    
-
                    {eb.slug && (
                      <div className="pt-2">
                        <label className="mb-1 flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground uppercase">
