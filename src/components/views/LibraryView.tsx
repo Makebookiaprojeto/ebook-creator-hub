@@ -98,14 +98,9 @@ export function LibraryView({ onCreateNew }: Props) {
       
       if (error) throw error;
       
-      toast.success("Configurações da Cakto salvas!");
+      toast.success("Configurações de checkout salvas!");
       
       setCheckoutUrlDrafts((p) => {
-        const n = { ...p };
-        delete n[eb.id];
-        return n;
-      });
-      setProductIdDrafts((p) => {
         const n = { ...p };
         delete n[eb.id];
         return n;
