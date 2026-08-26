@@ -107,13 +107,22 @@ const Index = () => {
         <div className="flex-1" />
         {view === "dashboard" && (
           <div className="ml-auto flex items-center gap-3">
+            {isAdmin && (
+              <button
+                onClick={handleOpenTestModal}
+                title="Configurar Venda de Teste"
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-card/50 backdrop-blur-sm border border-border hover:bg-muted transition text-foreground shadow-sm"
+              >
+                <Sliders className="h-3.5 w-3.5" />
+              </button>
+            )}
             <ThemeToggle />
             <NotificationBell />
           </div>
         )}
       </header>
 
-      <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1400px] w-full mx-auto pb-32">
+      <main className="flex-1 p-3 sm:p-6 lg:p-8 max-w-[1400px] w-full mx-auto pb-24 sm:pb-32 overflow-x-hidden">
         {view === "dashboard" && <DashboardView />}
         {view === "create" && <CreateEbookView />}
         {view === "library" && <LibraryView onCreateNew={() => setView("create")} />}
@@ -124,51 +133,39 @@ const Index = () => {
       </main>
 
       {/* Dock Menu */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
-        <div className="flex items-center gap-2 sm:gap-6 bg-white dark:bg-black border border-gray-200 dark:border-gray-800 px-4 py-1.5 rounded-full shadow-md">
-          <button onClick={() => setView("dashboard")} className={`flex flex-col items-center justify-center w-10 h-10 rounded-full transition-all ${view === "dashboard" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Dashboard">
+      <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 sm:gap-4 w-full sm:w-auto px-2 sm:px-0 justify-center">
+        <div className="flex items-center gap-1 sm:gap-6 bg-white dark:bg-black border border-gray-200 dark:border-gray-800 px-2 sm:px-4 py-1.5 rounded-full shadow-md">
+          <button onClick={() => setView("dashboard")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "dashboard" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Dashboard">
             <LayoutDashboard className="h-4 w-4" />
           </button>
-          <button onClick={() => setView("library")} className={`flex flex-col items-center justify-center w-10 h-10 rounded-full transition-all ${view === "library" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Biblioteca">
+          <button onClick={() => setView("library")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "library" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Biblioteca">
             <Library className="h-4 w-4" />
             </button>
-          <button onClick={() => setView("search")} className={`flex flex-col items-center justify-center w-10 h-10 rounded-full transition-all ${view === "search" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Buscar">
+          <button onClick={() => setView("search")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "search" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Buscar">
             <Search className="h-4 w-4" />
           </button>
           
-          <button onClick={() => setView("create")} className="flex items-center justify-center w-14 h-14 rounded-full transition-all bg-white dark:bg-black border-2 border-blue-600 shadow-[0_0_15px_rgba(59,130,246,0.4)] hover:scale-105 active:scale-95 text-blue-600 -mt-6 relative" title="Nova Estrutura">
+          <button onClick={() => setView("create")} className="flex items-center justify-center w-11 h-11 sm:w-14 sm:h-14 rounded-full transition-all bg-white dark:bg-black border-2 border-blue-600 shadow-[0_0_15px_rgba(59,130,246,0.4)] hover:scale-105 active:scale-95 text-blue-600 -mt-4 sm:-mt-6 relative" title="Nova Estrutura">
             <Plus className="h-6 w-6" />
             </button>
-          <button onClick={() => setView("integrations")} className={`flex flex-col items-center justify-center w-10 h-10 rounded-full transition-all ${view === "integrations" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Integrações">
+          <button onClick={() => setView("integrations")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "integrations" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Integrações">
             <Plug className="h-4 w-4" />
           </button>
           
-          <button onClick={() => setView("support")} className={`flex flex-col items-center justify-center w-10 h-10 rounded-full transition-all ${view === "support" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Suporte">
+          <button onClick={() => setView("support")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "support" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Suporte">
             <LifeBuoy className="h-4 w-4" />
           </button>
-          <button onClick={() => setView("profile")} className={`flex flex-col items-center justify-center w-10 h-10 rounded-full transition-all ${view === "profile" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Perfil">
+          <button onClick={() => setView("profile")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "profile" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Perfil">
             <User className="h-4 w-4" />
           </button>
         </div>
-      </div>
-
-      {/* Floating Bottom Right Controls */}
-      <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2">
-        {isAdmin && (
-          <button
-            onClick={handleOpenTestModal}
-            title="Configurar Venda de Teste"
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-card/80 backdrop-blur-md border border-border hover:bg-muted transition text-foreground shadow-lg"
-            >
-              <Sliders className="h-4 w-4" />
-          </button>
-        )}
+      
         <button
           onClick={handleSignOut}
           title="Sair"
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-card/80 backdrop-blur-md border border-border hover:bg-muted transition text-foreground shadow-lg"
-          >
-            <LogOut className="h-4 w-4" />
+          className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 transition text-gray-500 dark:text-gray-400 shadow-md"
+        >
+          <LogOut className="h-4 w-4" />
         </button>
       </div>
 
