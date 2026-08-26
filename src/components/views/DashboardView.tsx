@@ -402,7 +402,7 @@ export function DashboardView() {
               </div>
             </div>
             <div className="mt-1 flex items-end justify-between gap-3">
-              <p className="font-display text-7xl font-bold tracking-tight text-foreground">
+              <p className="font-display text-5xl sm:text-7xl font-bold tracking-tight text-foreground">
                 R$ {((profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d) + simulatedRevenue).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
               </p>
               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.35)]">
