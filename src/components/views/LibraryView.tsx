@@ -270,7 +270,7 @@ export function LibraryView({ onCreateNew }: Props) {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in -mt-6">
+    <div className="space-y-6 animate-fade-in sm:-mt-6 mt-0">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="font-display text-3xl font-bold">Biblioteca</h1>
