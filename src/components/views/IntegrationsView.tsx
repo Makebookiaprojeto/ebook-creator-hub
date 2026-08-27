@@ -11,7 +11,7 @@ if (typeof window !== "undefined") {
 
 export function IntegrationsView() {
   return (
-    <div className="space-y-12 animate-fade-in -mt-6">
+    <div className="space-y-12 animate-fade-in sm:-mt-6 mt-0">
       <div>
         <h1 className="font-display text-3xl font-bold">Integrações</h1>
         <p className="text-muted-foreground mt-2">
