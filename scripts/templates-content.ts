@@ -29,12 +29,12 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Emagrecimento",
     id: "8562c1c2-6259-4321-988f-157c992a1db0",
     slug: "emagrecimento",
-    title: "Corpo Leve",
-    subtitle: "Cinco passos visuais para emagrecer com consistência",
+    title: "O Código do Emagrecimento Definitivo",
+    subtitle: "Descubra o método validado para secar com saúde e manter os resultados",
     coverPrompt: `${coverStyle}, fresh green apple with measuring tape lightly wrapped around it, clean shadow`,
     chapters: [
       {
-        title: "Alimentação Consciente",
+        title: "O Segredo da Alimentação Estratégica",
         content:
           "Emagrecer começa antes do prato. Significa observar a fome real, mastigar com calma e escolher comida que sustenta sem pesar. Reduza ultraprocessados, priorize cores vivas no prato e beba água ao longo do dia. Não existe alimento mágico: existe constância. Quando você come com atenção, o cérebro recebe o sinal de saciedade no tempo certo e a fome emocional perde força. Comece simples — substitua um item por dia e mantenha por uma semana.",
         imagePrompt: `${baseStyle}, overhead flat lay of fresh colorful vegetables, avocado, salmon fillet, lemon, on white marble`,
@@ -69,12 +69,12 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Fitness e musculação",
     id: "c343dfaa-2862-4798-af99-af2bdcd2bfbe",
     slug: "fitness",
-    title: "Hipertrofia Real",
+    title: "Hipertrofia Máxima: O Guia Prático",
     subtitle: "Cinco pilares para construir músculo de verdade",
     coverPrompt: `${coverStyle}, single chrome dumbbell standing vertically, dramatic side light, polished surface`,
     chapters: [
       {
-        title: "Sobrecarga Progressiva",
+        title: "O Segredo da Sobrecarga Progressiva",
         content:
           "Músculo cresce quando é desafiado além do que já aguenta. Isso significa adicionar carga, repetição ou volume a cada ciclo. Anote cada treino: o que não é medido não evolui. Comece com uma base sólida de doze semanas focando técnica e amplitude. Depois aumente cinco por cento de carga a cada duas semanas nos exercícios principais. Sem progressão não há hipertrofia, apenas manutenção.",
         imagePrompt: `${baseStyle}, stack of black weight plates neatly arranged, polished barbell, white floor`,
@@ -109,7 +109,7 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Finanças",
     id: "f921abf0-8d2c-4d1e-bda1-6c3bad6b78da",
     slug: "financas",
-    title: "Dinheiro no Controle",
+    title: "O Mapa da Independência Financeira",
     subtitle: "Cinco passos para sair do vermelho e começar a investir",
     coverPrompt: `${coverStyle}, single glass jar with neatly stacked coins inside, soft side light, clean shadow`,
     chapters: [
@@ -149,7 +149,7 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Beleza e autocuidado",
     id: "f2117b13-9531-42ca-85e4-e695c13e4add",
     slug: "beleza",
-    title: "Pele Real",
+    title: "O Guia Secreto da Skincare Perfeita",
     subtitle: "Cinco passos para uma rotina de beleza que funciona",
     coverPrompt: `${coverStyle}, single elegant glass skincare bottle with dropper, soft pastel highlight, fresh petals`,
     chapters: [
@@ -189,7 +189,7 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Desenvolvimento pessoal",
     id: "5da42a5e-85c5-403b-bf5a-6f5aae7b6739",
     slug: "desenvolvimento-pessoal",
-    title: "Versão Maior",
+    title: "O Despertar do Seu Potencial Oculto",
     subtitle: "Cinco passos para destravar seu potencial",
     coverPrompt: `${coverStyle}, single open hardcover book with delicate plant emerging from pages, soft light`,
     chapters: [
@@ -229,7 +229,7 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Espiritualidade",
     id: "15c7d7aa-946a-4a4d-b27b-19e4b380c8ea",
     slug: "espiritualidade",
-    title: "Presença",
+    title: "A Jornada do Despertar Interior",
     subtitle: "Cinco passos para uma vida espiritual mais profunda",
     coverPrompt: `${coverStyle}, single lit white candle with rising smoke, soft side light, serene composition`,
     chapters: [
@@ -269,7 +269,7 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Maternidade",
     id: "56724db2-515c-4fc3-aceb-2974c0d02faf",
     slug: "maternidade",
-    title: "Primeiros Meses",
+    title: "O Manual da Maternidade Plena",
     subtitle: "Cinco passos essenciais para mães de primeira viagem",
     coverPrompt: `${coverStyle}, soft folded white baby blanket with single tiny knitted shoe on top, gentle light`,
     chapters: [
@@ -286,7 +286,7 @@ export const TEMPLATES: TemplateSeed[] = [
         imagePrompt: `${baseStyle}, mother gently cradling baby in soft white wrap, intimate moment, soft light`,
       },
       {
-        title: "Rede de Apoio",
+        title: "Como Estruturar Sua Rede de Apoio",
         content:
           "Maternidade não foi feita para ser vivida sozinha. Convide quem ama para visitar com tarefa: lavar louça, segurar bebê enquanto você banha, trazer comida pronta. Recusar ajuda por orgulho cobra caro na saúde mental. Aceitar é sabedoria, não fraqueza. A vila inteira ajuda a criar uma criança, mesmo na cidade moderna.",
         imagePrompt: `${baseStyle}, small bouquet of fresh white daisies in glass vase on white windowsill, soft light`,
@@ -309,7 +309,7 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Marketing digital",
     id: "1c43ccca-0a23-4888-b6be-184d759c2e74",
     slug: "marketing-digital",
-    title: "Primeira Venda Online",
+    title: "A Máquina de Vendas Online",
     subtitle: "Cinco passos para começar do zero na internet",
     coverPrompt: `${coverStyle}, modern smartphone on white surface with single shopping bag icon glowing turquoise, soft light`,
     chapters: [
@@ -349,18 +349,18 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Relacionamentos",
     id: "5e95f8a4-ceab-450b-ae00-55da6147d17d",
     slug: "relacionamentos",
-    title: "Amor que Dura",
+    title: "Os Códigos do Relacionamento Inabalável",
     subtitle: "Cinco passos para relacionamentos saudáveis",
     coverPrompt: `${coverStyle}, two simple silver wedding rings interlocked on white surface, soft light`,
     chapters: [
       {
-        title: "Comunicação Clara",
+        title: "O Poder da Comunicação Transparente",
         content:
           "A maior parte das brigas não é sobre o tema da briga: é sobre não se sentir ouvido. Antes de responder, repita o que entendeu com suas palavras. Pergunte se é isso mesmo. Esse simples gesto desarma noventa por cento dos conflitos antes que escalem. Falar é fácil; escutar de verdade é raro — e exatamente por isso, transformador.",
         imagePrompt: `${baseStyle}, two empty white coffee cups facing each other on white table, soft light`,
       },
       {
-        title: "Limites Saudáveis",
+        title: "O Poder de Dizer 'Não' Sem Culpa",
         content:
           "Amor não é diluir-se no outro. É preservar quem você é enquanto cria algo novo a dois. Mantenha amizades, hobbies, projetos individuais. Diga não com firmeza quando precisar. Limites claros não afastam: aproximam, porque mostram que existem duas pessoas inteiras se escolhendo, em vez de duas metades se fundindo por carência.",
         imagePrompt: `${baseStyle}, two single flowers in separate small vases side by side, white background, soft light`,
@@ -389,7 +389,7 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Receitas e culinária",
     id: "30cfc392-9120-4c3c-99f0-b2318a0f5fd5",
     slug: "receitas",
-    title: "Cozinha Fit",
+    title: "O Guia da Culinária Fit e Saborosa",
     subtitle: "Cinco refeições rápidas, saudáveis e saborosas",
     coverPrompt: `${coverStyle}, beautiful arranged salad bowl with fresh ingredients, overhead, soft light`,
     chapters: [
@@ -429,7 +429,7 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Pets",
     id: "27b82d87-9294-4316-8ecd-bfc1d1fd2fc5",
     slug: "pets",
-    title: "Tutor Consciente",
+    title: "O Manual do Cão Educado",
     subtitle: "Cinco passos para cuidar do seu cão como ele merece",
     coverPrompt: `${coverStyle}, single friendly golden retriever sitting calmly, studio white background, soft light`,
     chapters: [
@@ -469,7 +469,7 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Saúde mental",
     id: "a470b5f3-a8d2-4144-b9c6-a887012da5fc",
     slug: "saude-mental",
-    title: "Mente em Paz",
+    title: "Blindagem Contra a Ansiedade",
     subtitle: "Cinco passos para equilíbrio emocional no dia a dia",
     coverPrompt: `${coverStyle}, single small green plant in white pot beside calm gray stone, soft window light`,
     chapters: [
@@ -509,7 +509,7 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Empreendedorismo",
     id: "6cf46fad-7d9d-4514-bd92-c3f56e285278",
     slug: "empreendedorismo",
-    title: "Comece Pequeno",
+    title: "O Início do Seu Império Digital",
     subtitle: "Cinco passos para tirar seu negócio do papel",
     coverPrompt: `${coverStyle}, single small green plant sprouting from coffee cup on white desk, morning light`,
     chapters: [
@@ -549,7 +549,7 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Estudos e concursos",
     id: "58ff8975-9150-454c-aef1-1005b40e1618",
     slug: "estudos",
-    title: "Aprovação",
+    title: "Os Segredos da Aprovação Rápida",
     subtitle: "Cinco passos para passar em concurso",
     coverPrompt: `${coverStyle}, single open book with eyeglasses resting on top, soft natural light, study mood`,
     chapters: [
@@ -572,7 +572,7 @@ export const TEMPLATES: TemplateSeed[] = [
         imagePrompt: `${baseStyle}, hand holding pen filling answer sheet, white background, sharp focus`,
       },
       {
-        title: "Revisão Espaçada",
+        title: "Memorização Extrema: Como Nunca Mais Esquecer",
         content:
           "Memória esquece em curva exponencial. Para fixar, revise um dia depois, sete dias depois, trinta dias depois. Use flashcards no celular para revisão rápida em fila, ônibus, intervalo. Em um ano, conteúdo revisitado três vezes vira automático. Estudar uma vez e nunca mais voltar é desperdiçar o esforço inicial.",
         imagePrompt: `${baseStyle}, stack of small white flashcards neatly arranged on white desk, soft shadow`,
@@ -589,12 +589,12 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Idiomas",
     id: "d45761ad-bc5e-4d6b-9250-8861468e85fa",
     slug: "idiomas",
-    title: "Inglês Fluente",
+    title: "A Rota da Fluência em Inglês",
     subtitle: "Cinco passos para aprender inglês sozinho",
     coverPrompt: `${coverStyle}, single open dictionary with reading glasses on top, soft light, study mood`,
     chapters: [
       {
-        title: "Imersão Diária",
+        title: "O Segredo da Imersão Total em Casa",
         content:
           "Sem contato diário, o cérebro não fixa um idioma. Configure celular em inglês, troque legendas, ouça podcast no caminho. Trinta minutos de imersão passiva todos os dias rendem mais que duas horas semanais em sala. O segredo é tornar o idioma parte invisível da rotina, não evento separado da vida.",
         imagePrompt: `${baseStyle}, smartphone on white desk displaying small language icon, headphones beside, soft light`,
@@ -629,7 +629,7 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Renda extra",
     id: "2d2ceab6-4478-4291-9500-988011259538",
     slug: "renda-extra",
-    title: "Multiplique Sua Renda",
+    title: "Fábrica de Renda Extra",
     subtitle: "Cinco caminhos digitais para ganhar mais",
     coverPrompt: `${coverStyle}, single laptop displaying minimalist chart, coffee cup beside, soft morning light`,
     chapters: [
@@ -669,7 +669,7 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Viagens",
     id: "390f4db4-786b-489e-bff2-998a9911db02",
     slug: "viagens",
-    title: "Viaje Mais",
+    title: "O Código do Viajante Inteligente",
     subtitle: "Cinco passos para gastar menos e viajar melhor",
     coverPrompt: `${coverStyle}, single small globe beside compass on white desk, soft natural light`,
     chapters: [
@@ -709,7 +709,7 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Tecnologia e programação",
     id: "7d1a76ee-266a-4da5-87b8-4a7802321316",
     slug: "tecnologia",
-    title: "Comece a Programar",
+    title: "Destravando a Programação",
     subtitle: "Cinco passos para se tornar desenvolvedor",
     coverPrompt: `${coverStyle}, single sleek laptop displaying clean code on white desk, soft side light`,
     chapters: [
@@ -749,7 +749,7 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Arquitetura e Decoração",
     id: "23dd1aa6-d61a-44ad-9d94-9514f25c12aa",
     slug: "decoracao",
-    title: "Ambiente dos Sonhos",
+    title: "O Guia da Decoração Transformadora",
     subtitle: "Cinco passos para transformar qualquer espaço",
     coverPrompt: `${coverStyle}, single minimalist white armchair with green plant beside, soft light, clean room`,
     chapters: [
@@ -789,7 +789,7 @@ export const TEMPLATES: TemplateSeed[] = [
     niche: "Moda e Estilo",
     id: "ca43835a-630d-4412-ab4e-c9fb816c2125",
     slug: "moda",
-    title: "Estilo Próprio",
+    title: "Os Códigos da Imagem de Sucesso",
     subtitle: "Cinco passos para construir um guarda-roupa que funciona",
     coverPrompt: `${coverStyle}, single neatly folded white t-shirt and watch on white surface, soft light`,
     chapters: [
