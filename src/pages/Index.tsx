@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { NotificationBell } from "@/components/NotificationBell";
 import { DashboardView } from "@/components/views/DashboardView";
 import { CreateEbookView } from "@/components/views/CreateEbookView";
@@ -24,22 +24,6 @@ import { getTestSaleConfig, setTestSaleConfig } from "@/lib/adminTestSales";
 type View = "dashboard" | "create" | "library" | "support" | "profile" | "search" | "integrations";
 
 const Index = () => {
-  const [view, setView] = useState<View>("dashboard");
-  const { user, isAdmin, signOut } = useAuth();
-  const navigate = useNavigate();
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-  const [displayName, setDisplayName] = useState<string>("");
-
-  const [testModalOpen, setTestModalOpen] = useState(false);
-  const [testNiche, setTestNiche] = useState("");
-  const [testPrice, setTestPrice] = useState("");
-
-  const handleOpenTestModal = () => {
-    const config = getTestSaleConfig();
-    setTestNiche(config.niche);
-    setTestPrice(config.price.toString());
-    setTestModalOpen(true);
-  };
 
   const handleSaveTestConfig = () => {
     const p = parseFloat(testPrice);
