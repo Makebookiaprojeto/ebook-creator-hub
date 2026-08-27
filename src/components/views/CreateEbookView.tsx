@@ -722,7 +722,7 @@ export function CreateEbookView() {
     <div className="space-y-6 animate-fade-in">
 
       {/* Progress */}
-      <div className="px-5 -mt-6 pb-8">
+      <div className="px-5 sm:-mt-6 mt-0 pb-8">
         <div className="mx-auto grid max-w-2xl grid-cols-5 rounded-2xl bg-card/40 px-6 py-5">
           {steps.map((label, i) => (
             <div key={label} className="relative flex flex-col items-center gap-1.5">
@@ -1181,8 +1181,8 @@ export function CreateEbookView() {
         </AnimatePresence>
       </div>
 
-      <div className={`flex items-center justify-between ${step === 0 ? "mt-12" : ""}`}>
-        <Button variant="ghost" onClick={prev} disabled={step === 0 || generating}><ArrowLeft className="mr-2 h-4 w-4" /> Voltar</Button>
+      <div className={`flex items-center ${step === 0 ? "justify-end mt-12" : "justify-between"}`}>
+        {step > 0 && <Button variant="ghost" onClick={prev} disabled={generating}><ArrowLeft className="mr-2 h-4 w-4" /> Voltar</Button>}
         {step < steps.length - 1 ? (
           step === 1 ? (
             <Button 
