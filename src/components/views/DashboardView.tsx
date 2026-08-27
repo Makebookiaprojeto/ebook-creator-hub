@@ -357,7 +357,7 @@ export function DashboardView() {
   const totalEbooks = baseEbooks + (ebooks?.length || 0);
 
   return (
-    <div className="space-y-3 animate-fade-in py-1 -mt-6">
+    <div className="space-y-3 animate-fade-in py-1 sm:-mt-6 mt-0">
 
       <div className="space-y-3">
         <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-black dark:bg-none px-7 pt-3 pb-7 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
