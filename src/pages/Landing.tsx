@@ -106,10 +106,8 @@ const Landing = () => {
               DE IDEIA À PRIMEIRA VENDA
             </motion.div>
             
-            <motion.h1 variants={fadeIn} className="font-display text-5xl md:text-[5.5rem] font-black tracking-tight leading-[1.05] mb-6 text-white">
-              Não sabe criar um <br className="hidden md:block"/>
-              produto nem onde <br className="hidden md:block"/>
-              vender? <span className="text-yellow-400">Aqui, resolvemos <br className="hidden md:block"/> os dois.</span>
+            <motion.h1 variants={fadeIn} className="font-display text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.15] mb-6 text-white max-w-3xl">
+              Não sabe criar um produto nem onde vender? <span className="text-yellow-400">Aqui, resolvemos os dois.</span>
             </motion.h1>
             
             <motion.p variants={fadeIn} className="text-lg md:text-xl text-white/70 mb-10 max-w-2xl leading-relaxed">
@@ -158,15 +156,15 @@ const Landing = () => {
                </div>
             </div>
 
-            <div className="relative rounded-2xl border border-white/5 bg-[#0a0a0a] shadow-2xl overflow-hidden aspect-video max-h-[500px]">
+            <div className="relative rounded-2xl border border-white/5 bg-[#0a0a0a] shadow-2xl overflow-hidden aspect-auto min-h-[500px] md:min-h-[650px] flex flex-col">
               <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-[#111]">
                 <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
                 <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
                 <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
-                <div className="ml-4 text-xs text-white/30 font-mono">app.ebookaibuilder.com.br</div>
+                <div className="ml-4 text-xs text-white/30 font-mono">https://ebookaibuilder.com</div>
               </div>
               
-              <div className="w-full h-full relative overflow-hidden bg-gradient-to-b from-[#151515] to-[#050505]">
+              <div className="w-full flex-1 relative overflow-hidden bg-gradient-to-b from-[#151515] to-[#050505]">
                  <PreviewCarousel />
                  <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center bg-black/60">
                     <div className="bg-green-500/10 text-green-400 text-xs font-bold px-3 py-1 rounded uppercase tracking-wider mb-4 border border-green-500/20">
@@ -215,41 +213,41 @@ const Landing = () => {
           </div>
 
           <div className="max-w-[1000px] mx-auto grid md:grid-cols-2 gap-6">
-            <div className="bg-[#0a0a0a] border border-white/5 rounded-3xl p-10 flex flex-col justify-start">
-               <div className="text-white/40 text-xs font-bold tracking-wider mb-4">ANTES</div>
+            <div className="bg-[#053278] border border-blue-400/30 rounded-3xl p-10 flex flex-col justify-start relative shadow-2xl">
+               <div className="text-blue-200 text-xs font-bold tracking-wider mb-4">ANTES</div>
                <h3 className="text-2xl font-bold text-white mb-8">Uma ideia solta</h3>
                <ul className="space-y-4">
-                 <li className="text-white/50 flex items-start gap-3">
-                    <span className="mt-1 opacity-50">-</span> Não sabe por onde começar a escrever
+                 <li className="text-white/80 flex items-start gap-3">
+                    <span className="mt-1 opacity-60">-</span> Não sabe por onde começar a escrever
                  </li>
-                 <li className="text-white/50 flex items-start gap-3">
-                    <span className="mt-1 opacity-50">-</span> Não tem página de vendas nem checkout
+                 <li className="text-white/80 flex items-start gap-3">
+                    <span className="mt-1 opacity-60">-</span> Não tem página de vendas nem checkout
                  </li>
-                 <li className="text-white/50 flex items-start gap-3">
-                    <span className="mt-1 opacity-50">-</span> Não sabe como divulgar o produto
+                 <li className="text-white/80 flex items-start gap-3">
+                    <span className="mt-1 opacity-60">-</span> Não sabe como divulgar o produto
                  </li>
-                 <li className="text-white/50 flex items-start gap-3">
-                    <span className="mt-1 opacity-50">-</span> Levaria dias (ou nunca sairia do papel)
+                 <li className="text-white/80 flex items-start gap-3">
+                    <span className="mt-1 opacity-60">-</span> Levaria dias (ou nunca sairia do papel)
                  </li>
                </ul>
             </div>
 
-            <div className="bg-[#0f1422] border border-blue-500/20 rounded-3xl p-10 flex flex-col justify-start relative overflow-hidden">
-               <div className="absolute top-0 inset-x-0 h-1 bg-blue-500/50"></div>
-               <div className="text-blue-400 text-xs font-bold tracking-wider mb-4">DEPOIS</div>
-               <h3 className="text-2xl font-bold text-white mb-8">Um produto pronto para vender</h3>
+            <div className="bg-yellow-400 border border-yellow-500 rounded-3xl p-10 flex flex-col justify-start relative overflow-hidden shadow-2xl">
+               <div className="absolute top-0 inset-x-0 h-1 bg-yellow-500"></div>
+               <div className="text-black/60 text-xs font-bold tracking-wider mb-4">DEPOIS</div>
+               <h3 className="text-2xl font-bold text-black mb-8">Um produto pronto para vender</h3>
                <ul className="space-y-4">
-                 <li className="text-white/80 flex items-start gap-3">
-                    <Check className="w-5 h-5 text-green-400 shrink-0" /> Ebook completo, escrito pela IA em minutos
+                 <li className="text-black/80 flex items-start gap-3 font-medium">
+                    <Check className="w-5 h-5 text-black shrink-0" /> Ebook completo, escrito pela IA em minutos
                  </li>
-                 <li className="text-white/80 flex items-start gap-3">
-                    <Check className="w-5 h-5 text-green-400 shrink-0" /> Página de vendas e checkout já configurados
+                 <li className="text-black/80 flex items-start gap-3 font-medium">
+                    <Check className="w-5 h-5 text-black shrink-0" /> Página de vendas e checkout já configurados
                  </li>
-                 <li className="text-white/80 flex items-start gap-3">
-                    <Check className="w-5 h-5 text-green-400 shrink-0" /> Roteiros de vídeo prontos para gravar
+                 <li className="text-black/80 flex items-start gap-3 font-medium">
+                    <Check className="w-5 h-5 text-black shrink-0" /> Roteiros de vídeo prontos para gravar
                  </li>
-                 <li className="text-white/80 flex items-start gap-3">
-                    <Check className="w-5 h-5 text-green-400 shrink-0" /> Você só precisa revisar e divulgar
+                 <li className="text-black/80 flex items-start gap-3 font-medium">
+                    <Check className="w-5 h-5 text-black shrink-0" /> Você só precisa revisar e divulgar
                  </li>
                </ul>
             </div>
@@ -265,18 +263,17 @@ const Landing = () => {
              <h2 className="font-display text-3xl md:text-4xl font-bold mb-6 text-white">Integrado com as principais plataformas de pagamento do Brasil</h2>
            </div>
            
-           {/* Marquee Right to Left */}
            <div className="relative flex w-[200%] md:w-auto overflow-hidden py-4 opacity-80">
               <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#061022] to-transparent z-10" />
               <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#061022] to-transparent z-10" />
               <div className="flex items-center gap-4 px-4 animate-marquee whitespace-nowrap">
                 {["Kiwify", "Cakto", "Hotmart", "Applyfy", "PerfectPay", "Kiwify", "Cakto", "Hotmart", "Applyfy", "PerfectPay"].map((gateway, i) => (
-                   <div key={i} className="px-8 py-4 rounded-2xl border border-white/5 bg-[#0a0a0a] text-white/70 font-bold text-lg">
+                   <div key={i} className="px-6 py-2.5 rounded-2xl border border-white/5 bg-[#0a0a0a] text-white/70 font-bold text-base">
                      {gateway}
                    </div>
                 ))}
                 {["Kiwify", "Cakto", "Hotmart", "Applyfy", "PerfectPay", "Kiwify", "Cakto", "Hotmart", "Applyfy", "PerfectPay"].map((gateway, i) => (
-                   <div key={i+10} className="px-8 py-4 rounded-2xl border border-white/5 bg-[#0a0a0a] text-white/70 font-bold text-lg">
+                   <div key={i+10} className="px-6 py-2.5 rounded-2xl border border-white/5 bg-[#0a0a0a] text-white/70 font-bold text-base">
                      {gateway}
                    </div>
                 ))}
@@ -302,7 +299,6 @@ const Landing = () => {
               <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#030814] to-transparent z-10" />
               <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#030814] to-transparent z-10" />
               
-              {/* Top Row: Left to Right (marquee-reverse) */}
               <div className="flex items-center gap-4 px-4 animate-marquee-reverse whitespace-nowrap">
                 {["Emagrecimento", "Finanças pessoais", "Relacionamento", "Receitas fit", "Marketing digital", "Produtividade", "Emagrecimento", "Finanças pessoais", "Relacionamento", "Receitas fit", "Marketing digital", "Produtividade"].map((nicho, i) => (
                    <div key={`top-${i}`} className="px-6 py-2.5 rounded-full border border-white/5 bg-[#0a0a0a] text-white/60 text-sm font-medium">
@@ -316,7 +312,6 @@ const Landing = () => {
                 ))}
               </div>
 
-              {/* Bottom Row: Right to Left (marquee) */}
               <div className="flex items-center gap-4 px-4 animate-marquee whitespace-nowrap">
                 {["Espiritualidade", "Pets", "Beleza e autocuidado", "Desenvolvimento pessoal", "Idiomas", "Maternidade", "Espiritualidade", "Pets", "Beleza e autocuidado", "Desenvolvimento pessoal", "Idiomas", "Maternidade"].map((nicho, i) => (
                    <div key={`bot-${i}`} className="px-6 py-2.5 rounded-full border border-white/5 bg-[#0a0a0a] text-white/60 text-sm font-medium">
@@ -334,7 +329,7 @@ const Landing = () => {
 
         {/* SECTION: DEPOIMENTOS */}
         <section className="py-24 px-4 border-t border-white/5 bg-[#061022]">
-           <div className="max-w-[1000px] mx-auto text-center mb-16">
+           <div className="max-w-[1200px] mx-auto text-center mb-16">
              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-4 py-1.5 text-xs font-bold text-white/60 mb-6 uppercase tracking-wider">
                QUEM JÁ USOU
              </div>
@@ -342,11 +337,12 @@ const Landing = () => {
              <p className="text-white/60 text-lg">Depoimentos de quem usou o EbookAI Builder pra tirar o ebook do papel.</p>
            </div>
 
-           <div className="max-w-[1000px] mx-auto grid md:grid-cols-3 gap-6">
+           <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
                 { nome: "Mariana", nicho: "Nicho de emagrecimento saudável", texto: "Criei o ebook com a IA em poucos minutos e já comecei a vender na mesma semana." },
-                { nome: "Lucas", nicho: "Nicho de renda extra com serviços simples", texto: "Transformei uma ideia que tinha solta em um ebook completo, com oferta pronta pra venda. Recomendo demais!" },
-                { nome: "Ana", nicho: "Nicho de beleza e autocuidado", texto: "Nunca fui boa com Canva, ChatGPT etc. A ferramenta resolveu meu problema: criei minha estrutura em minutos e já coloquei pra vender." }
+                { nome: "Lucas", nicho: "Nicho de renda extra", texto: "Transformei uma ideia solta num produto completo, com oferta pronta pra venda. Recomendo demais!" },
+                { nome: "Ana", nicho: "Nicho de beleza e autocuidado", texto: "Nunca fui boa com Canva ou ChatGPT. Criei minha estrutura em minutos e já coloquei pra rodar." },
+                { nome: "Felipe", nicho: "Nicho de culinária e receitas", texto: "Minhas vendas dobraram! A copy da página de vendas que o sistema gerou é fora do comum. Perfeito." }
               ].map((dep, i) => (
                  <div key={i} className="bg-[#0a0a0a] border border-white/5 rounded-3xl p-8 flex flex-col justify-between">
                     <div>
@@ -354,10 +350,10 @@ const Landing = () => {
                       <p className="text-white/80 text-sm leading-relaxed mb-8">{dep.texto}</p>
                     </div>
                     <div className="flex items-center gap-3">
-                       <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">{dep.nome.charAt(0)}</div>
+                       <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold shrink-0">{dep.nome.charAt(0)}</div>
                        <div>
-                         <div className="text-white font-bold text-sm">{dep.nome}</div>
-                         <div className="text-white/40 text-[11px]">{dep.nicho}</div>
+                         <div className="text-white font-bold text-sm leading-none mb-1">{dep.nome}</div>
+                         <div className="text-white/40 text-[11px] leading-tight">{dep.nicho}</div>
                        </div>
                     </div>
                  </div>
@@ -396,7 +392,7 @@ const Landing = () => {
                </ul>
                
                <a href={CHECKOUT_LINKS.monthly} className="block w-full mt-auto">
-                 <Button className="w-full h-14 rounded-xl font-bold text-sm bg-white/5 hover:bg-white/10 text-white border border-white/10 transition-all">
+                 <Button className="w-full h-14 rounded-xl font-bold text-sm bg-yellow-400 hover:bg-yellow-500 text-black border border-none shadow-lg transition-all">
                    COMEÇAR NO MENSAL
                  </Button>
                </a>
@@ -426,7 +422,7 @@ const Landing = () => {
                </ul>
                
                <a href={CHECKOUT_LINKS.lifetime} className="block w-full mt-auto">
-                 <Button className="w-full h-14 rounded-xl font-bold text-sm bg-blue-600 hover:bg-blue-500 text-white transition-all">
+                 <Button className="w-full h-14 rounded-xl font-bold text-sm bg-yellow-400 hover:bg-yellow-500 text-black shadow-lg transition-all border-none">
                    GARANTIR ACESSO VITALÍCIO <ArrowRight className="ml-2 w-4 h-4" />
                  </Button>
                </a>
