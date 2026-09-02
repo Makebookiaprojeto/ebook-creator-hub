@@ -156,7 +156,7 @@ const Landing = () => {
                </div>
             </div>
 
-            <div className="relative rounded-2xl border border-white/5 bg-[#0a0a0a] shadow-2xl overflow-hidden aspect-auto min-h-[500px] md:min-h-[650px] flex flex-col">
+            <div className="relative rounded-2xl border border-white/5 bg-[#0a0a0a] shadow-2xl overflow-hidden aspect-auto min-h-[400px] md:min-h-[550px] flex flex-col">
               <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-[#111]">
                 <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
                 <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
@@ -213,7 +213,7 @@ const Landing = () => {
           </div>
 
           <div className="max-w-[1000px] mx-auto grid md:grid-cols-2 gap-6">
-            <div className="bg-[#053278] border border-blue-400/30 rounded-3xl p-10 flex flex-col justify-start relative shadow-2xl">
+            <div className="bg-[#08152b] border border-blue-500/20 rounded-3xl p-10 flex flex-col justify-start relative shadow-xl">
                <div className="text-blue-200 text-xs font-bold tracking-wider mb-4">ANTES</div>
                <h3 className="text-2xl font-bold text-white mb-8">Uma ideia solta</h3>
                <ul className="space-y-4">
@@ -234,19 +234,19 @@ const Landing = () => {
 
             <div className="bg-yellow-400 border border-yellow-500 rounded-3xl p-10 flex flex-col justify-start relative overflow-hidden shadow-2xl">
                <div className="absolute top-0 inset-x-0 h-1 bg-yellow-500"></div>
-               <div className="text-black/60 text-xs font-bold tracking-wider mb-4">DEPOIS</div>
+               <div className="text-black text-xs font-bold tracking-wider mb-4">DEPOIS</div>
                <h3 className="text-2xl font-bold text-black mb-8">Um produto pronto para vender</h3>
                <ul className="space-y-4">
-                 <li className="text-black/80 flex items-start gap-3 font-medium">
+                 <li className="text-black flex items-start gap-3 font-medium">
                     <Check className="w-5 h-5 text-black shrink-0" /> Ebook completo, escrito pela IA em minutos
                  </li>
-                 <li className="text-black/80 flex items-start gap-3 font-medium">
+                 <li className="text-black flex items-start gap-3 font-medium">
                     <Check className="w-5 h-5 text-black shrink-0" /> Página de vendas e checkout já configurados
                  </li>
-                 <li className="text-black/80 flex items-start gap-3 font-medium">
+                 <li className="text-black flex items-start gap-3 font-medium">
                     <Check className="w-5 h-5 text-black shrink-0" /> Roteiros de vídeo prontos para gravar
                  </li>
-                 <li className="text-black/80 flex items-start gap-3 font-medium">
+                 <li className="text-black flex items-start gap-3 font-medium">
                     <Check className="w-5 h-5 text-black shrink-0" /> Você só precisa revisar e divulgar
                  </li>
                </ul>
@@ -422,7 +422,7 @@ const Landing = () => {
                </ul>
                
                <a href={CHECKOUT_LINKS.lifetime} className="block w-full mt-auto">
-                 <Button className="w-full h-14 rounded-xl font-bold text-sm bg-yellow-400 hover:bg-yellow-500 text-black shadow-lg transition-all border-none">
+                 <Button className="w-full h-14 rounded-xl font-bold text-sm bg-blue-600 hover:bg-blue-500 text-white transition-all">
                    GARANTIR ACESSO VITALÍCIO <ArrowRight className="ml-2 w-4 h-4" />
                  </Button>
                </a>
