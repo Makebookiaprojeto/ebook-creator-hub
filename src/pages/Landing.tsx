@@ -236,18 +236,18 @@ const Landing = () => {
                <div className="absolute top-0 inset-x-0 h-1 bg-yellow-500"></div>
                <div className="text-black text-xs font-bold tracking-wider mb-4">DEPOIS</div>
                <h3 className="text-2xl font-bold text-black mb-8">Um produto pronto para vender</h3>
-               <ul className="space-y-4">
-                 <li className="text-black flex items-start gap-3 font-medium">
-                    <Check className="w-5 h-5 text-black shrink-0" /> Ebook completo, escrito pela IA em minutos
+               <ul className="space-y-5">
+                 <li className="text-black flex items-start gap-3 text-lg font-bold tracking-tight">
+                    <Check className="w-6 h-6 text-black shrink-0" /> Ebook completo, escrito pela IA em minutos
                  </li>
-                 <li className="text-black flex items-start gap-3 font-medium">
-                    <Check className="w-5 h-5 text-black shrink-0" /> Página de vendas e checkout já configurados
+                 <li className="text-black flex items-start gap-3 text-lg font-bold tracking-tight">
+                    <Check className="w-6 h-6 text-black shrink-0" /> Página de vendas e checkout já configurados
                  </li>
-                 <li className="text-black flex items-start gap-3 font-medium">
-                    <Check className="w-5 h-5 text-black shrink-0" /> Roteiros de vídeo prontos para gravar
+                 <li className="text-black flex items-start gap-3 text-lg font-bold tracking-tight">
+                    <Check className="w-6 h-6 text-black shrink-0" /> Roteiros de vídeo prontos para gravar
                  </li>
-                 <li className="text-black flex items-start gap-3 font-medium">
-                    <Check className="w-5 h-5 text-black shrink-0" /> Você só precisa revisar e divulgar
+                 <li className="text-black flex items-start gap-3 text-lg font-bold tracking-tight">
+                    <Check className="w-6 h-6 text-black shrink-0" /> Você só precisa revisar e divulgar
                  </li>
                </ul>
             </div>
