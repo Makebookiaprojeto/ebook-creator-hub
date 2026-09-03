@@ -930,7 +930,7 @@ export function CreateEbookView() {
                   <h2 className="font-display text-xl font-semibold text-center">Página de Vendas</h2>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 w-full max-w-5xl mx-auto pt-6 items-start">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 w-full max-w-5xl mx-auto pt-6 items-start">
                   <div className="space-y-4">
                     <div>
                       <label className="text-base font-medium mb-1.5 block">Título do Ebook</label>
@@ -1072,7 +1072,7 @@ export function CreateEbookView() {
 
                   {/* PREVIEW WIDGET */}
                   <div 
-                    className="hidden lg:flex flex-col border border-border rounded-2xl overflow-hidden relative shadow-2xl transition-colors duration-500 h-full min-h-[450px]"
+                    className="flex flex-col border border-border rounded-2xl w-full max-w-[500px] mx-auto overflow-hidden relative shadow-2xl transition-colors duration-500 h-full min-h-[450px]"
                     style={{ backgroundColor: secondaryColor || "#0a0a0a" }}
                   >
                     <div className="flex items-center gap-2 px-4 py-3 bg-black/40 backdrop-blur-sm border-b border-white/5">
