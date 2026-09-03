@@ -70,7 +70,7 @@ const Landing = () => {
               <img src={saasLogo} alt="Logo" className="h-full w-full object-cover" />
             </div>
             <span className="font-display text-lg font-bold tracking-tight text-white">
-              EbookAI Builder
+              EbookAI <span className="text-blue-500">Builder</span>
             </span>
           </Link>
           <div className="flex items-center gap-8">
@@ -114,15 +114,10 @@ const Landing = () => {
               Saia do zero com um <span className="text-white font-bold">produto pronto</span>, uma <span className="text-white font-bold">página de vendas</span> e <span className="text-white font-bold">grupos para divulgar</span> e começar a vender no digital.
             </motion.p>
             
-            <motion.div variants={fadeIn} className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+            <motion.div variants={fadeIn} className="flex justify-center w-full mt-2">
               <a href="#planos" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full sm:w-auto h-14 px-8 rounded-xl text-base font-bold bg-yellow-400 hover:bg-yellow-500 text-black shadow-lg transition-all border-none">
+                <Button size="lg" className="w-full sm:w-auto h-14 px-10 rounded-xl text-lg font-bold bg-yellow-400 hover:bg-yellow-500 text-black shadow-[0_0_30px_rgba(250,204,21,0.25)] transition-all border-none">
                   Gerar meu primeiro ebook agora <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </a>
-              <a href="#planos" className="w-full sm:w-auto">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto h-14 px-8 rounded-xl text-base font-bold bg-[#0a0a0a] border-white/10 text-white hover:bg-white/5 transition-all">
-                  Ver um ebook gerado pela IA
                 </Button>
               </a>
             </motion.div>
@@ -218,16 +213,16 @@ const Landing = () => {
                <h3 className="text-2xl font-bold text-white mb-8">Uma ideia solta</h3>
                <ul className="space-y-4">
                  <li className="text-white/80 flex items-start gap-3">
-                    <span className="mt-1 opacity-60">-</span> Não sabe por onde começar a escrever
+                    <span className="mt-1 opacity-60 font-bold">-</span> Não sabe por onde começar a escrever
                  </li>
                  <li className="text-white/80 flex items-start gap-3">
-                    <span className="mt-1 opacity-60">-</span> Não tem página de vendas nem checkout
+                    <span className="mt-1 opacity-60 font-bold">-</span> Não tem página de vendas nem checkout
                  </li>
                  <li className="text-white/80 flex items-start gap-3">
-                    <span className="mt-1 opacity-60">-</span> Não sabe como divulgar o produto
+                    <span className="mt-1 opacity-60 font-bold">-</span> Não sabe como divulgar o produto
                  </li>
                  <li className="text-white/80 flex items-start gap-3">
-                    <span className="mt-1 opacity-60">-</span> Levaria dias (ou nunca sairia do papel)
+                    <span className="mt-1 opacity-60 font-bold">-</span> Levaria dias (ou nunca sairia do papel)
                  </li>
                </ul>
             </div>
@@ -238,16 +233,16 @@ const Landing = () => {
                <h3 className="text-2xl font-bold text-black mb-8">Um produto pronto para vender</h3>
                <ul className="space-y-5">
                  <li className="text-black flex items-start gap-3 text-lg font-bold tracking-tight">
-                    <Check className="w-6 h-6 text-black shrink-0" /> Ebook completo, escrito pela IA em minutos
+                    <span className="mt-0.5 text-black font-black">-</span> Ebook completo, escrito pela IA em minutos
                  </li>
                  <li className="text-black flex items-start gap-3 text-lg font-bold tracking-tight">
-                    <Check className="w-6 h-6 text-black shrink-0" /> Página de vendas e checkout já configurados
+                    <span className="mt-0.5 text-black font-black">-</span> Página de vendas e checkout já configurados
                  </li>
                  <li className="text-black flex items-start gap-3 text-lg font-bold tracking-tight">
-                    <Check className="w-6 h-6 text-black shrink-0" /> Roteiros de vídeo prontos para gravar
+                    <span className="mt-0.5 text-black font-black">-</span> Roteiros de vídeo prontos para gravar
                  </li>
                  <li className="text-black flex items-start gap-3 text-lg font-bold tracking-tight">
-                    <Check className="w-6 h-6 text-black shrink-0" /> Você só precisa revisar e divulgar
+                    <span className="mt-0.5 text-black font-black">-</span> Você só precisa revisar e divulgar
                  </li>
                </ul>
             </div>
@@ -441,7 +436,7 @@ const Landing = () => {
               <ShieldCheck className="w-8 h-8 text-green-500 shrink-0 mt-1" />
               <div>
                 <h4 className="text-green-500 font-bold text-lg mb-2">Risco zero: 7 dias de garantia</h4>
-                <p className="text-white/60 text-sm leading-relaxed">Teste a plataforma por 7 dias. Se não for pra você, é só pedir e devolvemos 100% do seu dinheiro — sem perguntas, sem burocracia. Você só tem a ganhar.</p>
+                <p className="text-white/60 text-sm leading-relaxed">Teste a plataforma por 7 dias. Se não for pra você, é só pedir e devolvemos 100% do seu dinheiro. Sem perguntas, sem burocracia, você só tem a ganhar ! Comece hoje mesmo.</p>
               </div>
            </div>
         </section>
@@ -523,7 +518,7 @@ const Landing = () => {
               <img src={saasLogo} alt="Logo" className="h-full w-full object-cover" />
             </div>
             <span className="font-display text-base font-bold tracking-tight text-white">
-              EbookAI Builder
+              EbookAI <span className="text-blue-500">Builder</span>
             </span>
           </Link>
           
