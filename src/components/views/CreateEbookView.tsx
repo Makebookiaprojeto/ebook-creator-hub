@@ -930,8 +930,8 @@ export function CreateEbookView() {
                   <h2 className="font-display text-xl font-semibold text-center">Página de Vendas</h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 w-full max-w-5xl mx-auto pt-6 items-start">
-                  <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full max-w-6xl mx-auto pt-6 items-stretch">
+                  <div className="flex flex-col justify-center space-y-6 py-6 h-full">
                     <div>
                       <label className="text-base font-medium mb-1.5 block">Título do Ebook</label>
                       <Input 
@@ -1070,52 +1070,57 @@ export function CreateEbookView() {
                     </div>
                   </div>
 
-                  {/* PREVIEW WIDGET */}
+                                    {/* PREVIEW WIDGET */}
                   <div 
-                    className="flex flex-col border border-border rounded-2xl w-full max-w-[500px] mx-auto overflow-hidden relative shadow-2xl transition-colors duration-500 h-full min-h-[450px]"
+                    className="flex flex-col border border-border rounded-2xl w-full max-w-[550px] mx-auto overflow-hidden relative shadow-2xl transition-colors duration-500 min-h-[620px]"
                     style={{ backgroundColor: secondaryColor || "#0a0a0a" }}
                   >
                     <div className="flex items-center gap-2 px-4 py-3 bg-black/40 backdrop-blur-sm border-b border-white/5">
-                      <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
-                      <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-                      <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
-                      <div className="ml-4 text-[10px] text-white/40 font-mono">Prévia da Página</div>
+                      <div className="w-3.5 h-3.5 rounded-full bg-red-500/80"></div>
+                      <div className="w-3.5 h-3.5 rounded-full bg-yellow-500/80"></div>
+                      <div className="w-3.5 h-3.5 rounded-full bg-green-500/80"></div>
+                      <div className="ml-4 text-xs text-white/40 font-mono">Prévia da Página</div>
                     </div>
                     
-                    <div className="flex-1 p-6 flex flex-col relative overflow-hidden">
-                      <div className="absolute top-0 right-0 w-[300px] h-[300px] rounded-full blur-[80px] -z-10 opacity-30 transition-colors duration-500" style={{ backgroundColor: primaryColor || "#3b82f6" }} />
+                    <div className="flex-1 p-8 flex flex-col relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full blur-[100px] -z-10 opacity-30 transition-colors duration-500" style={{ backgroundColor: primaryColor || "#3b82f6" }} />
                       
-                      <div className="inline-flex self-start items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-4 transition-colors duration-500" style={{ backgroundColor: `${primaryColor}20`, color: primaryColor || "#3b82f6", border: `1px solid ${primaryColor}40` }}>
+                      <div className="inline-flex self-start items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider mb-6 transition-colors duration-500" style={{ backgroundColor: `${primaryColor}20`, color: primaryColor || "#3b82f6", border: `1px solid ${primaryColor}40` }}>
                         Edição Premium
                       </div>
                       
-                      <h1 className="text-2xl font-black tracking-tight leading-tight mb-2 text-white line-clamp-3">
+                      <h1 className="text-4xl font-black tracking-tight leading-[1.1] mb-4 text-white line-clamp-3">
                         {title || "Título do Ebook"}
                       </h1>
                       
-                      <p className="text-xs text-white/60 font-medium line-clamp-2 mb-4">
+                      <p className="text-sm text-white/60 font-medium line-clamp-2 mb-8 leading-relaxed">
                         {subtitle || "O guia definitivo, direto ao ponto, para quem quer resultados reais sem perder tempo."}
                       </p>
                       
-                      <div className="flex items-center gap-4 mt-auto z-10">
+                      <div className="flex items-center gap-5 mt-auto z-10 pb-6">
                         <div 
-                          className="px-4 py-2.5 rounded-xl text-xs font-black shadow-lg transition-colors duration-500 flex items-center justify-center gap-1"
+                          className="px-6 py-4 rounded-xl text-sm font-black shadow-lg transition-colors duration-500 flex items-center justify-center gap-1"
                           style={{ backgroundColor: primaryColor || "#3b82f6", color: "#ffffff" }}
                         >
                           QUERO ACESSO
                         </div>
                         <div>
-                          <div className="text-xl font-black leading-none transition-colors duration-500" style={{ color: primaryColor || "#3b82f6" }}>
+                          <div className="text-3xl font-black leading-none transition-colors duration-500" style={{ color: primaryColor || "#3b82f6" }}>
                             {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price || 0)}
                           </div>
                         </div>
                       </div>
                       
                       {coverUrl && (
-                        <div className="absolute bottom-[-10%] right-[-10%] w-40 aspect-[3/4.2] rounded-xl overflow-hidden shadow-2xl border border-white/10 rotate-[-5deg] z-0 opacity-80">
+                        <div className="absolute bottom-[-15%] right-[-15%] w-64 aspect-[3/4.2] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 rotate-[-5deg] z-0 opacity-80">
                           <img src={coverUrl} alt="Cover" className="w-full h-full object-cover" />
                         </div>
                       )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
                     </div>
                   </div>
                 </div>
