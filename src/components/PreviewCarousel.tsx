@@ -11,13 +11,13 @@ import step5Img from "@/assets/preview-step5.png";
 import step5_1Img from "@/assets/preview-step5-1.png";
 
 const slides = [
-  { id: "dashboard", img: dashImg, alt: "Dashboard de Vendas" },
-  { id: "step1", img: step1Img, alt: "Passo 1 - Escolha do Nicho" },
-  { id: "step2", img: step2Img, alt: "Passo 2 - Definição de Preço" },
-  { id: "step3", img: step3Img, alt: "Passo 3 - Criação do Ebook" },
-  { id: "step4", img: step4Img, alt: "Passo 4 - Página de Vendas" },
-  { id: "step5", img: step5Img, alt: "Passo 5 - Divulgação e Grupos" },
-  { id: "step5-1", img: step5_1Img, alt: "Passo 5 - Vídeos Prontos" },
+  { id: "dashboard", img: dashImg, alt: "" },
+  { id: "step1", img: step1Img, alt: "" },
+  { id: "step2", img: step2Img, alt: "" },
+  { id: "step3", img: step3Img, alt: "" },
+  { id: "step4", img: step4Img, alt: "" },
+  { id: "step5", img: step5Img, alt: "" },
+  { id: "step5-1", img: step5_1Img, alt: "" },
 ];
 
 export function PreviewCarousel() {
