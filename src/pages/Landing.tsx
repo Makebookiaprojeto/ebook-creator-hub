@@ -161,18 +161,6 @@ const Landing = () => {
               
               <div className="w-full flex-1 relative overflow-hidden bg-gradient-to-b from-[#151515] to-[#050505]">
                  <PreviewCarousel />
-                 <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center bg-black/60">
-                    <div className="bg-green-500/10 text-green-400 text-xs font-bold px-3 py-1 rounded uppercase tracking-wider mb-4 border border-green-500/20">
-                      GERADO POR IA
-                    </div>
-                    <h3 className="text-3xl font-bold text-white mb-2">Emagrecimento Sem Dieta</h3>
-                    <p className="text-white/60 text-sm mb-6">Guia completo em 5 capítulos</p>
-                    <div className="flex flex-col gap-2">
-                       <div className="flex items-center gap-2 text-white/80"><Check className="w-4 h-4 text-green-400" /> Estrutura pronta</div>
-                       <div className="flex items-center gap-2 text-white/80"><Check className="w-4 h-4 text-green-400" /> Conteúdo completo</div>
-                       <div className="flex items-center gap-2 text-white/80"><Check className="w-4 h-4 text-green-400" /> PDF pronto pra vender</div>
-                    </div>
-                 </div>
               </div>
             </div>
           </motion.div>
