@@ -407,9 +407,12 @@ export default function AdminTemplates() {
             </Button>
           </div>
           <div className="mt-3">
-            <Button variant="outline" size="sm" onClick={handleNewBlank}>
-              <Plus className="h-4 w-4 mr-2" /> Criar em branco
-            </Button>
+            <Button onClick={handleSeedEmagrecimento} variant="outline" className="gap-2" disabled={loading}>
+            <Sparkles className="w-4 h-4" /> Atualizar DB Emagrecimento
+          </Button>
+          <Button onClick={handleNewBlank} variant="outline" className="gap-2">
+            <Plus className="w-4 h-4" /> Novo template em branco
+          </Button>
           </div>
         </Card>
 
