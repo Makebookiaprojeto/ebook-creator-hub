@@ -1,0 +1,166 @@
+[
+  {
+    "niche": "Emagrecimento",
+    "title": "O Protocolo do Jejum Flexível",
+    "subtitle": "Aprenda a ativar a queima natural do seu corpo sem abrir mão da sua vida social.",
+    "cover_url": "/templates/emagrecimento/t1_cover.jpg",
+    "chapters": [
+      {
+        "title": "O Fim das Dietas Restritivas",
+        "subtitle": "Por que comer de 3 em 3 horas é um mito",
+        "content": "<p>A indústria do emagrecimento ensinou que você precisa comer o tempo todo para manter o metabolismo acelerado. Isso não apenas é exaustivo, como mantém seus níveis de insulina constantemente altos, bloqueando a queima de gordura.</p><p>O Jejum Flexível é a arte de dar um descanso ao seu corpo. Quando você pausa a ingestão constante de calorias, seu organismo finalmente acessa as reservas de gordura como fonte de energia primária.</p>",
+        "image_url": "/templates/emagrecimento/t1_ch1.jpg"
+      },
+      {
+        "title": "A Janela Perfeita para o Seu Corpo",
+        "subtitle": "Descobrindo o seu ritmo natural",
+        "content": "<p>Não existe uma regra única. O segredo do jejum moderno é a adaptação. Comece com 12 horas (que inclui o seu sono) e avance gradativamente para 14 ou 16 horas. O objetivo nunca é passar fome, mas sim construir resiliência metabólica.</p><p>A janela de alimentação deve se alinhar com seus compromissos. Se você prefere jantar com a família, pule o café da manhã. Flexibilidade é a chave para a consistência.</p>"
+      },
+      {
+        "title": "O que Quebra (e o que Não Quebra) o Jejum",
+        "subtitle": "Bebidas e atalhos permitidos",
+        "content": "<p>Muitas pessoas desistem por achar que não podem consumir nada. Água, café puro e chás sem açúcar são seus melhores aliados e não interrompem o processo. Na verdade, a cafeína pode até potencializar a mobilização de gorduras.</p><p>Evite qualquer bebida calórica. Até mesmo pequenos 'lanchinhos' saudáveis disparam a insulina e fecham a porta da queima de gordura. Mantenha-se limpo durante a janela de jejum.</p>",
+        "image_url": "/templates/emagrecimento/t1_ch3.jpg"
+      },
+      {
+        "title": "Desenhando sua Primeira Refeição",
+        "subtitle": "Como quebrar o jejum sem picos de açúcar",
+        "content": "<p>O erro mais fatal do jejum é quebrá-lo com carboidratos simples ou doces. Seu corpo está como uma esponja, e uma enxurrada de açúcar causará letargia imediata e acúmulo de gordura.</p><p>Priorize proteínas magras, gorduras boas e fibras. Uma porção de ovos, abacate ou uma salada rica preparam o sistema digestivo suavemente, mantendo a saciedade por horas e estabilizando a energia do seu dia.</p>"
+      },
+      {
+        "title": "Aceleradores Metabólicos",
+        "subtitle": "Como dobrar os resultados sem esforço extra",
+        "content": "<p>Quando seu corpo está em jejum e adaptado, a mágica acontece. Se você incluir uma caminhada leve ou um treino curto antes da primeira refeição, a queima de gordura é multiplicada. O corpo não tem glicose disponível e vai direto para os estoques.</p><p>Mantenha-se hidratado. Muitas vezes, o que interpretamos como fome é apenas sede profunda. Beba água com uma pitada de sal integral para manter os eletrólitos e a energia em alta.</p>",
+        "image_url": "/templates/emagrecimento/t1_ch5.jpg"
+      },
+      {
+        "title": "Estilo de Vida, Não Prisão",
+        "subtitle": "Mantendo o resultado para sempre",
+        "content": "<p>O verdadeiro poder do jejum flexível é que ele viaja com você. Festas, finais de semana, viagens — basta ajustar sua janela. Se exagerou no sábado, faça um jejum um pouco mais longo no domingo e o equilíbrio é restaurado instantaneamente.</p><p>Você recuperou o controle. O alimento deixa de ser uma obsessão constante e passa a ser nutrição e prazer no momento certo. Aproveite sua nova liberdade e o seu novo corpo.</p>"
+      }
+    ]
+  },
+  {
+    "niche": "Emagrecimento",
+    "title": "Equilíbrio Hormonal Feminino",
+    "subtitle": "Emagreça regulando o seu corpo de dentro para fora, sem estresse e sem fome.",
+    "cover_url": "/templates/emagrecimento/t2_cover.jpg",
+    "chapters": [
+      {
+        "title": "A Peça que Faltava",
+        "subtitle": "Por que comer menos nem sempre funciona",
+        "content": "<p>Se você já cortou calorias e mesmo assim a balança não se moveu, o problema não é a sua força de vontade. Mulheres possuem um sistema endócrino complexo, e quando hormônios como cortisol e insulina estão desregulados, o corpo entra em modo de sobrevivência.</p><p>Em modo de alerta, seu organismo estoca gordura (especialmente no abdômen) para se proteger. O primeiro passo para emagrecer é sinalizar segurança para o seu corpo.</p>",
+        "image_url": "/templates/emagrecimento/t2_ch1.jpg"
+      },
+      {
+        "title": "Domando a Insulina",
+        "subtitle": "O hormônio do armazenamento",
+        "content": "<p>A insulina é como um zelador guardando estoques. Cada vez que você come açúcar ou carboidratos refinados, os níveis disparam. Enquanto a insulina estiver alta, a porta da queima de gordura está literalmente trancada.</p><p>Não se trata de eliminar carboidratos, mas de saber escolhê-los. Fibras e proteínas em todas as refeições criam uma barreira que impede picos bruscos, mantendo o zelador calmo e os estoques de gordura acessíveis.</p>"
+      },
+      {
+        "title": "Cortisol: O Vilão Silencioso",
+        "subtitle": "Como o estresse bloqueia seu emagrecimento",
+        "content": "<p>O estresse crônico libera cortisol, que destrói músculos, aumenta a fome por doces e acumula gordura visceral. Dietas extremamente restritivas também são interpretadas como estresse, piorando ainda mais o quadro.</p><p>Acalmar o sistema nervoso é uma estratégia de perda de peso ativa. Sono de qualidade, respiração consciente e rotinas matinais relaxantes podem fazer mais pelo seu abdômen do que horas de esteira.</p>",
+        "image_url": "/templates/emagrecimento/t2_ch3.jpg"
+      },
+      {
+        "title": "A Dança do Ciclo Menstrual",
+        "subtitle": "Trabalhando com seu corpo, não contra ele",
+        "content": "<p>Seu metabolismo e energia mudam ao longo do mês. Na fase folicular, você tem mais energia para treinos intensos e menos fome. Na fase lútea (pré-menstrual), o corpo pede mais calorias e descanso.</p><p>Entender essa dança permite que você não se culpe pela fome natural e adapte sua alimentação com carboidratos complexos nos dias que antecedem a menstruação, evitando as clássicas crises de compulsão por doces.</p>"
+      },
+      {
+        "title": "Nutrientes que Curam",
+        "subtitle": "A base da alimentação anti-inflamatória",
+        "content": "<p>Inflamação celular é a raiz do desequilíbrio. Para revertê-la, seu corpo precisa de matéria-prima limpa. Ômega-3, magnésio, vitamina D e vegetais crucíferos ajudam o fígado a eliminar toxinas e excesso de estrogênio.</p><p>Priorize comida de verdade. Quanto menos um alimento for processado, mais ele trabalha a seu favor, reduzindo o inchaço e trazendo de volta o brilho da sua pele e a clareza mental.</p>",
+        "image_url": "/templates/emagrecimento/t2_ch5.jpg"
+      },
+      {
+        "title": "O Novo Normal",
+        "subtitle": "Paz com a comida e com o espelho",
+        "content": "<p>Quando seus hormônios estão em harmonia, você não precisa lutar contra a vontade de comer o tempo todo. A saciedade é natural, o peso cai sem sofrimento e a energia permanece constante durante o dia todo.</p><p>Celebre cada pequena vitória. O emagrecimento definitivo e feminino é aquele construído com autoamor, paciência e nutrição inteligente. Bem-vinda à sua melhor versão.</p>"
+      }
+    ]
+  },
+  {
+    "niche": "Emagrecimento",
+    "title": "Reeducação Alimentar Descomplicada",
+    "subtitle": "Coma o que gosta, aprenda a fazer trocas inteligentes e perca peso sorrindo.",
+    "cover_url": "/templates/emagrecimento/t3_cover.jpg",
+    "chapters": [
+      {
+        "title": "O Fim do Tudo ou Nada",
+        "subtitle": "A armadilha da perfeição",
+        "content": "<p>A maior causa do efeito sanfona é a mentalidade de 'começar na segunda-feira'. Quando você corta tudo o que ama, cria uma bomba-relógio de compulsão. A restrição gera o desejo incontrolável.</p><p>O segredo das pessoas que emagrecem e mantêm o corpo para sempre é o equilíbrio. Nenhuma refeição ruim estraga tudo, assim como nenhuma salada isolada faz milagre. A constância é o seu maior poder.</p>",
+        "image_url": "/templates/emagrecimento/t3_ch1.jpg"
+      },
+      {
+        "title": "Construindo o Prato Perfeito",
+        "subtitle": "A regra visual que não falha",
+        "content": "<p>Esqueça a contagem neurótica de calorias. Divida seu prato visualmente: metade deve ser preenchida com vegetais coloridos e ricos em água. Um quarto é o domínio das proteínas, essenciais para seus músculos e saciedade.</p><p>O quarto restante fica para os carboidratos complexos (como arroz, batata ou feijão). Essa fórmula garante que você saia da mesa leve, satisfeito e nutrido, sem picos de açúcar no sangue.</p>"
+      },
+      {
+        "title": "Trocas Inteligentes (Não Dolorosas)",
+        "subtitle": "Como reduzir 500 calorias sem perceber",
+        "content": "<p>O paladar é treinável. Trocar refrigerante tradicional pelo zero, ou o óleo de soja por um fio de azeite extra-virgem, pode cortar centenas de calorias diárias sem que você sinta qualquer privação.</p><p>Em vez de fritar, asse. Em vez de suco coado, coma a fruta inteira com suas preciosas fibras. Pequenos ajustes diários compostos ao longo de semanas geram uma perda de peso assustadora e natural.</p>",
+        "image_url": "/templates/emagrecimento/t3_ch3.jpg"
+      },
+      {
+        "title": "Dominando a Vontade de Doce",
+        "subtitle": "Estratégias para não ser refém do açúcar",
+        "content": "<p>A vontade desesperada por doces geralmente é sede, cansaço ou falta de proteínas na refeição anterior. Certifique-se de estar bebendo água o suficiente e comendo proteínas no almoço e no jantar.</p><p>Se a vontade for real, não fuja dela. Coma um pedaço de chocolate amargo ou faça uma sobremesa fit (como banana amassada com cacau e micro-ondas). Aprender a se satisfazer com pequenas porções é a chave da liberdade.</p>"
+      },
+      {
+        "title": "Planejamento de Elite",
+        "subtitle": "Quem não planeja, planeja falhar",
+        "content": "<p>A fome tira o nosso raciocínio lógico. Se você chegar em casa exausto e não houver nada pronto, o aplicativo de delivery será inevitável. O planejamento semanal protege você das piores decisões.</p><p>Tire duas horas do seu domingo para lavar saladas, grelhar proteínas e deixar lanches saudáveis à vista. O ambiente molda o comportamento: torne o erro difícil e o acerto fácil.</p>",
+        "image_url": "/templates/emagrecimento/t3_ch5.jpg"
+      },
+      {
+        "title": "A Regra dos 80/20",
+        "subtitle": "Uma vida sustentável",
+        "content": "<p>Nutra seu corpo com excelência 80% do tempo. Coma vegetais, proteínas magras e beba muita água. Nos outros 20%, saia com os amigos, coma pizza, tome uma taça de vinho sem um pingo de culpa.</p><p>O emagrecimento que dura a vida toda é aquele que permite você viver a sua vida. Abrace o processo, tenha paciência e perceba como é bom se sentir com energia, disposição e autoconfiança novamente.</p>"
+      }
+    ]
+  },
+  {
+    "niche": "Emagrecimento",
+    "title": "Queima Acelerada: Treinos de 15 Min.",
+    "subtitle": "Transforme o seu corpo usando apenas o peso do corpo e o conforto da sua casa.",
+    "cover_url": "/templates/emagrecimento/t4_cover.jpg",
+    "chapters": [
+      {
+        "title": "A Ilusão das Horas na Esteira",
+        "subtitle": "Por que mais tempo não significa mais resultado",
+        "content": "<p>Por anos, acreditamos que suar horas numa esteira era o único caminho. Mas a ciência provou o oposto: treinos excessivamente longos podem elevar o cortisol, quebrar massa muscular e desacelerar o metabolismo basal.</p><p>O corpo humano responde ao estímulo, não à duração. Ao enviar o sinal certo e intenso para os seus músculos em apenas 15 minutos, você engatilha um efeito de queima de gordura que dura o dia todo.</p>",
+        "image_url": "/templates/emagrecimento/t4_ch1.jpg"
+      },
+      {
+        "title": "O Efeito Afterburn (EPOC)",
+        "subtitle": "Queimando gordura enquanto assiste TV",
+        "content": "<p>O segredo dos treinos rápidos está no EPOC (Excesso de Consumo de Oxigênio Pós-Exercício). Quando o treino é intenso, seu corpo contrai um 'débito de oxigênio' para restaurar os músculos e a energia.</p><p>Isso significa que, pelas próximas 24 a 48 horas após aqueles curtos 15 minutos, seu metabolismo permanece acelerado. Você literalmente transforma seu corpo em uma fornalha, gastando calorias mesmo em total repouso.</p>"
+      },
+      {
+        "title": "A Estrutura Perfeita",
+        "subtitle": "Como montar seu circuito de 15 minutos",
+        "content": "<p>Um treino eficiente trabalha o corpo inteiro. Escolha 4 movimentos: um de pernas (como agachamento), um de empurrar (flexão), um de puxar (ou focado em costas) e um para o core (prancha). O foco é não parar.</p><p>Faça 40 segundos de execução máxima de cada exercício e descanse apenas 20 segundos. Repita esse ciclo por 4 rounds e você terá completado um treino magistral sem sair do tapete da sua sala.</p>",
+        "image_url": "/templates/emagrecimento/t4_ch3.jpg"
+      },
+      {
+        "title": "Músculo: O Devorador de Calorias",
+        "subtitle": "Por que treinar força é inegociável",
+        "content": "<p>Para cada quilo de músculo que você constrói, seu corpo passa a gastar mais calorias diariamente só para mantê-lo vivo. O músculo é um tecido metabolicamente ativo e é o seu melhor seguro contra o ganho de peso.</p><p>O medo de ficar 'grande demais' impede muitas pessoas de alcançarem a definição muscular. Fique tranquilo: treinar com o peso do corpo construirá um tônus firme, desenhado e atlético, e não um visual de fisiculturista.</p>"
+      },
+      {
+        "title": "Consistência Bate Intensidade",
+        "subtitle": "O poder dos pequenos hábitos",
+        "content": "<p>Fazer um treino brutal uma vez por semana não trará resultados. Fazer 15 minutos moderados todos os dias mudará a sua vida. O corpo se adapta rapidamente ao estímulo frequente, melhorando o fôlego e a composição corporal.</p><p>Não existe desculpa para falta de tempo quando a exigência é apenas 1% do seu dia (15 minutos). Crie um ritual matinal ou reserve um pequeno espaço à noite. Apenas comece e não quebre a corrente.</p>",
+        "image_url": "/templates/emagrecimento/t4_ch5.jpg"
+      },
+      {
+        "title": "A Alimentação Pós-Treino",
+        "subtitle": "Alavancando os resultados",
+        "content": "<p>Seu treino destruiu as fibras musculares (isso é bom) e esgotou sua energia. Agora, você precisa entregar os tijolos certos para a reconstrução. Proteína e uma pequena porção de carboidratos são essenciais.</p><p>Uma refeição equilibrada, como um prato com ovos mexidos e aveia, ou um filé de frango com arroz, sinaliza para o corpo reparar a musculatura com eficiência, maximizando a firmeza e o aspecto estético da perda de peso.</p>"
+      }
+    ]
+  }
+]
