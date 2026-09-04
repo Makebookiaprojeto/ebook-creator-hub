@@ -1072,7 +1072,7 @@ export function CreateEbookView() {
 
                                     {/* PREVIEW WIDGET */}
                   <div 
-                    className="flex flex-col border border-border rounded-2xl w-full max-w-[550px] mx-auto overflow-hidden relative shadow-2xl transition-colors duration-500 min-h-[620px]"
+                    className="flex flex-col border border-border rounded-2xl w-full max-w-[600px] mx-auto overflow-hidden relative shadow-2xl transition-colors duration-500 min-h-[750px]"
                     style={{ backgroundColor: secondaryColor || "#0a0a0a" }}
                   >
                     <div className="flex items-center gap-2 px-4 py-3 bg-black/40 backdrop-blur-sm border-b border-white/5">
@@ -1082,40 +1082,46 @@ export function CreateEbookView() {
                       <div className="ml-4 text-xs text-white/40 font-mono">Prévia da Página</div>
                     </div>
                     
-                    <div className="flex-1 p-8 flex flex-col relative overflow-hidden">
+                    <div className="flex-1 p-10 flex flex-col relative overflow-hidden">
                       <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full blur-[100px] -z-10 opacity-30 transition-colors duration-500" style={{ backgroundColor: primaryColor || "#3b82f6" }} />
                       
-                      <div className="inline-flex self-start items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider mb-6 transition-colors duration-500" style={{ backgroundColor: `${primaryColor}20`, color: primaryColor || "#3b82f6", border: `1px solid ${primaryColor}40` }}>
+                      <div className="inline-flex self-start items-center gap-2 px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider mb-5 transition-colors duration-500" style={{ backgroundColor: `${primaryColor}20`, color: primaryColor || "#3b82f6", border: `1px solid ${primaryColor}40` }}>
                         Edição Premium
                       </div>
                       
-                      <h1 className="text-4xl font-black tracking-tight leading-[1.1] mb-4 text-white line-clamp-3">
+                      <h1 className="text-3xl font-black tracking-tight leading-[1.2] mb-3 text-white line-clamp-4 relative z-10 w-[85%]">
                         {title || "Título do Ebook"}
                       </h1>
                       
-                      <p className="text-sm text-white/60 font-medium line-clamp-2 mb-8 leading-relaxed">
+                      <p className="text-sm text-white/60 font-medium line-clamp-3 mb-6 leading-relaxed relative z-10 w-[80%]">
                         {subtitle || "O guia definitivo, direto ao ponto, para quem quer resultados reais sem perder tempo."}
                       </p>
                       
-                      <div className="flex items-center gap-5 mt-auto z-10 pb-6">
+                      <div className="flex items-center gap-4 mt-auto z-20 pb-2">
                         <div 
-                          className="px-6 py-4 rounded-xl text-sm font-black shadow-lg transition-colors duration-500 flex items-center justify-center gap-1"
+                          className="px-5 py-3 rounded-xl text-xs font-black shadow-lg transition-colors duration-500 flex items-center justify-center gap-1"
                           style={{ backgroundColor: primaryColor || "#3b82f6", color: "#ffffff" }}
                         >
                           QUERO ACESSO
                         </div>
                         <div>
-                          <div className="text-3xl font-black leading-none transition-colors duration-500" style={{ color: primaryColor || "#3b82f6" }}>
+                          <div className="text-2xl font-black leading-none transition-colors duration-500" style={{ color: primaryColor || "#3b82f6" }}>
                             {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price || 0)}
                           </div>
                         </div>
                       </div>
                       
                       {coverUrl && (
-                        <div className="absolute bottom-[-15%] right-[-15%] w-64 aspect-[3/4.2] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 rotate-[-5deg] z-0 opacity-80">
+                        <div className="absolute bottom-6 right-6 w-44 aspect-[3/4.2] rounded-xl overflow-hidden shadow-[0_25px_50px_rgba(0,0,0,0.6)] border border-white/10 rotate-[2deg] z-10 transition-all duration-500 hover:rotate-0 hover:scale-105">
                           <img src={coverUrl} alt="Cover" className="w-full h-full object-cover" />
+                          <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent"></div>
                         </div>
                       )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
                     </div>
                   </div>
                 </div>
