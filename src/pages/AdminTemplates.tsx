@@ -9,7 +9,6 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Plus, Sparkles, Trash2, ArrowLeft, Save, X } from "lucide-react";
 import { toast } from "sonner";
-import emagrecimentoTemplates from '@/data/emagrecimento_templates.json';
 
 type Chapter = { title: string; subtitle: string; content: string };
 type Template = {
@@ -73,25 +72,6 @@ export default function AdminTemplates() {
   };
 
   
-  const handleSeedEmagrecimento = async () => {
-    try {
-      setLoading(true);
-      // Delete old Emagrecimento templates
-      await supabase.from('ebook_templates').delete().eq('niche', 'Emagrecimento');
-      
-      // Insert new ones
-      const { error } = await supabase.from('ebook_templates').insert(emagrecimentoTemplates);
-      if (error) throw error;
-      
-      toast.success('Emagrecimento atualizado com sucesso!');
-      loadTemplates();
-    } catch (e: any) {
-      toast.error('Erro ao seedar: ' + e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleGenerateDraft = async () => {
     if (!draftingNiche.trim()) {
       toast.error("Informe o nicho");
@@ -407,9 +387,6 @@ export default function AdminTemplates() {
             </Button>
           </div>
           <div className="mt-3">
-            <Button onClick={handleSeedEmagrecimento} variant="outline" className="gap-2" disabled={loading}>
-            <Sparkles className="w-4 h-4" /> Atualizar DB Emagrecimento
-          </Button>
           <Button onClick={handleNewBlank} variant="outline" className="gap-2">
             <Plus className="w-4 h-4" /> Novo template em branco
           </Button>
