@@ -1,0 +1,446 @@
+[
+  {
+    "niche": "Viagens",
+    "title": "Viaje Mais, Gaste Menos: O Guia Definitivo",
+    "subtitle": "Descubra os segredos para explorar o mundo sem esvaziar sua conta bancária.",
+    "cover_url": "/templates/viagens/t1_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "O Mindset do Viajante Inteligente",
+        "subtitle": "Desbloqueie o mundo mudando sua forma de pensar sobre dinheiro e turismo.",
+        "content": "<p>A verdadeira jornada não começa quando você embarca no avião, mas no momento em que você decide que o mundo é acessível. Mudar sua mentalidade financeira é o primeiro passo para vivenciar destinos que antes pareciam impossíveis para o seu orçamento atual.</p><p>Esqueça a velha crença de que viajar é um luxo exclusivo para poucos. Com as estratégias corretas e um olhar treinado para oportunidades autênticas, você descobrirá que os melhores segredos de cada cultura custam muito menos do que os pacotes turísticos tradicionais.</p>",
+        "image_url": "/templates/viagens/t1_ch1.jpg"
+      },
+      {
+        "title": "Caçando Passagens Aéreas a Preço de Banana",
+        "subtitle": "O algoritmo secreto para nunca mais pagar caro em voos internacionais.",
+        "content": "<p>As companhias aéreas utilizam sistemas complexos de precificação para maximizar os lucros, mas há falhas nesse sistema prontas para serem exploradas. Dominar o momento exato de compra e as ferramentas de alerta é como ter a chave mestra dos céus.</p><p>Vamos revelar como combinar datas flexíveis, rotas alternativas e programas de fidelidade ocultos. Você aprenderá a navegar pelas abas anônimas e a usar VPNs para garantir que as passagens mais baratas não sumam na frente dos seus olhos, garantindo economias massivas.</p>"
+      },
+      {
+        "title": "Hospedagem Incrível Quase de Graça",
+        "subtitle": "De casas na árvore a apartamentos charmosos: fuja das armadilhas hoteleiras.",
+        "content": "<p>Hospedagem não precisa ser sinônimo de quartos de hotel impessoais e caros. O mercado de acomodações alternativas explodiu, oferecendo estadias gratuitas ou a preços irrisórios para quem sabe onde e como procurar.</p><p>Seja através de house sitting, troca de casas ou redes de hospitalidade locais, existe uma comunidade global disposta a abrir as portas. Você vai entender como construir um perfil confiável e acessar acomodações incríveis que, além de economizar dinheiro, proporcionam uma imersão cultural verdadeira.</p>",
+        "image_url": "/templates/viagens/t1_ch3.jpg"
+      },
+      {
+        "title": "Sabores do Mundo no Orçamento",
+        "subtitle": "Como comer maravilhosamente bem pagando o preço dos moradores locais.",
+        "content": "<p>A gastronomia é a alma de qualquer destino, e os restaurantes mais caros e iluminados raramente oferecem a experiência mais autêntica. O verdadeiro sabor está escondido nas ruas laterais e nos mercados frequentados pela população local.</p><p>Neste capítulo, mostraremos como identificar a autêntica comida de rua segura, como ler menus sem cair em armadilhas para turistas e como comprar ingredientes frescos em mercados locais. Você vai degustar pratos premiados informalmente gastando moedas ao invés de notas altas.</p>"
+      },
+      {
+        "title": "Experiências e Passeios Ocultos",
+        "subtitle": "Fuja das multidões e viva aventuras inesquecíveis de forma gratuita.",
+        "content": "<p>As atrações mais famosas costumam ter filas quilométricas e ingressos superfaturados que drenam seu orçamento de viagem. Felizmente, as experiências mais transformadoras e memoráveis de uma jornada muitas vezes não custam absolutamente nada.</p><p>Descubra como encontrar guias voluntários locais, festivais de rua gratuitos, trilhas escondidas e monumentos espetaculares fora do radar das agências. Ao focar no turismo imersivo, você transformará sua viagem em uma coleção de memórias ricas e autênticas que dinheiro nenhum poderia comprar.</p>",
+        "image_url": "/templates/viagens/t1_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Viagens",
+    "title": "Destinos Exóticos Inexplorados",
+    "subtitle": "Fuja do óbvio e descubra os paraísos secretos mais fascinantes do planeta.",
+    "cover_url": "/templates/viagens/t2_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "O Chamado do Desconhecido",
+        "subtitle": "Por que abandonar as rotas turísticas tradicionais transformará sua vida.",
+        "content": "<p>O turismo em massa pasteurizou as experiências de viagem, transformando maravilhas do mundo em meros cenários para fotos padronizadas. Buscar o desconhecido não é apenas uma escolha de roteiro, mas um compromisso profundo com o autodescobrimento e a verdadeira aventura.</p><p>Ao desviar das capitais superlotadas e guias turísticos convencionais, você mergulha na essência de lugares tocados apenas pelos locais. É nesse espaço de incerteza e beleza crua que a verdadeira mágica das viagens exóticas acontece, mudando sua perspectiva para sempre.</p>",
+        "image_url": "/templates/viagens/t2_ch1.jpg"
+      },
+      {
+        "title": "As Jóias Escondidas da Ásia",
+        "subtitle": "Templos ancestrais e praias desertas que a internet ainda não descobriu.",
+        "content": "<p>Além das praias famosas da Tailândia e das cidades vibrantes do Japão, existe uma Ásia silenciosa e majestosa, guardada a sete chaves pelas montanhas e selvas densas. São aldeias paradas no tempo e ilhas intocadas de areias puras.</p><p>Desvendaremos rotas pelas fronteiras menos cruzadas do Sudeste Asiático, onde tradições milenares são vivenciadas sem a presença de multidões de câmeras. Prepare-se para se conectar com monastérios isolados e cachoeiras secretas que oferecem uma paz profunda e revitalizante.</p>"
+      },
+      {
+        "title": "Os Mistérios do Continente Africano",
+        "subtitle": "Aventuras selvagens e encontros culturais muito além do safári tradicional.",
+        "content": "<p>A África pulsa com uma energia vital inigualável, abrigando contrastes que vão de desertos infinitos a florestas exuberantes inexploradas. No entanto, a maioria dos viajantes se limita aos parques nacionais mais comercializados, perdendo a vastidão real do continente.</p><p>Nós o levaremos a vilarejos isolados, planícies onde tribos mantêm ritos ancestrais autênticos e oásis escondidos nas dunas do Saara. Uma imersão responsável e sustentável que revela as cores, os sons e a hospitalidade calorosa de um continente vibrante e misterioso.</p>",
+        "image_url": "/templates/viagens/t2_ch3.jpg"
+      },
+      {
+        "title": "A Magia Secreta da América Latina",
+        "subtitle": "Ruínas perdidas e vales mágicos no nosso próprio quintal sul-americano.",
+        "content": "<p>Enquanto o mundo olha para a Europa e América do Norte, a América Latina guarda cenários dignos de ficção científica que permanecem completamente fora do radar. A proximidade geográfica não diminui a magnitude das aventuras que aguardam os destemidos.</p><p>Explore sítios arqueológicos escondidos sob selvas tropicais, salares de cores surreais e vales andinos onde o tempo parece não passar. Aprenda a navegar por essas regiões com segurança e respeito, revelando um realismo fantástico que fará você se apaixonar perdidamente.</p>"
+      },
+      {
+        "title": "Planejando sua Própria Expedição",
+        "subtitle": "Logística, segurança e preparação para viagens fora do eixo turístico.",
+        "content": "<p>Aventurar-se em destinos exóticos requer mais do que coragem; exige um planejamento impecável. A ausência de infraestrutura turística tradicional significa que você precisará se preparar para a imprevisibilidade, transformando desafios em oportunidades de aprendizado.</p><p>Você receberá um manual completo sobre vistos difíceis, vacinas essenciais, comunicação sem barreiras linguísticas e navegação offline. Com esta base sólida, o medo do desconhecido dará lugar à emoção pura da descoberta, permitindo que você viaje com total confiança e segurança.</p>",
+        "image_url": "/templates/viagens/t2_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Viagens",
+    "title": "Nômade Digital: O Mundo é Seu Escritório",
+    "subtitle": "Passo a passo para viajar o ano inteiro trabalhando de forma remota.",
+    "cover_url": "/templates/viagens/t3_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "A Revolução do Trabalho Remoto",
+        "subtitle": "Por que a era do escritório físico acabou e como você pode lucrar com isso.",
+        "content": "<p>A ideia de estar acorrentado a uma mesa das 9h às 18h está rapidamente se tornando obsoleta. A revolução digital abriu portas inimagináveis, permitindo que profissionais de diversas áreas transformem sua conexão de internet em um passaporte global e ilimitado.</p><p>Tornar-se um nômade digital não é apenas sobre trabalhar de frente para a praia; é assumir o controle total sobre seu tempo, sua rotina e seu ambiente. Descubra os primeiros passos mentais e práticos para se libertar do sistema corporativo tradicional.</p>",
+        "image_url": "/templates/viagens/t3_ch1.jpg"
+      },
+      {
+        "title": "Carreiras Lucrativas para Viajantes",
+        "subtitle": "As profissões em alta que permitem total flexibilidade geográfica.",
+        "content": "<p>Muitas pessoas acreditam que apenas programadores ou influenciadores podem trabalhar viajando. A realidade é que o mercado remoto atual necessita desesperadamente de redatores, assistentes virtuais, consultores, designers, professores e especialistas em marketing dispostos a entregar resultados de qualquer lugar.</p><p>Mapeamos as carreiras mais rentáveis e acessíveis para quem deseja começar imediatamente. Aprenda como adaptar suas habilidades atuais, onde encontrar os melhores contratos freelance e como construir um portfólio robusto que atrai clientes internacionais pagando em moedas fortes.</p>"
+      },
+      {
+        "title": "Configurando sua Base pelo Mundo",
+        "subtitle": "Coworkings, vistos para nômades e a arte de escolher a próxima cidade.",
+        "content": "<p>A liberdade absoluta pode ser esmagadora sem um mínimo de estrutura. Escolher a cidade certa para se estabelecer temporariamente envolve equilibrar custo de vida, qualidade da internet, infraestrutura médica e a comunidade local de nômades digitais.</p><p>Desvendaremos os paraísos globais para trabalhadores remotos, como Medellín, Bali e Lisboa. Além disso, guiaremos você pelo labirinto de vistos específicos para nômades, garantindo que suas estadias prolongadas sejam não apenas incríveis, mas totalmente legais e livres de estresse imigratório.</p>",
+        "image_url": "/templates/viagens/t3_ch3.jpg"
+      },
+      {
+        "title": "Gestão de Tempo e Produtividade em Viagem",
+        "subtitle": "Como não deixar as distrações do paraíso destruírem seus resultados.",
+        "content": "<p>O maior desafio do nomadismo não é encontrar trabalho, mas sim manter o foco quando uma praia cristalina ou uma cidade vibrante aguardam lá fora. A linha entre férias permanentes e carreira sustentável é definida por sua rotina de produtividade.</p><p>Aprenda técnicas de bloqueio de tempo, rituais matinais imutáveis e como separar rigorosamente os espaços de trabalho e lazer. Com nosso sistema de gestão, você entregará projetos com excelência enquanto ainda terá de sobra para explorar e aproveitar o novo destino.</p>"
+      },
+      {
+        "title": "A Gestão Financeira Global",
+        "subtitle": "Impostos, contas internacionais e como multiplicar seu dinheiro viajando.",
+        "content": "<p>Receber em dólares ou euros enquanto gasta em moedas locais é o segredo do crescimento financeiro acelerado. Porém, a burocracia de impostos internacionais e taxas de câmbio abusivas podem devorar seus lucros se você não for estratégico.</p><p>Este capítulo essencial aborda a criação de contas globais multimoedas, residência fiscal estratégica e como otimizar seus impostos legalmente. Domine as finanças de um cidadão do mundo e transforme o nomadismo em um plano sólido de riqueza a longo prazo.</p>",
+        "image_url": "/templates/viagens/t3_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Viagens",
+    "title": "Experiências de Luxo com Orçamento Inteligente",
+    "subtitle": "A arte de viajar como realeza pagando como plebeu.",
+    "cover_url": "/templates/viagens/t4_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "O Luxo Hackeado",
+        "subtitle": "Desmistificando a ideia de que viagens exclusivas exigem fortunas.",
+        "content": "<p>A indústria do turismo de luxo vive do brilho e do status, convencendo a maioria de que o serviço cinco estrelas é inatingível. No entanto, o verdadeiro luxo não é sobre quanto você paga, mas sim sobre o acesso e o conhecimento das engrenagens do mercado.</p><p>Com os \"hacks\" e as táticas adequadas, experiências que pareciam reservadas para milionários tornam-se perfeitamente possíveis para o viajante comum. Prepararemos você para entrar em um novo mundo de upgrades constantes, lounges exclusivos e tratamentos VIP sem o custo exorbitante.</p>",
+        "image_url": "/templates/viagens/t4_ch1.jpg"
+      },
+      {
+        "title": "O Mundo dos Pontos e Milhas VIP",
+        "subtitle": "O mapa do tesouro para voar de Primeira Classe quase de graça.",
+        "content": "<p>As cabines de primeira classe e executiva parecem territórios inalcançáveis, mas a maioria das pessoas sentadas lá não pagou o preço cheio da passagem. Elas dominam o jogo invisível dos cartões de crédito e programas de milhagem de alto escalão.</p><p>Ensinaremos como acumular pontos exponencialmente através de gastos cotidianos e bônus de adesão. Aprenda a maximizar a emissão de bilhetes prêmio e a negociar upgrades nos balcões das companhias aéreas com elegância e técnica, garantindo champanhe a 30 mil pés.</p>"
+      },
+      {
+        "title": "Resorts 5 Estrelas Fora de Temporada",
+        "subtitle": "Timing perfeito para desfrutar da opulência por uma fração do preço.",
+        "content": "<p>A flutuação sazonal de preços nos hotéis de altíssimo luxo é drástica e previsível. O mesmo quarto que custa uma pequena fortuna no pico do verão pode ser arrematado por valores impressionantemente acessíveis poucas semanas antes ou depois.</p><p>Descubra a magia da \"shoulder season\" (meia-estação), onde o clima ainda é favorável, as multidões sumiram e os gerentes dos resorts estão desesperados para preencher as suítes ociosas. Aprenda também técnicas persuasivas de comunicação direta para conseguir mimos, jantares e upgrades complementares.</p>",
+        "image_url": "/templates/viagens/t4_ch3.jpg"
+      },
+      {
+        "title": "Alta Gastronomia sem Falência",
+        "subtitle": "Saboreando menus premiados e restaurantes Michelin inteligentemente.",
+        "content": "<p>Jantar em restaurantes estrelados pelo Guia Michelin é o ápice da viagem de luxo, mas as contas de jantar costumam ser astronômicas. O segredo que a maioria ignora é que a mesma cozinha brilhante é servida em horários alternativos por muito menos.</p><p>Mostraremos como os menus de almoço executivo e as degustações de \"early bird\" oferecem a mesma maestria culinária com descontos de até 60%. Saiba também como reservar mesas impossíveis e garantir um tratamento de crítico gastronômico onde quer que você vá.</p>"
+      },
+      {
+        "title": "Transporte Privado e Serviços Exclusivos",
+        "subtitle": "Helicópteros, iates e spas: pequenas indulgências, enorme impacto.",
+        "content": "<p>Um transfer privado no aeroporto ou um dia de relaxamento em um spa de renome mundial elevam a viagem a outro patamar. Embora alugar um iate privado por uma semana seja caro, fretá-lo por algumas horas compartilhadas é surpreendentemente viável.</p><p>Aprenda a fracionar experiências premium e utilizar aplicativos e clubes de desconto voltados ao turismo de alto padrão. Você terminará sua viagem revigorado, ostentando memórias de puro luxo que foram orquestradas com uma inteligência financeira invejável.</p>",
+        "image_url": "/templates/viagens/t4_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Arquitetura e Decoração",
+    "title": "Design Minimalista para Espaços Pequenos",
+    "subtitle": "Transforme apartamentos compactos em santuários de elegância e amplitude.",
+    "cover_url": "/templates/arquitetura/t1_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "Menos é Muito Mais",
+        "subtitle": "A filosofia do minimalismo aplicada ao bem-estar e ao design de interiores.",
+        "content": "<p>Viver em espaços pequenos não significa sacrificar o conforto ou o estilo. Pelo contrário, é o convite perfeito para adotar a filosofia minimalista, onde cada objeto presente no ambiente possui um propósito claro, seja ele funcional ou de profundo valor estético.</p><p>Ao compreender o minimalismo não como privação, mas como libertação do excesso, você começa a enxergar seu lar com novos olhos. O objetivo é criar um refúgio visualmente silencioso, onde a organização impecável e o design limpo promovem calma e clareza mental diária.</p>",
+        "image_url": "/templates/arquitetura/t1_ch1.jpg"
+      },
+      {
+        "title": "O Poder das Cores e da Luz",
+        "subtitle": "Ilusões de ótica sutis que dobram o tamanho visual do seu ambiente.",
+        "content": "<p>A paleta de cores é a ferramenta mais poderosa e econômica na transformação de metragens reduzidas. Tons claros e monocromáticos não apenas refletem a luz, mas também apagam os limites rígidos das paredes, criando uma expansão visual imediata no seu apartamento.</p><p>Dominaremos as técnicas de pintura inteligente e o uso estratégico de espelhos amplos para rebater a iluminação natural. Descubra como texturas suaves podem quebrar a monotonia do branco e trazer aquecimento, garantindo que o minimalismo seja incrivelmente acolhedor, nunca frio.</p>"
+      },
+      {
+        "title": "Móveis Multifuncionais e Inteligentes",
+        "subtitle": "O segredo oculto para otimizar cada centímetro quadrado do seu lar.",
+        "content": "<p>Quando o espaço é um artigo de luxo, seus móveis precisam trabalhar em dobro. A mobília convencional muitas vezes cria bloqueios no fluxo de circulação, sufocando a planta do imóvel e gerando a sensação constante de aperto e bagunça.</p><p>Exploraremos as maravilhas da marcenaria inteligente: camas com baús embutidos, mesas retráteis, painéis divisórios vazados e sofás adaptáveis. Escolher peças com linhas finas e pernas aparentes ajudará a manter o piso visível, um truque infalível para prolongar o campo de visão.</p>",
+        "image_url": "/templates/arquitetura/t1_ch3.jpg"
+      },
+      {
+        "title": "A Arte do Desapego Consciente",
+        "subtitle": "Métodos práticos para eliminar a tralha e respirar aliviado.",
+        "content": "<p>O maior inimigo do espaço compacto é o acúmulo desnecessário de objetos. Muitas vezes, guardamos coisas por apego emocional ou por puro hábito, reduzindo drasticamente o potencial do nosso ambiente de nos proporcionar paz e funcionalidade diária.</p><p>Aplicaremos estratégias rigorosas e afetivas de curadoria pessoal para limpar as prateleiras e armários. Você aprenderá a técnica de categorização implacável, mantendo apenas o que realmente traz alegria e utilidade, transformando sua casa em um espaço de respiro e contemplação leve.</p>"
+      },
+      {
+        "title": "Decoração com Propósito e Alma",
+        "subtitle": "Como adicionar personalidade sem destruir a estética minimalista.",
+        "content": "<p>O mito de que espaços minimalistas não têm personalidade não poderia estar mais errado. Na ausência da bagunça visual, a arte, as plantas e os objetos de design que você escolhe destacar ganham um protagonismo absoluto, exigindo uma seleção cuidadosa e intencional.</p><p>Ensinaremos como criar pontos focais dramáticos com uma única obra de arte imponente, a introduzir o verde botânico para trazer vida ao ambiente e a escolher texturas que contam sua história. Seu espaço pequeno se tornará uma obra de arte altamente curada.</p>",
+        "image_url": "/templates/arquitetura/t1_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Arquitetura e Decoração",
+    "title": "Decoração Sustentável e Ecológica",
+    "subtitle": "Crie um lar deslumbrante que respeita a natureza e o seu orçamento.",
+    "cover_url": "/templates/arquitetura/t2_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "O Despertar do Eco-Design",
+        "subtitle": "Entendendo o impacto do consumo consciente na arquitetura de interiores.",
+        "content": "<p>A forma como decoramos nossos espaços tem um impacto direto no meio ambiente, desde a extração de matérias-primas até o descarte de móveis rápidos (fast furniture). O design sustentável surge como uma resposta urgente e profundamente bela a esse modelo exaustivo.</p><p>Abraçar a sustentabilidade na decoração não significa abrir mão do luxo ou da sofisticação. Significa elevar seu nível de consciência, valorizando a história e a pegada ecológica dos materiais, criando um lar que vibra em harmonia com o bem-estar do planeta.</p>",
+        "image_url": "/templates/arquitetura/t2_ch1.jpg"
+      },
+      {
+        "title": "Materiais Naturais e Renováveis",
+        "subtitle": "Madeira certificada, bambu, linho e a riqueza das texturas orgânicas.",
+        "content": "<p>O uso de materiais sintéticos e tóxicos polui o ar interno das casas e esgota os recursos naturais. A transição para revestimentos e móveis ecológicos purifica o ambiente, trazendo uma energia vibrante e uma conexão tátil inigualável com a natureza.</p><p>Aprofunde-se no mundo dos materiais nobres e renováveis. Saiba como identificar selos de certificação de madeiras, as propriedades bactericidas do bambu e a elegância pura de tecidos como o algodão orgânico e o linho, criando atmosferas calorosas e extremamente saudáveis.</p>"
+      },
+      {
+        "title": "Upcycling: A Arte da Transformação",
+        "subtitle": "Ressignifique móveis antigos e garimpe tesouros únicos em antiquários.",
+        "content": "<p>O móvel mais ecológico do mundo é aquele que já existe. A cultura do descarte em massa nos fez esquecer o charme imortal de peças antigas, feitas de madeiras maciças que simplesmente não se encontram mais no mercado atual.</p><p>Descubra as técnicas práticas de restauração, pátina e pintura para dar vida nova a móveis de família ou tesouros de brechós. O upcycling adiciona uma camada profunda de história, exclusividade e caráter à sua decoração, tornando seu lar verdadeiramente inimitável.</p>",
+        "image_url": "/templates/arquitetura/t2_ch3.jpg"
+      },
+      {
+        "title": "Eficiência Energética e Iluminação Eco",
+        "subtitle": "Soluções brilhantes para reduzir drasticamente sua conta de energia.",
+        "content": "<p>Uma casa verdadeiramente sustentável deve ser inteligente no consumo de recursos diários. Projetos luminotécnicos antiquados não apenas prejudicam a beleza do ambiente, mas também desperdiçam dinheiro e sobrecarregam a malha energética desnecessariamente com calor excessivo.</p><p>Aprenda a maximizar a entrada de luz solar cruzada com espelhos e cortinas translúcidas. Dominaremos o uso estratégico de LEDs e sistemas de automação que garantem a luz perfeita para cada ocasião, aliando conforto visual extremo a uma pegada de carbono quase zero.</p>"
+      },
+      {
+        "title": "Design Biofílico em Casa",
+        "subtitle": "Integre a natureza viva ao seu dia a dia urbano para reduzir o estresse.",
+        "content": "<p>O design biofílico vai além de simplesmente espalhar vasos pela casa; é uma abordagem científica que busca reconectar os seres humanos à natureza para promover a cura, a criatividade e a redução de hormônios do estresse no ambiente doméstico.</p><p>Criaremos jardins verticais práticos, hortas orgânicas de varanda e agrupamentos de plantas purificadoras de ar, como a espada-de-são-jorge. Integrar elementos naturais como água e pedras transformará seu lar em um autêntico oásis urbano regenerativo e ecológico.</p>",
+        "image_url": "/templates/arquitetura/t2_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Arquitetura e Decoração",
+    "title": "Transformação de Ambientes com Iluminação",
+    "subtitle": "O guia definitivo para criar cenários mágicos usando o poder da luz.",
+    "cover_url": "/templates/arquitetura/t3_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "O Segredo Invisível da Arquitetura",
+        "subtitle": "Por que a iluminação é o fator que define o sucesso ou o fracasso de um projeto.",
+        "content": "<p>Você pode ter os móveis mais luxuosos e as obras de arte mais raras, mas com a luz errada, tudo parecerá sem vida e achatado. A luz é a tinta invisível com a qual o arquiteto pinta as emoções e a percepção de volume do ambiente.</p><p>Neste primeiro passo, desmistificaremos o impacto psicológico da temperatura de cor nas nossas vidas diárias. Aprenda a diferença vital entre a luz que acolhe e abraça versus a luz fria que causa fadiga, compreendendo como moldar a energia da sua casa.</p>",
+        "image_url": "/templates/arquitetura/t3_ch1.jpg"
+      },
+      {
+        "title": "Camadas de Luz: O Método Profissional",
+        "subtitle": "Como combinar luz geral, de tarefa e de destaque como um especialista.",
+        "content": "<p>Um erro comum é depender de um único ponto de luz central no teto, o que cria sombras duras e um ambiente pouco convidativo. A excelência no design de interiores exige o domínio das três camadas de iluminação independentes.</p><p>Detalharemos como distribuir a luz ambiente para uniformidade, a luz de tarefa para funcionalidade em áreas de leitura e cozinha, e a luz de destaque (acento) para valorizar quadros, plantas e texturas. O resultado é um cenário dinâmico e cinematográfico.</p>"
+      },
+      {
+        "title": "Iluminação Indireta e Dramática",
+        "subtitle": "Sancas, perfis de LED e arandelas para um conforto visual espetacular.",
+        "content": "<p>O luxo contemporâneo na arquitetura é marcado por não enxergar a fonte de luz, mas apenas o seu efeito maravilhoso banhando as superfícies. A iluminação indireta elimina o ofuscamento e eleva a sofisticação de qualquer cômodo instantaneamente.</p><p>Explore o uso de sancas invertidas de gesso, rodapés iluminados e perfis de LED embutidos na marcenaria. Essas soluções trazem uma sensação de flutuação e leveza, desenhando formas geométricas nas paredes e tornando os tetos visualmente muito mais altos e imponentes.</p>",
+        "image_url": "/templates/arquitetura/t3_ch3.jpg"
+      },
+      {
+        "title": "Luminárias como Obras de Arte",
+        "subtitle": "Pendentes, lustres e abajures que roubam a cena na decoração.",
+        "content": "<p>Enquanto a luz arquitetônica fica nos bastidores, a iluminação decorativa é a estrela do palco. Luminárias não servem apenas para emitir luz; elas são esculturas suspensas que ditam o estilo, preenchem vazios aéreos e funcionam como joias do ambiente.</p><p>Aprenda as regras de ouro para o dimensionamento e posicionamento perfeito de lustres sobre mesas de jantar e pendentes laterais em quartos. Saiba misturar metais e acabamentos, escolhendo peças icônicas que trarão um impacto deslumbrante aos seus convidados.</p>"
+      },
+      {
+        "title": "Automação e Cenários Inteligentes",
+        "subtitle": "Controle a atmosfera da sua casa na palma da mão com tecnologia acessível.",
+        "content": "<p>O avanço tecnológico tornou a automação residencial, antes restrita a mansões, incrivelmente democrática e fácil de instalar. Controlar a intensidade (dimmerização) e a temperatura da luz é a chave para adaptar o mesmo ambiente a diferentes momentos do dia.</p><p>Descubra como criar \"cenários de luz\" pré-programados para jantares românticos, sessões de cinema em família ou home office altamente focado. Comandos de voz e aplicativos transformarão a rotina da sua casa em uma experiência fluida, hipermoderna e surpreendente.</p>",
+        "image_url": "/templates/arquitetura/t3_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Arquitetura e Decoração",
+    "title": "O Guia Completo do Estilo Industrial",
+    "subtitle": "Aprenda a combinar brutalismo e aconchego para espaços incrivelmente modernos.",
+    "cover_url": "/templates/arquitetura/t4_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "A Essência dos Lofts Nova-Iorquinos",
+        "subtitle": "Como o charme de antigas fábricas se tornou o auge da sofisticação urbana.",
+        "content": "<p>O estilo industrial nasceu da necessidade criativa, quando artistas nova-iorquinos transformaram galpões abandonados em estúdios vibrantes. Hoje, ele representa a busca pela verdade dos materiais, despindo a casa de excessos estéticos e celebrando a imperfeição das texturas rústicas.</p><p>Para adotar esse estilo, é preciso abraçar a estética inacabada. O charme reside no contraste absoluto: a dureza fria do metal e do concreto fundindo-se de maneira genial ao calor das madeiras desgastadas e couros envolventes, criando lares cheios de atitude e história.</p>",
+        "image_url": "/templates/arquitetura/t4_ch1.jpg"
+      },
+      {
+        "title": "Materiais Crus e Estruturas Aparentes",
+        "subtitle": "Concreto, tijolinhos e tubulações como protagonistas do seu projeto.",
+        "content": "<p>A regra número um do design industrial é não esconder os esqueletos arquitetônicos. Em vez de embutir fiações em gessos caros, tubulações de aço galvanizado ou cobre tornam-se elementos decorativos imponentes que correm pelo teto e pelas paredes com orgulho.</p><p>Aprenda a aplicar cimento queimado autêntico ou papéis de parede de alta qualidade que imitam tijolinhos de demolição. Essas superfícies ricas em textura absorvem a luz de forma dramática, conferindo a densidade urbana que o estilo exige sem demandar quebra-quebra infinito.</p>"
+      },
+      {
+        "title": "Móveis e Metais com Presença",
+        "subtitle": "A harmonia perfeita entre o ferro preto fosco e a madeira maciça.",
+        "content": "<p>Na mobília industrial, a fragilidade não tem espaço. Peças robustas e estruturadas em serralheria geométrica com soldas aparentes dominam os ambientes, transmitindo firmeza, personalidade forte e durabilidade imbatível que resiste ao teste das tendências.</p><p>Mostraremos como escolher estantes vazadas, mesas de jantar com bases de ferro pesado e banquetas vintage de metal. O segredo para não deixar o ambiente opressivo é contrabalançar essa força com tampos de madeira natural cheios de veios e marcas do tempo.</p>",
+        "image_url": "/templates/arquitetura/t4_ch3.jpg"
+      },
+      {
+        "title": "Iluminação Pendente e Retrô",
+        "subtitle": "Lâmpadas de filamento e cúpulas esmaltadas para um clima intimista.",
+        "content": "<p>O estilo industrial falha miseravelmente se for banhado por luzes brancas e frias de escritórios corporativos. A iluminação aqui deve remeter às antigas fábricas e galpões do século XX, trazendo calor, nostalgia e sombras bastante marcadas.</p><p>Explore o uso de trilhos eletrificados pretos com spots articuláveis, perfeitos para flexibilidade no design. Destacaremos o charme irresistível das lâmpadas de filamento de carbono aparentes e luminárias pendentes grandes e esmaltadas, que criam zonas de intimidade extremas sobre balcões e mesas.</p>"
+      },
+      {
+        "title": "Abrandando o Brutalismo",
+        "subtitle": "Como injetar conforto e cores quentes para a casa não parecer fria.",
+        "content": "<p>O maior risco do estilo industrial é cruzar a linha da modernidade e cair na esterilidade, tornando a casa inóspita e barulhenta. Para que o design funcione no dia a dia, ele precisa desesperadamente de camadas ricas de maciez e conforto tátil.</p><p>O toque de mestre está nos tecidos encorpados: tapetes felpudos, sofás imensos de couro envelhecido ou veludo colorido, e cortinas pesadas. Combinadas a obras de arte urbanas e plantas grandiosas, essas camadas quebram a rigidez dos metais e transformam o brutalismo em puro aconchego.</p>",
+        "image_url": "/templates/arquitetura/t4_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Moda e Estilo",
+    "title": "O Guarda-Roupa Cápsula Perfeito",
+    "subtitle": "Menos roupas, mais estilo: aprenda a multiplicar seus looks com peças essenciais.",
+    "cover_url": "/templates/moda/t1_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "O Fim da Angústia do 'Não Tenho o Que Vestir'",
+        "subtitle": "Descubra como o excesso de roupas esconde o seu verdadeiro estilo.",
+        "content": "<p>Abrir um armário lotado e sentir que não há nada adequado para vestir é um fenômeno moderno e frustrante. O problema não é a falta de opções, mas a paralisia da decisão causada por compras impulsivas de itens que simplesmente não conversam entre si.</p><p>O conceito de guarda-roupa cápsula surge como um antídoto libertador. Ao restringir intencionalmente o número de peças para uma seleção altamente curada e versátil, você elimina a fadiga matinal e garante que estará sempre elegante, não importando a ocasião.</p>",
+        "image_url": "/templates/moda/t1_ch1.jpg"
+      },
+      {
+        "title": "A Estrutura das Peças Base",
+        "subtitle": "As bases neutras e atemporais que fundamentam a elegância duradoura.",
+        "content": "<p>Qualquer guarda-roupa funcional precisa de fundações de altíssima qualidade. Peças base não chamam atenção para si mesmas, mas formam a tela em branco perfeita para criar silhuetas sofisticadas e impecáveis que alongam e valorizam as suas proporções.</p><p>Detalharemos o guia definitivo da base perfeita: a camisa branca de corte preciso, a calça de alfaiataria preta, o jeans clássico sem lavagens extravagantes e o blazer perfeitamente ajustado. Investir pesadamente nesses itens é o segredo das mulheres reconhecidas mundialmente pela elegância sem esforço.</p>"
+      },
+      {
+        "title": "A Arte da Multiplicação de Looks",
+        "subtitle": "Fórmulas secretas para criar 30 visuais distintos usando apenas 10 peças.",
+        "content": "<p>O verdadeiro poder de uma cápsula bem desenhada é a combinabilidade infinita. Quando todas as peças do seu armário harmonizam em cores e estilos, o ato de se vestir deixa de ser um quebra-cabeça e se torna pura matemática estilística.</p><p>Ensinaremos a técnica das sobreposições inteligentes (layering) e a inversão de proporções. Você aprenderá a transitar uma mesma peça básica de um look rigoroso de escritório corporativo para um visual descontraído de fim de semana, apenas alterando as amarrações e dobras estratégicas.</p>",
+        "image_url": "/templates/moda/t1_ch3.jpg"
+      },
+      {
+        "title": "Injetando Cores e Estampas com Sabedoria",
+        "subtitle": "Como quebrar a monotonia neutra sem destruir a harmonia da cápsula.",
+        "content": "<p>Um erro frequente de quem adere ao minimalismo é acreditar que o armário deve ser exclusivamente preto, branco e bege, perdendo a alegria de viver. Cores e estampas são fundamentais para comunicar energia, mas precisam de uma estratégia clara de inserção.</p><p>Você descobrirá como definir sua paleta pessoal de cores de acento, que iluminam seu rosto e se alinham ao seu tom de pele. Mostraremos as três estampas clássicas que nunca saem de moda e como inseri-las em pequenas doses impactantes que revitalizam todo o conjunto neutro.</p>"
+      },
+      {
+        "title": "Manutenção e Compras Conscientes",
+        "subtitle": "O método definitivo para não cair nas armadilhas da fast fashion novamente.",
+        "content": "<p>Construir a cápsula perfeita é apenas o início; mantê-la intacta é o verdadeiro desafio diante do bombardeio constante da indústria de tendências descartáveis (fast fashion). É preciso blindar sua mente contra liquidações enganosas e desejos passageiros.</p><p>Apresentamos a regra do 'um entra, um sai' e o checklist implacável de 5 perguntas antes de comprar qualquer nova peça. Além disso, aprenda os segredos da lavagem correta e armazenamento para que suas roupas amadas durem décadas com aparência de novas.</p>",
+        "image_url": "/templates/moda/t1_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Moda e Estilo",
+    "title": "Estilo Pessoal: Descubra Sua Identidade",
+    "subtitle": "Um mergulho profundo para traduzir a sua essência em roupas impactantes.",
+    "cover_url": "/templates/moda/t2_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "As Roupas Falam Antes de Você",
+        "subtitle": "A psicologia da moda e o impacto da primeira impressão nas suas conquistas.",
+        "content": "<p>Sua imagem pessoal é a ferramenta de comunicação não-verbal mais rápida e potente que você possui. Antes mesmo de você dizer 'olá', suas roupas já enviaram dezenas de mensagens inconscientes sobre seu profissionalismo, confiança e valores para as pessoas ao seu redor.</p><p>Assumir o controle dessa narrativa não tem nada de futilidade; é pura estratégia de vida. Quando o que você veste está totalmente alinhado com quem você realmente é, você projeta uma autenticidade magnética que abre portas inexploradas, tanto nas relações pessoais quanto na carreira.</p>",
+        "image_url": "/templates/moda/t2_ch1.jpg"
+      },
+      {
+        "title": "Os Sete Estilos Universais",
+        "subtitle": "Identifique suas tribos e aprenda a mesclá-las para criar um visual único.",
+        "content": "<p>No mundo do design de moda e consultoria de imagem, todos os looks podem ser categorizados dentro da teoria dos Sete Estilos Universais. Ninguém pertence exclusivamente a apenas um; a genialidade do estilo é a mistura proporcional deles.</p><p>Vamos dissecar o Tradicional, Elegante, Esportivo, Romântico, Dramático, Criativo e Sensual. Ao descobrir qual é o seu estilo dominante e quais são os seus secundários, você terá um mapa claro e infalível de quais modelagens, tecidos e mensagens visuais combinam perfeitamente com a sua alma.</p>"
+      },
+      {
+        "title": "Biotipos e Proporções",
+        "subtitle": "Ame seu corpo usando a ilusão de ótica a favor da sua silhueta.",
+        "content": "<p>A indústria muitas vezes impõe um padrão irreal, mas a verdadeira elegância reside em dominar a arquitetura do próprio corpo. O segredo das atrizes hollywoodianas e supermodelos não é a perfeição física, mas sim o uso magistral de linhas, cortes e caimentos precisos.</p><p>Você aprenderá a diagnosticar seu formato de corpo (ampulheta, triângulo, retângulo, etc.) e as técnicas definitivas de proporção. Esconder volumes indesejados ou valorizar pontos fortes através de decotes estratéticos, cinturas altas e tecidos estruturados se tornará sua nova super-habilidade diária.</p>",
+        "image_url": "/templates/moda/t2_ch3.jpg"
+      },
+      {
+        "title": "A Análise de Coloração Pessoal",
+        "subtitle": "Descubra as cores que te rejuvenescem e as que apagam o seu brilho.",
+        "content": "<p>Você já notou como certas roupas fazem você parecer cansado, enquanto outras parecem iluminar seu rosto como mágica, mesmo sem maquiagem? Essa é a ciência da colorimetria agindo em harmonia ou em conflito com o seu subtom de pele.</p><p>Guiá-lo-emos pelos princípios básicos das cartelas sazonais (inverno, verão, outono, primavera). Ao compreender a temperatura, profundidade e intensidade ideais para você, o momento da compra se tornará incrivelmente fácil, garantindo que você nunca mais compre roupas das cores erradas.</p>"
+      },
+      {
+        "title": "Assinatura de Estilo (Signature Look)",
+        "subtitle": "Como criar uma marca registrada que faça você ser lembrado por todos.",
+        "content": "<p>Todo ícone de estilo na história possui um elemento inconfundível. Seja o óculos escuro marcante de Anna Wintour, o batom vermelho clássico ou um corte de cabelo imutável, ter uma assinatura visual consolida sua identidade na memória das pessoas com força absurda.</p><p>Vamos ajudá-lo a encontrar esse detalhe exclusivo, seja um tipo de joia, um perfume assinatura, ou uma paleta de cores característica. Esse pequeno toque final garantirá consistência absoluta à sua imagem, transformando você em sua própria e valiosa marca de luxo e sofisticação.</p>",
+        "image_url": "/templates/moda/t2_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Moda e Estilo",
+    "title": "Moda Sustentável e Consumo Consciente",
+    "subtitle": "O guia de estilo ético: vista-se de maneira chique, justa e ecológica.",
+    "cover_url": "/templates/moda/t3_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "A Verdade por trás da Fast Fashion",
+        "subtitle": "Compreendendo o impacto destrutivo da indústria e o poder da sua escolha.",
+        "content": "<p>A moda rápida democratizou as tendências, mas o preço oculto é assustadoramente alto. Montanhas de lixo têxtil, rios poluídos e trabalho quase escravo são as engrenagens silenciosas de um sistema feito para fazer você comprar e descartar incessantemente todas as semanas.</p><p>O primeiro passo para o consumo consciente é despertar para a realidade da cadeia produtiva. Quando você decide alinhar seu estilo aos seus valores éticos, cada peça de roupa que você escolhe comprar ou rejeitar torna-se um poderoso voto ativista pelo futuro do planeta.</p>",
+        "image_url": "/templates/moda/t3_ch1.jpg"
+      },
+      {
+        "title": "Garimpo e a Cultura do Brechó",
+        "subtitle": "Como encontrar tesouros únicos e vintage sem gastar uma fortuna.",
+        "content": "<p>Comprar em segunda mão deixou de ser necessidade para se tornar a mais pura vanguarda do estilo. Os brechós, lojas vintage e bazares são minas de ouro para quem busca exclusividade, tecidos e modelagens antigas de altíssima qualidade que as marcas atuais não replicam mais.</p><p>Ensinaremos o olhar clínico do caçador de tesouros. Aprenda a avaliar acabamentos, checar a durabilidade de tramas, pechinchar com sabedoria e a enxergar o potencial de customização em peças esquecidas. O vintage traz alma e história inimitáveis para qualquer look moderno.</p>"
+      },
+      {
+        "title": "Tecidos do Futuro e Fibras Ecológicas",
+        "subtitle": "Aprenda a ler etiquetas e escolher os materiais que abraçam a natureza.",
+        "content": "<p>A transição para um guarda-roupa sustentável passa obrigatoriamente pela educação material. Tecidos sintéticos derivados de petróleo não apenas poluem oceanos com microplásticos a cada lavagem, como também não permitem que a pele respire de forma saudável e natural.</p><p>Decifre os códigos das etiquetas e descubra o poder de investir em linho cru, algodão orgânico certificado, lyocell e fibras inovadoras como o Piñatex. Materiais de origem natural possuem caimento incomparável, envelhecem com muito mais dignidade e são perfeitamente biodegradáveis.</p>",
+        "image_url": "/templates/moda/t3_ch3.jpg"
+      },
+      {
+        "title": "Slow Fashion e o Apoio a Criadores Locais",
+        "subtitle": "Investindo em qualidade e design transparente da sua própria região.",
+        "content": "<p>A moda lenta (slow fashion) celebra o tempo necessário para criar algo verdadeiramente excepcional, valorizando o artesão e os processos manuais e justos. Ao comprar de marcas independentes locais, você impulsiona a economia da sua comunidade e diminui drasticamente a pegada de carbono do transporte global.</p><p>Guiaremos você na pesquisa e apoio de pequenos ateliês e estilistas independentes que produzem lotes limitados e sob demanda. O resultado é um guarda-roupa recheado de peças exclusivas e cheias de afeto, em contraposição ao uniforme globalizado e sem graça das grandes redes.</p>"
+      },
+      {
+        "title": "Conserto, Customização e Vida Longa",
+        "subtitle": "A revolução de fazer suas roupas amadas durarem gerações, não estações.",
+        "content": "<p>No passado, cuidar das roupas e consertá-las era um ofício valioso; hoje, é um ato de rebeldia ecológica maravilhosa. Um pequeno furo ou uma mancha não devem ser sentenças de morte para itens que ainda têm anos de vida útil e grandes histórias pela frente.</p><p>Retome a arte da manutenção, desde bordados criativos (visible mending) até tingimentos naturais caseiros. Saiba quando procurar um alfaiate de confiança para ajustar bainhas e ombros perfeitos. Cuidar do que você já possui é o ápice da elegância e da sustentabilidade inteligente.</p>",
+        "image_url": "/templates/moda/t3_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Moda e Estilo",
+    "title": "Acessórios que Transformam Qualquer Look",
+    "subtitle": "O segredo rápido e barato para elevar roupas básicas ao nível do alto padrão.",
+    "cover_url": "/templates/moda/t4_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "A Cereja do Bolo Estilístico",
+        "subtitle": "Como pequenos detalhes causam as maiores impressões na moda.",
+        "content": "<p>Você já se perguntou como as ícones de estilo de rua parecem deslumbrantes usando apenas calça jeans e uma camiseta de algodão? O mistério é totalmente desvendado quando você afasta o olhar das roupas em si e analisa as camadas de detalhes cuidadosamente arquitetados ao redor delas.</p><p>Os acessórios são os verdadeiros arquitetos da sofisticação diária. Eles têm o poder milagroso de atualizar silhuetas antigas, disfarçar roupas baratas e injetar sua personalidade única instantaneamente. Dominar esta arte fará você economizar milhares em peças e multiplicar seus looks exponencialmente.</p>",
+        "image_url": "/templates/moda/t4_ch1.jpg"
+      },
+      {
+        "title": "Sapatos e Bolsas: Os Pilares da Elegância",
+        "subtitle": "As peças de couro (ou materiais de alta qualidade) que você deve investir sem medo.",
+        "content": "<p>No mundo da consultoria de imagem, há uma regra de ouro inflexível: sapatos e bolsas revelam o verdadeiro nível de requinte de um visual e podem elevar ou arruinar peças de roupas maravilhosas. Roupas fast fashion podem passar despercebidas, mas calçados malfeitos gritam desleixo aos olhos.</p><p>Apresentaremos a tríade essencial: o scarpin poderoso, o mocassim masculino/feminino clássico e o tênis branco imaculado. Além disso, aprenda a escolher bolsas estruturadas com ferragens metálicas de alto brilho que parecem custar o triplo do seu valor real.</p>"
+      },
+      {
+        "title": "A Mágica dos Lenços e Echarpes",
+        "subtitle": "A versatilidade francesa para trazer cor e movimento ao redor do seu rosto.",
+        "content": "<p>Os lenços de seda são o segredo mais bem guardado e versátil das mulheres parisienses. Este pequeno quadrado de tecido estampado pode operar verdadeiros milagres estéticos e transitar por incontáveis funções no seu dia a dia.</p><p>Vamos te ensinar dezenas de amarrações chiques: no pescoço para proteger do frio com classe, envolto na alça da bolsa para um toque de luxo, como cinto improvisado, pulseira exuberante ou amarrado majestosamente no cabelo. É o item com o maior custo-benefício de toda a moda feminina e masculina.</p>",
+        "image_url": "/templates/moda/t4_ch3.jpg"
+      },
+      {
+        "title": "Joias e Bijuterias: O Brilho na Medida Certa",
+        "subtitle": "Misturando metais e criando composições que iluminam sua beleza natural.",
+        "content": "<p>Os metais que adicionamos próximo ao rosto têm o papel crucial de atuar como refletores naturais, amenizando olheiras e dando frescor à pele. Mas o excesso pode facilmente derrapar para o exagero cafona ou carnavalesco.</p><p>Descubra as regras de proporção (scale) e como misturar argolas clássicas, correntes contemporâneas e anéis minimalistas de forma fluida. Dominaremos também a tão temida mistura de dourado, prateado e rosé, quebrando velhos paradigmas e trazendo um ar cosmopolita e altamente requintado ao seu dia.</p>"
+      },
+      {
+        "title": "Óculos, Cintos e Chapéus",
+        "subtitle": "Acessórios de atitude que definem e afinam a silhueta instantaneamente.",
+        "content": "<p>Existem acessórios que não apenas adornam, mas que alteram magicamente a geometria do corpo e do rosto. Cintos estrategicamente posicionados acima da linha da cintura podem criar curvas voluptuosas e alongar as pernas de forma impressionante em segundos.</p><p>Mergulharemos na escolha do óculos de sol perfeito para afinar os ângulos do seu rosto, que exala aura de mistério e glamour. E, para os mais audaciosos, o guia de como introduzir chapéus elegantes e boinas que transformam qualquer calçada no seu tapete vermelho particular.</p>",
+        "image_url": "/templates/moda/t4_ch5.jpg"
+      }
+    ]
+  }
+]
