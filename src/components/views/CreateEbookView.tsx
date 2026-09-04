@@ -1119,8 +1119,8 @@ export function CreateEbookView() {
                         {/* Right Side: Image */}
                         <div className="w-[40%] flex justify-end shrink-0">
                           {coverUrl ? (
-                            <div className="w-full max-w-[200px] aspect-[3/4.2] rounded-xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.6)] border border-white/10 transition-transform duration-500 hover:scale-105">
-                              <img src={coverUrl} alt="Cover" className="w-full h-full object-cover" />
+                            <div className="w-full max-w-[200px] rounded-xl shadow-[0_20px_40px_rgba(0,0,0,0.6)] border border-white/10 transition-transform duration-500 hover:scale-105 flex items-center justify-center">
+                              <img src={coverUrl} alt="Cover" className="w-full h-auto object-contain rounded-xl" />
                             </div>
                           ) : (
                             <div className="w-full max-w-[200px] aspect-[3/4.2] rounded-xl border border-white/10 bg-white/5 flex items-center justify-center">
