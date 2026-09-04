@@ -1,0 +1,446 @@
+[
+  {
+    "niche": "Receitas e culinária",
+    "title": "Seca Barriga: 50 Receitas Low Carb",
+    "subtitle": "Transforme seu corpo com pratos deliciosos que queimam gordura 24 horas por dia.",
+    "cover_url": "/templates/receitas/t1_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "O Poder da Alimentação Estratégica",
+        "subtitle": "Por que a restrição severa nunca funciona a longo prazo.",
+        "content": "<p>A chave para um emagrecimento duradouro não está em passar fome, mas em fornecer os nutrientes certos na hora exata. Dietas extremamente restritivas costumam desacelerar o metabolismo e causar o temido efeito sanfona. Ao entender a dinâmica dos macronutrientes, você ganha a liberdade de comer até se saciar, sem culpa.</p><p>Neste capítulo inicial, desvendaremos os mitos por trás dos carboidratos e das gorduras. Você aprenderá como o seu corpo reage a diferentes picos de insulina e como controlar a compulsão alimentar substituindo ingredientes vilões por alternativas incrivelmente saborosas e nutritivas.</p>",
+        "image_url": "/templates/receitas/t1_ch1.jpg"
+      },
+      {
+        "title": "Café da Manhã: O Início Perfeito",
+        "subtitle": "Receitas matinais para explodir sua energia.",
+        "content": "<p>A primeira refeição do dia dita o ritmo do seu metabolismo. Escolher opções com baixo índice glicêmico logo cedo garante uma curva de energia estável, impedindo a sonolência no meio da manhã e aquele desejo incontrolável por doces antes do almoço. Pães low carb e panquecas proteicas serão seus novos aliados.</p><p>Aqui, você terá acesso a 10 receitas práticas que podem ser feitas em menos de cinco minutos. Desde ovos turbinados até smoothies termogênicos, vamos construir uma rotina matinal que seja tão prazerosa quanto eficiente para o seu objetivo de derreter medidas.</p>"
+      },
+      {
+        "title": "Almoços Rápidos e Saciedade Duradoura",
+        "subtitle": "Pratos principais que sustentam e surpreendem.",
+        "content": "<p>Muitas pessoas desistem de dietas por não terem tempo de cozinhar pratos elaborados no meio do expediente. A boa notícia é que o estilo de vida low carb é perfeitamente adaptável à correria moderna. Com as técnicas corretas de congelamento e organização (meal prep), você terá refeições de restaurante na sua marmita.</p><p>As 15 receitas desta seção provam que legumes e carnes não precisam ser sem graça. Usando temperos estratégicos e métodos de cocção rápidos, vamos transformar pratos simples em verdadeiras obras-primas culinárias que vão impressionar até quem não está de dieta.</p>",
+        "image_url": "/templates/receitas/t1_ch3.jpg"
+      },
+      {
+        "title": "Lanches Inteligentes",
+        "subtitle": "Como driblar a fome no meio da tarde.",
+        "content": "<p>O período da tarde é o grande calcanhar de aquiles de quem busca emagrecer. É exatamente nesse horário que o estresse do dia acumulado pede por uma recompensa rápida, geralmente na forma de açúcar. Ter lanches inteligentes à mão é a única defesa eficaz contra essas armadilhas diárias.</p><p>Descubra opções salgadas e doces, como chips de parmesão, mix de castanhas temperadas e bombons de cacau 70%. Com essas pequenas doses de energia, você manterá a queima de gordura ativa enquanto satisfaz o paladar e protege sua mente do cansaço.</p>"
+      },
+      {
+        "title": "Jantares Leves e Sobremesas Sem Culpa",
+        "subtitle": "Fechando o dia com chave de ouro e sem inchaço.",
+        "content": "<p>A última refeição do dia deve ser reparadora e gentil com a sua digestão, preparando o corpo para um sono profundo. Comer alimentos muito pesados à noite prejudica a produção hormonal e bloqueia o emagrecimento. O foco aqui é densidade nutritiva com volume reduzido.</p><p>Para provar que você não precisa abrir mão do prazer, encerramos com uma seleção de doces adaptados. Mousses, tortas de limão e bolos de caneca que utilizam adoçantes naturais. Aproveite o processo e comemore cada quilo perdido comendo algo absolutamente delicioso e alinhado aos seus objetivos.</p>",
+        "image_url": "/templates/receitas/t1_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Receitas e culinária",
+    "title": "Confeitaria de Sucesso: Lucre na sua Cozinha",
+    "subtitle": "Descubra como criar bolos e doces irresistíveis e faturar alto no conforto do seu lar.",
+    "cover_url": "/templates/receitas/t2_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "Fundamentos da Confeitaria Empreendedora",
+        "subtitle": "Os primeiros passos para transformar açúcar em lucro real.",
+        "content": "<p>A confeitaria vai muito além de misturar ingredientes; é uma arte precisa que requer técnica, padronização e amor. Muitas confeiteiras iniciantes falham por não entenderem a importância de medir cada grama e de conhecer os insumos. Ao dominar as bases, você garante que seus clientes tenham sempre a mesma experiência maravilhosa em cada mordida.</p><p>Nesta introdução, vamos abordar os utensílios essenciais para começar sem gastar fortunas. Além disso, revelarei os segredos de higienização, armazenamento e validade que vão profissionalizar sua produção desde o primeiro dia, estabelecendo confiança total com o seu público.</p>",
+        "image_url": "/templates/receitas/t2_ch1.jpg"
+      },
+      {
+        "title": "Massas Estruturadas e Fofinhas",
+        "subtitle": "O coração de qualquer bolo de sucesso.",
+        "content": "<p>O maior pesadelo na cozinha é um bolo que afunda no meio ou fica esfarelando, impossibilitando uma decoração bonita. O segredo de uma massa perfeita está no equilíbrio entre gordura, farinha e agentes de aeração. Aprender a fazer o famoso pão de ló, a massa amanteigada e a chiffon abrirá portas para inúmeras criações.</p><p>Apresento aqui o passo a passo infalível para bater, assar e esfriar suas massas de forma a reter a umidade. Com dicas sobre temperatura de forno e a hora certa de desenformar, seus bolos servirão como a base sólida e deliciosa para as melhores comemorações dos seus clientes.</p>"
+      },
+      {
+        "title": "Recheios que Não Derretem",
+        "subtitle": "Textura, sabor e segurança na montagem.",
+        "content": "<p>Um recheio mal estruturado pode arruinar horas de trabalho, fazendo com que o bolo desmorone no meio da festa. O ponto correto dos doces, ganaches e cremes é fundamental para garantir sustentação, principalmente em locais de clima quente ou bolos de andares. Aqui a química da confeitaria se faz mais presente.</p><p>Você aprenderá a criar brigadeiros gourmet, cremes de confeiteiro modernizados e compotas de frutas perfeitamente equilibradas. Com essas receitas, cada fatia cortada revelará camadas uniformes, cremosas e com um sabor que fará seu cliente pedir bis na próxima festa.</p>",
+        "image_url": "/templates/receitas/t2_ch3.jpg"
+      },
+      {
+        "title": "Decoração Descomplicada com Chantininho",
+        "subtitle": "Beleza visual que encanta e vende.",
+        "content": "<p>Nós comemos primeiro com os olhos, e na confeitaria, a apresentação dita o valor do seu produto. O chantininho revolucionou o mercado por ser extremamente estável, brilhante e ter um sabor que remete à infância. Dominar essa cobertura é o passaporte para criar bolos artísticos sem complicação.</p><p>Neste módulo prático, revelarei o segredo da hidratação perfeita, o uso de corantes para tons vibrantes e as principais técnicas de espátulas texturizadas. Mesmo que você nunca tenha segurado um saco de confeitar, conseguirá criar acabamentos lisos e perfeitos com algumas horas de prática.</p>"
+      },
+      {
+        "title": "Precificação e Vendas",
+        "subtitle": "Como calcular seus custos e lotar a agenda.",
+        "content": "<p>Fazer bolos maravilhosos é apenas metade do trabalho; a outra metade é garantir que você não esteja pagando para trabalhar. O erro número um na confeitaria é precificar com base no preço do concorrente sem conhecer os próprios custos invisíveis, como energia, gás e tempo de trabalho.</p><p>Vou te entregar planilhas simplificadas para calcular o preço exato de cada receita. Além disso, mostrarei estratégias de marketing no Instagram para atrair clientes dispostos a pagar o preço justo pelo seu talento, garantindo que sua paixão se torne um negócio incrivelmente lucrativo.</p>",
+        "image_url": "/templates/receitas/t2_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Receitas e culinária",
+    "title": "Refeições em 15 Minutos: Praticidade Diária",
+    "subtitle": "Cozinhe pratos deliciosos e nutritivos sem perder horas no fogão.",
+    "cover_url": "/templates/receitas/t3_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "A Ciência de Cozinhar Rápido",
+        "subtitle": "Técnicas profissionais para acelerar o preparo.",
+        "content": "<p>Cozinhar em 15 minutos não significa viver de macarrão instantâneo. Trata-se de aplicar técnicas de restaurantes para otimizar movimentos, preaquecer equipamentos corretamente e escolher cortes de carnes e vegetais que cozinham em tempo recorde. O tempo é o ingrediente mais valioso na vida moderna.</p><p>Neste capítulo, você aprenderá o conceito de mise en place inteligente. Vamos reorganizar sua cozinha para que tudo o que você precisa esteja a apenas um movimento de distância, eliminando a frustração de procurar ingredientes no meio da receita e garantindo um fluxo de trabalho zen e ultra veloz.</p>",
+        "image_url": "/templates/receitas/t3_ch1.jpg"
+      },
+      {
+        "title": "Pratos de Uma Panela Só",
+        "subtitle": "Sabor máximo com louça mínima.",
+        "content": "<p>O que adianta cozinhar em poucos minutos e gastar meia hora esfregando panelas na pia? As receitas de panela única (one-pot) são a salvação para quem chega cansado do trabalho. Ao combinar carboidratos, proteínas e legumes no mesmo recipiente, os sabores se mesclam intensamente criando caldos encorpados.</p><p>Você descobrirá combinações fantásticas como risotos expressos, massas feitas no próprio molho e ensopados vibrantes. Com o controle correto do calor e a ordem exata dos ingredientes, essas refeições entregam texturas perfeitas e uma limpeza incrivelmente fácil.</p>"
+      },
+      {
+        "title": "O Segredo dos Molhos Express",
+        "subtitle": "Transforme ingredientes simples em pratos de chef.",
+        "content": "<p>Um bom molho tem o poder mágico de elevar um simples peito de frango grelhado ao status de alta gastronomia. Na pressa, muitas pessoas recorrem a opções industrializadas cheias de conservantes, mas um molho artesanal pode ser criado no mesmo tempo que a carne leva para dourar.</p><p>Aprenda a dominar bases como o molho mostarda e mel, o sugo rústico de tomates cereja e o clássico beurre blanc adaptado. Com cinco ou seis ingredientes que você já tem na geladeira, criaremos emulsões ricas e brilhantes que trarão complexidade e umidade para qualquer refeição improvisada.</p>",
+        "image_url": "/templates/receitas/t3_ch3.jpg"
+      },
+      {
+        "title": "Acompanhamentos Vapt-Vupt",
+        "subtitle": "Guarnições prontas enquanto a mesa é posta.",
+        "content": "<p>O prato principal costuma roubar os holofotes, mas são os acompanhamentos que trazem equilíbrio nutricional e saciedade ao prato. Vegetais não precisam ser cozidos até perderem a cor e a textura; saladas não precisam ser monótonas folhas verdes jogadas em um pote.</p><p>Nesta seção, exploraremos salteados de brócolis com alho, cuscuz marroquino hidratado em três minutos e purês rústicos de raízes. Você verá como a textura crocante e os temperos ácidos dão vida aos acompanhamentos, tornando-os tão cobiçados quanto a própria proteína.</p>"
+      },
+      {
+        "title": "Descomplicando Frutos do Mar",
+        "subtitle": "Jantares sofisticados em tempo recorde.",
+        "content": "<p>Peixes e camarões são os campeões absolutos quando o assunto é cocção rápida. Ao contrário das carnes vermelhas, eles exigem pouquíssimos minutos no calor para atingirem a perfeição. Muitas pessoas evitam fazê-los por medo de errar o ponto, mas aqui perderemos esse medo para sempre.</p><p>Compartilho receitas infalíveis de camarão ao alho e óleo, filés de peixe no papelote com ervas e lulas salteadas na manteiga. Em menos de dez minutos de fogo, você poderá servir um banquete que parece ter saído de um restaurante litorâneo badalado, impressionando convidados de última hora.</p>",
+        "image_url": "/templates/receitas/t3_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Receitas e culinária",
+    "title": "Hambúrguer Artesanal: O Guia Definitivo",
+    "subtitle": "Monte sua hamburgueria em casa e surpreenda amigos e familiares.",
+    "cover_url": "/templates/receitas/t4_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "A Anatomia do Burger Perfeito",
+        "subtitle": "O que transforma um sanduíche comum em uma experiência inesquecível.",
+        "content": "<p>Um hambúrguer perfeito é uma obra de engenharia gastronômica. Não basta empilhar ingredientes aleatoriamente; cada elemento deve cumprir um papel de textura, sabor e temperatura. O pão abraça, a carne suculenta brilha, o queijo derrete envolvendo tudo e os vegetais trazem frescor e crocância.</p><p>Nesta introdução, vamos desconstruir o hambúrguer clássico para entender a proporção ideal entre carne e complementos. Aprenderemos sobre a importância das reações químicas, como a crosta de Maillard, que garante aquele sabor inconfundível de carne grelhada na chapa que dá água na boca só de pensar.</p>",
+        "image_url": "/templates/receitas/t4_ch1.jpg"
+      },
+      {
+        "title": "O Blend de Carnes Ideal",
+        "subtitle": "O segredo por trás da suculência extrema.",
+        "content": "<p>O grande erro do hambúrguer caseiro é utilizar carnes magras demais. A magia acontece quando misturamos cortes diferentes para equilibrar sabor, textura e gordura. O percentual de 20% a 25% de gordura é a regra de ouro para garantir que, mesmo bem passado, seu blend não vire uma sola de sapato.</p><p>Vou te ensinar a escolher as melhores peças no açougue, combinando acém, peito e fraldinha, por exemplo. Além disso, revelarei a técnica de moagem correta e o momento exato de adicionar o sal, impedindo que a carne resseque ou fique com textura de almôndega de padaria.</p>"
+      },
+      {
+        "title": "Pães Macios e Tostados",
+        "subtitle": "A fundação que sustenta a obra-prima.",
+        "content": "<p>O pão é o recipiente sagrado do hambúrguer. Se for seco demais, esfarela; se for denso demais, rouba a cena. Um bom pão brioche ou de batata deve ser levemente doce, super elástico e absorver os sucos da carne sem se desmanchar nas mãos do seu convidado.</p><p>Aqui, daremos ênfase à técnica vital de selar o pão na manteiga. Esse escudo térmico impede que os molhos encharquem a base, mantendo a integridade do lanche do primeiro ao último morro. É esse pequeno detalhe que diferencia o amador do verdadeiro chapeiro de respeito.</p>",
+        "image_url": "/templates/receitas/t4_ch3.jpg"
+      },
+      {
+        "title": "Maioneses e Molhos Especiais",
+        "subtitle": "A assinatura de sabor exclusivo.",
+        "content": "<p>O molho é a cola que une todos os componentes do hambúrguer. Uma maionese artesanal bem emulsionada confere uma camada de cremosidade rica que contrasta perfeitamente com a potência da carne bovina. E o melhor: você pode criar dezenas de variações a partir de uma única base.</p><p>Exploraremos as receitas mais aclamadas das hamburguerias de sucesso. Maionese verde com ervas frescas, molho barbecue defumado com uísque e o famoso molho especial levemente ácido e picante. Essas preparações são o toque de mestre que tornará sua criação absolutamente inesquecível.</p>"
+      },
+      {
+        "title": "Montagem e Harmonização",
+        "subtitle": "Construindo o arranha-céu de sabores.",
+        "content": "<p>A ordem dos tratores não altera o viaduto, mas a ordem dos ingredientes altera o hambúrguer. Colocar o alface embaixo ou em cima da carne muda completamente a experiência de mastigação. A arquitetura correta protege as folhas quentes e posiciona os sabores para tocarem o paladar no momento certo.</p><p>Finalizaremos nosso guia com os esquemas de montagem perfeitos para diferentes estilos de burger (smash, alto e recheado). Como bônus, falaremos sobre a escolha da batata rústica ideal e das bebidas refrescantes que limpam o paladar, proporcionando uma noite de hambúrguer imbatível.</p>",
+        "image_url": "/templates/receitas/t4_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Maternidade",
+    "title": "Sono Tranquilo: Como Fazer seu Bebê Dormir",
+    "subtitle": "O guia definitivo para noites inteiras de sono sem deixar seu bebê chorando.",
+    "cover_url": "/templates/maternidade/t1_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "A Ciência do Sono Infantil",
+        "subtitle": "Compreendendo o relógio biológico do seu filho.",
+        "content": "<p>O sono do bebê é drasticamente diferente do sono de um adulto. Nos primeiros meses, o ciclo circadiano ainda é imaturo, e os bebês passam a maior parte do tempo em sono REM, que é mais leve e sujeito a despertares. Entender essa biologia tira o peso da culpa materna quando o bebê acorda várias vezes.</p><p>Neste capítulo, mergulharemos nas janelas de sono — o tempo máximo que o bebê consegue ficar acordado sem produzir hormônios do estresse, como o cortisol. Identificar os sinais precoces de cansaço é o primeiro grande passo para evitar aquelas crises de choro de exaustão no final do dia.</p>",
+        "image_url": "/templates/maternidade/t1_ch1.jpg"
+      },
+      {
+        "title": "O Ambiente Perfeito para Dormir",
+        "subtitle": "Preparando o terreno para noites longas.",
+        "content": "<p>O útero materno era escuro, apertado e com um ruído constante. Replicar parte desse ambiente nos primeiros meses traz extrema segurança ao recém-nascido. A temperatura, a iluminação e o silêncio (ou a falta dele) influenciam diretamente na duração dos blocos de sono do seu filho.</p><p>Você vai aprender a importância do ruído branco e do swaddle (charutinho) como ferramentas poderosas de transição. Falaremos sobre a escuridão total para a produção de melatonina à noite e como diferenciar os cochilos diurnos para ajustar corretamente o relógio interno do bebê.</p>"
+      },
+      {
+        "title": "Criando a Rotina Noturna",
+        "subtitle": "O poder da previsibilidade na mente infantil.",
+        "content": "<p>Bebês e crianças prosperam na rotina. Eles não sabem ver as horas no relógio, então são as sequências de eventos que avisam ao cérebro que o momento de descansar chegou. Uma rotina bem estabelecida é como um ritual calmante que diminui as defesas de alerta da criança.</p><p>Apresento modelos práticos de rotinas noturnas — banho relaxante, massagem, diminuição de luzes e amamentação calma. Com consistência, apenas o ato de iniciar o banho morno já desencadeará bocejos no seu bebê, facilitando imensamente o processo de colocá-lo no berço.</p>",
+        "image_url": "/templates/maternidade/t1_ch3.jpg"
+      },
+      {
+        "title": "Saltos de Desenvolvimento e Regressões",
+        "subtitle": "Sobrevivendo às fases tempestuosas.",
+        "content": "<p>Justo quando você acha que encontrou o ritmo perfeito e o bebê está dormindo maravilhosamente bem, tudo parece desmoronar. Bem-vinda às regressões de sono e saltos de desenvolvimento! O cérebro do seu bebê está fazendo atualizações incríveis (rolar, engatinhar), e isso agita o sistema nervoso central.</p><p>Nesta seção, identificaremos as principais regressões (como a temida regressão dos 4 meses) e como agir de forma empática sem criar muletas crônicas. O segredo é oferecer acolhimento extra nesses dias sem desestruturar totalmente as bases que você já construiu com carinho.</p>"
+      },
+      {
+        "title": "Transição Gentil para o Berço",
+        "subtitle": "Autonomia de sono com muito afeto.",
+        "content": "<p>Muitas mães desejam que o bebê saiba adormecer de forma independente, mas os métodos antigos de \"deixar chorar até dormir\" podem ser traumáticos e gerar ansiedade. O caminho moderno foca no ensino gradual, onde a presença dos pais vai se minimizando à medida que a criança ganha confiança.</p><p>Ensinarei métodos empáticos, onde você nunca abandonará o bebê no quarto em desespero. Através do toque constante e de intervenções precisas, seu bebê aprenderá que o berço é um lugar maravilhoso e seguro, e que mamãe e papai estarão sempre ali quando for preciso.</p>",
+        "image_url": "/templates/maternidade/t1_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Maternidade",
+    "title": "Introdução Alimentar sem Traumas",
+    "subtitle": "Transforme a hora da papinha em um momento de alegria com o método BLW.",
+    "cover_url": "/templates/maternidade/t2_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "Quando e Como Começar",
+        "subtitle": "Os sinais de prontidão para a primeira refeição.",
+        "content": "<p>Aos seis meses, um universo de sabores, texturas e cores se abre para o bebê. Mas mais importante do que a idade no calendário, são os sinais de prontidão que o corpo demonstra, garantindo que o sistema digestivo e motor estejam preparados para receber algo além do leite materno ou fórmula.</p><p>Neste capítulo, você aprenderá a identificar se seu bebê consegue sentar sem apoio firme, se perdeu o reflexo de protrusão da língua e se mostra interesse genuíno pela comida. Começar na hora certa previne frustrações, desinteresse precoce e garante a segurança máxima para o seu filho.</p>",
+        "image_url": "/templates/maternidade/t2_ch1.jpg"
+      },
+      {
+        "title": "A Filosofia do BLW",
+        "subtitle": "O bebê no comando da própria nutrição.",
+        "content": "<p>O Baby-Led Weaning (Desmame Guiado pelo Bebê) revolucionou a forma como apresentamos a comida. Esqueça os liquidificadores e as papinhas sem forma; aqui o bebê explora o alimento em seu estado natural. Ele toca, cheira, esmaga e, no processo, desenvolve habilidades motoras essenciais e uma relação saudável com a fome.</p><p>Exploraremos os benefícios imunológicos e emocionais dessa abordagem. Ao permitir que a criança escolha o que e o quanto comer dentre as opções saudáveis oferecidas, reduzimos drasticamente as chances de seletividade alimentar no futuro e promovemos a verdadeira autonomia à mesa.</p>"
+      },
+      {
+        "title": "Engasgo vs Gaging: A Diferença Crucial",
+        "subtitle": "Vencendo o maior medo dos pais.",
+        "content": "<p>O principal motivo pelo qual as famílias desistem do BLW é o medo do engasgo. No entanto, é fundamental compreender a diferença entre o engasgo real (uma emergência silenciosa) e o reflexo de gaging (a ânsia natural), que é um mecanismo de defesa vital e muito sensível nos recém-nascidos.</p><p>Com informações detalhadas e tranquilizadoras, ensinarei como identificar rapidamente cada situação. Você saberá exatamente como agir sem passar nervosismo para a criança, mantendo a calma necessária para que a hora da refeição continue sendo um espaço seguro e livre de traumas.</p>",
+        "image_url": "/templates/maternidade/t2_ch3.jpg"
+      },
+      {
+        "title": "Preparando os Primeiros Cortes",
+        "subtitle": "O tamanho e a textura seguros para os primeiros meses.",
+        "content": "<p>A segurança do BLW reside totalmente na forma como o alimento é oferecido. No início, o bebê não tem movimento de pinça, usando a mão toda para agarrar. Portanto, os alimentos devem ter o tamanho e formato de um dedo adulto, facilitando a pegada enquanto partes projetam para fora da mão.</p><p>Nesta seção prática, você verá esquemas de cortes seguros para frutas escorregadias, vegetais duros e carnes. Discutiremos a importância do cozimento no vapor até que o alimento esteja macio o suficiente para ser esmagado pelo céu da boca, garantindo exploração segura desde o dia um.</p>"
+      },
+      {
+        "title": "Lidando com a Seletividade Inicial",
+        "subtitle": "O que fazer quando o bebê apenas brinca ou recusa a comida.",
+        "content": "<p>Nas primeiras semanas, a introdução alimentar é muito mais sobre exploração sensorial do que sobre nutrição volumosa, afinal, o leite continua sendo o alimento principal até um ano de idade. É normal e esperado que a maior parte da comida vá parar no chão ou na bochecha, e quase nada no estômago.</p><p>Trago dicas valiosas para lidar com as expectativas e evitar a pressão à mesa. Aprenda estratégias para reintroduzir alimentos rejeitados em novas apresentações, mantendo o ambiente leve, divertido e celebrando cada pequena mordida como uma grande vitória do seu pequeno explorador.</p>",
+        "image_url": "/templates/maternidade/t2_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Maternidade",
+    "title": "Mamãe Zen: Sobrevivendo ao Puerpério",
+    "subtitle": "Encontre equilíbrio, saúde mental e amor-próprio no período mais desafiador da maternidade.",
+    "cover_url": "/templates/maternidade/t3_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "O Desafio dos Primeiros Dias",
+        "subtitle": "Desconstruindo a maternidade romântica e idealizada.",
+        "content": "<p>O puerpério é uma verdadeira tempestade perfeita: privação de sono intensa, explosões hormonais violentas e a responsabilidade assustadora de cuidar de um recém-nascido. As propagandas mostram mães plácidas amamentando ao sol, mas a realidade costuma incluir choro no chuveiro e dúvidas avassaladoras sobre a própria capacidade.</p><p>Neste capítulo de acolhimento, vamos normalizar os sentimentos ambivalentes que surgem nos primeiros dias. Sentir medo, exaustão e até mesmo saudade da vida anterior não faz de você uma mãe ruim; faz de você humana. É o momento de tirar a capa de super-heroína e aceitar a própria vulnerabilidade.</p>",
+        "image_url": "/templates/maternidade/t3_ch1.jpg"
+      },
+      {
+        "title": "Amamentação: Além da Romantização",
+        "subtitle": "Enfrentando as dores e celebrando as pequenas vitórias.",
+        "content": "<p>Amamentar é natural, mas raramente é instintivo logo de cara. Fissuras, empedramento, confusão de bicos e a temida livre demanda podem transformar esse momento mágico em uma experiência angustiante. A pressão externa para amamentar exclusivamente, muitas vezes, esmaga a saúde mental materna.</p><p>Abordaremos dicas práticas para pega correta, alívio de dores e, mais importante, o respeito aos limites da mãe. Quer seja com leite materno ou fórmula, o seu bebê precisa de você inteira e emocionalmente disponível. Vamos despir a amamentação de julgamentos e focar no que funciona para a sua família.</p>"
+      },
+      {
+        "title": "A Nova Dinâmica do Casal",
+        "subtitle": "Preservando a parceria em meio ao caos.",
+        "content": "<p>A chegada de um bebê joga uma granada na dinâmica de qualquer casamento. A exaustão reduz a tolerância a zero, e a divisão desigual do trabalho reprodutivo costuma gerar ressentimentos profundos. É incrivelmente comum que parceiros apaixonados se sintam como meros colegas de quarto gerenciando uma crise.</p><p>Ofereço aqui estratégias de comunicação não-violenta para expressar necessidades reais sem tom de acusação. Aprenda como incluir o parceiro de forma ativa e não apenas como 'ajudante', reconstruindo a cumplicidade, a intimidade e a empatia na travessia desse novo e desconhecido território juntos.</p>",
+        "image_url": "/templates/maternidade/t3_ch3.jpg"
+      },
+      {
+        "title": "A Rede de Apoio Real",
+        "subtitle": "Como pedir ajuda e afastar palpites tóxicos.",
+        "content": "<p>Dizem que é preciso uma vila para criar uma criança, mas no mundo moderno, as mães costumam ficar isoladas em apartamentos com bebês chorando. Ao mesmo tempo, quando a vila aparece, ela frequentemente traz palpites desatualizados e julgamentos sobre o seu modo de maternar, minando sua já frágil autoconfiança.</p><p>Neste tópico, vou te ensinar a blindar a sua mente contra comentários não solicitados, estabelecendo limites amorosos, porém firmes, com familiares. Você aprenderá a delegar tarefas práticas (como lavar roupas e trazer comida) para a rede de apoio, poupando sua energia para o vínculo com o bebê.</p>"
+      },
+      {
+        "title": "Autocuidado Não É Egoísmo",
+        "subtitle": "Resgatando a mulher por trás da mãe.",
+        "content": "<p>No meio de mamadas e fraldas, a mulher que você era parece ter desaparecido. O autocuidado no puerpério muitas vezes é vendido como dias no spa, quando na verdade, tomar um banho quente e lavar o cabelo já pode parecer um grande luxo inalcançável. A culpa por querer cinco minutos sozinha é esmagadora.</p><p>Finalizamos nosso guia com pequenos rituais diários de micro-autocuidado. Mostrar a importância de nutrir a própria alma para conseguir nutrir a criança. Lembre-se: não se pode servir de uma jarra vazia. Cuidar de você é o primeiro e mais importante passo para cuidar lindamente do seu bebê.</p>",
+        "image_url": "/templates/maternidade/t3_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Maternidade",
+    "title": "Disciplina Positiva: Educando com Amor",
+    "subtitle": "Elimine os gritos e os castigos construindo uma relação de respeito mútuo.",
+    "cover_url": "/templates/maternidade/t4_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "O Fim dos Castigos e Punições",
+        "subtitle": "Por que a obediência cega não prepara para a vida.",
+        "content": "<p>Durante séculos, a educação infantil baseou-se no medo e no autoritarismo. Ameaças e cantinhos do pensamento até funcionam momentaneamente, mas criam crianças que apenas escondem seus erros e se tornam adultos inseguros ou rebeldes. A disciplina tradicional falha em ensinar habilidades essenciais de vida.</p><p>Introduzimos a mudança de paradigma da Disciplina Positiva. Trata-se de uma abordagem que enxerga o comportamento desafiador como falta de habilidade emocional, não como rebeldia calculada. Ao eliminar o medo, abrimos espaço para o aprendizado real, a cooperação autêntica e o respeito verdadeiro, sem abrir mão da firmeza e da liderança.</p>",
+        "image_url": "/templates/maternidade/t4_ch1.jpg"
+      },
+      {
+        "title": "A Necessidade por Trás do Choro",
+        "subtitle": "Desvendando o iceberg do mau comportamento.",
+        "content": "<p>A birra no meio do supermercado é apenas a ponta do iceberg. Debaixo d'água, existem necessidades não atendidas: sono, fome, desejo de poder, necessidade de atenção ou sobrecarga sensorial. Punir o comportamento sem tratar a causa raiz é como enxugar gelo com uma toalha furada.</p><p>Neste capítulo, nos tornaremos detetives do comportamento infantil. Você aprenderá a investigar a crença oculta por trás da crise do seu filho. Ao validar os sentimentos da criança e focar na necessidade emocional, as birras explosivas perdem força rapidamente, dando lugar à comunicação calma e ao entendimento mútuo.</p>"
+      },
+      {
+        "title": "Conexão Antes da Correção",
+        "subtitle": "O caminho neurológico para a cooperação.",
+        "content": "<p>Quando uma criança está em meio a uma crise de raiva, seu cérebro lógico (córtex pré-frontal) se desliga totalmente, sendo dominado pelo instinto de luta ou fuga. Tentar dar sermões ou aplicar lógica nesse momento é inútil; as palavras literalmente não conseguem ser processadas por um cérebro estressado.</p><p>O segredo da cooperação é a regra de ouro: 'Conexão antes da Correção'. Ensinarei técnicas de validação emocional — descer ao nível dos olhos, usar toques suaves e nomear sentimentos. Quando a criança se sente sentida e ouvida, seu cérebro relaxa, e só então ela se torna receptiva ao ensino das regras e limites.</p>",
+        "image_url": "/templates/maternidade/t4_ch3.jpg"
+      },
+      {
+        "title": "Encorajamento vs Elogio Vazio",
+        "subtitle": "Construindo autoestima resistente.",
+        "content": "<p>Fomos condicionados a dizer 'muito bem' e 'que menino lindo' para tudo, acreditando estar fomentando a autoestima. O problema do elogio vazio é que ele vicia a criança na aprovação externa, criando adultos perfeccionistas que desmoronam diante da primeira crítica ou fracasso.</p><p>Aqui, substituiremos o elogio pelo encorajamento. Você aprenderá a focar no esforço e no processo, em vez do resultado final ('Vejo que você se dedicou muito nesse desenho!'). Isso constrói uma autoconfiança interna sólida, onde a criança reconhece seu próprio valor e se sente capaz de enfrentar desafios com resiliência.</p>"
+      },
+      {
+        "title": "Limites Firmes e Gentis",
+        "subtitle": "A arte de dizer 'não' com amor.",
+        "content": "<p>Muitos confundem parentalidade respeitosa com permissividade. A Disciplina Positiva, na verdade, exige contornos e limites muito claros. Crianças que crescem sem limites tornam-se ansiosas, pois o mundo ao seu redor parece imprevisível e inseguro. O limite é um abraço invisível que protege.</p><p>Finalizaremos mostrando como sustentar um limite de forma gentil e firme ao mesmo tempo. Como oferecer escolhas limitadas, estabelecer acordos antecipados e permitir consequências lógicas naturais, preparando seu filho para ser um adulto responsável, consciente e emocionalmente inteligente no mundo real.</p>",
+        "image_url": "/templates/maternidade/t4_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Pets",
+    "title": "Cão Educado: Adestramento Positivo em 30 Dias",
+    "subtitle": "Comunicação clara e comandos fáceis para um cachorro equilibrado e feliz.",
+    "cover_url": "/templates/pets/t1_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "A Psicologia Canina Básica",
+        "subtitle": "Como seu cachorro enxerga o mundo.",
+        "content": "<p>Para treinar um cão com eficácia, precisamos primeiro entender como a mente canina opera. Cães não são humanos com pelos; eles não sentem culpa ou planejam vinganças destruindo seus sapatos. Eles são seres de associação instantânea, motivados por recompensas, segurança e rotina clara.</p><p>Neste capítulo fundamental, desvendaremos o mito do 'macho alfa' e da dominação. A verdadeira liderança não é conquistada pela força ou pelo medo, mas sim pelo controle inteligente de recursos e pela consistência. Ao dominar a linguagem corporal canina, você construirá um vínculo inquebrável de confiança e respeito com seu amigo de quatro patas.</p>",
+        "image_url": "/templates/pets/t1_ch1.jpg"
+      },
+      {
+        "title": "Xixi e Cocô no Lugar Certo",
+        "subtitle": "Solucionando o problema número um dos tutores.",
+        "content": "<p>Nada gera mais frustração do que pisar em uma surpresinha molhada no meio da sala. Limpar esfregando o nariz do filhote não ensina nada, apenas gera medo e faz com que ele passe a fazer as necessidades escondido atrás do sofá, complicando ainda mais o treinamento.</p><p>Apresento um protocolo infalível de reforço positivo e restrição de espaço temporária. Ensinarei a mapear os horários biológicos do seu cão e a usar o princípio da repetição recompensada. Em poucos dias, seu pet entenderá onde é o banheiro, poupando a sua paciência e a limpeza da sua casa inteira.</p>"
+      },
+      {
+        "title": "Parando de Puxar a Guia",
+        "subtitle": "Passeios relaxantes sem deslocar seu ombro.",
+        "content": "<p>O passeio deve ser o ponto alto do dia, não um cabo de guerra estressante e perigoso para o pescoço do cão. Cães puxam a guia simplesmente porque isso funciona; a tensão leva eles para mais perto daquele cheiro maravilhoso na grama. Mudar isso requer mudar o mecanismo de recompensa.</p><p>Vou te ensinar técnicas de ancoragem e mudanças bruscas de direção que quebram o padrão de puxões. Veremos o uso correto de peitorais educativos que facilitam a condução, transformando aquele cão tratorzinho ansioso em um parceiro civilizado que caminha calmamente ao seu lado desfrutando da paisagem.</p>",
+        "image_url": "/templates/pets/t1_ch3.jpg"
+      },
+      {
+        "title": "Controle de Mordidas e Pulos",
+        "subtitle": "Educação social para receber visitas tranquilamente.",
+        "content": "<p>Filhotes exploram o mundo com a boca, mas aquelas agulhinhas machucam e precisam ser inibidas antes que ele cresça. Pulos entusiasmados nas visitas parecem amigáveis no começo, mas podem derrubar crianças ou idosos. Ambos os comportamentos são exacerbados quando damos atenção na hora errada.</p><p>Aqui trabalharemos a inibição de mordida através do redirecionamento para brinquedos adequados e ignorando brincadeiras brutas. Além disso, estabeleceremos o comando 'Senta' como chave-mestra para receber qualquer interação humana, garantindo que seu pet seja sempre a atração principal da casa pelas boas maneiras.</p>"
+      },
+      {
+        "title": "Ansiedade de Separação",
+        "subtitle": "Paz de espírito quando você precisa sair.",
+        "content": "<p>Cães são animais de matilha e ficar sozinhos não é algo natural para a espécie. O choro ininterrupto, uivos, latidos excessivos e destruição de móveis são gritos de socorro de um sistema nervoso em pânico devido à dependência extrema e ao tédio acumulado num ambiente pobre de estímulos.</p><p>Finalizamos com um programa de dessensibilização sistemática de saídas e enriquecimento ambiental. Você aprenderá a criar brinquedos recheáveis e quebra-cabeças que manterão a mente do seu cão ocupada enquanto você trabalha, assegurando que ele fique seguro, relaxado e feliz até a hora maravilhosa do seu retorno.</p>",
+        "image_url": "/templates/pets/t1_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Pets",
+    "title": "Chef Pet: Alimentação Natural",
+    "subtitle": "Aumente a imunidade e a longevidade do seu cão ou gato com refeições de verdade.",
+    "cover_url": "/templates/pets/t2_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "O Perigo das Rações Ultraprocessadas",
+        "subtitle": "O que a indústria pet food não quer que você saiba.",
+        "content": "<p>Por décadas fomos convencidos de que bolinhas secas e marrons eram a dieta mais perfeita e nutritiva para os nossos animais de estimação. No entanto, muitas rações comerciais escondem ingredientes de baixíssima qualidade, excesso de carboidratos inflamatórios, corantes artificiais e conservantes agressivos ligados a alergias e doenças crônicas.</p><p>Neste capítulo revelador, desconstruiremos os rótulos das rações para que você entenda exatamente o que está colocando no pote do seu melhor amigo. Mostrar os benefícios imediatos da comida de verdade — desde um pelo brilhante e dentes limpos até uma disposição vital que fará seu pet parecer mais jovem do que nunca.</p>",
+        "image_url": "/templates/pets/t2_ch1.jpg"
+      },
+      {
+        "title": "Os Pilares da Nutrição Animal",
+        "subtitle": "O equilíbrio vital de proteínas, gorduras e fibras.",
+        "content": "<p>A alimentação natural não significa simplesmente jogar as sobras do almoço da família para o animal. Carnes temperadas com cebola e excesso de amido podem ser fatais. Existe uma biologia específica para carnívoros oportunistas (cães) e carnívoros estritos (gatos) que deve ser respeitada escrupulosamente na formulação.</p><p>Apresento de forma simplificada a pirâmide nutricional pet. Você conhecerá os cortes de carnes ideais, as vísceras altamente nutritivas (como o fígado) e os vegetais seguros. Com essas bases sólidas, montar o prato diário se tornará algo mecânico, intuitivo e extremamente seguro para o organismo do animal.</p>"
+      },
+      {
+        "title": "Calculando a Porção Ideal",
+        "subtitle": "Manutenção de peso e prevenção da obesidade.",
+        "content": "<p>Um dos grandes medos ao iniciar a alimentação natural é não saber a quantidade certa, levando o animal à obesidade ou à perda de massa magra. A matemática da dieta natural baseia-se no peso alvo, nível de atividade física diária e faixa etária do animal, exigindo um pequeno cálculo inicial indispensável.</p><p>Disponibilizo tabelas práticas e fórmulas de fácil compreensão para descobrir a cota diária de gramas exata que seu pet necessita. Também abordaremos a transição alimentar gradativa de 7 dias, um processo vital para evitar distúrbios gastrintestinais severos e garantir a adaptação suave da flora intestinal.</p>",
+        "image_url": "/templates/pets/t2_ch3.jpg"
+      },
+      {
+        "title": "Nutrição Específica para Gatos",
+        "subtitle": "Os desafios do carnívoro estrito.",
+        "content": "<p>A nutrição felina é uma arte completamente separada e desafiadora. Gatos não toleram carboidratos da mesma forma que cães e têm uma exigência biológica por altos níveis de proteína animal, gordura e taurina (um aminoácido crítico para o coração e visão). Além disso, a seletividade felina é famosa e testará sua paciência.</p><p>Aqui desvendaremos como introduzir texturas novas para felinos exigentes, a importância da comida úmida para a proteção dos rins (já que gatos bebem muito pouca água voluntariamente) e como criar um mix irresistível de carnes e órgãos que respeite a verdadeira natureza dos felinos modernos.</p>"
+      },
+      {
+        "title": "Suplementação e Receitas de Sucesso",
+        "subtitle": "Finalizando o prato com precisão clínica.",
+        "content": "<p>Mesmo o mix mais caprichado de carnes e vegetais não consegue entregar soziho 100% dos microminerais e vitaminas (como cálcio, iodo e vitamina E) exigidos a longo prazo. A suplementação adequada é a diferença entre uma dieta caseira excelente e uma dieta caseira perigosa que leva ao raquitismo.</p><p>Encerramos nosso manual com um arsenal de receitas balanceadas para cães e gatos, e o uso correto de suplementos comerciais e fontes naturais de cálcio (como a farinha de casca de ovo). Você sairá apto a congelar marmitinhas mensais, ganhando praticidade enquanto entrega saúde pura em formato de comida deliciosa.</p>",
+        "image_url": "/templates/pets/t2_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Pets",
+    "title": "Gatos Felizes: Comportamento Felino",
+    "subtitle": "Aprenda a 'falar gatês' e resolva os problemas de comportamento do seu felino.",
+    "cover_url": "/templates/pets/t3_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "A Mente de um Caçador Doméstico",
+        "subtitle": "A dualidade fascinante entre presa e predador.",
+        "content": "<p>Os gatos são criaturas paradoxais: dentro de casa eles são predadores apex caçando insetos e brinquedos, mas do ponto de vista da natureza, seu tamanho diminuto também os torna presas potenciais. Essa biologia dual molda absolutamente todas as reações de um gato, desde sua necessidade de estar no alto até seus sobressaltos repentinos.</p><p>Neste capítulo introdutório, vamos mergulhar na psique felina, destronando o mito de que gatos são indiferentes e traiçoeiros. Compreenderemos a anatomia sensorial incrível deles e como respeitar seus limites de interação, estabelecendo uma fundação de profunda confiança e carinho verdadeiro que eles reservam apenas aos merecedores.</p>",
+        "image_url": "/templates/pets/t3_ch1.jpg"
+      },
+      {
+        "title": "O Ambiente Enriquecido (Gatificação)",
+        "subtitle": "Transformando sua casa num playground sem perder o estilo.",
+        "content": "<p>Um gato vivendo em uma casa horizontal, sem locais para escalar ou se esconder, é um felino entediado, cronicamente estressado e muito propenso a problemas comportamentais. A verticalização do ambiente (ou gatificação) não é luxo, é uma necessidade básica para a sanidade mental e gasto de energia da espécie.</p><p>Você verá projetos simples para incorporar prateleiras, arranhadores estratégicos, tocas seguras e redes nas janelas sem arruinar a decoração da sua casa. Além disso, focaremos no estímulo olfativo e nas brincadeiras ativas diárias com varinhas que simulam caças reais, esgotando a energia física e mental de forma saudável.</p>"
+      },
+      {
+        "title": "A Ciência da Caixa de Areia",
+        "subtitle": "Acabando com o xixi fora do lugar de uma vez por todas.",
+        "content": "<p>O pesadelo número um dos tutores de gatos é a eliminação inadequada. Fazer xixi no sofá ou no tapete raramente é um ato de 'vingança'; quase sempre trata-se de um problema clínico escondido (como infecções urinárias) ou de uma insatisfação gigantesca com o design, limpeza ou localização da caixa de areia no território.</p><p>Abordarei a regra de ouro das caixas de areia (uma por gato mais uma de sobra), o tamanho ideal, a textura da areia preferida e os locais de maior conforto. Ao aplicar os ajustes cirúrgicos que ensino aqui, o problema do xixi indesejado desaparecerá, restaurando a paz e a limpeza no seu lar de forma definitiva.</p>",
+        "image_url": "/templates/pets/t3_ch3.jpg"
+      },
+      {
+        "title": "A Linguagem Corporal e Vocal",
+        "subtitle": "O que as orelhas, o rabo e os miados estão gritando para você.",
+        "content": "<p>Gatos falam muito o tempo todo, mas raramente usam a voz para isso (a menos que seja com humanos). A comunicação mais profunda de um gato acontece no silêncio de seus movimentos. O balançar da ponta da cauda, a dilatação das pupilas e o posicionamento das orelhas formam um complexo dicionário visual de intenções.</p><p>Aqui nos aprofundaremos na arte de 'ler' seu felino com precisão. Você vai saber distinguir um rabo balançando de felicidade de um rabo chicoteando de irritação antes de levar um arranhão. Decodificaremos as vibrações do ronronar, piscadelas lentas de afeto e todas as nuances sutis dessa linguagem silenciosa fantástica.</p>"
+      },
+      {
+        "title": "Apresentando Novos Animais",
+        "subtitle": "A integração pacífica de cães e novos gatos à matilha.",
+        "content": "<p>Trazer um novo animal para um território onde um gato já se considera dono soberano pode resultar em brigas corporais intensas, marcação urinária de estresse e até depressão. Gatos não aceitam novidades bruscas; eles são criaturas de rotina extrema e detestam qualquer intruso não verificado.</p><p>Finalizamos ensinando o protocolo de introdução super lenta, baseado em trocas olfativas por baixo das portas, associação positiva com comida (petiscos) e contato visual gradativo. Com paciência e a técnica correta, o que poderia ser uma guerra mundial felina torna-se o início de uma bela e duradoura amizade de ronronares conjuntos.</p>",
+        "image_url": "/templates/pets/t3_ch5.jpg"
+      }
+    ]
+  },
+  {
+    "niche": "Pets",
+    "title": "Primeiros Socorros para Pets",
+    "subtitle": "Saiba agir rápido em emergências até chegar ao veterinário e salve vidas.",
+    "cover_url": "/templates/pets/t4_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "Montando o Kit de Emergência Pet",
+        "subtitle": "Esteja preparado para o pior nos momentos críticos.",
+        "content": "<p>Acidentes domésticos e emergências não marcam hora e, na imensa maioria das vezes, ocorrem nos piores horários possíveis, como domingos de madrugada. Nessas horas, perder tempo procurando um simples curativo ou antisséptico pode custar caro para a saúde ou sobrevivência do seu amado companheiro.</p><p>Neste capítulo vital, listaremos todos os componentes obrigatórios do seu kit de primeiros socorros canino e felino. Desde termômetros específicos e gases estéreis, até pinças, carvão ativado e soluções limpadoras. Com a maleta correta montada, você ganha segundos preciosos e a tranquilidade mental para agir friamente num momento de puro pânico.</p>",
+        "image_url": "/templates/pets/t4_ch1.jpg"
+      },
+      {
+        "title": "Identificando Sinais de Intoxicação",
+        "subtitle": "O perigo silencioso das plantas e alimentos humanos.",
+        "content": "<p>Nossas casas estão repletas de toxinas perigosíssimas, escondidas em inocentes tabletes de chocolate, uvas docinhas, medicamentos humanos caídos no chão e folhagens decorativas (como a famosa Comigo-Ninguém-Pode). A intoxicação pet avança rápido, atacando os rins, fígado e o sistema nervoso central num piscar de olhos.</p><p>Você aprenderá a reconhecer rapidamente sintomas como salivação excessiva, tremores, vômitos e convulsões. Discutiremos o uso corretivo emergencial em casa e, crucialmente, quando jamais se deve provocar o vômito (pois dependendo do veneno, refluir piora a queimadura do esôfago), te preparando para a estabilização rumo ao pronto-socorro.</p>"
+      },
+      {
+        "title": "Engasgos e Paradas Cardiorrespiratórias",
+        "subtitle": "Manobras de salvamento que não podem esperar.",
+        "content": "<p>Seu cão estava roendo um osso inapropriado, engole e subitamente arregala os olhos, parando de respirar. Em situações de asfixia, a janela de oportunidade para evitar lesões cerebrais severas ou o óbito é de poucos minutos, impossibilitando a espera pelo socorro veterinário profissional em trânsito.</p><p>Nesta seção hiper importante, ensinarei o passo a passo seguro da Manobra de Heimlich adaptada para diferentes portes de cães e gatos. Além disso, passaremos pelos fundamentos da RCP (Reanimação Cardiopulmonar) em pets, com o ritmo e força exata das compressões torácicas que podem manter o coração do seu melhor amigo batendo até a ajuda chegar.</p>",
+        "image_url": "/templates/pets/t4_ch3.jpg"
+      },
+      {
+        "title": "Como Lidar com Cortes e Ferimentos",
+        "subtitle": "Estancando sangramentos e protegendo feridas da infecção.",
+        "content": "<p>Durante brincadeiras intensas, brigas ou pisões acidentais, os pets frequentemente sofrem cortes profundos nas patas e focinho, ou até mesmo lacerações corporais. Um animal ferido costuma entrar em pânico e a dor extrema pode fazer até mesmo o cachorro mais dócil do mundo morder o próprio dono em defesa.</p><p>Ensinarei técnicas de contenção segura (incluindo o uso de focinheiras improvisadas) e como aplicar pressão direta para frear hemorragias arteriais graves. Mostrarei também a forma correta de realizar curativos provisórios de compressão nas patas, orelhas ou corpo, mantendo a ferida isolada e o animal estabilizado durante a viagem médica.</p>"
+      },
+      {
+        "title": "Transporte Seguro e Calmo",
+        "subtitle": "Reduzindo danos no caminho para a clínica veterinária.",
+        "content": "<p>Pegar um animal com suspeita de fratura óssea de qualquer jeito e jogá-lo no banco traseiro do carro pode agravar permanentemente o quadro (como no caso de lesões na medula espinhal). O manejo térmico e o posicionamento físico adequado são frequentemente negligenciados no nervosismo dos tutores e motoristas durante resgates.</p><p>O último capítulo fecha nosso curso orientando como improvisar macas firmes (usando tábuas ou mantas grossas esticadas) para não flexionar a coluna de um pet traumatizado. Como realizar transporte de gatos estressados, prevenir hipotermia em casos de choque severo e garantir que a chegada à clínica ofereça ao animal as melhores chances totais de recuperação completa.</p>",
+        "image_url": "/templates/pets/t4_ch5.jpg"
+      }
+    ]
+  }
+]
