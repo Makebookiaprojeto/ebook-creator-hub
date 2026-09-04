@@ -1,0 +1,170 @@
+[
+  {
+    "niche": "Relacionamentos",
+    "title": "A Ciência da Comunicação Inquebrável",
+    "subtitle": "Como evitar brigas estúpidas e construir uma ponte impenetrável no seu casamento.",
+    "cover_url": "/templates/relacionamentos/t1_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "O Fim dos Monólogos Destrutivos",
+        "subtitle": "Por que ouvir não é apenas calar a boca",
+        "content": "<p>A maioria das discussões de relacionamento acontece não porque o casal tem opiniões opostas, mas porque ambos estão desesperados para serem ouvidos, enquanto ninguém escuta ativamente. O silêncio forçado para pensar no próximo argumento é um veneno rápido para a intimidade.</p><p>O primeiro passo para a comunicação inquebrável é esvaziar sua mente da necessidade de 'vencer' a discussão. Em um casal, ou ambos ganham, ou o relacionamento como um todo perde. Valide o sentimento antes de discutir os fatos.</p>",
+        "image_url": "/templates/relacionamentos/t1_ch1.jpg"
+      },
+      {
+        "title": "Desarmando Gatilhos de Defesa",
+        "subtitle": "As palavras que não devem ser ditas",
+        "content": "<p>Frases que começam com 'Você sempre...' ou 'Você nunca...' ativam automaticamente o sistema de defesa e fuga do cérebro primitivo do parceiro. Não existe diálogo após essa barreira, apenas ataque ou evasão silenciosa prolongada.</p><p>A técnica da responsabilidade substitui acusações brutais por confissões sobre como uma ação te afeta. 'Eu me sinto ignorado quando...' foca no seu sentimento e abre espaço para que o outro entenda o impacto da ação sem se sentir bombardeado na esquina.</p>"
+      },
+      {
+        "title": "A Reunião do Casal",
+        "subtitle": "Preventivos emocionais práticos",
+        "content": "<p>Não espere a panela de pressão explodir. Casais inquebráveis possuem o hábito das 'reuniões semanais'. Trinta minutos no domingo para discutir finanças, rotina e o mais importante: alinhar as expectativas não faladas e ocultas daquela semana que passou.</p><p>Esse espaço seguro para falar abertamente, regado com compreensão em um ambiente livre de estresse, evita que pequenos aborrecimentos se transformem no monstro da insatisfação amarga um mês depois.",
+        "image_url": "/templates/relacionamentos/t1_ch3.jpg"
+      },
+      {
+        "title": "Intimidade Além da Cama",
+        "subtitle": "O mapa para o amor profundo",
+        "content": "<p>A verdadeira intimidade não nasce entre quatro paredes, nasce na cozinha quando você faz um café surpresa. Nasce quando você solta o celular e presta atenção genuína na história banal sobre o dia no trabalho que o seu parceiro precisa desesperadamente descarregar.</p><p>Entender a linguagem do amor predominante (toque físico, serviço, palavras) do seu parceiro é a chave mestra para investir o seu carinho no local em que ele realmente será validado, otimizando seu esforço com retorno emocional máximo.</p>"
+      },
+      {
+        "title": "Gerenciando as Crises Externas",
+        "subtitle": "Nós contra o problema",
+        "content": "<p>Demissões, luto familiar, problemas com os filhos. Eventualmente, o inferno externo baterá na porta da casa de vocês. O maior erro nesta fase é apontar o dedo ou competir pela coroa de 'quem está sofrendo mais' nessa batalha de forças invisíveis.</p><p>Adotem o mantra inegociável: 'Somos eu e você contra o problema'. Quando a base interna está fortemente aliada, a pressão de fora não divide o casal, pelo contrário, os funde ainda mais numa força de combate e apoio indestrutível.</p>",
+        "image_url": "/templates/relacionamentos/t1_ch5.jpg"
+      },
+      {
+        "title": "Reconstruindo o Fascínio",
+        "subtitle": "Mantendo a chama em 10 anos",
+        "content": "<p>A familiaridade é natural, mas não precisa se tornar tédio e rotina mórbida. O fascínio retorna quando ambos se comprometem com o próprio crescimento individual, trazendo coisas novas e energia independente de volta para o ecossistema e rotina dos dois.</p><p>Celebrem pequenas vitórias. Planejem novas micro-experiências fora da rotina estática. O relacionamento não é algo que vocês 'encontraram', é algo brutal que vocês construíram, tijolo por tijolo de decisões amorosas e diárias.</p>"
+      }
+    ]
+  },
+  {
+    "niche": "Relacionamentos",
+    "title": "Superando o Fim do Mundo",
+    "subtitle": "Um mapa prático, psicológico e passo a passo para reconstruir você mesmo(a) após o término.",
+    "cover_url": "/templates/relacionamentos/t2_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "A Física do Coração Partido",
+        "subtitle": "O que acontece no seu cérebro hoje",
+        "content": "<p>O que você está sentindo agora não é exagero dramático. Exames neurológicos provam que a rejeição atinge os exatos mesmos receptores cerebrais que o impacto de uma dor física aguda. Seu cérebro está em franca síndrome de abstinência brutal.</p><p>Entender que seu estado químico não é o normal, tira o fardo da culpa absurda de não conseguir superar isso magicamente em um final de semana qualquer, dando clareza para curar o corpo e mente.</p>",
+        "image_url": "/templates/relacionamentos/t2_ch1.jpg"
+      },
+      {
+        "title": "O Protocolo do Zero Contato",
+        "subtitle": "Desintoxicando a máquina",
+        "content": "<p>Você não pode curar o ferimento de uma queimadura se continuar passando a mão no fogo. Acreditar que poderão 'ficar amigos' agora é a pior mentira manipuladora que o seu cérebro já contou a você mesmo. A única cura é a privação química do estímulo inicial.</p><p>Remova as fotos, arquive, apague o número, pare de vigiar as redes. O Zero Contato não é uma tática suja e imatura para tentar trazer a pessoa de volta, é a intervenção cirúrgica necessária para você parar o sangramento profundo da sua energia diária.</p>"
+      },
+      {
+        "title": "O Luto Pela Identidade Perdida",
+        "subtitle": "Quem é você sem o 'nós'?",
+        "content": "<p>Metade do que você chora não é apenas pela ausência da pessoa amada, é o luto cruel pelo futuro, pelas viagens imaginadas, pelos filhos pensados, por todos os domingos na frente da Netflix. Esse futuro acaba de ser arrancado violentamente do mapa da sua vida.</p><p>É preciso sentir raiva, tristeza, negação de forma crua, sem fugir para álcool excessivo ou novos encontros de band-aid superficial. Mergulhar na dor é a maneira inevitável e natural do sistema humano drenar essa ferida até estancar.</p>",
+        "image_url": "/templates/relacionamentos/t2_ch3.jpg"
+      },
+      {
+        "title": "Remontando o Quebra-Cabeça",
+        "subtitle": "Descobrindo coisas no singular",
+        "content": "<p>Quando o silêncio parar de machucar ativamente o peito, você vai notar um espaço vago muito grande na agenda. O segredo da fase três é reintroduzir paixões antigas que foram abandonadas para o relacionamento fluir ou hobbies que sempre causaram curiosidade escondida.</p><p>Correr, pintar, dançar, programar. Faça isso exclusivamente para você, ocupando o cérebro com o prazer intenso da dopamina autogerada e autossuficiente e recuperando a soberania vital do seu corpo.</p>"
+      },
+      {
+        "title": "A Mentira Sobre o Encerramento",
+        "subtitle": "Por que a última conversa é uma perda de tempo",
+        "content": "<p>Ficamos obcecados buscando por um fechamento formal e lógico que explique tudo o que deu errado. A dura realidade invisível é que a maioria dos 'porquês' machucaria ainda mais do que o silêncio fantasmagórico que restou das noites mal dormidas.</p><p>O seu encerramento verdadeiro não é algo que a outra pessoa te dá em um balcão da cafeteria. O seu encerramento é a aceitação interna e fria de que acabou, independentemente dos pormenores, resgatando a rédea da sua vida sem mais perguntas soltas ao ar.</p>",
+        "image_url": "/templates/relacionamentos/t2_ch5.jpg"
+      },
+      {
+        "title": "O Desabrochar",
+        "subtitle": "Seu upgrade inevitável",
+        "content": "<p>Quando você finalmente acorda em um dia comum, escuta o nome da pessoa em voz alta ou visita aquele antigo restaurante, e sente uma paz neutra profunda no peito, você cruzou oficialmente o rubicão final da superação invisível.</p><p>Você emerge com o coração duro e a empatia imensa de quem sofreu e renasceu das próprias cinzas. A dor ensina limites cruciais absolutos. Você está curado, ciente do seu real valor imperdoável e completamente pronto, ou pronta, para viver tudo de novo.</p>"
+      }
+    ]
+  },
+  {
+    "niche": "Desenvolvimento pessoal",
+    "title": "A Arquitetura de Hábitos Imparáveis",
+    "subtitle": "Como criar rotinas fortes e programar o seu cérebro para conquistar suas metas sem depender de motivação barata.",
+    "cover_url": "/templates/desenvolvimento_pessoal/t1_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "O Mito do Sentimento de Motivação",
+        "subtitle": "Por que você falha todo dia 15 de janeiro",
+        "content": "<p>A motivação é como um pico de açúcar químico no cérebro. É maravilhosa, vibrante e gera grande impulso inicial, mas queima em questão de pouquíssimas horas, caindo a níveis assustadores. É fisicamente instável depender desse pico de energia inicial todos os dias.</p><p>As pessoas que parecem mais disciplinadas na sociedade não usam força de vontade excessiva. Elas simplesmente desenvolveram um ambiente automatizado cruel onde tomar a decisão correta exige muito menos fricção cerebral inicial do que tomar a pior decisão fácil.</p>",
+        "image_url": "/templates/desenvolvimento_pessoal/t1_ch1.jpg"
+      },
+      {
+        "title": "O Loop Invisível",
+        "subtitle": "Gatilho, rotina e grande recompensa",
+        "content": "<p>Todo comportamento humano na terra funciona em uma tríade. Algo o engatilha (ver o sofá), ocorre a rotina mecânica (você senta e assiste TV desenfreadamente), e depois a recompensa gerada pela dopamina estourando sem propósito e de forma barata.</p><p>Para destruir um mau hábito crônico, você não pode simplesmente focar em extirpar a rotina falida. Você precisa prever o gatilho, mascarar os antigos estopins, e injetar um comportamento diferente e novo que atenda a essa mesma via de recompensa escondida.</p>"
+      },
+      {
+        "title": "A Regra dos Dois Minutos",
+        "subtitle": "Vencendo a barreira do primeiro esforço colossal",
+        "content": "<p>Você não procrastina ir para a academia, você procrastina as três etapas de arrumar a mala, pegar o carro, trocar a roupa e se deslocar. Reduza qualquer meta formidável para os exatos dois minutos inaugurais cruciais de arranque, cortando atritos irreais da mente.</p><p>O foco diário não é levantar pesos monstruosos. O foco é 'Eu irei calçar o meu tênis e pisar na rua de forma inevitável todos os dias às sete'. Após quebrar essa inércia inicial paralisante, os trinta minutos sequentes do novo hábito rolam pela lei da pura inércia.</p>",
+        "image_url": "/templates/desenvolvimento_pessoal/t1_ch3.jpg"
+      },
+      {
+        "title": "Engenharia de Ambiente",
+        "subtitle": "Facilitando o acerto natural do processo",
+        "content": "<p>Seu espaço de vivência fala mais alto que qualquer livro de disciplina pesada. Se quiser parar de devorar biscoitos durante o caos noturno de ansiedade e privação, não os compre, destruindo fisicamente a disponibilidade na dispensa para sempre.</p><p>Deixe um livro espesso em cima do seu travesseiro pela manhã, se deseja ler trinta páginas antes do seu sono reparador, criando assim um obstáculo positivo automático. Um ambiente projetado toma as decisões acertadas essenciais quase de forma inconsciente por você.</p>"
+      },
+      {
+        "title": "A Identidade Que Sustenta o Tijolo",
+        "subtitle": "O salto quântico da consistência real",
+        "content": "<p>Pessoas que falham estão sempre mirando no objetivo final distante: 'Quero ler dez livros esse ano de qualquer forma'. Quem tem o jogo totalmente ganho visa sempre alterar a sua base fundamental e sua própria identidade subconsciente e natural do processo contínuo.</p><p>Quando você diz repetidamente e convicto, 'Eu sou um leitor assíduo', a leitura incessante não é mais um sacrifício terrível de disciplina. É somente a sua prova visível da sua identidade diária enraizada sendo expressada em atitudes no mundo da realidade palpável externa.</p>",
+        "image_url": "/templates/desenvolvimento_pessoal/t1_ch5.jpg"
+      },
+      {
+        "title": "Construindo o Castelo Eterno",
+        "subtitle": "O acúmulo das margens irrisórias diárias",
+        "content": "<p>Se você se aprimorar incansáveis 1% todos os dias ao longo do percurso do sol, matematicamente o seu valor pessoal no ano será exponencial. O foco nas metas microscópicas repetíveis sempre ganhará das tentativas espetaculares, arriscadas, e falhas das grandes resoluções dramáticas.</p><p>Fique cego e em estado hipnótico para os resultados dos próximos três meses, focando em alinhar exclusivamente os seus próprios comportamentos rotineiros microscópicos até eles serem uma segunda natureza impenetrável à falha sistemática. A vitória e o império se constroem nos bastidores minúsculos.</p>"
+      }
+    ]
+  },
+  {
+    "niche": "Desenvolvimento pessoal",
+    "title": "Hiperfoco e Mente Blindada",
+    "subtitle": "Como domar a era das distrações digitais, limpar o barulho e recuperar o domínio absoluto sobre as suas horas do dia e produtividade real extrema.",
+    "cover_url": "/templates/desenvolvimento_pessoal/t2_cover.jpg",
+    "is_active": true,
+    "chapters": [
+      {
+        "title": "O Sequestro do Seu Cérebro",
+        "subtitle": "Engenharia comportamental focada",
+        "content": "<p>Aplicativos de rolagem infinita não nascem divertidos por acaso e coincidência biológica. Eles são desenhados milimetricamente por dezenas de grandes neurocientistas cruéis com orçamentos infinitos para hackear o sistema primário brutal de liberação da sua dopamina límbica subconsciente.</p><p>Seu esgotamento agudo em dias onde você parece que não concluiu nada fisicamente produtivo, mas ficou trancafiado no buraco das notificações incessantes, não é uma falha moral sua, é uma crise real química contínua. Você é o produto principal fatiado dessa prateleira infinita e esgotante de publicidade silenciosa cibernética, e seu tempo virou a moeda deles.</p>",
+        "image_url": "/templates/desenvolvimento_pessoal/t2_ch1.jpg"
+      },
+      {
+        "title": "A Desintoxicação Lógica",
+        "subtitle": "Buscando o nível de base basal",
+        "content": "<p>Você não conseguirá jamais manter seu foco profundo na construção árdua do seu relatório financeiro super entediante, se o seu cérebro continuar sabendo de maneira silenciosa que há uma porta infinita de estímulo instantâneo multicolorido gritando e pedindo atenção no seu bolso lateral esquerdo todo o decorrer de cada mísero minuto da vida.</p><p>Tirar os feeds desgovernados das primeiras três horas essenciais de silêncio absoluto da sua rotina da sua abençoada manhã restaura de maneira contínua o estado biológico pacífico e de clareza fundamental primária mental basal que é vital e crítico pro raciocínio profundo voltar na sua rotina do dia longo.</p>"
+      },
+      {
+        "title": "A Prática do Trabalho Profundo",
+        "subtitle": "Evoluindo para o ápice cerebral produtivo",
+        "content": "<p>Sessões bloqueadas de 'Deep Work' (trabalho altamente profundo) funcionam por uma limitação fisiológica implacável universal biológica, não meramente por frescura estratégica passageira. Para acessar as camadas analíticas superiores reais na sua cognição abstrata, seu cérebro demora 15 a 20 minutos focado até alinhar todas as ligações lógicas no processo mental denso essencial para aquele esforço monumental diário.</p><p>Se um alerta sonoro destrói sua linha cronológica ininterrupta no décimo terceiro exato minuto tenso e precioso, você literalmente precisa jogar a toalha invisível recuando pro estágio zero. Construa bolhas e blocos rigorosos intensos intocáveis blindando esse mergulho silencioso analítico para acelerar entregas.</p>",
+        "image_url": "/templates/desenvolvimento_pessoal/t2_ch3.jpg"
+      },
+      {
+        "title": "Dizendo Não Sem Sentir Culpa",
+        "subtitle": "Focando recursos em poucas batalhas",
+        "content": "<p>A maior falácia invisível disseminada na corporação e sociedade é aplaudir e exaltar os famigerados falsos profissionais multifocados multitarefas rápidos sobre humanos super requisitados da bolha, que respondem cada mensagem estúpida sem nenhum filtro crítico num raio milissegundo irreal perfeitamente veloz.</p><p>Cada minúscula micro responsabilidade frágil adicional irrelevante sugadora aceita para manter todos agradavelmente passivos, destrói em essência uma lasca grandiosa irreversível essencial para a única grande entrega transformadora central crucial. A competência em recusar interrupções, blinda a prioridade principal monumental do líder produtivo eficaz impenetrável ao desperdício generalizado de dias.</p>"
+      },
+      {
+        "title": "Alinhamento Circadiano",
+        "subtitle": "A sincronia rítmica brutal natural da performance e ritmo do nosso sol",
+        "content": "<p>Todo sistema humano endócrino opera na curva clássica ancestral da insuperável e divina cronobiologia implacável que oscila independentemente da sua imensa vontade. Seu auge cognitivo analítico abstrato tem janelas incrivelmente curtas, não existindo milagres para focar puramente em contas complexas à tarde quando o declínio de sua preciosa força termogênica bate violentamente após a sua alimentação regular diária habitual e o ritmo dita repouso reparador e essencial natural da vida fisiológica do organismo.</p><p>O super herói da produção diária implacável orquestra toda e cada maldita grande batalha crítica dura nas preciosas montanhas horas brilhantes matinais da hiperatividade natural. Apenas tarefas bobas vão na curva de decadência.</p>",
+        "image_url": "/templates/desenvolvimento_pessoal/t2_ch5.jpg"
+      },
+      {
+        "title": "A Máquina Calibrada Perfeita",
+        "subtitle": "Tempo extra na agenda eterna",
+        "content": "<p>Recuperar sistematicamente de forma intencional essas 2 grandes horas vazadas para distração aleatória irracional contínua crônica na internet, devolve-lhe para fins lógicos cruciais matemáticos precisos nada menos que brutais enormes um mês inteirinho e produtivo inteiro novo em cada volta do calendário longo anual em favor de conquistas massivas intocadas reais de sonhos adormecidos antigos cruciais na jornada maravilhosa da vida longa real e prática na estrada gloriosa percorrida.</p><p>A mente é sua. Assuma o controle absoluto sem remorsos e viva um degrau transcendental acima da manada que perde vida real em pixels. Retome as chaves hoje.</p>"
+      }
+    ]
+  }
+]
