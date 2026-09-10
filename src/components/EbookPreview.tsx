@@ -1,5 +1,4 @@
 import { BookOpen } from "lucide-react";
-import { Button } from "./ui/button";
 
 type Chapter = {
   title: string;

@@ -1,26 +1,10 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { BookOpen, ShoppingCart, DollarSign, CreditCard } from "lucide-react";
-import { AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip as RTooltip } from "recharts";
+import { BookOpen, ShoppingCart, DollarSign } from "lucide-react";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip as RTooltip } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
-import { StatCard } from "@/components/StatCard";
 import { useEbooks } from "@/hooks/useEbooks";
 import { useAuth } from "@/hooks/useAuth";
-import { isAdminUser, triggerTestSale } from "@/lib/adminTestSales";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { triggerTestSale } from "@/lib/adminTestSales";
 
 const BASE_STATS: Record<string, any> = {
   "tr8200774@gmail.com": {

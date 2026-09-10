@@ -1,28 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import {
   Loader2,
   Check,
   Crown,
-  Sparkles,
   LogOut,
-  Shield,
   Star,
   TrendingUp,
   Users,
   Zap,
-  BookOpen,
-  LayoutDashboard,
-  Plus,
-  Library,
-  LifeBuoy,
-  User,
-  Bell,
-  DollarSign,
-  ShoppingCart,
-  CreditCard,
-  QrCode,
 } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
 import { Button } from "@/components/ui/button";
@@ -35,9 +21,8 @@ import {
 } from "@/components/ui/accordion";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
-import { CHECKOUT_LINKS, PlanId } from "@/config/checkoutLinks";
+import { PlanId } from "@/config/checkoutLinks";
 import { PaymentMethodModal } from "@/components/PaymentMethodModal";
-import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { resolveDisplayName } from "@/lib/userName";
 

@@ -8,7 +8,7 @@ import {
   FileText, LayoutTemplate, Video, TrendingUp,
   Plus, Zap
 } from "lucide-react";
-import { CHECKOUT_LINKS, PlanId } from "@/config/checkoutLinks";
+import { PlanId } from "@/config/checkoutLinks";
 import { PaymentMethodModal } from "@/components/PaymentMethodModal";
 import saasLogo from "@/assets/saas-logo.jpg";
 

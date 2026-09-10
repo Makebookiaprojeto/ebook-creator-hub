@@ -2,20 +2,14 @@ import { useState, useEffect, useRef, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, ArrowRight, Check, Sparkles, Loader2, Copy, Users, Rocket,
-  Search, ChevronDown, Star, Flame, ShieldCheck, Clock, Zap, Quote, Download, FileText, Eye,
-  BookOpen, MousePointer2, Target, Layout, Award, Lock as LockIcon, ArrowRight as ArrowRightIcon,
-  TrendingUp, ExternalLink, Video, Play, Megaphone,
+  Search, Flame, Zap, Quote, Download,
+  ExternalLink, Video, Play,
   Dumbbell, Utensils, Baby, Dog, Sparkle, GraduationCap, Laptop, Palette, Briefcase, Languages, Map, Home, Shirt,
-  Heart, Wallet, Brain, HeartPulse, DollarSign, BadgeDollarSign,
+  Heart, Wallet, Brain, HeartPulse, DollarSign,
   SquareStack, SquareMousePointer, SquareArrowOutUpRight, Square
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue
-} from "@/components/ui/select";
 
 const niches = [
   { name: "Emagrecimento", emoji: "🔥", icon: Flame, desc: "Alta demanda, ticket médio R$47" },
@@ -49,7 +43,6 @@ const testimonials = [
 import { toast } from "sonner";
 import { useEbooks } from "@/hooks/useEbooks";
 import { supabase } from "@/integrations/supabase/client";
-import { EbookPreview } from "@/components/EbookPreview";
 import { EbookPreviewCarousel, preloadEbookPreviewImages } from "@/components/EbookPreviewCarousel";
 import { generateEbookPdf, downloadPdf } from "@/lib/ebookPdf";
 const videoDivulgacao1 = { url: "/videos/video-divulgacao-1.mp4" };

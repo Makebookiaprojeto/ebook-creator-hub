@@ -27,7 +27,6 @@ import {
   Infinity as InfinityIcon,
   Crown,
   HelpCircle,
-  PlayCircle,
   ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";

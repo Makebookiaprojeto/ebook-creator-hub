@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Sparkles, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
 
 const passwordSchema = z.string().min(6, "Senha deve ter no mínimo 6 caracteres").max(72);

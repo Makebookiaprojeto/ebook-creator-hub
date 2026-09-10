@@ -1,27 +1,19 @@
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
-// import { plans } from "@/lib/mockData";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   User as UserIcon,
   Loader2,
   Camera,
   Upload,
   Crown,
-  Sparkles,
-  Check,
-  Settings,
-  Link2,
-  Lock,
-  Copy,
   Calendar,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
-import { CHECKOUT_LINKS, PlanId } from "@/config/checkoutLinks";
+import { PlanId } from "@/config/checkoutLinks";
 import { PaymentMethodModal } from "@/components/PaymentMethodModal";
 import { resolveDisplayName } from "@/lib/userName";
 

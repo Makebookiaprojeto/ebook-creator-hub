@@ -11,7 +11,7 @@ import { IntegrationsView } from "@/components/views/IntegrationsView";
 import { LayoutDashboard, Library, Plus, LifeBuoy, User, LogOut, Sliders, Search, Plug } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { resolveDisplayName, initialFromName } from "@/lib/userName";
+import { resolveDisplayName } from "@/lib/userName";
 import saasLogo from "@/assets/saas-logo.jpg";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
