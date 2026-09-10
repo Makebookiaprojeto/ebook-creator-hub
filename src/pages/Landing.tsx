@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { CHECKOUT_LINKS } from "@/config/checkoutLinks";
 import saasLogo from "@/assets/saas-logo.jpg";
-import { PreviewCarousel } from "@/components/PreviewCarousel";
 
 const FAQItem = ({ question, answer }: { question: string; answer: string }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -130,10 +129,10 @@ const Landing = () => {
           </motion.div>
 
           <motion.div 
-            initial={{ opacity: 0, y: 100 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
-            className="w-full max-w-[1000px] mt-24 relative z-20"
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="w-full max-w-[1000px] mt-14 relative z-20"
           >
             <div className="flex justify-center gap-2 mb-4 overflow-x-auto pb-2">
                <div className="flex items-center gap-2 px-4 py-2 bg-[#0a0a0a] border border-white/5 rounded-xl text-white/80 text-sm font-medium">
@@ -155,19 +154,6 @@ const Landing = () => {
                <div className="flex items-center gap-2 px-4 py-2 bg-[#0a0a0a] border border-white/5 rounded-xl text-white/80 text-sm font-medium">
                  <TrendingUp className="w-4 h-4" /> Vender
                </div>
-            </div>
-
-            <div className="relative rounded-2xl border border-white/5 bg-[#0a0a0a] shadow-2xl overflow-hidden aspect-auto min-h-[400px] md:min-h-[550px] flex flex-col">
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-[#111]">
-                <div className="w-3 h-3 rounded-full bg-[#FF0000]"></div>
-                <div className="w-3 h-3 rounded-full bg-white/20"></div>
-                <div className="w-3 h-3 rounded-full bg-white/20"></div>
-                <div className="ml-4 text-xs text-white/40 font-mono">https://ebookaibuilder.com</div>
-              </div>
-              
-              <div className="w-full flex-1 relative overflow-hidden bg-gradient-to-b from-[#151515] to-[#050505]">
-                 <PreviewCarousel />
-              </div>
             </div>
           </motion.div>
 
