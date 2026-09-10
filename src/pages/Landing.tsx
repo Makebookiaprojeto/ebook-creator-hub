@@ -157,27 +157,13 @@ const Landing = () => {
                </div>
             </div>
 
-            {/* Mockup 3D com perspectiva, flutuação suave e leve sombreamento vermelho */}
-            <motion.div 
-              animate={{ y: [0, -7, 0] }}
-              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-              className="relative max-w-[700px] mx-auto"
-              style={{ perspective: "1000px" }}
-            >
-              <div 
-                className="relative rounded-2xl border border-white/10 bg-[#000000] overflow-hidden transition-all duration-500 hover:scale-[1.015] shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_35px_rgba(255,0,0,0.22)]"
-                style={{
-                  transform: "rotateX(4deg)",
-                  transformStyle: "preserve-3d"
-                }}
-              >
-                <img 
-                  src={heroMockup} 
-                  alt="Ebook AI Builder" 
-                  className="w-full h-auto object-cover rounded-2xl block"
-                />
-              </div>
-            </motion.div>
+            <div className="relative max-w-[720px] mx-auto">
+              <img 
+                src={heroMockup} 
+                alt="Ebook AI Builder" 
+                className="w-full h-auto block"
+              />
+            </div>
           </motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-[1000px] mt-16 text-left">
