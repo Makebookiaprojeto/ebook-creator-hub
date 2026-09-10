@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # 1. Rota de Webhook -> webhook.php
+  RewriteRule ^webhook/?$ webhook.php [L,QSA]
+
+  # 2. Arquivos e diretórios existentes são servidos diretamente
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # 3. Fallback do SPA Vite -> index.html
+  RewriteRule ^ index.html [L]
+</IfModule>

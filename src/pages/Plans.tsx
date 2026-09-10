@@ -35,7 +35,8 @@ import {
 } from "@/components/ui/accordion";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
-import { CHECKOUT_LINKS } from "@/config/checkoutLinks";
+import { CHECKOUT_LINKS, PlanId } from "@/config/checkoutLinks";
+import { PaymentMethodModal } from "@/components/PaymentMethodModal";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { resolveDisplayName } from "@/lib/userName";
@@ -109,6 +110,7 @@ export default function Plans() {
   const { user, loading: authLoading, signOut } = useAuth();
   const { loading: subLoading, isActive } = useSubscription();
   const [displayName, setDisplayName] = useState<string>("");
+  const [modalPlan, setModalPlan] = useState<PlanId | null>(null);
 
   useEffect(() => {
     // Force CSS dark mode
@@ -150,14 +152,7 @@ export default function Plans() {
   }, [authLoading, user, navigate]);
 
   const handleCheckout = (plan: "monthly" | "lifetime") => {
-    const baseUrl = CHECKOUT_LINKS[plan];
-    if (!baseUrl) {
-      toast.error("Forma de pagamento indisponível.");
-      return;
-    }
-    const url = new URL(baseUrl);
-    if (user?.email) url.searchParams.set("email", user.email);
-    window.location.href = url.toString();
+    setModalPlan(plan);
   };
 
   const scrollToPlans = () => {
@@ -438,6 +433,14 @@ export default function Plans() {
           </p>
         </section>
       </main>
+
+      {/* MODAL DE SELEÇÃO DE FORMA DE PAGAMENTO (PIX / CARTÃO) */}
+      <PaymentMethodModal
+        isOpen={!!modalPlan}
+        onClose={() => setModalPlan(null)}
+        planId={modalPlan || "monthly"}
+        userEmail={user?.email}
+      />
     </div>
   );
 }

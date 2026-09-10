@@ -21,8 +21,8 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { CHECKOUT_LINKS } from "@/config/checkoutLinks";
+import { CHECKOUT_LINKS, PlanId } from "@/config/checkoutLinks";
+import { PaymentMethodModal } from "@/components/PaymentMethodModal";
 import { resolveDisplayName } from "@/lib/userName";
 
 export function ProfileView() {
@@ -39,6 +39,7 @@ export function ProfileView() {
     plan_type: string;
     status: string;
   } | null>(null);
+  const [modalPlan, setModalPlan] = useState<PlanId | null>(null);
 
 
   // Carrega dados do perfil
@@ -115,9 +116,8 @@ export function ProfileView() {
   }, [user]);
 
   const handleSubscribe = (planId: string) => {
-    const url = CHECKOUT_LINKS[planId];
-    if (url && /^https?:\/\//i.test(url) && !url.includes("SEU_LINK")) {
-      window.open(url, "_blank", "noopener,noreferrer");
+    if (planId === "monthly" || planId === "lifetime") {
+      setModalPlan(planId);
     } else {
       toast.info("Checkout deste plano ainda não está configurado.");
     }
@@ -301,6 +301,14 @@ export function ProfileView() {
       </div>
 
       {/* Seção de planos removida conforme solicitação do usuário para uma experiência mais limpa */}
+
+      {/* MODAL DE SELEÇÃO DE FORMA DE PAGAMENTO (PIX / CARTÃO) */}
+      <PaymentMethodModal
+        isOpen={!!modalPlan}
+        onClose={() => setModalPlan(null)}
+        planId={modalPlan || "monthly"}
+        userEmail={user?.email}
+      />
     </div>
   );
 }

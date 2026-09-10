@@ -8,7 +8,8 @@ import {
   FileText, LayoutTemplate, Video, TrendingUp,
   Plus, Zap
 } from "lucide-react";
-import { CHECKOUT_LINKS } from "@/config/checkoutLinks";
+import { CHECKOUT_LINKS, PlanId } from "@/config/checkoutLinks";
+import { PaymentMethodModal } from "@/components/PaymentMethodModal";
 import saasLogo from "@/assets/saas-logo.jpg";
 
 const FAQItem = ({ question, answer }: { question: string; answer: string }) => {
@@ -34,6 +35,7 @@ const FAQItem = ({ question, answer }: { question: string; answer: string }) => 
 const Landing = () => {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
+  const [modalPlan, setModalPlan] = useState<PlanId | null>(null);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
@@ -365,11 +367,12 @@ const Landing = () => {
                  ))}
                </ul>
                
-               <a href={CHECKOUT_LINKS.monthly} className="block w-full mt-auto">
-                 <Button className="w-full h-14 rounded-xl font-bold text-sm bg-[#FF0000] hover:bg-[#CC0000] text-white border-none shadow-lg transition-all">
-                   COMEÇAR NO MENSAL
-                 </Button>
-               </a>
+                <Button 
+                  onClick={() => setModalPlan("monthly")}
+                  className="w-full h-14 rounded-xl font-bold text-sm bg-[#FF0000] hover:bg-[#CC0000] text-white border-none shadow-lg transition-all mt-auto"
+                >
+                  COMEÇAR NO MENSAL
+                </Button>
             </div>
 
             {/* PLANO VITALÍCIO */}
@@ -395,11 +398,12 @@ const Landing = () => {
                  ))}
                </ul>
                
-               <a href={CHECKOUT_LINKS.lifetime} className="block w-full mt-auto">
-                 <Button className="w-full h-14 rounded-xl font-bold text-sm bg-[#FF0000] hover:bg-[#CC0000] text-white shadow-[0_0_30px_rgba(255,0,0,0.4)] transition-all">
-                   GARANTIR ACESSO VITALÍCIO <ArrowRight className="ml-2 w-4 h-4" />
-                 </Button>
-               </a>
+                <Button 
+                  onClick={() => setModalPlan("lifetime")}
+                  className="w-full h-14 rounded-xl font-bold text-sm bg-[#FF0000] hover:bg-[#CC0000] text-white shadow-[0_0_30px_rgba(255,0,0,0.4)] transition-all mt-auto"
+                >
+                  GARANTIR ACESSO VITALÍCIO <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
                
                <div className="flex items-center justify-center gap-4 mt-6 text-[10px] text-white/50 font-medium">
                   <span className="flex items-center gap-1"><ShieldCheck className="w-3 h-3 text-[#FF0000]" /> Pagamento seguro</span>
@@ -506,6 +510,14 @@ const Landing = () => {
           </div>
         </div>
       </footer>
+
+      {/* MODAL DE SELEÇÃO DE FORMA DE PAGAMENTO (PIX / CARTÃO) */}
+      <PaymentMethodModal
+        isOpen={!!modalPlan}
+        onClose={() => setModalPlan(null)}
+        planId={modalPlan || "monthly"}
+        userEmail={user?.email}
+      />
     </div>
   );
 };
