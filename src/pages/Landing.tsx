@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { CHECKOUT_LINKS } from "@/config/checkoutLinks";
 import saasLogo from "@/assets/saas-logo.jpg";
-import { PreviewCarousel } from "@/components/PreviewCarousel";
 
 const FAQItem = ({ question, answer }: { question: string; answer: string }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,27 +63,33 @@ const Landing = () => {
         transition={{ duration: 0.5 }}
         className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-[#000000]/85 backdrop-blur-md"
       >
-        <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-4">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg overflow-hidden border border-white/10">
+        <div className="mx-auto flex max-w-[1200px] items-center justify-between px-4 sm:px-6 py-4">
+          <Link to="/" className="flex items-center gap-2 sm:gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg overflow-hidden border border-white/10 shrink-0">
               <img src={saasLogo} alt="Logo" className="h-full w-full object-cover" />
             </div>
-            <span className="font-display text-lg font-bold tracking-tight text-white">
+            <span className="font-display text-base sm:text-lg font-bold tracking-tight text-white whitespace-nowrap">
               EbookAI <span className="text-[#FF0000]">Builder</span>
             </span>
           </Link>
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-3 sm:gap-8">
             <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-white/60">
               <a href="#como-funciona" className="hover:text-white transition-colors">Como funciona</a>
               <a href="#planos" className="hover:text-white transition-colors">Preços</a>
               <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
               <Link to="/auth" className="hover:text-white transition-colors">Entrar</Link>
             </nav>
-            <a href="#planos">
+            <a href="#planos" className="hidden sm:inline-block">
               <Button className="h-10 px-6 rounded-lg font-bold bg-[#FF0000] hover:bg-[#CC0000] text-white shadow-[0_0_18px_rgba(255,0,0,0.35)] transition-all border-none">
                 Criar meu ebook
               </Button>
             </a>
+            {/* Botão Entrar para celular / mobile no canto superior direito */}
+            <Link to="/auth" className="md:hidden">
+              <Button className="h-9 px-4 rounded-lg font-bold bg-[#FF0000] hover:bg-[#CC0000] text-white shadow-[0_0_14px_rgba(255,0,0,0.35)] transition-all border-none text-sm">
+                Entrar
+              </Button>
+            </Link>
           </div>
         </div>
       </motion.header>
@@ -151,17 +156,12 @@ const Landing = () => {
                </div>
             </div>
 
-            <div className="relative rounded-2xl border border-white/5 bg-[#0a0a0a] shadow-2xl overflow-hidden aspect-auto min-h-[400px] md:min-h-[550px] flex flex-col">
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-[#111]">
-                <div className="w-3 h-3 rounded-full bg-[#FF0000]"></div>
-                <div className="w-3 h-3 rounded-full bg-white/20"></div>
-                <div className="w-3 h-3 rounded-full bg-white/20"></div>
-                <div className="ml-4 text-xs text-white/40 font-mono">https://ebookaibuilder.com</div>
-              </div>
-              
-              <div className="w-full flex-1 relative overflow-hidden bg-gradient-to-b from-[#151515] to-[#050505]">
-                 <PreviewCarousel />
-              </div>
+            <div className="relative rounded-2xl border border-white/10 bg-[#000000] shadow-[0_0_60px_rgba(255,0,0,0.25)] overflow-hidden max-w-[950px] mx-auto">
+              <img 
+                src="/hero-ebook-mockup.jpg" 
+                alt="Ebook AI Builder" 
+                className="w-full h-auto object-cover rounded-2xl block"
+              />
             </div>
           </motion.div>
 

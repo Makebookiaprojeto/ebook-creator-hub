@@ -24,7 +24,6 @@ import {
   QrCode,
 } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
-import { PreviewCarousel } from "@/components/PreviewCarousel";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -219,11 +218,12 @@ export default function Plans() {
           </Button>
 
           <div className="mt-16 relative mx-auto max-w-4xl px-4 flex flex-col items-center">
-            <h2 className="text-3xl sm:text-4xl font-black text-white mb-10 animate-slide-up">
-              Veja Por Dentro
-            </h2>
-            <div className="w-full">
-              <PreviewCarousel />
+            <div className="w-full relative rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(255,0,0,0.25)] bg-[#000000]">
+              <img 
+                src="/hero-ebook-mockup.jpg" 
+                alt="Ebook AI Builder" 
+                className="w-full h-auto object-cover rounded-2xl block"
+              />
             </div>
           </div>
         </section>
