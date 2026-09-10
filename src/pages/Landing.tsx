@@ -134,7 +134,7 @@ const Landing = () => {
             transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
             className="w-full max-w-[1000px] mt-24 relative z-20"
           >
-            <div className="flex justify-center gap-2 mb-4 overflow-x-auto pb-2">
+            <div className="flex justify-center gap-2 mb-8 md:mb-10 overflow-x-auto pb-2">
                <div className="flex items-center gap-2 px-4 py-2 bg-[#0a0a0a] border border-white/5 rounded-xl text-white/80 text-sm font-medium">
                  <FileText className="w-4 h-4" /> Ebook
                </div>
@@ -156,7 +156,7 @@ const Landing = () => {
                </div>
             </div>
 
-            <div className="relative rounded-2xl border border-white/10 bg-[#000000] shadow-[0_0_60px_rgba(255,0,0,0.25)] overflow-hidden max-w-[950px] mx-auto">
+            <div className="relative rounded-2xl border border-white/10 bg-[#000000] shadow-[0_0_50px_rgba(255,0,0,0.25)] overflow-hidden max-w-[780px] mx-auto">
               <img 
                 src="/hero-ebook-mockup.jpg" 
                 alt="Ebook AI Builder" 

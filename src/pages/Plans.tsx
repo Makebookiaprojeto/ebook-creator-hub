@@ -217,7 +217,7 @@ export default function Plans() {
             Ver planos
           </Button>
 
-          <div className="mt-16 relative mx-auto max-w-4xl px-4 flex flex-col items-center">
+          <div className="mt-16 relative mx-auto max-w-3xl px-4 flex flex-col items-center">
             <div className="w-full relative rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(255,0,0,0.25)] bg-[#000000]">
               <img 
                 src="/hero-ebook-mockup.jpg" 
