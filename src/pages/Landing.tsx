@@ -156,7 +156,7 @@ const Landing = () => {
                </div>
             </div>
 
-            <div className="relative rounded-2xl border border-white/10 bg-[#000000] shadow-[0_0_50px_rgba(255,0,0,0.25)] overflow-hidden max-w-[780px] mx-auto">
+            <div className="relative rounded-2xl border border-white/10 bg-[#000000] overflow-hidden max-w-[700px] mx-auto">
               <img 
                 src="/hero-ebook-mockup.jpg" 
                 alt="Ebook AI Builder" 
