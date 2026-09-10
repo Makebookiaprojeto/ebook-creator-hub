@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { CHECKOUT_LINKS } from "@/config/checkoutLinks";
 import saasLogo from "@/assets/saas-logo.jpg";
+import heroMockup from "@/assets/hero-mockup.jpg";
 
 const FAQItem = ({ question, answer }: { question: string; answer: string }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -158,7 +159,7 @@ const Landing = () => {
 
             <div className="relative rounded-2xl border border-white/10 bg-[#000000] overflow-hidden max-w-[700px] mx-auto">
               <img 
-                src="/hero-ebook-mockup.jpg" 
+                src={heroMockup} 
                 alt="Ebook AI Builder" 
                 className="w-full h-auto object-cover rounded-2xl block"
               />

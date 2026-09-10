@@ -24,6 +24,7 @@ import {
   QrCode,
 } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
+import heroMockup from "@/assets/hero-mockup.jpg";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -220,7 +221,7 @@ export default function Plans() {
           <div className="mt-16 relative mx-auto max-w-2xl px-4 flex flex-col items-center">
             <div className="w-full relative rounded-2xl overflow-hidden border border-white/10 bg-[#000000]">
               <img 
-                src="/hero-ebook-mockup.jpg" 
+                src={heroMockup} 
                 alt="Ebook AI Builder" 
                 className="w-full h-auto object-cover rounded-2xl block"
               />
