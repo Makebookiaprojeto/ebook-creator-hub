@@ -360,7 +360,7 @@ export function DashboardView() {
     <div className="space-y-3 animate-fade-in py-1 sm:-mt-6 mt-0">
 
       <div className="space-y-3">
-        <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-black dark:bg-none px-7 pt-3 pb-7 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
+        <div className="relative overflow-hidden rounded-3xl border border-red-500/20 dark:border-white/10 bg-white dark:bg-black dark:bg-none px-7 pt-3 pb-7 shadow-[0_10px_40px_-10px_rgba(255,0,0,0.2)]">
           
           <div className="relative">
             <div className="flex items-start justify-between gap-3">
@@ -391,8 +391,8 @@ export function DashboardView() {
                       }}
                       className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all border ${
                         active
-                          ? "bg-blue-500 text-white border-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
-                          : "bg-blue-500/10 text-blue-600 dark:text-blue-300 border-blue-500/30 hover:bg-blue-500/20"
+                          ? "bg-[#FF0000] text-white border-[#FF0000] shadow-[0_0_10px_rgba(255,0,0,0.5)]"
+                          : "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/30 hover:bg-red-500/20"
                       }`}
                     >
                       {opt.label}
@@ -405,7 +405,7 @@ export function DashboardView() {
               <p className="font-display text-5xl sm:text-7xl font-bold tracking-tight text-foreground">
                 R$ {((profitPeriod === "today" ? stats.revenueToday : profitPeriod === "7d" ? stats.revenue7d : stats.revenue30d) + simulatedRevenue).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
               </p>
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.35)]">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-red-500/15 text-red-600 dark:text-red-400 shadow-[0_0_12px_rgba(255,0,0,0.35)]">
                 <DollarSign className="h-5 w-5" />
               </div>
             </div>
@@ -417,24 +417,24 @@ export function DashboardView() {
         </div>
 
         <div className="grid grid-cols-2 gap-3 pt-1">
-          <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-black dark:bg-none px-4 py-5 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
+          <div className="relative overflow-hidden rounded-3xl border border-red-500/20 dark:border-white/10 bg-white dark:bg-black dark:bg-none px-4 py-5 shadow-[0_10px_40px_-10px_rgba(255,0,0,0.2)]">
               <div className="relative flex items-center justify-between">
                 <div>
                   <p className="text-[11px] uppercase tracking-wider text-muted-foreground dark:text-white/80">E-Books</p>
                 <p className="font-display text-2xl font-bold tracking-tight">{totalEbooks}</p>
               </div>
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.3)]">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-500/15 text-red-600 dark:text-red-400 shadow-[0_0_10px_rgba(255,0,0,0.3)]">
                 <BookOpen className="h-4 w-4" />
               </div>
             </div>
           </div>
-          <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-black dark:bg-none px-4 py-5 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
+          <div className="relative overflow-hidden rounded-3xl border border-red-500/20 dark:border-white/10 bg-white dark:bg-black dark:bg-none px-4 py-5 shadow-[0_10px_40px_-10px_rgba(255,0,0,0.2)]">
               <div className="relative flex items-center justify-between">
                 <div>
                   <p className="text-[11px] uppercase tracking-wider text-muted-foreground dark:text-white/80">Vendas</p>
                 <p className="font-display text-2xl font-bold tracking-tight">{stats.totalSales + simulatedSales}</p>
               </div>
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.3)]">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-500/15 text-red-600 dark:text-red-400 shadow-[0_0_10px_rgba(255,0,0,0.3)]">
                 <ShoppingCart className="h-4 w-4" />
               </div>
             </div>
@@ -463,13 +463,13 @@ function SalesByHourChart({ total }: { total: number }) {
   }, [total]);
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-blue-500/20 bg-white dark:bg-black dark:bg-none p-5 shadow-[0_10px_40px_-10px_rgba(59,130,246,0.35)]">
+    <div className="relative overflow-hidden rounded-3xl border border-red-500/20 dark:border-white/10 bg-white dark:bg-black dark:bg-none p-5 shadow-[0_10px_40px_-10px_rgba(255,0,0,0.2)]">
       
       <div className="mb-4 flex items-center justify-between relative">
         <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-black dark:text-white">Receita</h3>
-        <div className="flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1">
-          <span className="h-1.5 w-1.5 rounded-full bg-blue-400 shadow-[0_0_8px_#60a5fa]" />
-          <span className="text-[11px] font-medium text-blue-600 dark:text-blue-300">Últimos 30 dias</span>
+        <div className="flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#FF0000] shadow-[0_0_8px_#FF0000]" />
+          <span className="text-[11px] font-medium text-red-600 dark:text-red-400">Últimos 30 dias</span>
         </div>
       </div>
 
@@ -478,14 +478,14 @@ function SalesByHourChart({ total }: { total: number }) {
           <AreaChart data={data} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id="lineStroke" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#3b82f6" stopOpacity={1} />
-                <stop offset="50%" stopColor="#60a5fa" stopOpacity={1} />
-                <stop offset="100%" stopColor="#93c5fd" stopOpacity={1} />
+                <stop offset="0%" stopColor="#FF0000" stopOpacity={1} />
+                <stop offset="50%" stopColor="#FF3333" stopOpacity={1} />
+                <stop offset="100%" stopColor="#CC0000" stopOpacity={1} />
               </linearGradient>
               <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.45} />
-                <stop offset="60%" stopColor="#3b82f6" stopOpacity={0.12} />
-                <stop offset="100%" stopColor="#3b82f6" stopOpacity={0} />
+                <stop offset="0%" stopColor="#FF0000" stopOpacity={0.45} />
+                <stop offset="60%" stopColor="#FF0000" stopOpacity={0.12} />
+                <stop offset="100%" stopColor="#FF0000" stopOpacity={0} />
               </linearGradient>
             </defs>
 
@@ -511,10 +511,10 @@ function SalesByHourChart({ total }: { total: number }) {
               tickFormatter={(v) => `R$${v >= 1000 ? `${(v / 1000).toFixed(1)}k` : v}`}
             />
             <RTooltip
-              cursor={{ stroke: "#60a5fa", strokeOpacity: 0.5, strokeDasharray: "4 4" }}
+              cursor={{ stroke: "#FF0000", strokeOpacity: 0.5, strokeDasharray: "4 4" }}
               contentStyle={{
                 background: "hsl(var(--popover))",
-                border: "1px solid rgba(59,130,246,0.4)",
+                border: "1px solid rgba(255,0,0,0.4)",
                 borderRadius: 12,
                 color: "hsl(var(--popover-foreground))",
                 fontSize: 12,
@@ -531,7 +531,7 @@ function SalesByHourChart({ total }: { total: number }) {
               strokeWidth={2.75}
               fill="url(#areaFill)"
               dot={false}
-              activeDot={{ r: 5, fill: "#60a5fa", stroke: "hsl(var(--background))", strokeWidth: 2 }}
+              activeDot={{ r: 5, fill: "#FF0000", stroke: "hsl(var(--background))", strokeWidth: 2 }}
             />
           </AreaChart>
         </ResponsiveContainer>

@@ -135,28 +135,28 @@ const Index = () => {
 
       {/* Dock Menu */}
       <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 sm:gap-4 w-full sm:w-auto px-2 sm:px-0 justify-center">
-        <div className="flex items-center gap-1 sm:gap-6 bg-white dark:bg-black border border-gray-200 dark:border-gray-800 px-2 sm:px-4 py-1.5 rounded-full shadow-md">
-          <button onClick={() => setView("dashboard")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "dashboard" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Dashboard">
+        <div className="flex items-center gap-1 sm:gap-6 bg-white dark:bg-black border border-gray-200 dark:border-white/10 px-2 sm:px-4 py-1.5 rounded-full shadow-md">
+          <button onClick={() => setView("dashboard")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "dashboard" ? "text-[#FF0000] bg-red-50 dark:bg-red-950/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"}`} title="Dashboard">
             <LayoutDashboard className="h-4 w-4" />
           </button>
-          <button onClick={() => setView("library")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "library" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Biblioteca">
+          <button onClick={() => setView("library")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "library" ? "text-[#FF0000] bg-red-50 dark:bg-red-950/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"}`} title="Biblioteca">
             <Library className="h-4 w-4" />
             </button>
-          <button onClick={() => setView("search")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "search" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Buscar">
+          <button onClick={() => setView("search")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "search" ? "text-[#FF0000] bg-red-50 dark:bg-red-950/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"}`} title="Buscar">
             <Search className="h-4 w-4" />
           </button>
           
-          <button onClick={() => setView("create")} className="flex items-center justify-center w-11 h-11 sm:w-14 sm:h-14 rounded-full transition-all bg-white dark:bg-black border-2 border-blue-600 shadow-[0_0_15px_rgba(59,130,246,0.4)] hover:scale-105 active:scale-95 text-blue-600 -mt-4 sm:-mt-6 relative" title="Nova Estrutura">
+          <button onClick={() => setView("create")} className="flex items-center justify-center w-11 h-11 sm:w-14 sm:h-14 rounded-full transition-all bg-white dark:bg-black border-2 border-[#FF0000] shadow-[0_0_16px_rgba(255,0,0,0.45)] hover:scale-105 active:scale-95 text-[#FF0000] -mt-4 sm:-mt-6 relative" title="Nova Estrutura">
             <Plus className="h-6 w-6" />
-            </button>
-          <button onClick={() => setView("integrations")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "integrations" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Integrações">
+          </button>
+          <button onClick={() => setView("integrations")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "integrations" ? "text-[#FF0000] bg-red-50 dark:bg-red-950/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"}`} title="Integrações">
             <Plug className="h-4 w-4" />
           </button>
           
-          <button onClick={() => setView("support")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "support" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Suporte">
+          <button onClick={() => setView("support")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "support" ? "text-[#FF0000] bg-red-50 dark:bg-red-950/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"}`} title="Suporte">
             <LifeBuoy className="h-4 w-4" />
           </button>
-          <button onClick={() => setView("profile")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "profile" ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"}`} title="Perfil">
+          <button onClick={() => setView("profile")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "profile" ? "text-[#FF0000] bg-red-50 dark:bg-red-950/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"}`} title="Perfil">
             <User className="h-4 w-4" />
           </button>
         </div>
@@ -164,13 +164,12 @@ const Index = () => {
         <button
           onClick={handleSignOut}
           title="Sair"
-          className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 transition text-gray-500 dark:text-gray-400 shadow-md"
+          className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-full bg-white dark:bg-black border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 transition text-gray-500 dark:text-gray-400 shadow-md"
         >
           <LogOut className="h-4 w-4" />
         </button>
       </div>
 
-      {/* Modal de Configuração de Teste de Venda */}
       {isAdmin && (
         <Dialog open={testModalOpen} onOpenChange={setTestModalOpen}>
           <DialogContent className="sm:max-w-[425px] border-border bg-card text-foreground">

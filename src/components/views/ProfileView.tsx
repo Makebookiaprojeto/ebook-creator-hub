@@ -257,7 +257,7 @@ export function ProfileView() {
             <h2 className="font-display text-2xl font-semibold">{displayName}</h2>
             <div className="flex flex-col gap-1 mt-1">
               <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Crown className="h-3 w-3 text-amber-500" />
+                <Crown className="h-3 w-3 text-[#FF0000]" />
                 <span className="font-medium">
                   {isAdmin 
                     ? "Plano ADM" 

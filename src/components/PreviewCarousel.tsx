@@ -35,8 +35,8 @@ export function PreviewCarousel() {
     <div className="relative mx-auto w-full max-w-4xl flex flex-col items-center gap-6">
       {/* Container Principal do Card animado */}
       <div className="relative w-full rounded-2xl overflow-hidden p-[2px] aspect-[16/8] sm:aspect-[16/9]">
-        {/* Luz dourada girando (borda animada) */}
-        <div className="absolute inset-[-100%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0_270deg,#facc15_360deg)] opacity-90" />
+        {/* Luz vermelha girando (borda animada) */}
+        <div className="absolute inset-[-100%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0_270deg,#FF0000_360deg)] opacity-90" />
         
         {/* Container interno bloqueando o meio */}
         <div className="relative w-full h-full bg-[#0A0A0B] rounded-[14px] flex items-center justify-center overflow-hidden">
@@ -63,7 +63,7 @@ export function PreviewCarousel() {
             onClick={() => setCurrentSlide(index)}
             className={cn(
               "w-2 h-2 rounded-full transition-all duration-300",
-              currentSlide === index ? "bg-yellow-400 w-4" : "bg-white/40 hover:bg-white/60"
+              currentSlide === index ? "bg-[#FF0000] w-4" : "bg-white/40 hover:bg-white/60"
             )}
             aria-label={`Ir para o slide ${index + 1}`}
           />

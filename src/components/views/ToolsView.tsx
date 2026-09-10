@@ -86,12 +86,12 @@ export function ToolsView() {
   };
 
   const tools = [
-    { id: 1, name: "Gerador de Títulos", desc: "Crie títulos magnéticos com IA", icon: "Sparkles", color: "from-violet-500 to-purple-500" },
-    { id: 2, name: "Gerador de Copy", desc: "Textos persuasivos para vendas", icon: "PenLine", color: "from-pink-500 to-rose-500" },
-    { id: 3, name: "Ideias de Nicho", desc: "Descubra nichos lucrativos", icon: "Lightbulb", color: "from-amber-500 to-orange-500" },
-    { id: 4, name: "Analisador de Concorrência", desc: "Estude o mercado em segundos", icon: "Search", color: "from-blue-500 to-cyan-500" },
-    { id: 5, name: "Gerador de Capas", desc: "Capas profissionais com IA", icon: "Image", color: "from-emerald-500 to-teal-500" },
-    { id: 6, name: "Otimizador SEO", desc: "Melhore seu posicionamento", icon: "TrendingUp", color: "from-indigo-500 to-violet-500" },
+    { id: 1, name: "Gerador de Títulos", desc: "Crie títulos magnéticos com IA", icon: "Sparkles", color: "from-red-600 to-red-800" },
+    { id: 2, name: "Gerador de Copy", desc: "Textos persuasivos para vendas", icon: "PenLine", color: "from-red-600 to-red-800" },
+    { id: 3, name: "Ideias de Nicho", desc: "Descubra nichos lucrativos", icon: "Lightbulb", color: "from-red-600 to-red-800" },
+    { id: 4, name: "Analisador de Concorrência", desc: "Estude o mercado em segundos", icon: "Search", color: "from-red-600 to-red-800" },
+    { id: 5, name: "Gerador de Capas", desc: "Capas profissionais com IA", icon: "Image", color: "from-red-600 to-red-800" },
+    { id: 6, name: "Otimizador SEO", desc: "Melhore seu posicionamento", icon: "TrendingUp", color: "from-red-600 to-red-800" },
   ];
 
   return (
@@ -198,7 +198,7 @@ export function ToolsView() {
                       <Card className="hover:border-primary/50 transition-colors">
                         <CardHeader className="p-4 pb-2">
                           <div className="flex items-start justify-between">
-                            <div className="p-2 rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                            <div className="p-2 rounded-full bg-red-500/10 text-red-600 dark:text-red-400">
                               <Facebook className="w-4 h-4" />
                             </div>
                             {grupo.membros && (

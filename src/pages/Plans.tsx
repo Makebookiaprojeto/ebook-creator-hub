@@ -207,7 +207,7 @@ export default function Plans() {
           <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground mb-8">
             <div className="flex items-center gap-1">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                <Star key={i} className="h-4 w-4 fill-[#FF0000] text-[#FF0000]" />
               ))}
               <span className="ml-1 font-medium text-foreground">4.9</span>
               <span>· +2.000 criadores</span>
@@ -290,7 +290,7 @@ export default function Plans() {
               <button
                 type="button"
                 onClick={() => handleCheckout("monthly")}
-                className="w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black shadow-lg shadow-yellow-400/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-[#FF0000] hover:bg-[#CC0000] text-white shadow-lg shadow-red-600/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 Garanta seu Acesso
               </button>
@@ -339,7 +339,7 @@ export default function Plans() {
               <button
                 type="button"
                 onClick={() => handleCheckout("lifetime")}
-                className="w-full h-14 rounded-xl font-bold text-base flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black shadow-lg shadow-yellow-400/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full h-14 rounded-xl font-bold text-base flex items-center justify-center gap-2 bg-[#FF0000] hover:bg-[#CC0000] text-white shadow-lg shadow-red-600/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 Garanta seu Acesso
               </button>
@@ -383,7 +383,7 @@ export default function Plans() {
                   {[...Array(t.rating)].map((_, i) => (
                     <Star
                       key={i}
-                      className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                      className="h-4 w-4 fill-[#FF0000] text-[#FF0000]"
                     />
                   ))}
                 </div>

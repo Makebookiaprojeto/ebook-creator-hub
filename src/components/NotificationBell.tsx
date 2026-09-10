@@ -190,10 +190,10 @@ export function NotificationBell() {
       />
       <DropdownMenu onOpenChange={(open) => open && markAsRead()}>
         <DropdownMenuTrigger asChild>
-          <button className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-[#D4AF37]/40 bg-gradient-to-br from-black to-zinc-900 shadow-[0_0_14px_rgba(212,175,55,0.45)] transition-all hover:shadow-[0_0_22px_rgba(212,175,55,0.7)] hover:scale-105 active:scale-95">
-            <Bell className="h-[18px] w-[18px] text-[#D4AF37] transition-transform group-hover:rotate-12" />
+          <button className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-border/80 dark:border-white/10 bg-card hover:border-[#FF0000]/50 shadow-sm transition-all hover:shadow-[0_0_15px_rgba(255,0,0,0.25)] hover:scale-105 active:scale-95">
+            <Bell className="h-[18px] w-[18px] text-foreground transition-transform group-hover:rotate-12 group-hover:text-[#FF0000]" />
             {unreadCount > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-gradient-to-br from-red-500 to-red-600 px-1 text-[10px] font-bold text-white shadow-[0_0_8px_rgba(239,68,68,0.6)] ring-2 ring-background animate-in zoom-in">
+              <span className="absolute -right-1 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#FF0000] px-1 text-[10px] font-bold text-white shadow-[0_0_8px_rgba(255,0,0,0.6)] ring-2 ring-background animate-in zoom-in">
                 {unreadCount > 9 ? "9+" : unreadCount}
               </span>
             )}

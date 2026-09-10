@@ -417,7 +417,7 @@ export function LibraryView({ onCreateNew }: Props) {
                     </Button>
                   </div>
                   {(!eb.price_cents || eb.price_cents < 50) && (
-                    <p className="mt-1 text-[10px] text-amber-500">
+                    <p className="mt-1 text-[10px] text-[#FF0000]">
                       Defina um preço para habilitar a venda.
                     </p>
                   )}

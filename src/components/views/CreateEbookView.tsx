@@ -1076,20 +1076,20 @@ export function CreateEbookView() {
                     style={{ backgroundColor: secondaryColor || "#0a0a0a" }}
                   >
                     <div className="flex items-center gap-2 px-4 py-3 bg-black/40 backdrop-blur-sm border-b border-white/5">
-                      <div className="w-3.5 h-3.5 rounded-full bg-red-500/80"></div>
-                      <div className="w-3.5 h-3.5 rounded-full bg-yellow-500/80"></div>
-                      <div className="w-3.5 h-3.5 rounded-full bg-green-500/80"></div>
+                      <div className="w-3.5 h-3.5 rounded-full bg-[#FF0000]"></div>
+                      <div className="w-3.5 h-3.5 rounded-full bg-white/20"></div>
+                      <div className="w-3.5 h-3.5 rounded-full bg-white/20"></div>
                       <div className="ml-4 text-xs text-white/40 font-mono">Prévia da Página</div>
                     </div>
                     
                     <div className="flex-1 p-8 flex items-center relative overflow-hidden">
                       {/* Background Glow */}
-                      <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full blur-[100px] -z-10 opacity-30 transition-colors duration-500" style={{ backgroundColor: primaryColor || "#3b82f6" }} />
+                      <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full blur-[100px] -z-10 opacity-30 transition-colors duration-500" style={{ backgroundColor: primaryColor || "#FF0000" }} />
                       
                       <div className="flex w-full items-center justify-between gap-6 relative z-10">
                         {/* Left Side: Texts */}
                         <div className="flex flex-col justify-center flex-1">
-                          <div className="inline-flex self-start items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-4 transition-colors duration-500" style={{ backgroundColor: `${primaryColor}20`, color: primaryColor || "#3b82f6", border: `1px solid ${primaryColor}40` }}>
+                          <div className="inline-flex self-start items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-4 transition-colors duration-500" style={{ backgroundColor: `${primaryColor}20`, color: primaryColor || "#FF0000", border: `1px solid ${primaryColor}40` }}>
                             Edição Premium
                           </div>
                           
@@ -1104,12 +1104,12 @@ export function CreateEbookView() {
                           <div className="flex flex-col sm:flex-row sm:items-center gap-4 mt-2">
                             <div 
                               className="px-5 py-3 rounded-xl text-xs font-black shadow-lg transition-colors duration-500 flex items-center justify-center gap-1 shrink-0"
-                              style={{ backgroundColor: primaryColor || "#3b82f6", color: "#ffffff" }}
+                              style={{ backgroundColor: primaryColor || "#FF0000", color: "#ffffff" }}
                             >
                               QUERO ACESSO
                             </div>
                             <div>
-                              <div className="text-2xl font-black leading-none transition-colors duration-500" style={{ color: primaryColor || "#3b82f6" }}>
+                              <div className="text-2xl font-black leading-none transition-colors duration-500" style={{ color: primaryColor || "#FF0000" }}>
                                 {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price || 0)}
                               </div>
                             </div>
