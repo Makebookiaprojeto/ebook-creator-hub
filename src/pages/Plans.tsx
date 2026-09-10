@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   Loader2,
   Check,
@@ -219,13 +220,26 @@ export default function Plans() {
           </Button>
 
           <div className="mt-16 relative mx-auto max-w-2xl px-4 flex flex-col items-center">
-            <div className="w-full relative rounded-2xl overflow-hidden border border-white/10 bg-[#000000]">
-              <img 
-                src={heroMockup} 
-                alt="Ebook AI Builder" 
-                className="w-full h-auto object-cover rounded-2xl block"
-              />
-            </div>
+            <motion.div 
+              animate={{ y: [0, -6, 0] }}
+              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+              className="w-full"
+              style={{ perspective: "1000px" }}
+            >
+              <div 
+                className="w-full relative rounded-2xl overflow-hidden border border-white/10 bg-[#000000] shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_35px_rgba(255,0,0,0.22)] transition-all duration-500 hover:scale-[1.015]"
+                style={{
+                  transform: "rotateX(4deg)",
+                  transformStyle: "preserve-3d"
+                }}
+              >
+                <img 
+                  src={heroMockup} 
+                  alt="Ebook AI Builder" 
+                  className="w-full h-auto object-cover rounded-2xl block"
+                />
+              </div>
+            </motion.div>
           </div>
         </section>
 
