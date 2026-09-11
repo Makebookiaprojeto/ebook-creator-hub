@@ -5,7 +5,6 @@ import {
   User as UserIcon,
   Loader2,
   Camera,
-  Upload,
   Crown,
   Calendar,
 } from "lucide-react";
@@ -13,15 +12,16 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { PlanId } from "@/config/checkoutLinks";
 import { PaymentMethodModal } from "@/components/PaymentMethodModal";
-import { resolveDisplayName } from "@/lib/userName";
+import { resolveDisplayName, initialFromName } from "@/lib/userName";
 
 export function ProfileView() {
   const plansRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [displayName, setDisplayName] = useState("");
+  const [displayName, setDisplayName] = useState(() => resolveDisplayName(null, user));
   const [savingName, setSavingName] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
@@ -50,6 +50,8 @@ export function ProfileView() {
       if (profileData) {
         setAvatarUrl(profileData.avatar_url || null);
         setDisplayName(resolveDisplayName(profileData.display_name, user));
+      } else {
+        setDisplayName(resolveDisplayName(null, user));
       }
 
       const { data: roleData } = await supabase.rpc("has_role", {
@@ -209,7 +211,7 @@ export function ProfileView() {
                 <img src={avatarUrl} alt={displayName} className="h-full w-full object-cover" />
               ) : (
                 <div className="flex h-full w-full items-center justify-center gradient-primary text-3xl font-bold text-primary-foreground">
-                  {displayName.charAt(0).toUpperCase()}
+                  {initialFromName(displayName)}
                 </div>
               )}
               {uploadingAvatar && (
@@ -235,7 +237,7 @@ export function ProfileView() {
             />
           </div>
           <div>
-            <h2 className="font-display text-2xl font-semibold">{displayName}</h2>
+            <h2 className="font-display text-2xl font-semibold">{displayName || "Usuário"}</h2>
             <div className="flex flex-col gap-1 mt-1">
               <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <Crown className="h-3 w-3 text-[#FF0000]" />
