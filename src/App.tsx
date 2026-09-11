@@ -16,7 +16,14 @@ import NotFound from "./pages/NotFound.tsx";
 import AdminTemplates from "./pages/AdminTemplates";
 import DownloadPage from "./pages/DownloadPage";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 2, // 2 minutos de cache
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>

@@ -343,18 +343,30 @@ export function LibraryView({ onCreateNew }: Props) {
                     variant="secondary"
                     className="flex-1 min-w-[70px]"
                     onClick={() => handlePreview(eb)}
+                    disabled={loadingPreview && openEbook?.id === eb.id}
                     title="Ver E-Book"
                   >
-                    <Eye className="h-3.5 w-3.5" /> Ver
+                    {loadingPreview && openEbook?.id === eb.id ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      <Eye className="h-3.5 w-3.5" />
+                    )}{" "}
+                    Ver
                   </Button>
                   <Button
                     size="sm"
                     variant="secondary"
                     className="flex-1 min-w-[70px]"
                     onClick={() => handleDownloadPDF(eb)}
+                    disabled={downloadingId === eb.id || isGeneratingPDF}
                     title="Baixar PDF"
                   >
-                    <Download className="h-3.5 w-3.5" /> PDF
+                    {downloadingId === eb.id ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      <Download className="h-3.5 w-3.5" />
+                    )}{" "}
+                    PDF
                   </Button>
 
 

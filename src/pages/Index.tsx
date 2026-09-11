@@ -11,7 +11,6 @@ import { IntegrationsView } from "@/components/views/IntegrationsView";
 import { LayoutDashboard, Library, Plus, LifeBuoy, User, LogOut, Sliders, Search, Plug } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { resolveDisplayName } from "@/lib/userName";
 import saasLogo from "@/assets/saas-logo.jpg";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -27,13 +26,10 @@ const Index = () => {
   const [view, setView] = useState<View>("dashboard");
   const { user, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-  const [displayName, setDisplayName] = useState<string>("");
 
   const [testModalOpen, setTestModalOpen] = useState(false);
   const [testNiche, setTestNiche] = useState("");
   const [testPrice, setTestPrice] = useState("");
-  const [simulatedSales, setSimulatedSales] = useState(0);
 
   const handleOpenTestModal = () => {
     const config = getTestSaleConfig();
@@ -61,37 +57,8 @@ const Index = () => {
 
   useEffect(() => {
     if (!user) return;
-    const fetchProfile = async () => {
-      // 1. Garantir que o perfil existe (fallback)
-      await supabase.rpc('ensure_profile_exists', { p_user_id: user.id });
-
-      const { data } = await supabase
-        .from("profiles")
-        .select("avatar_url, display_name")
-        .eq("user_id", user.id)
-        .maybeSingle();
-      if (data) {
-        setAvatarUrl((data as any).avatar_url);
-        setDisplayName(resolveDisplayName((data as any).display_name, user));
-      }
-    };
-    fetchProfile();
-
-    const channel = supabase
-      .channel("profile-header")
-      .on(
-        "postgres_changes",
-        { event: "UPDATE", schema: "public", table: "profiles", filter: `user_id=eq.${user.id}` },
-        (payload) => {
-          if ((payload.new as any).avatar_url !== undefined) setAvatarUrl((payload.new as any).avatar_url);
-          if ((payload.new as any).display_name !== undefined) setDisplayName((payload.new as any).display_name);
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    // Garantir que o perfil existe (fallback de segurança)
+    supabase.rpc("ensure_profile_exists", { p_user_id: user.id });
   }, [user]);
 
   return (
@@ -103,7 +70,6 @@ const Index = () => {
             <img src={saasLogo} alt="EbookAI Builder" className="h-full w-full object-cover" />
           </div>
         )}
-        
         
         <div className="flex-1" />
         {view === "dashboard" && (

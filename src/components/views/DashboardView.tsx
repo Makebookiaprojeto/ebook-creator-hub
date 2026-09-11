@@ -97,7 +97,6 @@ const quotes = [
 export function DashboardView() {
   const { user: authUser, isAdmin } = useAuth();
   const { ebooks, loading: loadingEbooks } = useEbooks();
-  const [dbDisplayName, setDbDisplayName] = useState<string | null>(null);
   const [quote, setQuote] = useState("");
   const [stats, setStats] = useState({
     totalSales: 0,
@@ -105,11 +104,8 @@ export function DashboardView() {
     revenueToday: 0,
     revenue7d: 0,
     revenue30d: 0,
-    views: "0",
   });
-  const [salesHistory, setSalesHistory] = useState<any[]>([]);
   const [loadingStats, setLoadingStats] = useState(true);
-  const [paymentStats, setPaymentStats] = useState<any[]>([]);
   const [profitPeriod, setProfitPeriod] = useState<"today" | "7d" | "30d">(() => {
     return (localStorage.getItem("dashboard_profit_period") as any) || "today";
   });
@@ -130,22 +126,11 @@ export function DashboardView() {
     if (!authUser) return;
     setLoadingStats(true);
     try {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("display_name")
-        .eq("user_id", authUser.id)
-        .maybeSingle();
-      if (profile) setDbDisplayName(profile.display_name);
-
       const { data: sales } = await supabase
         .from("purchases")
         .select("amount_paid_cents, created_at, status, platform")
         .eq("seller_user_id", authUser.id)
         .in("status", ["paid", "approved", "pending"]);
-
-      const { count: viewsCount } = await supabase
-        .from("ebook_views")
-        .select("*", { count: 'exact', head: true });
 
       const userEmail = (authUser.email || "").toLowerCase();
       let base = BASE_STATS[userEmail];
@@ -192,48 +177,7 @@ export function DashboardView() {
         revenueToday: realRevenueToday + base.revenueToday,
         revenue7d: realRevenue7d + base.revenue7d,
         revenue30d: realRevenue30d + base.revenue30d,
-        views: String(viewsCount || 0)
       });
-
-      const last6Months = Array.from({ length: 6 }, (_, i) => {
-        const date = new Date();
-        date.setMonth(date.getMonth() - i);
-        return {
-          month: date.toLocaleString("pt-BR", { month: "short" }),
-          vendas: Math.floor(base.totalSales / 6),
-          timestamp: date.getTime(),
-        };
-      }).reverse();
-
-      realSales.forEach((s) => {
-        if (!s.created_at) return;
-        const d = new Date(s.created_at);
-        const monthName = d.toLocaleString("pt-BR", { month: "short" });
-        const m = last6Months.find((x) => x.month === monthName);
-        if (m) m.vendas += 1;
-      });
-
-      setSalesHistory(last6Months);
-
-      const methods = ["Pix", "Cartão de Crédito", "Boleto", "Pix Automático"];
-
-      const calculatedPaymentStats = methods.map(method => {
-        const methodSales = realSales.filter(s => (s as any).payment_method === method || s.platform === method);
-        const realMethodRevenue = methodSales.reduce((acc, s) => acc + (s.amount_paid_cents || 0), 0) / 100;
-        const baseMethodRevenue = base.payments[method] || 0;
-        const totalMethodRevenue = realMethodRevenue + baseMethodRevenue;
-        
-        const totalRevenueForConversion = totalRevenueValue || 1;
-        const conversionRate = (totalMethodRevenue / totalRevenueForConversion) * 100;
-
-        return {
-          name: method,
-          conversion: `${conversionRate.toFixed(0)}%`,
-          value: `R$ ${totalMethodRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
-        };
-      });
-
-      setPaymentStats(calculatedPaymentStats);
     } catch (error) {
       console.error("Error fetching dashboard stats:", error);
     } finally {
@@ -255,18 +199,6 @@ export function DashboardView() {
       }, 500);
     };
 
-    // IDs de ebooks do próprio usuário (para filtrar ebook_views client-side,
-    // já que postgres_changes filter não suporta IN).
-    let ownedEbookIds = new Set<string>();
-    const loadOwnedEbookIds = async () => {
-      const { data } = await supabase
-        .from("ebooks")
-        .select("id")
-        .eq("user_id", authUser.id);
-      ownedEbookIds = new Set((data || []).map((e: any) => e.id));
-    };
-    loadOwnedEbookIds();
-
     const channel = supabase
       .channel(`dashboard-updates-${authUser.id}`)
       .on("postgres_changes", {
@@ -282,25 +214,11 @@ export function DashboardView() {
         filter: `user_id=eq.${authUser.id}`
       }, () => scheduleRefresh())
       .on("postgres_changes", {
-        event: "INSERT",
-        schema: "public",
-        table: "ebook_views"
-      }, (payload) => {
-        const ebookId = (payload.new as any)?.ebook_id;
-        if (ebookId && ownedEbookIds.has(ebookId)) scheduleRefresh();
-      })
-      .on("postgres_changes", {
         event: "*",
         schema: "public",
         table: "ebooks",
         filter: `user_id=eq.${authUser.id}`
-      }, (payload) => {
-        const newId = (payload.new as any)?.id;
-        const oldId = (payload.old as any)?.id;
-        if (newId) ownedEbookIds.add(newId);
-        if (payload.eventType === "DELETE" && oldId) ownedEbookIds.delete(oldId);
-        scheduleRefresh();
-      })
+      }, () => scheduleRefresh())
       .subscribe();
 
     const handleRefresh = (e: Event) => {
@@ -329,8 +247,6 @@ export function DashboardView() {
     };
   }, [authUser, fetchDashboardData]);
 
-  const displayName = dbDisplayName || (authUser?.user_metadata?.display_name as string | undefined) || authUser?.email?.split("@")[0] || "Usuário";
-  
   const userEmail = (authUser?.email || "").toLowerCase();
   let baseEbooks = 0;
   if (BASE_STATS[userEmail]) {

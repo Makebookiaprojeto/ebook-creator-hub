@@ -64,8 +64,42 @@ export function useEbooks() {
   }, [user]);
 
   useEffect(() => {
-    fetchEbooks();
-  }, [fetchEbooks]);
+    let isMounted = true;
+    const run = async () => {
+      if (!user) {
+        if (isMounted) {
+          setEbooks([]);
+          setLoading(false);
+        }
+        return;
+      }
+      if (isMounted) setLoading(true);
+      const { data, error } = await supabase
+        .from("ebooks")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (isMounted) {
+        if (!error && data) {
+          const formatted = (data as any[]).map(eb => {
+            const content = eb.content_json;
+            const chapters = Array.isArray(content) ? content : (content?.chapters || []);
+            return {
+              ...eb,
+              chapter_count: chapters.length
+            };
+          });
+          setEbooks(formatted);
+        }
+        setLoading(false);
+      }
+    };
+    run();
+    return () => {
+      isMounted = false;
+    };
+  }, [user]);
 
   const createEbookWithChapters = async (ebook: NewEbook, chapters: NewChapter[]) => {
     if (!user) throw new Error("Não autenticado");

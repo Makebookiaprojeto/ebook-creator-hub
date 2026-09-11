@@ -37,6 +37,7 @@ export function ProfileView() {
   // Carrega dados do perfil
   useEffect(() => {
     if (!user) return;
+    let isMounted = true;
     const loadData = async () => {
       const { data } = await supabase
         .from("profiles")
@@ -44,6 +45,7 @@ export function ProfileView() {
         .eq("user_id", user.id)
         .maybeSingle();
       
+      if (!isMounted) return;
       const profileData = data as any;
       if (profileData) {
         setAvatarUrl(profileData.avatar_url || null);
@@ -54,8 +56,8 @@ export function ProfileView() {
         _user_id: user.id,
         _role: "admin",
       });
+      if (!isMounted) return;
       setIsAdmin(!!roleData || user.email?.toLowerCase() === "tr8200774@gmail.com");
-
 
       // Carregar assinatura ativa
       const { data: subData } = await supabase
@@ -67,6 +69,7 @@ export function ProfileView() {
         .limit(1)
         .maybeSingle();
       
+      if (!isMounted) return;
       if (subData) {
         setActiveSubscription(subData);
       } else {
@@ -80,31 +83,17 @@ export function ProfileView() {
           .limit(1)
           .maybeSingle();
         
-        if (subEmailData) {
+        if (isMounted && subEmailData) {
           setActiveSubscription(subEmailData);
         }
       }
     };
 
-
     loadData();
 
-    // Inscrição para atualizações em tempo real do perfil
-    const channel = supabase
-      .channel("profile-usage")
-      .on(
-        "postgres_changes",
-        { event: "UPDATE", schema: "public", table: "profiles", filter: `user_id=eq.${user.id}` },
-        (payload) => {
-          // No actions needed for removed fields
-        }
-      )
-      .subscribe();
-
     return () => {
-      supabase.removeChannel(channel);
+      isMounted = false;
     };
-
   }, [user]);
 
   const handleSubscribe = (planId: string) => {

@@ -1272,7 +1272,7 @@ export function CreateEbookView() {
                   await supabase.from("ebooks").update({ title, subtitle, status: "published", is_public: true, price }).eq("id", generatedEbookId);
                 }
                 toast.success("Ebook finalizado!");
-                setTimeout(() => { resetForm(); window.location.href = "/"; }, 2000);
+                setTimeout(() => { resetForm(); window.location.href = "/app"; }, 1500);
               } catch (e) { toast.error("Erro ao salvar"); } finally { setSaving(false); }
             }}
           >

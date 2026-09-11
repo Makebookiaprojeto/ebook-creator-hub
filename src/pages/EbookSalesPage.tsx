@@ -148,15 +148,21 @@ export default function EbookSalesPage() {
   };
 
   useEffect(() => {
+    let cancelled = false;
     (async () => {
       if (!slug) return;
       const { data: ebookData } = await supabase.from("ebooks").select("*").eq("slug", slug).maybeSingle();
+      if (cancelled) return;
       if (!ebookData) { setLoading(false); return; }
       const { data: chData } = await supabase.from("chapters").select("*").eq("ebook_id", ebookData.id).order("order_index", { ascending: true });
+      if (cancelled) return;
       setEbook(ebookData);
       setChapters(chData || []);
       setLoading(false);
     })();
+    return () => {
+      cancelled = true;
+    };
   }, [slug]);
 
   if (loading) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground"><Loader2 className="animate-spin h-10 w-10 text-primary" /></div>;
