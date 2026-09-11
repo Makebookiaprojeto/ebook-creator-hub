@@ -25,3 +25,10 @@ dist-ssr
  
 .env
 .env.*
+
+# Scratch scripts & sensitive local files
+check-sub*
+*.cjs
+*.mjs
+webhook_log.txt
+*.bak

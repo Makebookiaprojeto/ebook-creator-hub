@@ -1,15 +1,36 @@
+# 1. Bloqueio de arquivos sensíveis, logs e backups
+<FilesMatch "^(webhook_log\.txt|\.env|\.git|.*\.log|.*\.bak|.*\.sql)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# 2. Cabeçalhos de Segurança HTTP e Proteção de Versão
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header unset X-Powered-By
+  Header always unset X-Powered-By
+</IfModule>
+
+# 3. Roteamento da Aplicação e Webhook
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
 
-  # 1. Rota de Webhook -> webhook.php
+  # Rota de Webhook -> webhook.php
   RewriteRule ^webhook/?$ webhook.php [L,QSA]
 
-  # 2. Arquivos e diretórios existentes são servidos diretamente
+  # Arquivos e diretórios existentes são servidos diretamente
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
-  # 3. Fallback do SPA Vite -> index.html
+  # Fallback do SPA Vite -> index.html
   RewriteRule ^ index.html [L]
 </IfModule>

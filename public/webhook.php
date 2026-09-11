@@ -18,11 +18,13 @@ $supabaseUrl = 'https://eyiwycfemptavqwpxfly.supabase.co';
 $serviceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5aXd5Y2ZlbXB0YXZxd3B4Zmx5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NDI1MDQwNywiZXhwIjoyMDk5ODI2NDA3fQ.3S03-YegGxxR795WdY1k8cei4s0uU-OEnqiVZpEz_dg';
 $pingupagSecret = 'pingupag_sk_070fd938444da7400c35a89ec55ea6de3c977f613705a276ffa9b15149d563f1';
 
-// Log incoming request
+// Sanitize and secure incoming request
 $rawInput = file_get_contents('php://input');
-$logFile = __DIR__ . '/webhook_log.txt';
-$logEntry = date('[Y-m-d H:i:s]') . " " . $_SERVER['REQUEST_METHOD'] . " " . $rawInput . PHP_EOL;
-@file_put_contents($logFile, $logEntry, FILE_APPEND);
+
+// Prevenção de exposição de dados: remove arquivo de log público se ainda existir
+if (file_exists(__DIR__ . '/webhook_log.txt')) {
+    @unlink(__DIR__ . '/webhook_log.txt');
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     header('Content-Type: application/json');
@@ -158,8 +160,7 @@ if (in_array($status, $approvedStatuses)) {
         ];
         $upRes = supabaseRequest($supabaseUrl . '/rest/v1/subscriptions?on_conflict=user_id', 'POST', $subData, $upsertHeaders);
         
-        $logResult = date('[Y-m-d H:i:s]') . " ATIVADO: user=$userId email=$email plano=$planType tx=$transactionId" . PHP_EOL;
-        @file_put_contents($logFile, $logResult, FILE_APPEND);
+        error_log("PinguPag ATIVADO: user=$userId email=$email plano=$planType tx=$transactionId");
 
         header('Content-Type: application/json');
         echo json_encode(['ok' => true, 'action' => 'activated', 'user_id' => $userId, 'plan' => $planType]);
@@ -188,8 +189,7 @@ if (in_array($status, $approvedStatuses)) {
             ]);
         }
 
-        $logResult = date('[Y-m-d H:i:s]') . " PENDENTE CRIADO/ATUALIZADO: email=$email plano=$planType tx=$transactionId" . PHP_EOL;
-        @file_put_contents($logFile, $logResult, FILE_APPEND);
+        error_log("PinguPag PENDENTE: email=$email plano=$planType tx=$transactionId");
 
         header('Content-Type: application/json');
         echo json_encode(['ok' => true, 'action' => 'pending_saved', 'email' => $email, 'plan' => $planType]);
