@@ -76,19 +76,15 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
 
         {/* Header */}
         <div className="text-center mb-6 pt-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF0000]/10 border border-[#FF0000]/30 text-[#FF0000] text-xs font-bold uppercase tracking-wider mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF0000]/10 border border-[#FF0000]/30 text-[#FF0000] text-xs font-bold uppercase tracking-wider mb-4">
             <Zap className="w-3.5 h-3.5" /> Escolha a Forma de Pagamento
           </div>
-          <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2">
-            Como prefere pagar?
-          </h3>
-          <p className="text-white/60 text-sm">
-            Você selecionou o{" "}
-            <span className="text-white font-bold">
+          <p className="text-center font-bold text-base sm:text-lg text-white tracking-tight">
+            <span>
               {isLifetime ? "Plano Vitalício" : "Plano Mensal"}
             </span>
             {" — "}
-            <span className="text-[#FF0000] font-bold">
+            <span className="text-[#FF0000]">
               {isLifetime ? "R$ 247,90 (Único)" : "R$ 147,90/mês"}
             </span>
           </p>
