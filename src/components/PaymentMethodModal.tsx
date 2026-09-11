@@ -1,6 +1,19 @@
 import React, { useEffect } from "react";
-import { X, QrCode, CreditCard, ShieldCheck, Zap, Lock } from "lucide-react";
+import { X, CreditCard, ShieldCheck, Zap, Lock } from "lucide-react";
 import { PlanId, getCheckoutUrl } from "@/config/checkoutLinks";
+
+// Símbolo minimalista oficial do PIX (Banco Central do Brasil)
+const PixIcon: React.FC<{ className?: string }> = ({ className = "w-5 h-5" }) => (
+  <svg
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    className={className}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M11.917 11.71a2.046 2.046 0 0 1-1.454-.602l-2.1-2.1a.4.4 0 0 0-.551 0l-2.108 2.108a2.044 2.044 0 0 1-1.454.602h-.414l2.66 2.66c.83.83 2.177.83 3.007 0l2.667-2.668h-.253zM4.25 4.282c.55 0 1.066.214 1.454.602l2.108 2.108a.39.39 0 0 0 .552 0l2.1-2.1a2.044 2.044 0 0 1 1.453-.602h.253L9.503 1.623a2.127 2.127 0 0 0-3.007 0l-2.66 2.66h.414z" />
+    <path d="m14.377 6.496-1.612-1.612a.307.307 0 0 1-.114.023h-.733c-.379 0-.75.154-1.017.422l-2.1 2.1a1.005 1.005 0 0 1-1.425 0L5.268 5.32a1.448 1.448 0 0 0-1.018-.422h-.9a.306.306 0 0 1-.109-.021L1.623 6.496c-.83.83-.83 2.177 0 3.008l1.618 1.618a.305.305 0 0 1 .108-.022h.901c.38 0 .75-.153 1.018-.421L7.375 8.57a1.034 1.034 0 0 1 1.426 0l2.1 2.1c.267.268.638.421 1.017.421h.733c.04 0 .079.01.114.024l1.612-1.612c.83-.83.83-2.178 0-3.008z" />
+  </svg>
+);
 
 interface PaymentMethodModalProps {
   isOpen: boolean;
@@ -47,7 +60,7 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
       <div className="absolute inset-0" onClick={onClose} />
 
       {/* Modal Container */}
-      <div className="relative w-full max-w-lg bg-[#000000] border-2 border-[#FF0000]/40 rounded-3xl p-6 sm:p-8 text-white shadow-[0_0_60px_rgba(255,0,0,0.25)] z-10 overflow-hidden">
+      <div className="relative w-full max-w-md bg-[#000000] border-2 border-[#FF0000]/40 rounded-3xl p-6 sm:p-7 text-white shadow-[0_0_60px_rgba(255,0,0,0.25)] z-10 overflow-hidden">
         
         {/* Glow sutil no topo */}
         <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-32 bg-[#FF0000]/20 rounded-full blur-3xl pointer-events-none" />
@@ -81,62 +94,24 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
           </p>
         </div>
 
-        {/* Opções de Pagamento */}
-        <div className="space-y-4 mb-6">
-          {/* Opção 1: PIX (PinguPag) */}
+        {/* Opções Minimalistas de Pagamento */}
+        <div className="space-y-3 mb-6">
+          {/* Opção 1: PIX (PinguPag) - Branco minimalista */}
           <button
             onClick={() => handleSelectMethod("pix")}
-            className="group w-full text-left bg-gradient-to-r from-white/[0.04] to-white/[0.02] hover:from-[#FF0000]/10 hover:to-[#FF0000]/5 border-2 border-white/10 hover:border-[#FF0000] rounded-2xl p-5 transition-all duration-300 shadow-md hover:shadow-[0_0_30px_rgba(255,0,0,0.3)] relative overflow-hidden flex items-center justify-between"
+            className="w-full flex items-center justify-center gap-2.5 bg-white text-black font-extrabold text-sm sm:text-base tracking-wide rounded-xl py-3.5 px-4 shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:bg-neutral-100 hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] hover:scale-[1.01] active:scale-[0.99] transition-all duration-200"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#FF0000]/10 border border-[#FF0000]/30 flex items-center justify-center text-[#FF0000] group-hover:scale-110 group-hover:bg-[#FF0000] group-hover:text-white transition-all duration-300 shrink-0">
-                <QrCode className="w-7 h-7" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="font-bold text-lg text-white group-hover:text-[#FF0000] transition-colors">
-                    Pagar com PIX
-                  </span>
-                  <span className="bg-[#FF0000] text-white text-[10px] font-black uppercase px-2 py-0.5 rounded-full tracking-wider shadow-sm">
-                    Acesso Imediato
-                  </span>
-                </div>
-                <p className="text-xs text-white/50 group-hover:text-white/80 transition-colors">
-                  Aprovação instantânea • Liberação do SaaS em segundos
-                </p>
-              </div>
-            </div>
-            <div className="hidden sm:flex items-center text-white/40 group-hover:text-white group-hover:translate-x-1 transition-all text-sm font-semibold pl-2">
-              Pagar →
-            </div>
+            <PixIcon className="w-5 h-5 text-black shrink-0" />
+            <span>PAGAR COM PIX</span>
           </button>
 
-          {/* Opção 2: Cartão de Crédito (Applyfy) */}
+          {/* Opção 2: Cartão de Crédito (Applyfy) - Vermelho minimalista */}
           <button
             onClick={() => handleSelectMethod("card")}
-            className="group w-full text-left bg-gradient-to-r from-white/[0.04] to-white/[0.02] hover:from-white/[0.08] hover:to-white/[0.04] border-2 border-white/10 hover:border-white/40 rounded-2xl p-5 transition-all duration-300 shadow-md hover:shadow-[0_0_25px_rgba(255,255,255,0.15)] relative overflow-hidden flex items-center justify-between"
+            className="w-full flex items-center justify-center gap-2.5 bg-[#FF0000] text-white font-extrabold text-sm sm:text-base tracking-wide rounded-xl py-3.5 px-4 shadow-[0_0_20px_rgba(255,0,0,0.3)] hover:bg-[#E60000] hover:shadow-[0_0_30px_rgba(255,0,0,0.5)] hover:scale-[1.01] active:scale-[0.99] transition-all duration-200"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/80 group-hover:scale-110 group-hover:bg-white group-hover:text-black transition-all duration-300 shrink-0">
-                <CreditCard className="w-7 h-7" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="font-bold text-lg text-white transition-colors">
-                    Pagar com Cartão de Crédito
-                  </span>
-                  <span className="bg-white/10 border border-white/20 text-white/90 text-[10px] font-bold uppercase px-2 py-0.5 rounded-full tracking-wider">
-                    Até 12x
-                  </span>
-                </div>
-                <p className="text-xs text-white/50 group-hover:text-white/80 transition-colors">
-                  Parcele sua assinatura com total comodidade e segurança
-                </p>
-              </div>
-            </div>
-            <div className="hidden sm:flex items-center text-white/40 group-hover:text-white group-hover:translate-x-1 transition-all text-sm font-semibold pl-2">
-              Pagar →
-            </div>
+            <CreditCard className="w-5 h-5 text-white shrink-0" />
+            <span>PAGAR COM CARTÃO DE CRÉDITO</span>
           </button>
         </div>
 
