@@ -181,7 +181,12 @@ const DivulgacaoVideoCard = memo(function DivulgacaoVideoCard({ title, src, file
 
 
 
-export function CreateEbookView() {
+interface CreateEbookViewProps {
+  onComplete?: () => void;
+  onCancel?: () => void;
+}
+
+export function CreateEbookView({ onComplete, onCancel }: CreateEbookViewProps = {}) {
   const { createEbookWithChapters } = useEbooks();
   const [saving, setSaving] = useState(false);
   const [step, setStep] = useState(0);
@@ -1065,7 +1070,7 @@ export function CreateEbookView() {
 
                                     {/* PREVIEW WIDGET */}
                   <div 
-                    className="flex flex-col border border-border rounded-2xl w-full max-w-[650px] mx-auto overflow-hidden relative shadow-2xl transition-colors duration-500 min-h-[500px]"
+                    className="flex flex-col border border-red-500/30 rounded-2xl w-full max-w-[650px] mx-auto overflow-hidden relative shadow-[0_0_35px_rgba(255,0,0,0.4)] transition-colors duration-500 min-h-[500px]"
                     style={{ backgroundColor: secondaryColor || "#0a0a0a" }}
                   >
                     <div className="flex items-center gap-2 px-4 py-3 bg-black/40 backdrop-blur-sm border-b border-white/5">
@@ -1236,8 +1241,12 @@ export function CreateEbookView() {
         </AnimatePresence>
       </div>
 
-      <div className={`flex items-center ${step === 0 ? "justify-end mt-12" : "justify-between"}`}>
-        {step > 0 && <Button variant="ghost" onClick={prev} disabled={generating}><ArrowLeft className="mr-2 h-4 w-4" /> Voltar</Button>}
+      <div className="flex items-center justify-between mt-12">
+        {step > 0 ? (
+          <Button variant="ghost" onClick={prev} disabled={generating}><ArrowLeft className="mr-2 h-4 w-4" /> Voltar</Button>
+        ) : onCancel ? (
+          <Button variant="ghost" onClick={onCancel}><ArrowLeft className="mr-2 h-4 w-4" /> Voltar ao Painel</Button>
+        ) : <div />}
         {step < steps.length - 1 ? (
           step === 1 ? (
             <Button 
@@ -1272,7 +1281,14 @@ export function CreateEbookView() {
                   await supabase.from("ebooks").update({ title, subtitle, status: "published", is_public: true, price }).eq("id", generatedEbookId);
                 }
                 toast.success("Ebook finalizado!");
-                setTimeout(() => { resetForm(); window.location.href = "/app"; }, 1500);
+                setTimeout(() => {
+                  resetForm();
+                  if (onComplete) {
+                    onComplete();
+                  } else {
+                    window.location.href = "/app";
+                  }
+                }, 1500);
               } catch (e) { toast.error("Erro ao salvar"); } finally { setSaving(false); }
             }}
           >
