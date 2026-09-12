@@ -20,6 +20,12 @@ export function IntegrationsView() {
           </div>
         ))}
       </div>
+
+      <div className="pt-2 max-w-2xl">
+        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+          Basta conectar o link de checkout da plataforma que você utiliza na página de vendas que é gerada pela ferramenta.
+        </p>
+      </div>
     </div>
   );
 }
