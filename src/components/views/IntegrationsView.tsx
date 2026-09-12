@@ -10,11 +10,11 @@ export function IntegrationsView() {
         </p>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-4">
+      <div className="flex flex-col items-start gap-3.5 pt-4">
         {platforms.map((gateway) => (
           <div
             key={gateway}
-            className="px-6 py-2.5 rounded-2xl border border-black/10 dark:border-white/10 bg-[#000000] text-white font-bold text-base shadow-sm"
+            className="min-w-[200px] text-center px-6 py-2.5 rounded-2xl border border-black/10 dark:border-white/10 bg-[#000000] text-white font-bold text-base shadow-[0_0_15px_rgba(255,0,0,0.35)]"
           >
             {gateway}
           </div>
