@@ -307,7 +307,7 @@ export function LibraryView({ onCreateNew }: Props) {
           {ebooks.map((eb) => (
             <div
               key={eb.id}
-              className="group flex flex-col overflow-hidden rounded-2xl border border-[#FF0000] bg-card shadow-soft transition hover:shadow-glow"
+              className="group flex flex-col overflow-hidden rounded-2xl border bg-card shadow-soft transition hover:shadow-glow"
             >
               <div className="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-primary/30 to-primary/70">
                 {eb.cover_url ? (
