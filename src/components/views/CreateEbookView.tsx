@@ -803,7 +803,7 @@ export function CreateEbookView({ onComplete, onCancel }: CreateEbookViewProps =
                   <h2 className="font-display text-xl font-semibold mt-2 mb-4">Defina o preço</h2>
                 </div>
 
-                <div className="mt-5 rounded-2xl border border-[#D4AF37] bg-card shadow-[0_0_18px_rgba(212,175,55,0.35)] p-6">
+                <div className="mt-5 rounded-2xl border border-[#FF0000] bg-card shadow-[0_0_18px_rgba(255,0,0,0.35)] p-6">
 
 
                   <label className="text-sm font-medium uppercase text-muted-foreground">Preço de venda (R$)</label>
@@ -827,22 +827,29 @@ export function CreateEbookView({ onComplete, onCancel }: CreateEbookViewProps =
                         if (!priceInput) return;
                         setPriceInput(price.toFixed(2).replace(".", ","));
                       }}
-                      className="pl-12 h-16 text-3xl font-bold font-display border-[#D4AF37] focus-visible:ring-[#D4AF37]"
+                      className="pl-12 h-16 text-3xl font-bold font-display border-[#FF0000] focus-visible:ring-[#FF0000] shadow-[0_0_12px_rgba(255,0,0,0.25)]"
                     />
                   </div>
                   <div className="mt-5">
 
                   <p className="text-sm text-muted-foreground mb-2">Sugestões rápidas</p>
                   <div className="flex flex-wrap gap-2">
-                    {pricePresets.map((p) => (
-                      <button
-                        key={p}
-                        onClick={() => { setPrice(p); setPriceInput(p.toFixed(2).replace(".", ",")); }}
-                        className={`rounded-lg border px-4 py-2 text-base font-medium transition hover:border-primary ${price === p ? "border-primary bg-accent text-accent-foreground" : ""}`}
-                      >
-                        R$ {p.toFixed(2).replace(".", ",")}
-                      </button>
-                    ))}
+                    {pricePresets.map((p) => {
+                      const isSelected = price === p;
+                      return (
+                        <button
+                          key={p}
+                          onClick={() => { setPrice(p); setPriceInput(p.toFixed(2).replace(".", ",")); }}
+                          className={`rounded-lg border px-4 py-2 text-base font-medium transition ${
+                            isSelected
+                              ? "border-[#FFFF00] text-[#FFFF00] bg-[#FFFF00]/10 shadow-[0_0_10px_rgba(255,255,0,0.25)]"
+                              : "border-border text-foreground hover:border-white/40"
+                          }`}
+                        >
+                          R$ {p.toFixed(2).replace(".", ",")}
+                        </button>
+                      );
+                    })}
                   </div>
 
                 </div>
