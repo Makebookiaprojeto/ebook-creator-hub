@@ -260,7 +260,7 @@ export function DashboardView() {
     <div className="space-y-3 animate-fade-in py-1 sm:-mt-6 mt-0">
 
       <div className="space-y-3">
-        <div className="relative overflow-hidden rounded-3xl border border-red-500/20 dark:border-white/10 bg-white dark:bg-black dark:bg-none px-7 pt-3 pb-7 shadow-[0_10px_40px_-10px_rgba(255,0,0,0.2)]">
+        <div className="relative overflow-hidden rounded-3xl border border-[#FF0000] bg-white dark:bg-black dark:bg-none px-7 pt-3 pb-7 shadow-[0_10px_40px_-10px_rgba(255,0,0,0.2)]">
           
           <div className="relative">
             <div className="flex items-start justify-between gap-3">
@@ -291,8 +291,8 @@ export function DashboardView() {
                       }}
                       className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all border ${
                         active
-                          ? "bg-[#FF0000] text-white border-[#FF0000] shadow-[0_0_10px_rgba(255,0,0,0.5)]"
-                          : "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/30 hover:bg-red-500/20"
+                          ? "bg-black text-white border-[#FF0000] shadow-[0_0_8px_rgba(255,0,0,0.4)]"
+                          : "bg-black text-white border-white/20 hover:border-white/40"
                       }`}
                     >
                       {opt.label}
@@ -317,7 +317,7 @@ export function DashboardView() {
         </div>
 
         <div className="grid grid-cols-2 gap-3 pt-1">
-          <div className="relative overflow-hidden rounded-3xl border border-red-500/20 dark:border-white/10 bg-white dark:bg-black dark:bg-none px-4 py-5 shadow-[0_10px_40px_-10px_rgba(255,0,0,0.2)]">
+          <div className="relative overflow-hidden rounded-3xl border border-[#FF0000] bg-white dark:bg-black dark:bg-none px-4 py-5 shadow-[0_10px_40px_-10px_rgba(255,0,0,0.2)]">
               <div className="relative flex items-center justify-between">
                 <div>
                   <p className="text-[11px] uppercase tracking-wider text-muted-foreground dark:text-white/80">E-Books</p>
@@ -328,7 +328,7 @@ export function DashboardView() {
               </div>
             </div>
           </div>
-          <div className="relative overflow-hidden rounded-3xl border border-red-500/20 dark:border-white/10 bg-white dark:bg-black dark:bg-none px-4 py-5 shadow-[0_10px_40px_-10px_rgba(255,0,0,0.2)]">
+          <div className="relative overflow-hidden rounded-3xl border border-[#FF0000] bg-white dark:bg-black dark:bg-none px-4 py-5 shadow-[0_10px_40px_-10px_rgba(255,0,0,0.2)]">
               <div className="relative flex items-center justify-between">
                 <div>
                   <p className="text-[11px] uppercase tracking-wider text-muted-foreground dark:text-white/80">Vendas</p>
@@ -363,13 +363,13 @@ function SalesByHourChart({ total }: { total: number }) {
   }, [total]);
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-red-500/20 dark:border-white/10 bg-white dark:bg-black dark:bg-none p-5 shadow-[0_10px_40px_-10px_rgba(255,0,0,0.2)]">
+    <div className="relative overflow-hidden rounded-3xl border border-[#FF0000] bg-white dark:bg-black dark:bg-none p-5 shadow-[0_10px_40px_-10px_rgba(255,0,0,0.2)]">
       
       <div className="mb-4 flex items-center justify-between relative">
         <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-black dark:text-white">Receita</h3>
-        <div className="flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1">
+        <div className="flex items-center gap-2 rounded-full border border-white/20 bg-black px-3 py-1">
           <span className="h-1.5 w-1.5 rounded-full bg-[#FF0000] shadow-[0_0_8px_#FF0000]" />
-          <span className="text-[11px] font-medium text-red-600 dark:text-red-400">Últimos 30 dias</span>
+          <span className="text-[11px] font-medium text-white">Últimos 30 dias</span>
         </div>
       </div>
 

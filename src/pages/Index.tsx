@@ -101,7 +101,7 @@ const Index = () => {
 
       {/* Dock Menu */}
       <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 sm:gap-4 w-full sm:w-auto px-2 sm:px-0 justify-center">
-        <div className="flex items-center gap-1 sm:gap-6 bg-white dark:bg-black border border-gray-200 dark:border-white/10 px-2 sm:px-4 py-1.5 rounded-full shadow-md">
+        <div className="flex items-center gap-1 sm:gap-6 bg-white dark:bg-black border border-[#FF0000] px-2 sm:px-4 py-1.5 rounded-full shadow-md">
           <button onClick={() => setView("dashboard")} className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${view === "dashboard" ? "text-[#FF0000] bg-red-50 dark:bg-red-950/30" : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"}`} title="Dashboard">
             <LayoutDashboard className="h-4 w-4" />
           </button>
@@ -130,7 +130,7 @@ const Index = () => {
         <button
           onClick={handleSignOut}
           title="Sair"
-          className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-full bg-white dark:bg-black border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 transition text-gray-500 dark:text-gray-400 shadow-md"
+          className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-full bg-white dark:bg-black border border-[#FF0000] hover:bg-gray-100 dark:hover:bg-white/5 transition text-gray-500 dark:text-gray-400 shadow-md"
         >
           <LogOut className="h-4 w-4" />
         </button>

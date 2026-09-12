@@ -14,7 +14,7 @@ export function IntegrationsView() {
         {platforms.map((gateway) => (
           <div
             key={gateway}
-            className="min-w-[200px] text-center px-6 py-2.5 rounded-2xl border border-black/10 dark:border-white/10 bg-[#000000] text-white font-bold text-base shadow-[0_0_15px_rgba(255,0,0,0.35)]"
+            className="min-w-[200px] text-center px-6 py-2.5 rounded-2xl border border-[#FF0000] bg-[#000000] text-white font-bold text-base shadow-[0_0_15px_rgba(255,0,0,0.35)]"
           >
             {gateway}
           </div>
@@ -23,7 +23,7 @@ export function IntegrationsView() {
 
       <div className="pt-2 max-w-2xl">
         <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-          Basta conectar o link de checkout da plataforma que você utiliza na página de vendas que é gerada pela ferramenta.
+          Basta conectar o link de checkout da plataforma que você utiliza, na página de vendas que é gerada pela ferramenta, dentro da biblioteca de E-books gerados.
         </p>
       </div>
     </div>
