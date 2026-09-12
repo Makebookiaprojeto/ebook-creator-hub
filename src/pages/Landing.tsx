@@ -158,25 +158,6 @@ const Landing = () => {
                </div>
             </div>
           </motion.div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-[1000px] mt-16 text-left">
-             <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-2 text-sm font-bold text-white"><div className="w-1.5 h-1.5 rounded-full bg-[#FF0000] shadow-[0_0_8px_rgba(255,0,0,0.8)]"></div> Feito no Brasil</div>
-                <div className="text-xs text-white/50 ml-3.5">100% em português</div>
-             </div>
-             <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-2 text-sm font-bold text-white"><div className="w-1.5 h-1.5 rounded-full bg-[#FF0000] shadow-[0_0_8px_rgba(255,0,0,0.8)]"></div> IA de ponta</div>
-                <div className="text-xs text-white/50 ml-3.5">Modelos de última geração</div>
-             </div>
-             <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-2 text-sm font-bold text-white"><div className="w-1.5 h-1.5 rounded-full bg-[#FF0000] shadow-[0_0_8px_rgba(255,0,0,0.8)]"></div> Pagamento seguro</div>
-                <div className="text-xs text-white/50 ml-3.5">PIX e cartão</div>
-             </div>
-             <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-2 text-sm font-bold text-white"><div className="w-1.5 h-1.5 rounded-full bg-[#FF0000] shadow-[0_0_8px_rgba(255,0,0,0.8)]"></div> 7 dias de garantia</div>
-                <div className="text-xs text-white/50 ml-3.5">Risco zero</div>
-             </div>
-          </div>
         </section>
 
         {/* SECTION: VOCÊ SÓ PRECISA DE UMA IDEIA */}
