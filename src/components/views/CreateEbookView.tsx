@@ -1153,7 +1153,7 @@ export function CreateEbookView({ onComplete, onCancel }: CreateEbookViewProps =
                   className="mt-8 space-y-4"
                 >
                   <div className="p-6 rounded-lg border border-border bg-card/40 shadow-gold">
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-1 text-[#FFFF00]">
+                    <h3 className="text-lg font-bold flex items-center gap-2 mb-1 text-black dark:text-[#FFFF00]">
                       <Users className="h-5 w-5 text-primary" />
                       Buscar grupos por nicho
                     </h3>
@@ -1208,7 +1208,7 @@ export function CreateEbookView({ onComplete, onCancel }: CreateEbookViewProps =
                     </div>
                   </div>
                   <div className="p-5">
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-1 text-[#FFFF00]">
+                    <h3 className="text-lg font-bold flex items-center gap-2 mb-1 text-black dark:text-[#FFFF00]">
                       <Video className="h-5 w-5 text-primary" />
                       Vídeos prontos para divulgação
                     </h3>
