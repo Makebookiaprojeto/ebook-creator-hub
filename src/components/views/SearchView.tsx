@@ -74,8 +74,8 @@ const DivulgacaoVideoCard = memo(function DivulgacaoVideoCard({
   };
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4 rounded-xl border border-white/30 bg-background/40 p-4">
-      <div className="relative shrink-0 mx-auto sm:mx-0 w-[140px] aspect-[9/16] rounded-lg overflow-hidden bg-black border border-white/30">
+    <div className="flex flex-col sm:flex-row gap-4 rounded-xl border border-border/80 dark:border-white/30 bg-background/40 p-4">
+      <div className="relative shrink-0 mx-auto sm:mx-0 w-[140px] aspect-[9/16] rounded-lg overflow-hidden bg-black border border-border/80 dark:border-white/30">
         {src ? (
           <video
             ref={videoRef}
