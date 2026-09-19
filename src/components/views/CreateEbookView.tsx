@@ -162,7 +162,7 @@ const DivulgacaoVideoCard = memo(function DivulgacaoVideoCard({ title, src, file
         <h4 className="text-base font-semibold mb-2 text-primary">{title}</h4>
         <div className="flex-1 flex flex-col justify-start pt-8">
           <p className="text-base text-muted-foreground whitespace-pre-line leading-relaxed">
-            <span className="font-semibold text-[#FFFF00]">Roteiro: </span>
+            <span className="font-bold text-black dark:text-[#FFFF00]">Roteiro: </span>
             {script}
           </p>
         </div>
