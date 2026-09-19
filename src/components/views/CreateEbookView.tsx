@@ -1184,7 +1184,7 @@ export function CreateEbookView({ onComplete, onCancel }: CreateEbookViewProps =
 
 
                   <div className="p-5 rounded-xl border border-border shadow-gold">
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-1 text-[#FFFF00]">
+                    <h3 className="text-lg font-bold flex items-center gap-2 mb-1 text-black dark:text-[#FFFF00]">
                       <Quote className="h-5 w-5 text-primary" />
                       Mensagem pronta para Divulgação
                     </h3>
