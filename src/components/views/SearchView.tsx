@@ -108,7 +108,7 @@ const DivulgacaoVideoCard = memo(function DivulgacaoVideoCard({
         <h4 className="text-base font-semibold mb-2 text-primary">{title}</h4>
         <div className="flex-1 flex flex-col justify-start pt-4 sm:pt-8">
           <p className="text-base text-muted-foreground whitespace-pre-line leading-relaxed">
-            <span className="font-semibold text-[#FFFF00]">Roteiro: </span>
+            <span className="font-bold text-black dark:text-[#FFFF00]">Roteiro: </span>
             {script}
           </p>
         </div>
@@ -156,7 +156,7 @@ export function SearchView() {
       >
         {/* 1. Buscar Grupos por Nicho */}
         <div className="p-6 rounded-lg border border-border bg-card/40 shadow-gold">
-          <h3 className="text-lg font-semibold flex items-center gap-2 mb-1 text-[#FFFF00]">
+          <h3 className="text-lg font-bold flex items-center gap-2 mb-1 text-black dark:text-[#FFFF00]">
             <Users className="h-5 w-5 text-primary" />
             Buscar grupos por nicho
           </h3>
@@ -190,7 +190,7 @@ export function SearchView() {
         {/* 2. Mensagens Prontas para Divulgação */}
         <div className="p-6 rounded-lg border border-border bg-card/40 shadow-gold space-y-4">
           <div>
-            <h3 className="text-lg font-semibold flex items-center gap-2 mb-1 text-[#FFFF00]">
+            <h3 className="text-lg font-bold flex items-center gap-2 mb-1 text-black dark:text-[#FFFF00]">
               <Quote className="h-5 w-5 text-primary" />
               Mensagens prontas para Divulgação
             </h3>
@@ -231,7 +231,7 @@ export function SearchView() {
 
         {/* 3. Vídeos Prontos para Divulgação */}
         <div className="p-6 rounded-lg border border-border bg-card/40 shadow-gold">
-          <h3 className="text-lg font-semibold flex items-center gap-2 mb-1 text-[#FFFF00]">
+          <h3 className="text-lg font-bold flex items-center gap-2 mb-1 text-black dark:text-[#FFFF00]">
             <Video className="h-5 w-5 text-primary" />
             Vídeos prontos para divulgação
           </h3>
