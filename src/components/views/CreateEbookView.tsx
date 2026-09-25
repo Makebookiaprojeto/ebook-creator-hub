@@ -181,6 +181,19 @@ const DivulgacaoVideoCard = memo(function DivulgacaoVideoCard({ title, src, file
 
 
 
+function isLightHexColor(hex?: string | null): boolean {
+  if (!hex) return false;
+  let cleaned = hex.replace("#", "").trim();
+  if (cleaned.length === 3) {
+    cleaned = cleaned.split("").map((c) => c + c).join("");
+  }
+  if (cleaned.length !== 6) return false;
+  const r = parseInt(cleaned.slice(0, 2), 16) / 255;
+  const g = parseInt(cleaned.slice(2, 4), 16) / 255;
+  const b = parseInt(cleaned.slice(4, 6), 16) / 255;
+  return (0.299 * r + 0.587 * g + 0.114 * b) > 0.5;
+}
+
 interface CreateEbookViewProps {
   onComplete?: () => void;
   onCancel?: () => void;
@@ -225,6 +238,7 @@ export function CreateEbookView({ onComplete, onCancel }: CreateEbookViewProps =
   const [salesPageStage, setSalesPageStage] = useState("");
   const [primaryColor, setPrimaryColor] = useState("#F97316");
   const [secondaryColor, setSecondaryColor] = useState("#000000");
+  const isLightPreviewBg = isLightHexColor(secondaryColor || "#0a0a0a");
 
   const resetForm = () => {
     setStep(0);
@@ -1098,11 +1112,11 @@ export function CreateEbookView({ onComplete, onCancel }: CreateEbookViewProps =
                             Edição Premium
                           </div>
                           
-                          <h1 className="text-3xl font-black tracking-tight leading-[1.2] mb-3 text-white line-clamp-4">
+                          <h1 className={`text-3xl font-black tracking-tight leading-[1.2] mb-3 line-clamp-4 transition-colors duration-500 ${isLightPreviewBg ? "text-neutral-900" : "text-white"}`}>
                             {title || "Título do Ebook"}
                           </h1>
                           
-                          <p className="text-xs text-white/60 font-medium line-clamp-4 mb-6 leading-relaxed">
+                          <p className={`text-xs font-medium line-clamp-4 mb-6 leading-relaxed transition-colors duration-500 ${isLightPreviewBg ? "text-neutral-600" : "text-white/60"}`}>
                             {subtitle || "O guia definitivo, direto ao ponto, para quem quer resultados reais sem perder tempo com teoria."}
                           </p>
                           
