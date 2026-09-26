@@ -9,8 +9,10 @@ import {
   TrendingUp,
   Users,
   Zap,
+  Tag,
 } from "lucide-react";
 import saasLogo from "@/assets/saas-logo.jpg";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -96,6 +98,25 @@ export default function Plans() {
   const { loading: subLoading, isActive } = useSubscription();
   const [displayName, setDisplayName] = useState<string>("");
   const [modalPlan, setModalPlan] = useState<PlanId | null>(null);
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(false);
+  const [couponError, setCouponError] = useState("");
+
+  const handleApplyCoupon = () => {
+    const clean = couponCode.trim().toUpperCase();
+    if (!clean) {
+      setCouponError("Por favor, digite um cupom.");
+      return;
+    }
+    if (clean === "VIP50") {
+      setAppliedCoupon(true);
+      setCouponError("");
+      toast.success("Cupom VIP50 aplicado com sucesso! 50% de desconto ativado.");
+    } else {
+      setCouponError("Cupom inválido ou expirado.");
+      toast.error("Cupom inválido ou expirado.");
+    }
+  };
 
   useEffect(() => {
     // Force CSS dark mode
@@ -220,7 +241,7 @@ export default function Plans() {
 
         {/* PLANOS */}
         <section id="planos" className="max-w-5xl mx-auto px-6 py-12 scroll-mt-20">
-          <div className="text-center mb-10">
+          <div className="text-center mb-8">
             <h2 className="text-2xl md:text-4xl font-bold mb-3">
               Escolha o plano ideal para você
             </h2>
@@ -229,16 +250,74 @@ export default function Plans() {
             </p>
           </div>
 
+          {/* CAMPO DE CUPOM ACIMA DOS CARDS */}
+          <div className="max-w-[460px] mx-auto mb-10">
+            <div className="relative flex items-center bg-card border border-border focus-within:border-[#FF0000] rounded-2xl p-1.5 shadow-md transition-all">
+              <div className="pl-3 pr-2 text-muted-foreground">
+                <Tag className="w-4 h-4 text-[#FF0000]" />
+              </div>
+              <input
+                type="text"
+                value={couponCode}
+                onChange={(e) => {
+                  setCouponCode(e.target.value);
+                  if (couponError) setCouponError("");
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleApplyCoupon();
+                }}
+                placeholder="Digite seu cupom de desconto"
+                className="flex-1 bg-transparent border-none text-foreground placeholder:text-muted-foreground text-sm focus:outline-none uppercase font-semibold tracking-wider"
+              />
+              <Button
+                type="button"
+                onClick={handleApplyCoupon}
+                className="h-10 px-5 rounded-xl font-bold text-xs bg-[#FF0000] hover:bg-[#CC0000] text-white transition-all shadow-md active:scale-95"
+              >
+                {appliedCoupon ? "Aplicado" : "Aplicar"}
+              </Button>
+            </div>
+
+            {/* Feedback Visual do Cupom */}
+            {appliedCoupon && (
+              <div className="mt-3 flex items-center justify-center gap-2 text-xs font-bold text-white bg-black border border-[#FF0000] py-2 px-4 rounded-xl shadow-[0_0_20px_rgba(255,0,0,0.25)] animate-in fade-in slide-in-from-top-1">
+                <span className="bg-[#FF0000] text-white text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider">50% OFF</span>
+                <span>Cupom VIP50 aplicado com sucesso!</span>
+              </div>
+            )}
+
+            {couponError && (
+              <div className="mt-2 text-center text-xs font-medium text-[#FF0000] animate-in fade-in">
+                {couponError}
+              </div>
+            )}
+          </div>
+
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto items-stretch">
             {/* Mensal */}
             <Card className="px-8 py-8 border-border/60 flex flex-col rounded-2xl bg-card/60 backdrop-blur-sm shadow-md hover:shadow-lg hover:border-border transition-all">
               <div className="mb-6">
-                <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">
-                  Mensal
+                <div className="flex items-center justify-between mb-3">
+                  <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                    Mensal
+                  </div>
+                  {appliedCoupon && (
+                    <span className="bg-[#FF0000] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                      50% OFF
+                    </span>
+                  )}
                 </div>
+
+                {appliedCoupon && (
+                  <div className="text-muted-foreground text-xs font-semibold line-through mb-1">
+                    De R$ 295,80/mês
+                  </div>
+                )}
                 <div className="flex items-baseline gap-1">
                   <span className="text-sm font-bold align-top">R$</span>
-                  <span className="text-5xl font-bold">147,90</span>
+                  <span className="text-5xl font-bold">
+                    {appliedCoupon ? "147,90" : "295,80"}
+                  </span>
                   <span className="text-muted-foreground">/mês</span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
@@ -248,12 +327,12 @@ export default function Plans() {
 
               <ul className="space-y-3 mb-8 flex-1">
                 <li className="flex items-start gap-2 text-sm">
-                  <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                  <Check className="h-4 w-4 text-[#FF0000] mt-0.5 shrink-0" />
                   <span>Criação de E-Books ilimitada</span>
                 </li>
                 {BENEFITS.map((b) => (
                   <li key={b} className="flex items-start gap-2 text-sm">
-                    <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                    <Check className="h-4 w-4 text-[#FF0000] mt-0.5 shrink-0" />
                     <span>{b}</span>
                   </li>
                 ))}
@@ -269,27 +348,41 @@ export default function Plans() {
             </Card>
 
             {/* Vitalício */}
-            <Card className="px-8 py-8 border-2 border-primary bg-gradient-to-b from-primary/10 to-primary/5 flex flex-col relative rounded-2xl ring-2 ring-primary/40 plan-glow-animated shadow-2xl shadow-primary/20 md:scale-[1.03]">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 text-[10px] font-black bg-primary text-primary-foreground px-4 py-1.5 rounded-full tracking-widest uppercase shadow-lg whitespace-nowrap">
+            <Card className="px-8 py-8 border-2 border-[#FF0000] bg-gradient-to-b from-[#FF0000]/10 to-[#FF0000]/5 flex flex-col relative rounded-2xl ring-2 ring-[#FF0000]/40 plan-glow-animated shadow-2xl shadow-red-600/20 md:scale-[1.03]">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 text-[10px] font-black bg-[#FF0000] text-white px-4 py-1.5 rounded-full tracking-widest uppercase shadow-lg whitespace-nowrap">
                 <Crown className="h-3 w-3" /> Mais escolhido
               </div>
 
               <div className="mb-6 mt-2">
-                <div className="text-xs font-bold text-primary uppercase tracking-widest mb-3">
-                  Vitalício
+                <div className="flex items-center justify-between mb-3">
+                  <div className="text-xs font-bold text-[#FF0000] uppercase tracking-widest">
+                    Vitalício
+                  </div>
+                  {appliedCoupon && (
+                    <span className="bg-[#FF0000] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                      50% OFF
+                    </span>
+                  )}
                 </div>
+
+                {appliedCoupon && (
+                  <div className="text-muted-foreground text-xs font-semibold line-through mb-1">
+                    De R$ 495,80 à vista
+                  </div>
+                )}
                 <div className="flex items-baseline gap-1">
                   <span className="text-sm font-bold align-top">12x de R$</span>
-                  <span className="text-6xl font-black">29,58</span>
+                  <span className="text-6xl font-black">
+                    {appliedCoupon ? "29,58" : "49,58"}
+                  </span>
                 </div>
                 <div className="text-sm font-bold text-muted-foreground mt-1">
-                  ou R$ 247,90 à vista
+                  ou R$ {appliedCoupon ? "247,90" : "495,80"} à vista
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
                   Pague uma vez e use para sempre.
                 </p>
               </div>
-
 
               <ul className="space-y-3 mb-8 flex-1">
                 {[
@@ -302,7 +395,7 @@ export default function Plans() {
                   "Atualizações vitalícias inclusas",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm font-medium">
-                    <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                    <Check className="h-4 w-4 text-[#FF0000] mt-0.5 shrink-0" />
                     <span>{item}</span>
                   </li>
                 ))}
@@ -321,15 +414,27 @@ export default function Plans() {
           {/* COMPARATIVO ECONOMIA */}
           <Card className="mt-8 p-6 max-w-2xl mx-auto bg-muted/30 border-border/60">
             <div className="flex items-start gap-3">
-              <TrendingUp className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+              <TrendingUp className="h-5 w-5 text-[#FF0000] mt-0.5 shrink-0" />
               <div className="text-sm">
                 <p className="font-semibold mb-1">Faz as contas com a gente:</p>
                 <p className="text-muted-foreground">
-                  Mensal por 1 ano = <span className="line-through">R$ 1.798,80</span>{" "}
-                  · Vitalício = <span className="font-semibold text-foreground">R$ 247,90</span>{" "}
-                  para sempre. Você economiza{" "}
-                  <span className="font-semibold text-primary">R$ 1.548,90</span> só
-                  no primeiro ano.
+                  {appliedCoupon ? (
+                    <>
+                      Mensal por 1 ano = <span className="line-through">R$ 1.774,80</span>{" "}
+                      · Vitalício = <span className="font-semibold text-foreground">R$ 247,90</span>{" "}
+                      para sempre. Você economiza{" "}
+                      <span className="font-semibold text-[#FF0000]">R$ 1.526,90</span> só
+                      no primeiro ano.
+                    </>
+                  ) : (
+                    <>
+                      Mensal por 1 ano = <span className="line-through">R$ 3.549,60</span>{" "}
+                      · Vitalício = <span className="font-semibold text-foreground">R$ 495,80</span>{" "}
+                      para sempre. Você economiza{" "}
+                      <span className="font-semibold text-[#FF0000]">R$ 3.053,80</span> só
+                      no primeiro ano.
+                    </>
+                  )}
                 </p>
               </div>
             </div>
@@ -425,6 +530,7 @@ export default function Plans() {
         onClose={() => setModalPlan(null)}
         planId={modalPlan || "monthly"}
         userEmail={user?.email}
+        hasDiscount={appliedCoupon}
       />
     </div>
   );
