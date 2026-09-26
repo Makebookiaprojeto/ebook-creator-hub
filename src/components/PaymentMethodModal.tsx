@@ -20,6 +20,7 @@ interface PaymentMethodModalProps {
   onClose: () => void;
   planId: PlanId;
   userEmail?: string;
+  hasDiscount?: boolean;
 }
 
 export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
@@ -27,6 +28,7 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
   onClose,
   planId,
   userEmail,
+  hasDiscount = false,
 }) => {
   // Fechar ao pressionar ESC
   useEffect(() => {
@@ -48,7 +50,7 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
   const isLifetime = planId === "lifetime";
 
   const handleSelectMethod = (method: "pix" | "card") => {
-    const url = getCheckoutUrl(planId, method, userEmail);
+    const url = getCheckoutUrl(planId, method, userEmail, hasDiscount);
     if (url) {
       window.location.href = url;
     }
@@ -85,7 +87,9 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
             </span>
             {" — "}
             <span className="text-[#FF0000]">
-              {isLifetime ? "R$ 247,90 (Único)" : "R$ 147,90/mês"}
+              {hasDiscount
+                ? isLifetime ? "R$ 247,90 (Único)" : "R$ 147,90/mês"
+                : isLifetime ? "R$ 495,80 (Único)" : "R$ 295,80/mês"}
             </span>
           </p>
         </div>
