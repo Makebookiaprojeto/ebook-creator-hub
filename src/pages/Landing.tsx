@@ -6,11 +6,12 @@ import { motion } from "framer-motion";
 import { 
   Check, ArrowRight, ShieldCheck, 
   FileText, LayoutTemplate, Video, TrendingUp,
-  Plus, Zap
+  Plus, Zap, Tag
 } from "lucide-react";
 import { PlanId } from "@/config/checkoutLinks";
 import { PaymentMethodModal } from "@/components/PaymentMethodModal";
 import saasLogo from "@/assets/saas-logo.jpg";
+import { toast } from "sonner";
 
 const FAQItem = ({ question, answer }: { question: string; answer: string }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,6 +37,25 @@ const Landing = () => {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [modalPlan, setModalPlan] = useState<PlanId | null>(null);
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(false);
+  const [couponError, setCouponError] = useState("");
+
+  const handleApplyCoupon = () => {
+    const clean = couponCode.trim().toUpperCase();
+    if (!clean) {
+      setCouponError("Por favor, digite um cupom.");
+      return;
+    }
+    if (clean === "VIP50") {
+      setAppliedCoupon(true);
+      setCouponError("");
+      toast.success("Cupom VIP50 aplicado com sucesso! 50% de desconto ativado.");
+    } else {
+      setCouponError("Cupom inválido ou expirado.");
+      toast.error("Cupom inválido ou expirado.");
+    }
+  };
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
@@ -320,7 +340,7 @@ const Landing = () => {
 
         {/* PRICING SECTION */}
         <section id="planos" className="pt-24 pb-12 px-4 relative bg-[#000000] border-t border-white/10">
-          <div className="max-w-[1000px] mx-auto text-center mb-16">
+          <div className="max-w-[1000px] mx-auto text-center mb-10">
              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-bold text-white/70 mb-6 uppercase tracking-wider">
                PLANOS
              </div>
@@ -328,16 +348,75 @@ const Landing = () => {
              <p className="text-white/60 text-lg">Pagamento seguro via PIX ou cartão. 7 dias de garantia em qualquer plano — sem risco.</p>
           </div>
 
+          {/* CAMPO DE CUPOM ACIMA DOS CARDS */}
+          <div className="max-w-[460px] mx-auto mb-12">
+            <div className="relative flex items-center bg-[#0a0a0a] border border-white/15 focus-within:border-[#FF0000] rounded-2xl p-1.5 shadow-[0_0_25px_rgba(0,0,0,0.6)] transition-all">
+              <div className="pl-3 pr-2 text-white/40">
+                <Tag className="w-4 h-4 text-[#FF0000]" />
+              </div>
+              <input
+                type="text"
+                value={couponCode}
+                onChange={(e) => {
+                  setCouponCode(e.target.value);
+                  if (couponError) setCouponError("");
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleApplyCoupon();
+                }}
+                placeholder="Digite seu cupom de desconto"
+                className="flex-1 bg-transparent border-none text-white placeholder-white/40 text-sm focus:outline-none uppercase font-semibold tracking-wider"
+              />
+              <Button
+                type="button"
+                onClick={handleApplyCoupon}
+                className="h-10 px-5 rounded-xl font-bold text-xs bg-[#FF0000] hover:bg-[#CC0000] text-white transition-all shadow-md active:scale-95"
+              >
+                {appliedCoupon ? "Aplicado" : "Aplicar"}
+              </Button>
+            </div>
+
+            {/* Feedback Visual do Cupom */}
+            {appliedCoupon && (
+              <div className="mt-3 flex items-center justify-center gap-2 text-xs font-bold text-white bg-black border border-[#FF0000] py-2 px-4 rounded-xl shadow-[0_0_20px_rgba(255,0,0,0.25)] animate-in fade-in slide-in-from-top-1">
+                <span className="bg-[#FF0000] text-white text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider">50% OFF</span>
+                <span>Cupom VIP50 aplicado com sucesso!</span>
+              </div>
+            )}
+
+            {couponError && (
+              <div className="mt-2 text-center text-xs font-medium text-[#FF0000] animate-in fade-in">
+                {couponError}
+              </div>
+            )}
+          </div>
+
           <div className="max-w-[900px] mx-auto grid md:grid-cols-2 gap-6 items-stretch">
             {/* PLANO MENSAL */}
             <div className="bg-[#0a0a0a] border border-white/10 rounded-3xl p-8 flex flex-col relative">
-               <h3 className="text-2xl font-bold text-white mb-2">Mensal</h3>
+               <div className="flex items-center justify-between mb-2">
+                 <h3 className="text-2xl font-bold text-white">Mensal</h3>
+                 {appliedCoupon && (
+                   <span className="bg-[#FF0000] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                     50% OFF
+                   </span>
+                 )}
+               </div>
                <p className="text-white/40 text-sm mb-8">Ideal pra testar sem compromisso.</p>
                
-               <div className="flex items-baseline gap-1 mb-8">
-                  <span className="text-lg font-bold text-white/60">R$</span>
-                  <span className="text-[3.5rem] font-display font-black text-white leading-none tracking-tighter">147,90</span>
-                  <span className="text-white/40 text-sm ml-1">/mês</span>
+               <div className="mb-8">
+                 {appliedCoupon && (
+                   <div className="text-white/40 text-sm font-semibold line-through mb-1">
+                     De R$ 295,80/mês
+                   </div>
+                 )}
+                 <div className="flex items-baseline gap-1">
+                    <span className="text-lg font-bold text-white/60">R$</span>
+                    <span className="text-[3.5rem] font-display font-black text-white leading-none tracking-tighter">
+                      {appliedCoupon ? "147,90" : "295,80"}
+                    </span>
+                    <span className="text-white/40 text-sm ml-1">/mês</span>
+                 </div>
                </div>
                
                <ul className="space-y-4 mb-10 flex-1">
@@ -362,14 +441,34 @@ const Landing = () => {
                   MELHOR CUSTO-BENEFÍCIO
                </div>
                
-               <h3 className="text-2xl font-bold text-[#FF0000] mb-2 mt-2 text-center">Vitalício</h3>
-               <p className="text-white/40 text-sm mb-8 text-center">Pague uma vez. Use para sempre, sem mensalidade.</p>
-               
-               <div className="flex items-baseline justify-center gap-1 mb-2">
-                  <span className="text-lg font-bold text-white/60">R$</span>
-                  <span className="text-[4rem] font-display font-black text-white leading-none tracking-tighter">247,90</span>
+               <div className="flex items-center justify-between mb-2 mt-2">
+                 <h3 className="text-2xl font-bold text-[#FF0000]">Vitalício</h3>
+                 {appliedCoupon && (
+                   <span className="bg-[#FF0000] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                     50% OFF
+                   </span>
+                 )}
                </div>
-               <div className="text-center text-white/40 text-xs mb-8">pagamento único · menos de 2 meses do plano mensal</div>
+               <p className="text-white/40 text-sm mb-8">Pague uma vez. Use para sempre, sem mensalidade.</p>
+               
+               <div className="mb-8">
+                 {appliedCoupon && (
+                   <div className="text-white/40 text-sm font-semibold line-through mb-1">
+                     De R$ 495,80
+                   </div>
+                 )}
+                 <div className="flex items-baseline gap-1">
+                    <span className="text-lg font-bold text-white/60">R$</span>
+                    <span className="text-[4rem] font-display font-black text-white leading-none tracking-tighter">
+                      {appliedCoupon ? "247,90" : "495,80"}
+                    </span>
+                 </div>
+                 <div className="text-white/40 text-xs mt-2">
+                   {appliedCoupon 
+                     ? "pagamento único · menos de 2 meses do plano mensal" 
+                     : "pagamento único · acesso vitalício para sempre"}
+                 </div>
+               </div>
                
                <ul className="space-y-4 mb-10 flex-1">
                  {["Tudo do plano mensal, pra sempre", "Ebooks ilimitados com IA", "Páginas de vendas incluídas", "Download em PDF", "Nunca mais pague de novo"].map((item, i) => (
@@ -498,6 +597,7 @@ const Landing = () => {
         onClose={() => setModalPlan(null)}
         planId={modalPlan || "monthly"}
         userEmail={user?.email}
+        hasDiscount={appliedCoupon}
       />
     </div>
   );
