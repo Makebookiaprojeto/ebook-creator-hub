@@ -8,7 +8,7 @@ import { SupportView } from "@/components/views/SupportView";
 import { ProfileView } from "@/components/views/ProfileView";
 import { SearchView } from "@/components/views/SearchView";
 import { IntegrationsView } from "@/components/views/IntegrationsView";
-import { LayoutDashboard, Library, Plus, LifeBuoy, User, LogOut, Sliders, Search, Plug, Ticket, Copy, Check, Zap } from "lucide-react";
+import { LayoutDashboard, Library, Plus, LifeBuoy, User, LogOut, Sliders, Search, Plug, Ticket, Copy, Check, Zap, Sparkles } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import saasLogo from "@/assets/saas-logo.jpg";
@@ -160,55 +160,108 @@ const Index = () => {
 
       {/* MODAL INDIQUE AMIGOS / CUPONS */}
       <Dialog open={referralModalOpen} onOpenChange={setReferralModalOpen}>
-        <DialogContent className="sm:max-w-[420px] bg-[#000000] border-2 border-[#FF0000]/40 text-white rounded-3xl p-6 sm:p-7 shadow-[0_0_50px_rgba(255,0,0,0.25)]">
-          <DialogHeader className="text-center sm:text-center">
-            <div className="mx-auto w-12 h-12 rounded-2xl bg-[#FF0000]/10 border border-[#FF0000]/30 flex items-center justify-center text-[#FF0000] mb-3">
-              <Ticket className="w-6 h-6" />
+        <DialogContent className="sm:max-w-[440px] bg-[#0a0a0a] border border-white/10 text-white rounded-3xl p-6 sm:p-7 shadow-[0_0_60px_rgba(255,0,0,0.18)] overflow-hidden">
+          {/* Subtle Top Red Ambient Glow */}
+          <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-56 h-32 bg-[#FF0000]/20 rounded-full blur-3xl pointer-events-none" />
+
+          {/* Header */}
+          <div className="relative text-center pt-1 mb-5">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FF0000]/10 border border-[#FF0000]/25 text-[#FF0000] text-[11px] font-bold tracking-wider uppercase mb-3">
+              <Sparkles className="w-3.5 h-3.5" /> Indicação Exclusiva
             </div>
-            <DialogTitle className="text-xl sm:text-2xl font-black text-white tracking-tight">
+            <DialogTitle className="text-2xl font-black text-white tracking-tight">
               Indique Amigos
             </DialogTitle>
-          </DialogHeader>
-
-          <div className="py-2 text-center space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF0000]/10 border border-[#FF0000]/30 text-[#FF0000] text-xs font-bold uppercase tracking-wider">
-              <Zap className="w-3.5 h-3.5" /> 50% OFF Disponível
-            </div>
-
-            <p className="text-sm text-white/80 leading-relaxed font-medium">
+            <p className="text-xs sm:text-sm text-white/60 mt-1.5 max-w-xs mx-auto leading-relaxed">
               Você possui <span className="text-[#FF0000] font-bold">5 cupons</span> de indicação de <span className="text-white font-bold">50% OFF</span> disponíveis para compartilhar com seus amigos!
             </p>
+          </div>
 
-            {/* BOX DO CÓDIGO DO CUPOM */}
-            <div className="p-4 rounded-2xl bg-[#0a0a0a] border border-white/10 relative overflow-hidden">
-              <div className="text-[11px] text-white/40 uppercase font-semibold tracking-wider mb-1.5">
-                Código do Cupom de Desconto
+          {/* Scarcity / Counter Banner */}
+          <div className="relative flex items-center justify-between bg-black/60 border border-white/10 rounded-xl px-4 py-2.5 mb-4">
+            <div className="flex items-center gap-2">
+              <span className="flex h-2 w-2 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF0000] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF0000]"></span>
+              </span>
+              <span className="text-xs font-semibold text-white/90">
+                Cupons de <span className="text-[#FF0000] font-bold">50% OFF</span>
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 bg-[#FF0000]/15 border border-[#FF0000]/30 px-2.5 py-0.5 rounded-full">
+              <span className="text-[11px] font-extrabold text-[#FF0000] uppercase tracking-wider">
+                5 disponíveis
+              </span>
+            </div>
+          </div>
+
+          {/* Luxury Voucher Card */}
+          <div className="relative bg-gradient-to-b from-[#141414] to-[#0c0c0c] border border-white/15 rounded-2xl p-5 mb-5 shadow-inner overflow-hidden">
+            {/* Watermark icon */}
+            <Ticket className="absolute -right-3 -bottom-3 w-24 h-24 text-white/[0.03] pointer-events-none rotate-12" />
+
+            <div className="flex items-center justify-between text-[11px] text-white/40 uppercase font-semibold tracking-wider mb-3">
+              <span className="flex items-center gap-1.5 text-white/70">
+                <Zap className="w-3.5 h-3.5 text-[#FF0000]" /> Cupom VIP
+              </span>
+              <span className="bg-[#FF0000]/15 border border-[#FF0000]/30 text-[#FF0000] px-2 py-0.5 rounded text-[10px] font-black">
+                50% OFF
+              </span>
+            </div>
+
+            {/* Code Box with Quick Click-to-Copy */}
+            <div 
+              onClick={handleCopyCoupon}
+              className="group cursor-pointer flex items-center justify-between bg-black/80 hover:bg-black border border-dashed border-white/20 hover:border-[#FF0000]/60 rounded-xl px-4 py-3.5 transition-all duration-200"
+              title="Clique para copiar"
+            >
+              <div className="flex flex-col text-left">
+                <span className="text-[10px] text-white/40 uppercase tracking-widest font-medium">Código do Cupom</span>
+                <span className="font-mono text-2xl font-black tracking-widest text-white group-hover:text-[#FF0000] transition-colors">
+                  VIP50
+                </span>
               </div>
-              <div className="text-2xl sm:text-3xl font-black tracking-widest text-[#FF0000] selection:bg-[#FF0000] selection:text-white">
-                VIP50
-              </div>
-              <div className="text-[11px] text-white/40 mt-1">
-                Válido para o Plano Mensal e Vitalício
+              <div className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 group-hover:bg-[#FF0000]/10 group-hover:border-[#FF0000]/30 group-hover:text-white transition-all">
+                {couponCopied ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    <span className="text-emerald-400">Copiado</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>Copiar</span>
+                  </>
+                )}
               </div>
             </div>
 
-            {/* BOTÃO COPIAR */}
-            <Button
-              type="button"
-              onClick={handleCopyCoupon}
-              className="w-full h-12 rounded-xl font-bold text-sm bg-[#FF0000] hover:bg-[#CC0000] text-white shadow-[0_0_25px_rgba(255,0,0,0.35)] transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
-            >
-              {couponCopied ? (
-                <>
-                  <Check className="w-4 h-4 text-white" /> Cupom Copiado!
-                </>
-              ) : (
-                <>
-                  <Copy className="w-4 h-4 text-white" /> Copiar Cupom
-                </>
-              )}
-            </Button>
+            <div className="flex items-center justify-between mt-3 text-[11px] text-white/40">
+              <span>Válido para Mensal e Vitalício</span>
+              <span className="text-[#FF0000] font-semibold">Ativação instantânea</span>
+            </div>
           </div>
+
+          {/* Action Button */}
+          <Button
+            type="button"
+            onClick={handleCopyCoupon}
+            className={`w-full h-12 rounded-xl font-extrabold text-sm tracking-wide transition-all duration-200 flex items-center justify-center gap-2 active:scale-[0.99] ${
+              couponCopied
+                ? "bg-white text-black hover:bg-neutral-200 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+                : "bg-[#FF0000] hover:bg-[#E00000] text-white shadow-[0_0_25px_rgba(255,0,0,0.35)] hover:shadow-[0_0_35px_rgba(255,0,0,0.5)]"
+            }`}
+          >
+            {couponCopied ? (
+              <>
+                <Check className="w-4 h-4 text-black stroke-[3]" /> Cupom VIP50 Copiado!
+              </>
+            ) : (
+              <>
+                <Copy className="w-4 h-4 stroke-[2.5]" /> Copiar Cupom
+              </>
+            )}
+          </Button>
         </DialogContent>
       </Dialog>
 
