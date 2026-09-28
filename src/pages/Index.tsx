@@ -166,11 +166,11 @@ const Index = () => {
 
           {/* Header */}
           <div className="relative text-center pt-1 mb-5">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FF0000]/10 border border-[#FF0000]/25 text-[#FF0000] text-[11px] font-bold tracking-wider uppercase mb-3">
-              <Sparkles className="w-3.5 h-3.5" /> Indicação Exclusiva
+            <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#FF0000]/10 border border-[#FF0000]/25 text-[#FF0000] text-[11px] font-bold tracking-wider uppercase mb-3">
+              Indicação Exclusiva
             </div>
-            <DialogTitle className="text-2xl font-black text-white tracking-tight">
-              Indique Amigos
+            <DialogTitle className="text-2xl font-black text-white tracking-tight uppercase">
+              INDIQUE AMIGOS
             </DialogTitle>
             <p className="text-xs sm:text-sm text-white/60 mt-1.5 max-w-xs mx-auto leading-relaxed">
               Você possui <span className="text-[#FF0000] font-bold">5 cupons</span> de indicação de <span className="text-white font-bold">50% OFF</span> disponíveis para compartilhar com seus amigos!
@@ -185,7 +185,7 @@ const Index = () => {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF0000]"></span>
               </span>
               <span className="text-xs font-semibold text-white/90">
-                Cupons de <span className="text-[#FF0000] font-bold">50% OFF</span>
+                CUPONS <span className="text-[#FF0000] font-bold">50% OFF</span>
               </span>
             </div>
             <div className="flex items-center gap-1.5 bg-[#FF0000]/15 border border-[#FF0000]/30 px-2.5 py-0.5 rounded-full">
@@ -199,15 +199,6 @@ const Index = () => {
           <div className="relative bg-gradient-to-b from-[#141414] to-[#0c0c0c] border border-white/15 rounded-2xl p-5 mb-5 shadow-inner overflow-hidden">
             {/* Watermark icon */}
             <Ticket className="absolute -right-3 -bottom-3 w-24 h-24 text-white/[0.03] pointer-events-none rotate-12" />
-
-            <div className="flex items-center justify-between text-[11px] text-white/40 uppercase font-semibold tracking-wider mb-3">
-              <span className="flex items-center gap-1.5 text-white/70">
-                <Zap className="w-3.5 h-3.5 text-[#FF0000]" /> Cupom VIP
-              </span>
-              <span className="bg-[#FF0000]/15 border border-[#FF0000]/30 text-[#FF0000] px-2 py-0.5 rounded text-[10px] font-black">
-                50% OFF
-              </span>
-            </div>
 
             {/* Code Box with Quick Click-to-Copy */}
             <div 
@@ -236,9 +227,8 @@ const Index = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-between mt-3 text-[11px] text-white/40">
-              <span>Válido para Mensal e Vitalício</span>
-              <span className="text-[#FF0000] font-semibold">Ativação instantânea</span>
+            <div className="text-center mt-3 text-xs sm:text-[13px] font-medium text-white/60">
+              Válido para Mensal e Vitalício
             </div>
           </div>
 
