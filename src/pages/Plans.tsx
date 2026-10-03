@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/accordion";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
-import { PlanId } from "@/config/checkoutLinks";
+import { PlanId, DIRECT_APPLYFY_ONLY, redirectToCheckout } from "@/config/checkoutLinks";
 import { PaymentMethodModal } from "@/components/PaymentMethodModal";
 import { supabase } from "@/integrations/supabase/client";
 import { resolveDisplayName } from "@/lib/userName";
@@ -158,7 +158,11 @@ export default function Plans() {
   }, [authLoading, user, navigate]);
 
   const handleCheckout = (plan: "monthly" | "lifetime") => {
-    setModalPlan(plan);
+    if (DIRECT_APPLYFY_ONLY) {
+      redirectToCheckout(plan, user?.email, appliedCoupon);
+    } else {
+      setModalPlan(plan);
+    }
   };
 
   const scrollToPlans = () => {
@@ -524,14 +528,16 @@ export default function Plans() {
         </section>
       </main>
 
-      {/* MODAL DE SELEÇÃO DE FORMA DE PAGAMENTO (PIX / CARTÃO) */}
-      <PaymentMethodModal
-        isOpen={!!modalPlan}
-        onClose={() => setModalPlan(null)}
-        planId={modalPlan || "monthly"}
-        userEmail={user?.email}
-        hasDiscount={appliedCoupon}
-      />
+      {/* MODAL DE SELEÇÃO DE FORMA DE PAGAMENTO (PIX / CARTÃO) - Mantido para quando a PinguPag voltar */}
+      {!DIRECT_APPLYFY_ONLY && (
+        <PaymentMethodModal
+          isOpen={!!modalPlan}
+          onClose={() => setModalPlan(null)}
+          planId={modalPlan || "monthly"}
+          userEmail={user?.email}
+          hasDiscount={appliedCoupon}
+        />
+      )}
     </div>
   );
 }
