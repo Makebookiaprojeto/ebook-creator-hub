@@ -58,3 +58,27 @@ export function getCheckoutUrl(
   return baseUrl;
 }
 
+// ============================================================================
+// CONTROLE DE CHECKOUT MOMENTÂNEO (CONTINGÊNCIA PINGUPAG):
+// A PinguPag está temporariamente fora do ar.
+// Enquanto DIRECT_APPLYFY_ONLY = true:
+// - O clique em comprar redireciona IMEDIATAMENTE para a Applyfy.
+// - O modal de seleção de método (PIX / Cartão) é ignorado.
+//
+// PARA RESTAURAR O SISTEMA NORMAL (PIX PINGUPAG + CARTÃO APPLYFY NO MODAL):
+// Basta alterar DIRECT_APPLYFY_ONLY para false!
+// ============================================================================
+export const DIRECT_APPLYFY_ONLY = true;
+
+export function redirectToCheckout(
+  plan: PlanId,
+  email?: string,
+  hasDiscount: boolean = false
+): void {
+  const url = getCheckoutUrl(plan, "card", email, hasDiscount);
+  if (url) {
+    window.location.href = url;
+  }
+}
+
+
