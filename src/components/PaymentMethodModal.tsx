@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { X, CreditCard, ShieldCheck, Zap, Lock } from "lucide-react";
-import { PlanId, getCheckoutUrl } from "@/config/checkoutLinks";
+import { PlanId, getCheckoutUrl, DIRECT_APPLYFY_ONLY } from "@/config/checkoutLinks";
 
 // Símbolo minimalista oficial do PIX (Banco Central do Brasil)
 const PixIcon: React.FC<{ className?: string }> = ({ className = "w-5 h-5" }) => (
@@ -45,7 +45,17 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  // Se modo direto estiver ativo, redireciona imediatamente para o checkout da Applyfy
+  useEffect(() => {
+    if (isOpen && DIRECT_APPLYFY_ONLY) {
+      const url = getCheckoutUrl(planId, "card", userEmail, hasDiscount);
+      if (url) {
+        window.location.href = url;
+      }
+    }
+  }, [isOpen, planId, userEmail, hasDiscount]);
+
+  if (!isOpen || DIRECT_APPLYFY_ONLY) return null;
 
   const isLifetime = planId === "lifetime";
 
