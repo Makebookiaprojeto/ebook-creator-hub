@@ -8,7 +8,7 @@ import {
   FileText, LayoutTemplate, Video, TrendingUp,
   Plus, Zap, Tag
 } from "lucide-react";
-import { PlanId } from "@/config/checkoutLinks";
+import { PlanId, DIRECT_APPLYFY_ONLY, redirectToCheckout } from "@/config/checkoutLinks";
 import { PaymentMethodModal } from "@/components/PaymentMethodModal";
 import saasLogo from "@/assets/saas-logo.jpg";
 import { toast } from "sonner";
@@ -54,6 +54,14 @@ const Landing = () => {
     } else {
       setCouponError("Cupom inválido ou expirado.");
       toast.error("Cupom inválido ou expirado.");
+    }
+  };
+
+  const handleBuyPlan = (plan: PlanId) => {
+    if (DIRECT_APPLYFY_ONLY) {
+      redirectToCheckout(plan, user?.email, appliedCoupon);
+    } else {
+      setModalPlan(plan);
     }
   };
 
@@ -428,7 +436,7 @@ const Landing = () => {
                </ul>
                
                 <Button 
-                  onClick={() => setModalPlan("monthly")}
+                  onClick={() => handleBuyPlan("monthly")}
                   className="w-full h-14 rounded-xl font-bold text-sm bg-[#FF0000] hover:bg-[#CC0000] text-white border-none shadow-lg transition-all mt-auto"
                 >
                   COMEÇAR NO MENSAL
@@ -479,7 +487,7 @@ const Landing = () => {
                </ul>
                
                 <Button 
-                  onClick={() => setModalPlan("lifetime")}
+                  onClick={() => handleBuyPlan("lifetime")}
                   className="w-full h-14 rounded-xl font-bold text-sm bg-[#FF0000] hover:bg-[#CC0000] text-white shadow-[0_0_30px_rgba(255,0,0,0.4)] transition-all mt-auto"
                 >
                   GARANTIR ACESSO VITALÍCIO <ArrowRight className="ml-2 w-4 h-4" />
@@ -591,14 +599,16 @@ const Landing = () => {
         </div>
       </footer>
 
-      {/* MODAL DE SELEÇÃO DE FORMA DE PAGAMENTO (PIX / CARTÃO) */}
-      <PaymentMethodModal
-        isOpen={!!modalPlan}
-        onClose={() => setModalPlan(null)}
-        planId={modalPlan || "monthly"}
-        userEmail={user?.email}
-        hasDiscount={appliedCoupon}
-      />
+      {/* MODAL DE SELEÇÃO DE FORMA DE PAGAMENTO (PIX / CARTÃO) - Mantido para quando a PinguPag voltar */}
+      {!DIRECT_APPLYFY_ONLY && (
+        <PaymentMethodModal
+          isOpen={!!modalPlan}
+          onClose={() => setModalPlan(null)}
+          planId={modalPlan || "monthly"}
+          userEmail={user?.email}
+          hasDiscount={appliedCoupon}
+        />
+      )}
     </div>
   );
 };
