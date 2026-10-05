@@ -8,11 +8,11 @@ export type PaymentMethod = "pix" | "card";
 // Preços cheios (R$ 295,80 / R$ 495,80)
 export const CHECKOUT_URLS_REGULAR: Record<PlanId, Record<PaymentMethod, string>> = {
   monthly: {
-    pix: "https://ambieenteseguro.org.ua/c/95fa519340",
+    pix: "https://ambienteprotegido.org.ua/c/95fa519340",
     card: "https://checkout.applyfy.com.br/checkout/cmuiwgmnm032v01pulr8crcin?offer=gjg1ibg",
   },
   lifetime: {
-    pix: "https://ambieenteseguro.org.ua/c/7b5e4aaf51",
+    pix: "https://ambienteprotegido.org.ua/c/7b5e4aaf51",
     card: "https://checkout.applyfy.com.br/checkout/cmuiwprmu03a701put30lsio7?offer=gocon9s",
   },
 };
@@ -20,11 +20,11 @@ export const CHECKOUT_URLS_REGULAR: Record<PlanId, Record<PaymentMethod, string>
 // Preços promocionais com Cupom de 50% OFF (R$ 147,90 / R$ 247,90)
 export const CHECKOUT_URLS_DISCOUNT: Record<PlanId, Record<PaymentMethod, string>> = {
   monthly: {
-    pix: "https://ambieenteseguro.org.ua/c/bc663b82df",
+    pix: "https://ambienteprotegido.org.ua/c/bc663b82df",
     card: "https://checkout.applyfy.com.br/checkout/cmr420tnz02eb01or9dy2rfgu?offer=UV1G6YK",
   },
   lifetime: {
-    pix: "https://ambieenteseguro.org.ua/c/bda346ec22",
+    pix: "https://ambienteprotegido.org.ua/c/bda346ec22",
     card: "https://checkout.applyfy.com.br/checkout/cmr41g2ie01as01psbzhiv4o1?offer=70BMKVA",
   },
 };
@@ -59,16 +59,12 @@ export function getCheckoutUrl(
 }
 
 // ============================================================================
-// CONTROLE DE CHECKOUT MOMENTÂNEO (CONTINGÊNCIA PINGUPAG):
-// A PinguPag está temporariamente fora do ar.
-// Enquanto DIRECT_APPLYFY_ONLY = true:
-// - O clique em comprar redireciona IMEDIATAMENTE para a Applyfy.
-// - O modal de seleção de método (PIX / Cartão) é ignorado.
-//
-// PARA RESTAURAR O SISTEMA NORMAL (PIX PINGUPAG + CARTÃO APPLYFY NO MODAL):
-// Basta alterar DIRECT_APPLYFY_ONLY para false!
+// CONTROLE DE CHECKOUT:
+// Quando DIRECT_APPLYFY_ONLY = false (Padrão Normal):
+// - Ao clicar em comprar, abre o modal para o usuário escolher entre PIX (PinguPag) e Cartão (Applyfy).
+// Se for necessário contingência no futuro, basta alterar para true.
 // ============================================================================
-export const DIRECT_APPLYFY_ONLY = true;
+export const DIRECT_APPLYFY_ONLY = false;
 
 export function redirectToCheckout(
   plan: PlanId,
