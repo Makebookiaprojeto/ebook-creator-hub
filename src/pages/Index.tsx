@@ -165,20 +165,20 @@ const Index = () => {
           <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-56 h-32 bg-[#FF0000]/20 rounded-full blur-3xl pointer-events-none" />
 
           {/* Header */}
-          <div className="relative text-center pt-1 mb-5">
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#FF0000]/10 border border-[#FF0000]/25 text-[#FF0000] text-[11px] font-bold tracking-wider uppercase mb-3">
+          <div className="relative text-center pt-2 sm:pt-3 mb-8">
+            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FF0000]/10 border border-[#FF0000]/25 text-[#FF0000] text-[11px] font-bold tracking-wider uppercase mb-5">
               Indicação Exclusiva
             </div>
             <DialogTitle className="text-2xl font-black text-white tracking-tight uppercase">
               INDIQUE AMIGOS
             </DialogTitle>
-            <p className="text-xs sm:text-sm text-white/60 mt-1.5 max-w-xs mx-auto leading-relaxed">
+            <p className="text-xs sm:text-sm text-white/60 mt-2 max-w-xs mx-auto leading-relaxed">
               Você possui <span className="text-[#FF0000] font-bold">5 cupons</span> de indicação de <span className="text-white font-bold">50% OFF</span> disponíveis para compartilhar com seus amigos!
             </p>
           </div>
 
           {/* Scarcity / Counter Banner */}
-          <div className="relative flex items-center justify-between bg-black/60 border border-white/10 rounded-xl px-4 py-2.5 mb-4">
+          <div className="relative flex items-center justify-between bg-black/60 border border-white/10 rounded-xl px-4 py-2.5 mb-5">
             <div className="flex items-center gap-2">
               <span className="flex h-2 w-2 relative">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF0000] opacity-75"></span>
@@ -195,40 +195,30 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Luxury Voucher Card */}
-          <div className="relative bg-gradient-to-b from-[#141414] to-[#0c0c0c] border border-white/15 rounded-2xl p-5 mb-5 shadow-inner overflow-hidden">
-            {/* Watermark icon */}
-            <Ticket className="absolute -right-3 -bottom-3 w-24 h-24 text-white/[0.03] pointer-events-none rotate-12" />
-
-            {/* Code Box with Quick Click-to-Copy */}
-            <div 
-              onClick={handleCopyCoupon}
-              className="group cursor-pointer flex items-center justify-between bg-black/80 hover:bg-black border border-dashed border-white/20 hover:border-[#FF0000]/60 rounded-xl px-4 py-3.5 transition-all duration-200"
-              title="Clique para copiar"
-            >
-              <div className="flex flex-col text-left">
-                <span className="text-[10px] text-white/40 uppercase tracking-widest font-medium">Código do Cupom</span>
-                <span className="font-mono text-2xl font-black tracking-widest text-white group-hover:text-[#FF0000] transition-colors">
-                  VIP50
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 group-hover:bg-[#FF0000]/10 group-hover:border-[#FF0000]/30 group-hover:text-white transition-all">
-                {couponCopied ? (
-                  <>
-                    <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="text-emerald-400">Copiado</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-3.5 h-3.5" />
-                    <span>Copiar</span>
-                  </>
-                )}
-              </div>
+          {/* Code Box with Quick Click-to-Copy (without enclosing gray border/field) */}
+          <div 
+            onClick={handleCopyCoupon}
+            className="group cursor-pointer flex items-center justify-between px-2 py-2 mb-6 transition-all duration-200"
+            title="Clique para copiar"
+          >
+            <div className="flex flex-col text-left">
+              <span className="text-[10px] text-white/40 uppercase tracking-widest font-medium">Código do Cupom</span>
+              <span className="font-mono text-2xl sm:text-3xl font-black tracking-widest text-white group-hover:text-[#FF0000] transition-colors">
+                VIP50
+              </span>
             </div>
-
-            <div className="text-center mt-3 text-xs sm:text-[13px] font-medium text-white/60">
-              Válido para Mensal e Vitalício
+            <div className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 group-hover:bg-[#FF0000]/10 group-hover:border-[#FF0000]/30 group-hover:text-white transition-all">
+              {couponCopied ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-emerald-400">Copiado</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>Copiar</span>
+                </>
+              )}
             </div>
           </div>
 
