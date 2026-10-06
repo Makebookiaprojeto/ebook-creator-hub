@@ -165,8 +165,8 @@ const Index = () => {
           <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-56 h-32 bg-[#FF0000]/20 rounded-full blur-3xl pointer-events-none" />
 
           {/* Header */}
-          <div className="relative text-center pt-2 sm:pt-3 mb-8">
-            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FF0000]/10 border border-[#FF0000]/25 text-[#FF0000] text-[11px] font-bold tracking-wider uppercase mb-5">
+          <div className="relative text-center pt-2 sm:pt-3 mb-6">
+            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FF0000]/10 border border-[#FF0000]/25 text-[#FF0000] text-[11px] font-bold tracking-wider uppercase mb-6">
               Indicação Exclusiva
             </div>
             <DialogTitle className="text-2xl font-black text-white tracking-tight uppercase">
@@ -212,7 +212,7 @@ const Index = () => {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF0000]"></span>
               </span>
               <span className="text-xs font-semibold text-white/90">
-                CUPONS <span className="text-[#FF0000] font-bold">50% OFF</span>
+                CUPOM <span className="text-[#FF0000] font-bold">50% OFF</span>
               </span>
             </div>
             <div className="flex items-center gap-1.5 bg-[#FF0000]/15 border border-[#FF0000]/30 px-2.5 py-0.5 rounded-full">
