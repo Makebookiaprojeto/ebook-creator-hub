@@ -177,28 +177,10 @@ const Index = () => {
             </p>
           </div>
 
-          {/* Scarcity / Counter Banner */}
-          <div className="relative flex items-center justify-between bg-black/60 border border-white/10 rounded-xl px-4 py-2.5 mb-5">
-            <div className="flex items-center gap-2">
-              <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF0000] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF0000]"></span>
-              </span>
-              <span className="text-xs font-semibold text-white/90">
-                CUPONS <span className="text-[#FF0000] font-bold">50% OFF</span>
-              </span>
-            </div>
-            <div className="flex items-center gap-1.5 bg-[#FF0000]/15 border border-[#FF0000]/30 px-2.5 py-0.5 rounded-full">
-              <span className="text-[11px] font-extrabold text-[#FF0000] uppercase tracking-wider">
-                5 disponíveis
-              </span>
-            </div>
-          </div>
-
           {/* Code Box with Quick Click-to-Copy (without enclosing gray border/field) */}
           <div 
             onClick={handleCopyCoupon}
-            className="group cursor-pointer flex items-center justify-between px-2 py-2 mb-6 transition-all duration-200"
+            className="group cursor-pointer flex items-center justify-between px-2 py-2 mb-4 transition-all duration-200"
             title="Clique para copiar"
           >
             <div className="flex flex-col text-left">
@@ -219,6 +201,24 @@ const Index = () => {
                   <span>Copiar</span>
                 </>
               )}
+            </div>
+          </div>
+
+          {/* Scarcity / Counter Banner */}
+          <div className="relative flex items-center justify-between bg-black/60 border border-white/10 rounded-xl px-4 py-2.5 mb-6">
+            <div className="flex items-center gap-2">
+              <span className="flex h-2 w-2 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF0000] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF0000]"></span>
+              </span>
+              <span className="text-xs font-semibold text-white/90">
+                CUPONS <span className="text-[#FF0000] font-bold">50% OFF</span>
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 bg-[#FF0000]/15 border border-[#FF0000]/30 px-2.5 py-0.5 rounded-full">
+              <span className="text-[11px] font-extrabold text-[#FF0000] uppercase tracking-wider">
+                5 disponíveis
+              </span>
             </div>
           </div>
 
