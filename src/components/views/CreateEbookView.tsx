@@ -48,6 +48,24 @@ import { generateEbookPdf, downloadPdf } from "@/lib/ebookPdf";
 const videoDivulgacao1 = { url: "/videos/video-divulgacao-1.mp4" };
 const videoDivulgacao2 = { url: "/videos/video-divulgacao-2.mp4" };
 
+const divulgacaoMensagens = [
+  {
+    id: 1,
+    title: "Opção 1",
+    text: "Pessoal, encontrei esse e-book esses dias e achei o conteúdo bem interessante. É bem direto e fácil de entender. Acho que pode ajudar quem está começando nesse assunto.\n\nVou deixar o link aqui para quem tiver interesse 👇",
+  },
+  {
+    id: 2,
+    title: "Opção 2",
+    text: "Não sei se alguém aqui já conhece, mas encontrei esse e-book e achei que valia a pena compartilhar. O conteúdo é bem prático e não fica só naquela teoria toda.\n\nVou deixar o link para quem tiver interesse 👇",
+  },
+  {
+    id: 3,
+    title: "Opção 3",
+    text: "Gente, achei esse material bem interessante e resolvi compartilhar aqui. Principalmente pra quem está começando, acho que pode ser útil.\n\nQuem quiser conferir, vou deixar o link aqui embaixo 👇",
+  },
+];
+
 const steps = ["Nicho", "Preço", "Ebook", "Página de Vendas", "Divulgação"];
 const pricePresets = [19.9, 29.9, 39.9, 49.9];
 
@@ -841,7 +859,7 @@ export function CreateEbookView({ onComplete, onCancel }: CreateEbookViewProps =
                         if (!priceInput) return;
                         setPriceInput(price.toFixed(2).replace(".", ","));
                       }}
-                      className="pl-12 h-16 text-3xl font-bold font-display border-[#FF0000] focus-visible:ring-[#FF0000] shadow-[0_0_12px_rgba(255,0,0,0.25)]"
+                      className="pl-12 h-16 text-3xl font-bold font-display border-border/80 dark:border-white/20 focus-visible:ring-1 focus-visible:ring-ring shadow-sm"
                     />
                   </div>
                   <div className="mt-5">
@@ -1197,28 +1215,47 @@ export function CreateEbookView({ onComplete, onCancel }: CreateEbookViewProps =
                   </div>
 
 
-                  <div className="p-5 rounded-xl border border-border shadow-gold">
-                    <h3 className="text-lg font-bold flex items-center gap-2 mb-1 text-black dark:text-[#FFFF00]">
-                      <Quote className="h-5 w-5 text-primary" />
-                      Mensagem pronta para Divulgação
-                    </h3>
-                    <p className="text-sm text-muted-foreground mb-4">Use esta mensagem persuasiva para aumentar sua conversão.</p>
-                    <div className="relative">
-                      <pre className="whitespace-pre-wrap font-sans text-sm bg-muted/50 p-4 pb-14 rounded-xl border border-dashed border-primary/20 leading-relaxed">
-                        {`Já comecei a ler esse e-book e estou gostando bastante! 📚🔥\nConteúdo direto, fácil de entender e cheio de informações.\nSe tiver interesse, vale a pena conferir 👇\n\nLink: ${ebookLink}`}
-                      </pre>
-                      <Button
-                        size="sm"
-                        className="absolute bottom-3 right-3 bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm gap-2"
-                        onClick={() => {
-                          const text = `Já comecei a ler esse e-book e estou gostando bastante! 📚🔥\nConteúdo direto, fácil de entender e cheio de informações.\nSe tiver interesse, vale a pena conferir 👇\n\nLink: ${ebookLink}`;
-                          navigator.clipboard.writeText(text);
-                          toast.success("Mensagem copiada!");
-                        }}
-                      >
-                        <Copy className="h-3.5 w-3.5" />
-                        Copiar Mensagem
-                      </Button>
+                  <div className="p-6 rounded-lg border border-border bg-card/40 shadow-gold space-y-4">
+                    <div>
+                      <h3 className="text-lg font-bold flex items-center gap-2 mb-1 text-black dark:text-[#FFFF00]">
+                        <Quote className="h-5 w-5 text-primary" />
+                        Mensagens prontas para Divulgação
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Use estas opções de mensagens persuasivas para divulgar nos grupos:
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4">
+                      {divulgacaoMensagens.map((item) => {
+                        const messageText = ebookLink ? `${item.text}\n\nLink: ${ebookLink}` : item.text;
+                        return (
+                          <div
+                            key={item.id}
+                            className="relative rounded-xl border border-border/80 bg-background/50 p-4 pb-14 transition-colors hover:border-primary/40"
+                          >
+                            <div className="flex items-center justify-between mb-3">
+                              <span className="text-xs font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20">
+                                {item.title}
+                              </span>
+                            </div>
+                            <pre className="whitespace-pre-wrap font-sans text-sm text-foreground/90 leading-relaxed">
+                              {messageText}
+                            </pre>
+                            <Button
+                              size="sm"
+                              className="absolute bottom-3 right-3 gradient-primary text-primary-foreground shadow-sm gap-2"
+                              onClick={() => {
+                                navigator.clipboard.writeText(messageText);
+                                toast.success(`${item.title} copiada!`);
+                              }}
+                            >
+                              <Copy className="h-3.5 w-3.5" />
+                              Copiar Mensagem
+                            </Button>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                   <div className="p-5">
